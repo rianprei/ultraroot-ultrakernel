@@ -30,7 +30,7 @@ Para o agente em nuvem: este repo tem o código e a lista de tarefas. Para compi
 - `tools/verify_repo.sh`: VERIFICADOR OK.
 - Kernel: `gki_defconfig` + `kernelsu.fragment` + `olddefconfig`, com `CONFIG_KSU=y`.
 - Kernel: `make prepare` com o clang `r510928`, depois da correção do libbpf e com `bc` instalado: exit 0.
-- Kernel: `make Image` (clang r510928, `-j6`): exit 0, sem avisos. Gera `arch/arm64/boot/Image` (36 MB, sha256 `1fe3d6b8…7861a`) e `vmlinux` (180 MB). Tempo: cerca de 45 minutos com 6 núcleos.
+- Kernel: `make Image` (clang r510928, `-j6`): exit 0, sem avisos. Gera `arch/arm64/boot/Image` (36 MB, sha256 `1fe3d6b8…7861a`) e `vmlinux` (180 MB). Tempo medido: cerca de 9 minutos com 6 núcleos (log de 19:12 a 19:21).
 - UltraRoot: `./gradlew :core-backend:testDebugUnitTest --offline` (BUILD SUCCESSFUL) e `./gradlew :core-backend:externalNativeBuildDebug --offline`, que gerou `libultraroot.so` (arm64-v8a).
 
 ## Erros encontrados nos testes (e o que foi feito)
