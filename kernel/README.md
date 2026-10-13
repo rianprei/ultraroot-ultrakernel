@@ -4,7 +4,7 @@ Três partes, todas dentro do repo:
 
 - `common/`: árvore GKI no commit base `5a0ffb4`, com o delta nosso. Sem o `.git` e sem artefatos de build. Licença: GPL-2.0 (ver `common/COPYING`). Tem 82 mil arquivos (1,5 GB).
 - `patches/ultrakernel-delta-base-5a0ffb4.diff`: o delta modificado (`BUILD.bazel`, `drivers/Kconfig`, `drivers/Makefile`).
-- `lake/`: snapshot do repo do lake no commit `c8e7812` (ferramentas, dados e documentação). O remoto público do lake está em `ffe583a`. O commit `c8e7812` ainda não foi publicado.
+- `lake/`: snapshot do repo do lake no commit `c8e7812` (ferramentas, dados e documentação). O remoto público do lake está em `ffe583a`. O commit `c8e7812` ainda não foi publicado. Seis arquivos de `kernel/lake/docs/research/` diferem do commit, por redação e reescrita de caminhos (ERR-18 em `docs/ERROS-PARA-REVISAO.md`).
 - `upstream/KernelSU/`: arquivos do KernelSU no commit `6e3860443f8fea7c5fc226277e53888033796488`. Hashes em `PIN.md`.
 
 ## Delta nosso sobre o base
@@ -21,7 +21,7 @@ Três partes, todas dentro do repo:
 
 ## Como montar um build
 
-Sem o toolchain do lake, qualquer clang 17 ou mais novo serve para `gki_defconfig`. Sempre fora da árvore:
+Sem o toolchain do lake, qualquer clang 17 ou mais novo gera o `gki_defconfig` (não conferido contra o gate KMI). O build conferido contra o gate usa o clang `r510928` (ver `docs/PRE-REQUISITOS.md`). Sempre fora da árvore:
 
 ```
 make -C kernel/common O=/caminho/fora/saida ARCH=arm64 LLVM=1 gki_defconfig

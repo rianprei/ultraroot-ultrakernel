@@ -20,8 +20,9 @@ Os números completos estão em `docs/ultraroot/plan.md` (§9, estado de execuç
 O projeto Gradle fica em `ultraroot/`.
 
 - Gradle 9.7.1 pelo wrapper (`ultraroot/gradle/wrapper/gradle-wrapper.properties`).
-- JDK 21 (`ultraroot/app/build.gradle.kts`, `sourceCompatibility`).
-- SDK: `compileSdk` e `targetSdk = 37`, `minSdk = 31` (`ultraroot/app/build.gradle.kts`).
+- JDK 21 (`ultraroot/app/build.gradle.kts`, `sourceCompatibility`). Se o JDK padrão da máquina for outro, defina `JAVA_HOME` para um JDK 21.
+- SDK: `compileSdk { release(37) { minorApiLevel = 0 } }` (plataforma `android-37.0`), `targetSdk = 37`, `minSdk = 31` (`ultraroot/app/build.gradle.kts`). Build-tools `37.0.0`.
+- Defina `ANDROID_HOME` apontando para o SDK. O `local.properties` não vai para o repo (está no `.gitignore`).
 - NDK `29.0.14206865` e CMake `3.22.1` (`ultraroot/core-backend/build.gradle.kts`).
 - Comandos usados nas conferências (ver `docs/history/reports/h8r1_errno_2026-10-13.txt`, T4 e T5):
 
@@ -29,7 +30,13 @@ O projeto Gradle fica em `ultraroot/`.
 cd ultraroot
 ./gradlew :core-backend:externalNativeBuildDebug --offline
 ./gradlew :core-backend:testDebugUnitTest --offline
+./gradlew :app:testDebugUnitTest --offline
+./gradlew :app:assembleDebug
 ```
+
+Resultado de 2026-10-13, a partir do clone, com cache vazio: 20 testes do core-backend e 41 do app passam, e o APK de debug é gerado (`docs/history/reports/app_gradle_clone_2026-10-13.txt`).
+
+Na primeira compilação, sem cache, rode sem `--offline`: o Gradle precisa de rede para baixar a distribuição e as dependências. Depois disso, `--offline` funciona com o cache local.
 
 - Teste nativo no host (sem Android), a partir da raiz do repo:
 

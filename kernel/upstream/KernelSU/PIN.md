@@ -17,4 +17,4 @@
 
 ## Árvore completa do pin
 
-`kernel/upstream/KernelSU/` contém a árvore inteira do commit (`git archive`, 679 arquivos). Os sete arquivos da tabela acima estão incluídos com o mesmo conteúdo.
+`kernel/upstream/KernelSU/` contém a árvore inteira do commit: 678 arquivos regulares e 2 links simbólicos (680 entradas, como `git ls-tree -r` do commit), mais este PIN.md. Os 678 arquivos regulares têm o mesmo blob git do commit, conferido em 2026-10-13 com `git hash-object` contra `git ls-tree`. A tabela acima traz o sha256 de sete deles.

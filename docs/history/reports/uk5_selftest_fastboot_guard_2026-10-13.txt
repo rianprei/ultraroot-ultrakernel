@@ -1,0 +1,360 @@
+UK-5: kernel/lake/tools/selftest_fastboot_guard.sh no clone (commit 0f3fbe3c6), 2026-10-13. Fastboot falso, nenhum aparelho.
+Resultado: GUARD-SELFTEST 44 passada(s), 0 falha(s). O caso T-1 contra o backup auditado foi pulado (T1-AUDITED skip): o backup fica fora do repo de propósito.
+
+### [1] devices passa
+    stub chamado, argv: devices
+  => OK
+
+### [2] reboot passa
+    stub chamado, argv: reboot
+  => OK
+
+### [3-product] getvar product passa
+    stub chamado, argv: getvar product
+  => OK
+
+### [3-current-slot] getvar current-slot passa
+    stub chamado, argv: getvar current-slot
+  => OK
+
+### [3-slot-count] getvar slot-count passa
+    stub chamado, argv: getvar slot-count
+  => OK
+
+### [3-is-userspace] getvar is-userspace passa
+    stub chamado, argv: getvar is-userspace
+  => OK
+
+### [3-unlocked] getvar unlocked passa
+    stub chamado, argv: getvar unlocked
+  => OK
+
+### [3-max-download-size] getvar max-download-size passa
+    stub chamado, argv: getvar max-download-size
+  => OK
+
+### [3-partition-size:boot_b] getvar partition-size:boot_b passa
+    stub chamado, argv: getvar partition-size:boot_b
+  => OK
+
+### [3-slot-successful:a] getvar slot-successful:a passa
+    stub chamado, argv: getvar slot-successful:a
+  => OK
+
+### [3-slot-successful:b] getvar slot-successful:b passa
+    stub chamado, argv: getvar slot-successful:b
+  => OK
+
+### [3-slot-unbootable:a] getvar slot-unbootable:a passa
+    stub chamado, argv: getvar slot-unbootable:a
+  => OK
+
+### [3-slot-unbootable:b] getvar slot-unbootable:b passa
+    stub chamado, argv: getvar slot-unbootable:b
+  => OK
+
+### [3-slot-retry-count:a] getvar slot-retry-count:a passa
+    stub chamado, argv: getvar slot-retry-count:a
+  => OK
+
+### [3-slot-retry-count:b] getvar slot-retry-count:b passa
+    stub chamado, argv: getvar slot-retry-count:b
+  => OK
+
+### [3-battery-soc-ok] getvar battery-soc-ok passa
+    stub chamado, argv: getvar battery-soc-ok
+  => OK
+
+### [3-battery-voltage] getvar battery-voltage passa
+    stub chamado, argv: getvar battery-voltage
+  => OK
+
+### [4] flash boot_b válido chama o stub
+    stub chamado, argv: flash boot_b <tmp>/fastboot_guard.VUPsdC/image.bin sha=a654ecfcdc6439a3a421c6c5a29ed998a7f8b91e47b1c6808c172f8354e5372f mode=400
+  => OK
+
+### [5] getvar all recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [6] getvar cpuid recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [7] oem recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [24] oem unlock recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [25] oem off-mode-charge recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [26] update recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [8] erase recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [9] format recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [10] set_active recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [11] flashing recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [12] flash lk recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [13] flash boot_a recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [14] flash boot_b hash errado recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [15] flash boot_b tamanho errado recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [16] flash boot_b sem ANDROID! recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [17] flash boot_b arquivo inexistente recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [18] devices com arg extra recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [19] getvar sem nome recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [20] sem args (uso) recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+### [21] flash usa cópia privada verificada (TOCTOU)
+    stub recebeu cópia 0400 com hash permitido: <tmp>/fastboot_guard.G8TSBo/image.bin
+  => OK
+
+### [22] arquivo com espaço passa
+    stub chamado, argv: flash boot_b <tmp>/fastboot_guard.Bp5l4T/image.bin sha=a654ecfcdc6439a3a421c6c5a29ed998a7f8b91e47b1c6808c172f8354e5372f mode=400
+  => OK
+
+### [23] arquivo com traço inicial passa (sem confusão de flag)
+    stub chamado, argv: flash boot_b <tmp>/fastboot_guard.zN1viW/image.bin sha=a654ecfcdc6439a3a421c6c5a29ed998a7f8b91e47b1c6808c172f8354e5372f mode=400
+  => OK
+
+### V89 slot a recusa
+    recusado sem argv reboot
+  => OK
+
+### V89 is-userspace yes recusa
+    recusado sem argv reboot
+  => OK
+
+### V89 slot b passa
+    reboot depois dos dois getvar
+  => OK
+
+### V89 userspace Variable not found passa
+    reboot depois dos dois getvar
+  => OK
+
+### V89 slot sem linha recusa
+    recusado sem argv reboot
+  => OK
+
+V89 OK reboot interlock
+### V102 slot a recusa
+    recusado sem flash
+  => OK
+
+### V102 is-userspace yes recusa
+    recusado sem flash
+  => OK
+
+### V102 slot sem linha recusa
+    recusado sem flash
+  => OK
+
+### V102 slot b passa
+    flash depois do slot
+  => OK
+
+V102 OK flash slot interlock
+### V112 flash trailing space
+    aceito
+  => OK
+
+### V112 flash trailing CR
+    aceito
+  => OK
+
+### V112 flash leading space
+    aceito
+  => OK
+
+### V112 flash underscore
+    recusado
+  => OK
+
+### V112 flash uppercase
+    recusado
+  => OK
+
+### V112 flash bb
+    recusado
+  => OK
+
+### V112 flash slot a
+    recusado
+  => OK
+
+### V112 flash empty
+    recusado
+  => OK
+
+### V112 reboot trailing space
+    aceito
+  => OK
+
+### V112 reboot trailing CR
+    aceito
+  => OK
+
+### V112 reboot leading space
+    aceito
+  => OK
+
+### V112 reboot underscore
+    recusado
+  => OK
+
+### V112 reboot uppercase
+    recusado
+  => OK
+
+### V112 reboot bb
+    recusado
+  => OK
+
+### V112 reboot slot a
+    recusado
+  => OK
+
+### V112 reboot empty
+    recusado
+  => OK
+
+V112 OK slot value normalization
+### V98 4000000 passa
+    flash depois de partition-size
+  => OK
+
+### V98 0x4000000 passa
+    flash depois de partition-size
+  => OK
+
+### V98 0X4000000 passa
+    flash depois de partition-size
+  => OK
+
+### V98 Finished trailer ignorado
+    flash depois de partition-size
+  => OK
+
+### V98 3ffffff recusa
+    recusado sem flash
+  => OK
+
+### V98 67108864 é hex e recusa
+    recusado sem flash
+  => OK
+
+### V98 vazio recusa
+    recusado sem flash
+  => OK
+
+### V98 Variable not found recusa
+    recusado sem flash
+  => OK
+
+### V98 FAILED recusa
+    recusado sem flash
+  => OK
+
+### T-1 sintético hash+size+magic+4000000
+    aceito
+  => OK
+
+### T-1 hash que não é o do arquivo recusa
+    recusado sem flash
+  => OK
+
+### T-1 partição 3ffffff recusa
+    recusado sem flash
+  => OK
+
+### T-1 partição 67108864 recusa
+    recusado sem flash
+  => OK
+
+### T-1 partição vazia recusa
+    recusado sem flash
+  => OK
+
+### T-1 partição Variable not found recusa
+    recusado sem flash
+  => OK
+
+### T-1 magic errado recusa
+    recusado sem flash
+  => OK
+
+### T-1 tamanho errado recusa
+    recusado sem flash
+  => OK
+
+### T-1 boot_a recusa
+    recusado sem flash
+  => OK
+
+T1-AUDITED skip
+V98 OK partition-size hex parse
+T-1 pronto: sim
+### [R1] rollback com slot b unbootable flasha boot_b e reativa b
+    flash boot_b + set_active b; set_active a ausente
+  => OK
+
+### [R2] rollback com slot a não escreve e não troca slot
+    recusado (exit=2), sem flash e sem set_active
+  => OK
+
+### [R3] sabotagem: set_active a nunca chega no stub
+    set_active a recusado, stub intacto
+  => OK
+
+### [R4] rollback hash errado recusado
+    recusado (exit=2), stub NÃO chamado
+  => OK
+
+GUARD-SELFTEST: 44 passada(s), 0 falha(s)
+V66 OK fastboot guard behavioral selftest (fake fastboot, allow+deny+update+oem+TOCTOU)
+SELFTEST-GUARD PASS

@@ -29,3 +29,12 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 
 - **Licença:** nenhuma definida. Todos os direitos reservados. Opções: MIT ou Apache-2.0 para o código próprio. Código do KernelSU em `kernel/upstream/` mantém a licença original.
 - **Capturas de tela do aparelho:** duas PNG ficaram fora do repo (ver `docs/history/evidence/NAO-INCLUIDO.txt`). Podem conter notificações ou dados pessoais. Se quiser incluir, depois de você olhar.
+- **Correção de redação (publicada em `main`):** a fingerprint e o serial do certificado público do GKI, redigidos por engano em 5 linhas do lake, foram restaurados. A regra V3 do verificador foi corrigida e testada. Detalhes em `docs/ERROS-PARA-REVISAO.md`, ERR-01 e ERR-02.
+- **E-mail pessoal em três commits publicados (decisão sua):** `901a32718`, `739838c3a` e `0f3fbe3c6` têm o seu e-mail pessoal no autor. Trocar isso exige reescrever o histórico público, com force push. Não faço sem a frase "sim, reescrever histórico". Detalhes em `docs/ERROS-PARA-REVISAO.md`, ERR-03.
+- **Fluxo de PR (decisão sua):** o `AGENTS.md` diz branch e PR. Nesta rodada, você pediu commit direto em `main`. Detalhes em `docs/ERROS-PARA-REVISAO.md`, ERR-20.
+
+## UltraKernel
+
+- **Revisão do inventário (UK-6):** `docs/ultrakernel/UK6-INVENTARIO-TUNABLES.md`. Libera a escolha de opções para o UK-7.
+- **TRIM_UNUSED_KSYMS:** o build deixa a opção `n`, e o config do aparelho tem `y`. Decidir se o build deve igualar o aparelho. Se sim, o gate de KMI (UK-4) roda de novo. Detalhes na seção "Diferenças" do inventário.
+- **Variante do aparelho (UK-0):** o modelo `2410FPCC5G` tem final `5G`, e o pedido fala em 4G. Confirmar qual é o aparelho antes de qualquer build para ele.

@@ -1,0 +1,953 @@
+UK-3: kernel/lake/tools/run_all_checks.sh na árvore de trabalho corrigida (2026-10-13), a partir de 0f3fbe3c6.
+Correção: 5 linhas restauradas do lake (cert público) e regra V3 do verificador com borda e teste.
+As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do gate; cada um aparece como '=> OK'.
+
+--- V1 docs numbers
+    V77 OK gate exit 0 required before V1 trusts the numbers
+    V1 NOTE not cross-checkable offline (device dump not published; see SPEC.md §V/V1): 342 ramdisk +
+    V1 NOTE 215 vendor_dlkm + 17 in both; vermagic groups 193/170/7; 101|68 kCFI counts; 429 baseline modules
+    V68 OK KMI-GATES.md quotes the Google-key fingerprint (76:FB:DF:D1:3F:6B:A6:12:75:6E:AE:36:E9:9F:88:50:8F:A3:20:2A:A3:51:17:70:4C:26:D5:5A:99:CC:72:A1)
+    V1 PASS docs numbers == gate/data (557 files, 370 modules, 4138 required, 2309 provided)
+
+--- V2 regex controls
+    V2 OK   docs/DEVICE-TEST-PROTOCOL.md:12 controle positivo+negativo (sha256sums_bad.txt: 1 linhas)
+    V2 OK   docs/DEVICE-TEST-PROTOCOL.md:183 controle positivo+negativo (dmesg_bad.txt: 7 linhas)
+    V2 OK   docs/DEVICE-TEST-PROTOCOL.md:184 controle positivo+negativo (dmesg_bad.txt: 7 linhas)
+    V2 PASS 3 padrão(ões) -E com controles positivo+negativo; 0 pipe escapado
+    V37 OK todos os padrões -E dos 5 docs têm controles positivo+negativo; 0 pipe escapado
+
+--- V3-V8+V14-V17 invariants
+    V85 OK required docs exist
+    V3 OK protocol compares avbtool info_image of vbmeta_a and vbmeta_b and forbids slot switching
+    V3 OK no un-negated 'fastboot set_active' instruction in docs/DEVICE-TEST-PROTOCOL.md
+    V4 OK docs/DEVICE-TEST-PROTOCOL.md states the fastboot boot caveat (UNKNOWN) next to the command
+    V4 OK no positive support claim for fastboot boot in docs/DEVICE-TEST-PROTOCOL.md/docs/SAFETY.md/README.md
+    V4 OK protocol STOPs when the bootloader answers 'unknown command'
+    V5 OK every absence claim in the protocol/safety docs cites 2+ independent sources
+    V5 NOTE manual-review scope: empirical absence claims only; 'nothing in T0/T2 writes flash' is a statement about the doc's own table, checked by reading the table
+    V7 OK every kernel-behaviour claim cites a source file or CONFIG symbol
+    V14 OK docs/SAFETY.md has the real-bootloader evidence table (lk_b.img strings source + INFERRED labelling)
+    V14 OK SAFETY string verification recipe complete (image sha256 + 4 file offsets)
+    V14 OK protocol labels LK check order (INFERRED other-device, or cites RE1 disassembly)
+    V14 NOTE manual-review the semantic truth (string really in lk_b.img) still needs the retained binary, but the recipe (image sha256 + 4 file offsets, greppable with grep -boa -F) is checked above; the quoted strings were grepped against a retained strings extract during the FIX7 review (extract not published)
+    V15 OK no executable 'fastboot boot' step in docs/DEVICE-TEST-PROTOCOL.md
+    V15 OK protocol documents why the legacy RAM-boot was discarded (slot-selection risk)
+    V15 OK docs/SAFETY.md states the RAM path is not used
+    V16 OK protocol declares 'Variable not found' as an accepted answer
+    V16 OK write pre-flight present: partition-size:boot_b = 0x4000000, file = 67108864 B, sha256 checked
+    V16 OK is-userspace=yes (fastbootd) is a STOP
+    V16 NOTE manual-review is-userspace was read as no on 2026-10-09; the protocol still tolerates Variable not found
+    V17 OK the size/write order cites RE1 disassembly of the real binary
+    V17 OK gemini-sourced claims keep the INFERRED (other device) label
+    V17 OK no PROVED claim in the device-facing docs
+    V17 OK protocol derives the oversize protection from its own pre-flight, not from the LK's assumed order
+    V18 OK T-1 is gated on Z0 PASS
+    V18 OK T-1 requires the owner's explicit yes
+    V18 OK T-1 verifies the backup hash before writing
+    V18 OK T-1 writes identical content only
+    V18 OK T-1 names the backup-image flash command
+    V18 OK README affirms two protected writes (T-1 backup, T3 kernel)
+    V19 OK docs/SAFETY.md cites RE4_codex_fallback.md
+    V19 OK docs/SAFETY.md cites RE2_codex_bootmode.md
+    V19 OK docs/SAFETY.md cites fcn.4c461724
+    V19 OK docs/SAFETY.md cites 0x4c42b264
+    V19 OK retry mechanics stay labelled UNVERIFIED
+    V20 OK no instruction presents is-userspace as absent from lk_b.img
+    V21 OK Z0 allowlist contains getvar product
+    V21 OK Z0 allowlist contains getvar current-slot
+    V21 OK Z0 allowlist contains getvar slot-count
+    V21 OK Z0 allowlist contains getvar is-userspace
+    V21 OK Z0 allowlist contains getvar unlocked
+    V21 OK Z0 allowlist contains getvar max-download-size
+    V21 OK Z0 allowlist contains getvar partition-size:boot_b
+    V21 OK Z0 allowlist contains getvar slot-successful:a
+    V21 OK Z0 allowlist contains getvar slot-successful:b
+    V21 OK Z0 allowlist contains getvar slot-unbootable:a
+    V21 OK Z0 allowlist contains getvar slot-unbootable:b
+    V21 OK Z0 allowlist contains getvar slot-retry-count:a
+    V21 OK Z0 allowlist contains getvar slot-retry-count:b
+    V21 OK Z0 allowlist contains getvar battery-soc-ok
+    V21 OK Z0 allowlist contains getvar battery-voltage
+    V21 OK Z0.3 fenced lines match the 15-name allowlist exactly (no dupes, no extras)
+    V21 OK Z0.3 has no extra getvar beyond the 15-name closed allowlist
+    V21 OK Z0 forbids 'getvar all'
+    V21 OK Z0 names the oem wipe permission it refuses to touch
+    V22 OK Z0 PASS requires key-reached fastboot with Vol− + Power
+    V22 OK adb reboot bootloader is marked optional/documentary (Z0.0)
+    V23 OK slot != b means power off by keys, never 'fastboot reboot'
+    V24 OK Z0 requires the charger disconnected
+    V25 OK Z0 no-adb procedure: 3 min, keys once, second failure ends the day
+    V26 OK day baseline is the criterion; 429 modules is example only
+    V27 OK Z0 carries the honest list of what it does not prove
+    V28 OK every tools/*.sh and scripts/*.sh is executable (index 100755, on-disk +x)
+    V29 OK data/lk_tables.tsv lists 14 table names
+    V29 OK controlled-table row has nvcfg
+    V29 OK controlled-table row has nvdata
+    V29 OK controlled-table row has nvram
+    V29 OK controlled-table row has persist
+    V29 OK controlled-table row has proinfo
+    V29 OK controlled-table row has protect1
+    V29 OK controlled-table row has protect2
+    V29 OK controlled-table row has no extra: nvcfg
+    V29 OK controlled-table row has no extra: nvdata
+    V29 OK controlled-table row has no extra: nvram
+    V29 OK controlled-table row has no extra: persist
+    V29 OK controlled-table row has no extra: proinfo
+    V29 OK controlled-table row has no extra: protect1
+    V29 OK controlled-table row has no extra: protect2
+    V29 OK erase-forbidden row has boot0
+    V29 OK erase-forbidden row has boot1
+    V29 OK erase-forbidden row has preloader
+    V29 OK erase-forbidden row has preloader_a
+    V29 OK erase-forbidden row has preloader_ab
+    V29 OK erase-forbidden row has preloader_b
+    V29 OK erase-forbidden row has preloader_backup
+    V29 OK erase-forbidden row has no extra: boot0
+    V29 OK erase-forbidden row has no extra: boot1
+    V29 OK erase-forbidden row has no extra: preloader
+    V29 OK erase-forbidden row has no extra: preloader_a
+    V29 OK erase-forbidden row has no extra: preloader_ab
+    V29 OK erase-forbidden row has no extra: preloader_b
+    V29 OK erase-forbidden row has no extra: preloader_backup
+    V29 OK SAFETY states: lk is NOT in either table
+    V29 OK SAFETY states: seccfg is NOT in either table
+    V29 OK SAFETY states: expdb is NOT in either table
+    V29 OK SAFETY states: misc is NOT in either table
+    V29 OK SAFETY states: boot_para is NOT in either table
+    V29 OK SAFETY states: vbmeta is NOT in either table
+    V29 OK SAFETY states: vendor_boot is NOT in either table
+    V30 OK no executable 'getvar all' outside docs/research/
+    V31 OK protocol has exactly 2 wrapper flash lines (T-1, T3)
+    V31 OK every wrapper flash targets boot_b
+    V31 OK README affirms two protected writes (T-1 backup, T3 kernel)
+    V31 OK T-1 block line keeps the wrapper form
+    V32 OK T-1 section (line 97) comes after R3 (line 75)
+    V33 OK no machine paths, identifiers or secret shapes in research notes, the plan, or the config table
+    V34 OK never-touch rule lists preloader
+    V34 OK protocol NEVER list covers preloader
+    V34 OK never-touch rule lists lk
+    V34 OK protocol NEVER list covers lk
+    V34 OK never-touch rule lists seccfg
+    V34 OK protocol NEVER list covers seccfg
+    V34 OK never-touch rule lists nvram
+    V34 OK protocol NEVER list covers nvram
+    V34 OK never-touch rule lists nvdata
+    V34 OK protocol NEVER list covers nvdata
+    V34 OK never-touch rule lists nvcfg
+    V34 OK protocol NEVER list covers nvcfg
+    V34 OK never-touch rule lists persist
+    V34 OK protocol NEVER list covers persist
+    V34 OK never-touch rule lists proinfo
+    V34 OK protocol NEVER list covers proinfo
+    V34 OK never-touch rule lists protect1
+    V34 OK protocol NEVER list covers protect1
+    V34 OK never-touch rule lists protect2
+    V34 OK protocol NEVER list covers protect2
+    V34 OK never-touch rule lists misc
+    V34 OK protocol NEVER list covers misc
+    V34 OK never-touch rule lists boot_para
+    V34 OK protocol NEVER list covers boot_para
+    V34 OK never-touch rule lists expdb
+    V34 OK protocol NEVER list covers expdb
+    V35 OK Z0 header states mandatory Z0 writes nothing; Z0.0 writes only boot reason
+    V36 OK SAFETY states two protected writes (T-1 backup, T3 kernel)
+    V37 NOTE manual-review V37: regex controls extended to README/SAFETY/BUILD/KMI-GATES/PROTOCOL in check_regex_controls.sh (V37 FAIL/OK signal there)
+    V38 OK Z0.3 has no extra getvar beyond the 15-name closed allowlist
+    V39 OK No stale single-write sentence; README affirms two protected writes
+    V40 OK SPEC V40 names the exact phrase V22 enforces (key-reached fastboot)
+    V41 OK docs/research/README.md has 'contain errors' warning and UNVERIFIED table
+    V42 OK V41: V30 stricter filter enforced in V30
+    V43 OK Z0.4 exception states rollback index 0 means LK can boot old slot A
+    V44 OK is-userspace text states string exists in LK getvar table
+    V45 OK Protocol cites RE1 disassembly for check-before-write order (0x4c4367d2 precedes 0x4c436834) with inline r2 reproducer
+    V46 OK T-1.2 names the wrapper backup-image flash command
+    V46 OK T2b lists six exact getvar commands inline
+    V47 OK no 'command fastboot' instruction in device-facing docs (wrapper-only)
+    V47 OK protocol documents the wrapper refusal + exactly the two gated flashes
+    V47 OK SAFETY recovery path uses the wrapper form
+    V48 OK protect2 appears before protect1 in all device-facing docs
+    V49 OK Baseline modules text says 429 (example only); your number is your baseline
+    V50 OK Protocol states when/how to read pstore: next normal boot on good kernel
+    V51 OK SAFETY.md Never touch list states it is project policy, wider than LK tables
+    V52 OK Slot firmware comparison accept in writing = type specific phrase
+    V53 OK Abort criteria table includes L1-L6 lacunae
+    V8 OK 68 fact rows present (>= 10)
+    V8 OK 68 fact rows, all with a non-empty proof column
+    V8 OK docs/research/README.md carries the 'contain errors' warning and the UNVERIFIED link table
+    V8 OK every device-dump proof citation carries its verification boundary (retained/not published)
+    V8 NOTE manual-review that each individual FACT sentence in the raw notes has a source is NOT automatable (free prose); the proof column of the facts log is the enforced landing place
+    V56 OK protocol runs on-device observation via: adb shell uname -r
+    V56 OK protocol runs on-device observation via: adb shell 'cat /proc/modules'
+    V56 OK protocol runs on-device observation via: adb shell dmesg > baseline_dmesg.txt
+    V56 OK protocol runs on-device observation via: adb shell ls -l /sys/fs/pstore
+    V55 OK every PROTO:NN/SAFETY:NN cross-reference resolves to an existing line
+    V55 NOTE manual-review existence only: whether the cited line is TOPICALLY related stays a human review (this round: userdata = SAFETY:8, verified by reading)
+    V57 OK protocol carries the consolidated residual risks table (R1-R4 with mitigation + status)
+    V58 OK guard allowlist keeps devices + reboot
+    V58 OK guard allowlist keeps getvar product
+    V58 OK guard allowlist keeps getvar current-slot
+    V58 OK guard allowlist keeps getvar slot-count
+    V58 OK guard allowlist keeps getvar is-userspace
+    V58 OK guard allowlist keeps getvar unlocked
+    V58 OK guard allowlist keeps getvar max-download-size
+    V58 OK guard allowlist keeps getvar partition-size:boot_b
+    V58 OK guard allowlist keeps getvar slot-successful:a
+    V58 OK guard allowlist keeps getvar slot-successful:b
+    V58 OK guard allowlist keeps getvar slot-unbootable:a
+    V58 OK guard allowlist keeps getvar slot-unbootable:b
+    V58 OK guard allowlist keeps getvar slot-retry-count:a
+    V58 OK guard allowlist keeps getvar slot-retry-count:b
+    V58 OK guard allowlist keeps getvar battery-soc-ok
+    V58 OK guard allowlist keeps getvar battery-voltage
+    V58 OK guard write gate keeps: 67108864
+    V58 OK guard write gate keeps: ANDROID!
+    V58 OK guard write gate keeps: FASTBOOT_GUARD_HASHES
+    V58 OK guard write gate keeps: flash boot_b
+    V59 OK no bare/command fastboot instruction in protocol/SAFETY (wrapper-only)
+    V59 OK protocol routes fastboot through tools/fastboot_guard.sh
+    V60 OK protocol captures stderr via: 2>&1 | tee z0_fastboot_before.txt
+    V60 OK protocol captures stderr via: 2>&1 | tee t2b_readout.txt
+    V60 OK protocol captures stderr via: fastboot answers on stderr
+    V61 OK retry-count:b is informational only (0 legitimate)
+    V61 OK gate is successful:b=yes AND unbootable:b=no
+    V62 OK protocol carries the required/optional/accepted-absent getvar policy
+    V63 OK T-1.3 re-checks build/release on Android, then slot state only after key re-entry
+    V64 OK no generic RAM sentence in protocol
+    V69 OK README.md uses controlled term: host-verified
+    V69 OK README.md uses controlled term: rebuild-reproducible
+    V69 OK README.md uses controlled term: hardware-unverified
+    V69 OK README.md uses controlled term: boot-unproven
+    V69 OK docs/KMI-GATES.md uses controlled term: host-verified
+    V69 OK docs/KMI-GATES.md uses controlled term: rebuild-reproducible
+    V69 OK docs/KMI-GATES.md uses controlled term: hardware-unverified
+    V69 OK docs/KMI-GATES.md uses controlled term: boot-unproven
+    V69 OK docs/SAFETY.md uses controlled term: host-verified
+    V69 OK docs/SAFETY.md uses controlled term: rebuild-reproducible
+    V69 OK docs/SAFETY.md uses controlled term: hardware-unverified
+    V69 OK docs/SAFETY.md uses controlled term: boot-unproven
+    V71 OK no stale T0/T2 live-step references in device-facing docs
+    V72 OK slot-successful is required, and the accepted-absent block says it is not accepted-absent
+    V72 OK no 'any per-slot' accepted-absent clause
+    V72 OK max-download-size is threshold-if-present in Z0 and in R3
+    V72 OK no zero-risk or risk-free claim in the protocol or SAFETY
+    V73 OK order is T2b-pre, then T3 flash, then T2b-post
+    V73 OK T3 pass is OKAY; 30 min stress is not the pass criterion
+    V73 OK reboot of the new image waits for T2b-post
+    V74 OK L2 names one key attempt, then wrapper rollback or stop
+    V74 OK L3 says stop and do not repeat the flash
+    V74 OK L4 rolls back a flash that bypassed the wrapper and ends the day
+    V75 OK every PROTO/SAFETY citation names a token present on the cited line
+    V90 OK protocol keeps: re-apply Z0.4 before reboot
+    V90 OK protocol keeps: desligue por teclas e encerre
+    V90 OK protocol keeps: do not unlock the screen
+    V90 OK protocol keeps: Device not lake: STOP, do not advance, do not unlock
+    V90 OK protocol keeps: slot not _b: power off, do not unlock, do not reboot
+    V90 OK protocol keeps: OS line mismatch: power off, do not unlock, report, do not reboot
+    V90 OK protocol keeps: modules not a superset: STOP, do not advance, and do not reboot when current-slot is not b
+    V91 OK abort preamble keeps the reboot instruction and the slot exception
+    V92 OK any-other-answer is scoped to the PASS predicates, and slot a is record-only
+    V93 OK protocol states the single absence definition in rule 4 and the abort row
+    V93 OK absence is Variable not found with no FAILED ( in that answer
+    V94 OK empty Z0.2 ends the day; the row does not offer another cable
+    V95 OK Z0.5 stops when the capture lacks one answer per allowlist name
+    V96 OK max-download-size is LK hex, optional 0x prefix, in bytes, in Z0 and in R3
+    V97 OK Z0 PASS equation is identical on the close line and the summary line
+    V98 OK lk_parse_size accepts lake hex with or without 0x and the flash guard uses it
+    V99 OK key entry is power off, disconnect, Vol− + Power until FASTBOOT, release, reconnect
+    V100 OK Z0 2026-10-09 values are logged and the unlogged sentence is gone
+    V101 OK slot A is measured unbootable, the skip is the priority nibble, and retry b=1 stays INFERRED for T3
+    V102 OK flash refuses unless current-slot is b and is-userspace is not yes
+    V103 OK second-disk copy is a T-1.1 precondition and the copy commands are cp and sha256sum -c
+    V104 OK guard refusal stops with no second flash; a mid-write without OKAY is not intact
+    V105 OK T-1.3b gates three slot values and only records retry-count
+    V106 OK T-1.3a and Z0 results name the measured uname and the capture before T-1.2
+    V107 OK day order is host guard files, adb baseline with the cable, then unplug for Z0.1
+    V108 OK T-1 writes only the backup hash; boot_b_new.img is T3 day only
+    V109 OK Z0.6 is the isolated-Z0 exit and T-1 stays in fastboot until the flash
+    V110 OK identity check has no unnamed model or CPU id
+    V111 OK fact 21 names 12 log rows, 41 distinct images, and the measured 44/44 copy
+    V112 OK slot value is exactly b after trailing space and CR are removed
+    V113 OK pstore gate measures the ramoops backend, not cold-boot files
+    V114 OK T3 acceptance diffs dmesg against the stock boot
+    V115 OK CRC gate fails closed on a required symbol with no provider, except the stock allowlist
+    PASS protocol invariants (V3-V75 and V90-V115 except aliases and the checks that live in other scripts)
+
+--- V6 destructive ops
+    V6 OK   tools/check_docs_numbers.sh:22 rm -rf $T (mktemp -d + trap)
+    V6 OK   tools/fastboot_guard.sh:40 rm -rf $GDIR (mktemp -d + trap)
+    V6 OK   tools/fetch_official_artifacts.sh:114 rm -rf $STAGE (mktemp -d + trap)
+    V6 OK   tools/gate_kmi_crc.sh:22 rm -rf $T (mktemp -d + trap)
+    V6 OK   tools/run_all_checks.sh:65 rm -rf $T (mktemp -d + trap)
+    V6 OK   tools/selftest_backprop.sh:12 rm -rf $BASE (mktemp -d + trap)
+    V6 OK   tools/selftest_backprop.sh:40 rm -rf $dir (mktemp -d + trap)
+    V6 OK   tools/selftest_fastboot_guard.sh:11 rm -rf $BASE (mktemp -d + trap)
+    V6 OK   tools/selftest_fetch_publish.sh:12 rm -rf $WORK (mktemp -d + trap)
+    V6 OK   tools/selftest_gates.sh:15 rm -rf $WORK (mktemp -d + trap)
+    V6 OK   tools/verify_modsig.sh:24 rm -rf $TMPWORK (mktemp -d + trap)
+    V6 PASS 11 rm -rf executável(is), todos em diretórios criados por mktemp -d e removidos por trap
+
+--- V54 sigpipe hygiene
+    V54 OK no pipe into grep -q in tools/*.sh (herestrings or file args only)
+    PASS sigpipe hygiene (V54)
+
+--- V9 fetch url
+    V9 OK   --dry-run can.ko -> https://ci.android.com/builds/submitted/13771415/kernel_aarch64/latest/can.ko
+    V9 OK   --dry-run Image -> https://ci.android.com/builds/submitted/13771415/kernel_aarch64/latest/Image
+    V9 OK   --dry-run vmlinux.symvers -> https://ci.android.com/builds/submitted/13771415/kernel_aarch64/latest/vmlinux.symvers
+    V9 OK   --dry-run BUILD_INFO -> https://ci.android.com/builds/submitted/13771415/kernel_aarch64/latest/view/BUILD_INFO
+    V9 OK   --dry-run não criou <repo>/kernel/lake/official
+    V9 PASS dry-run URL pattern == documented viewer URL (https://ci.android.com/builds/submitted/13771415/kernel_aarch64/latest)
+
+--- V76 fetch publish
+    V76 OK nome ../x recusado
+    V76 OK nome absoluto recusado
+    V76 OK nome com barra recusado
+    V76 OK nome .. recusado
+    V76 OK official/ do repo continua ausente
+    V76 OK dry-run Image intacto
+    V76 OK lixo de symvers recusado
+    V76 OK destino sem candidato lixo
+    V76 OK can.ko com hash errado recusado
+    V76 OK destino sem candidato can.ko
+    V76 OK hash pinado de Image não é substituível
+    V76 OK DOWNLOADED symvers
+    V76 OK UNVERIFIED symvers
+    V76 OK sem HASH-VERIFIED falso
+    V76 OK symvers publicado
+    V76 OK HASH-VERIFIED local.symvers
+    V76 OK uma palavra de verificação
+    V78 OK curl failure is reported, not swallowed
+    V76 PASS fetch name gate + atomic publish
+
+--- GATE crc self-test
+    ### [1/6] POSITIVO: symvers de referência (stock oficial do Google)
+        modules.files=557 modules.unique=370
+        symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+        compared=2309 mismatches=0 missing_exports=0 conflicting_crcs=0
+        export_type_mismatches=0 namespace_mismatches=0
+        unresolved=0
+        PASS
+      => OK   [positivo] exit=0, casou /^PASS$/
+    
+    ### [2/6] NEGATIVO (i): 1 CRC exigido corrompido (mutex_lock: 0xd5977bfb -> 0xdeadbeef)
+        modules.files=557 modules.unique=370
+        symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+        compared=2309 mismatches=1 missing_exports=0 conflicting_crcs=0
+        export_type_mismatches=0 namespace_mismatches=0
+        unresolved=0
+        MISMATCH mutex_lock required=0xd5977bfb new=0xdeadbeef
+        FAIL
+      => OK   [crc-sabotado] exit=1, casou /MISMATCH mutex_lock required=0xd5977bfb new=0xdeadbeef/
+    
+    ### [3/6] NEGATIVO (ii): 1 export exigido removido do symvers (mutex_lock)
+        modules.files=557 modules.unique=370
+        symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+        compared=2308 mismatches=0 missing_exports=1 conflicting_crcs=0
+        export_type_mismatches=0 namespace_mismatches=0
+        unresolved=1
+        MISSING_EXPORT mutex_lock
+        UNRESOLVED mutex_lock
+        FAIL
+      => OK   [export-removido] exit=1, casou /^MISSING_EXPORT mutex_lock$/
+    
+    ### [4/6] NEGATIVO (iii): symvers vazio
+        modules.files=557 modules.unique=370
+        symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+        compared=0 mismatches=0 missing_exports=2309 conflicting_crcs=0
+        export_type_mismatches=0 namespace_mismatches=0
+        unresolved=2309
+        MISSING_EXPORT __ClearPageMovable
+        MISSING_EXPORT __SetPageMovable
+        MISSING_EXPORT ___drm_dbg
+        MISSING_EXPORT ___pskb_trim
+        MISSING_EXPORT ___ratelimit
+        MISSING_EXPORT __alloc_pages
+        MISSING_EXPORT __alloc_percpu
+        MISSING_EXPORT __alloc_percpu_gfp
+        MISSING_EXPORT __alloc_skb
+        MISSING_EXPORT __arch_copy_from_user
+        MISSING_EXPORT __arch_copy_to_user
+        MISSING_EXPORT __arm_smccc_hvc
+        MISSING_EXPORT __arm_smccc_smc
+        MISSING_EXPORT __arm_smccc_sve_check
+        MISSING_EXPORT __bio_add_page
+        MISSING_EXPORT __bitmap_set
+        MISSING_EXPORT __bitmap_weight
+        MISSING_EXPORT __blk_alloc_disk
+        MISSING_EXPORT __check_object_size
+        MISSING_EXPORT __clk_get_hw
+        UNRESOLVED __ClearPageMovable
+        UNRESOLVED __SetPageMovable
+        UNRESOLVED ___drm_dbg
+        UNRESOLVED ___pskb_trim
+        UNRESOLVED ___ratelimit
+        UNRESOLVED __alloc_pages
+        UNRESOLVED __alloc_percpu
+        UNRESOLVED __alloc_percpu_gfp
+        UNRESOLVED __alloc_skb
+        UNRESOLVED __arch_copy_from_user
+        UNRESOLVED __arch_copy_to_user
+        UNRESOLVED __arm_smccc_hvc
+        UNRESOLVED __arm_smccc_smc
+        UNRESOLVED __arm_smccc_sve_check
+        UNRESOLVED __bio_add_page
+        UNRESOLVED __bitmap_set
+        UNRESOLVED __bitmap_weight
+        UNRESOLVED __blk_alloc_disk
+        UNRESOLVED __check_object_size
+        UNRESOLVED __clk_get_hw
+        FAIL
+      => OK   [symvers-vazio] exit=1, casou /compared=0 .*missing_exports=2309/
+    
+    ### [5/6] EXATIDÃO (U4): símbolo que só difere por prefixo não casa (mutex_lock vs mutex_lockX)
+        modules.files=557 modules.unique=370
+        symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+        compared=2308 mismatches=0 missing_exports=1 conflicting_crcs=0
+        export_type_mismatches=0 namespace_mismatches=0
+        unresolved=1
+        MISSING_EXPORT mutex_lock
+        UNRESOLVED mutex_lock
+        FAIL
+      => OK   [prefixo-exato] exit=1, casou /^MISSING_EXPORT mutex_lock$/
+    
+    ### [6/6] NEGATIVO (item 42): export_type de um símbolo exigido diverge
+        modules.files=557 modules.unique=370
+        symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+        compared=2309 mismatches=0 missing_exports=0 conflicting_crcs=0
+        export_type_mismatches=1 namespace_mismatches=0
+        unresolved=0
+        XTYPE_MISMATCH mutex_lock ref=EXPORT_SYMBOL new=EXPORT_SYMBOL_GPL_SABOTAGE
+        FAIL
+      => OK   [export-type] exit=1, casou /^XTYPE_MISMATCH mutex_lock /
+    
+    SELFTEST PASS (positivo PASS + 4 sabotagens FAIL + 1 exatidão de chave)
+
+--- PY unit tests
+        
+        OK
+        BYTECHECK: novo=12356 stock=12356 footer preservado
+        + avbtool add_hash_footer --image <scratch><tmp>/rbtest.up2v_3g7/.repack-riwjss9p.tmp --partition_size 67108864 --partition_name boot --algorithm NONE --rollback_index 0
+        ROUNDTRIP OK: kernel 109 B idêntico no OUT
+    V65 NOTE run_fuzz.py is not in this tree; V65 is unittest discover only
+    V65 OK Python unit tests pass (unittest discover tests/test_*.py; ResourceWarning is an error)
+
+--- GUARD fastboot stub
+    ### [1] devices passa
+        stub chamado, argv: devices
+      => OK
+    
+    ### [2] reboot passa
+        stub chamado, argv: reboot
+      => OK
+    
+    ### [3-product] getvar product passa
+        stub chamado, argv: getvar product
+      => OK
+    
+    ### [3-current-slot] getvar current-slot passa
+        stub chamado, argv: getvar current-slot
+      => OK
+    
+    ### [3-slot-count] getvar slot-count passa
+        stub chamado, argv: getvar slot-count
+      => OK
+    
+    ### [3-is-userspace] getvar is-userspace passa
+        stub chamado, argv: getvar is-userspace
+      => OK
+    
+    ### [3-unlocked] getvar unlocked passa
+        stub chamado, argv: getvar unlocked
+      => OK
+    
+    ### [3-max-download-size] getvar max-download-size passa
+        stub chamado, argv: getvar max-download-size
+      => OK
+    
+    ### [3-partition-size:boot_b] getvar partition-size:boot_b passa
+        stub chamado, argv: getvar partition-size:boot_b
+      => OK
+    
+    ### [3-slot-successful:a] getvar slot-successful:a passa
+        stub chamado, argv: getvar slot-successful:a
+      => OK
+    
+    ### [3-slot-successful:b] getvar slot-successful:b passa
+        stub chamado, argv: getvar slot-successful:b
+      => OK
+    
+    ### [3-slot-unbootable:a] getvar slot-unbootable:a passa
+        stub chamado, argv: getvar slot-unbootable:a
+      => OK
+    
+    ### [3-slot-unbootable:b] getvar slot-unbootable:b passa
+        stub chamado, argv: getvar slot-unbootable:b
+      => OK
+    
+    ### [3-slot-retry-count:a] getvar slot-retry-count:a passa
+        stub chamado, argv: getvar slot-retry-count:a
+      => OK
+    
+    ### [3-slot-retry-count:b] getvar slot-retry-count:b passa
+        stub chamado, argv: getvar slot-retry-count:b
+      => OK
+    
+    ### [3-battery-soc-ok] getvar battery-soc-ok passa
+        stub chamado, argv: getvar battery-soc-ok
+      => OK
+    
+    ### [3-battery-voltage] getvar battery-voltage passa
+        stub chamado, argv: getvar battery-voltage
+      => OK
+    
+    ### [4] flash boot_b válido chama o stub
+        stub chamado, argv: flash boot_b <scratch><tmp>/fastboot_guard.jDDyw9/image.bin sha=a654ecfcdc6439a3a421c6c5a29ed998a7f8b91e47b1c6808c172f8354e5372f mode=400
+      => OK
+    
+    ### [5] getvar all recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [6] getvar cpuid recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [7] oem recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [24] oem unlock recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [25] oem off-mode-charge recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [26] update recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [8] erase recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [9] format recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [10] set_active recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [11] flashing recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [12] flash lk recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [13] flash boot_a recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [14] flash boot_b hash errado recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [15] flash boot_b tamanho errado recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [16] flash boot_b sem ANDROID! recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [17] flash boot_b arquivo inexistente recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [18] devices com arg extra recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [19] getvar sem nome recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [20] sem args (uso) recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    ### [21] flash usa cópia privada verificada (TOCTOU)
+        stub recebeu cópia 0400 com hash permitido: <scratch><tmp>/fastboot_guard.Z2rHtk/image.bin
+      => OK
+    
+    ### [22] arquivo com espaço passa
+        stub chamado, argv: flash boot_b <scratch><tmp>/fastboot_guard.tQDVfO/image.bin sha=a654ecfcdc6439a3a421c6c5a29ed998a7f8b91e47b1c6808c172f8354e5372f mode=400
+      => OK
+    
+    ### [23] arquivo com traço inicial passa (sem confusão de flag)
+        stub chamado, argv: flash boot_b <scratch><tmp>/fastboot_guard.cf0ust/image.bin sha=a654ecfcdc6439a3a421c6c5a29ed998a7f8b91e47b1c6808c172f8354e5372f mode=400
+      => OK
+    
+    ### V89 slot a recusa
+        recusado sem argv reboot
+      => OK
+    
+    ### V89 is-userspace yes recusa
+        recusado sem argv reboot
+      => OK
+    
+    ### V89 slot b passa
+        reboot depois dos dois getvar
+      => OK
+    
+    ### V89 userspace Variable not found passa
+        reboot depois dos dois getvar
+      => OK
+    
+    ### V89 slot sem linha recusa
+        recusado sem argv reboot
+      => OK
+    
+    V89 OK reboot interlock
+    ### V102 slot a recusa
+        recusado sem flash
+      => OK
+    
+    ### V102 is-userspace yes recusa
+        recusado sem flash
+      => OK
+    
+    ### V102 slot sem linha recusa
+        recusado sem flash
+      => OK
+    
+    ### V102 slot b passa
+        flash depois do slot
+      => OK
+    
+    V102 OK flash slot interlock
+    ### V112 flash trailing space
+        aceito
+      => OK
+    
+    ### V112 flash trailing CR
+        aceito
+      => OK
+    
+    ### V112 flash leading space
+        aceito
+      => OK
+    
+    ### V112 flash underscore
+        recusado
+      => OK
+    
+    ### V112 flash uppercase
+        recusado
+      => OK
+    
+    ### V112 flash bb
+        recusado
+      => OK
+    
+    ### V112 flash slot a
+        recusado
+      => OK
+    
+    ### V112 flash empty
+        recusado
+      => OK
+    
+    ### V112 reboot trailing space
+        aceito
+      => OK
+    
+    ### V112 reboot trailing CR
+        aceito
+      => OK
+    
+    ### V112 reboot leading space
+        aceito
+      => OK
+    
+    ### V112 reboot underscore
+        recusado
+      => OK
+    
+    ### V112 reboot uppercase
+        recusado
+      => OK
+    
+    ### V112 reboot bb
+        recusado
+      => OK
+    
+    ### V112 reboot slot a
+        recusado
+      => OK
+    
+    ### V112 reboot empty
+        recusado
+      => OK
+    
+    V112 OK slot value normalization
+    ### V98 4000000 passa
+        flash depois de partition-size
+      => OK
+    
+    ### V98 0x4000000 passa
+        flash depois de partition-size
+      => OK
+    
+    ### V98 0X4000000 passa
+        flash depois de partition-size
+      => OK
+    
+    ### V98 Finished trailer ignorado
+        flash depois de partition-size
+      => OK
+    
+    ### V98 3ffffff recusa
+        recusado sem flash
+      => OK
+    
+    ### V98 67108864 é hex e recusa
+        recusado sem flash
+      => OK
+    
+    ### V98 vazio recusa
+        recusado sem flash
+      => OK
+    
+    ### V98 Variable not found recusa
+        recusado sem flash
+      => OK
+    
+    ### V98 FAILED recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 sintético hash+size+magic+4000000
+        aceito
+      => OK
+    
+    ### T-1 hash que não é o do arquivo recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 partição 3ffffff recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 partição 67108864 recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 partição vazia recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 partição Variable not found recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 magic errado recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 tamanho errado recusa
+        recusado sem flash
+      => OK
+    
+    ### T-1 boot_a recusa
+        recusado sem flash
+      => OK
+    
+    T1-AUDITED skip
+    V98 OK partition-size hex parse
+    T-1 pronto: sim
+    ### [R1] rollback com slot b unbootable flasha boot_b e reativa b
+        flash boot_b + set_active b; set_active a ausente
+      => OK
+    
+    ### [R2] rollback com slot a não escreve e não troca slot
+        recusado (exit=2), sem flash e sem set_active
+      => OK
+    
+    ### [R3] sabotagem: set_active a nunca chega no stub
+        set_active a recusado, stub intacto
+      => OK
+    
+    ### [R4] rollback hash errado recusado
+        recusado (exit=2), stub NÃO chamado
+      => OK
+    
+    GUARD-SELFTEST: 44 passada(s), 0 falha(s)
+    V66 OK fastboot guard behavioral selftest (fake fastboot, allow+deny+update+oem+TOCTOU)
+    SELFTEST-GUARD PASS
+
+--- CONFIG table
+    V70 OK config table: no absolute language, gate columns present
+
+--- MODSIG matrix
+    ### [1] signatário correto valida
+      => OK (exit=0)
+    
+    ### [2] signatário errado rejeitado
+      => OK (exit=1)
+    
+    ### [3] conteúdo modificado rejeitado
+      => OK (exit=1)
+    
+    ### [4] assinatura modificada rejeitada
+      => OK (exit=1)
+    
+    ### [5] cert ausente rejeitado limpo
+      => OK (exit=1)
+    
+    ### [6] mesmo issuer, outra chave rejeitado
+      => OK (exit=1)
+    
+    ### [7] cert expirado rejeitado
+      => OK (exit=1)
+    
+    ### [8] cert ainda não válido rejeitado
+      => OK (exit=1)
+    
+    V67 OK modsig synthetic matrix (8/8: signer ok/errado, conteúdo/assinatura, cert ausente, mesmo issuer, cert expirado, cert ainda não válido)
+    SELFTEST-FULL PASS (8/8)
+
+--- BUILD claims
+    V79 OK cms diagnostic reports openssl failure
+    V80 OK actions/checkout pinned by SHA
+    V81 OK build commands, disk units, and env flags match the script
+    V82 OK gate, tag pin, and selftest claims match the commands
+    V83 OK config, corpus split, cites, and contributor rules match the repo
+    V84 OK build.sh names 80 GiB and does not mask failures
+    V86 OK config diff, symvers cmp, and TSV regen match the failure modes
+    V87 OK measured claims stay inside the recorded evidence
+    V88 OK contributor route and changelog paths are explicit
+
+=== resumo dos invariantes ===
+V1    PASS
+V2    PASS
+V3    PASS
+V4    PASS
+V5    PASS
+V6    PASS
+V7    PASS
+V8    PASS
+V9    PASS
+V10   PASS
+V11   PASS
+V12   PASS
+V13   PASS
+V14   PASS
+V15   PASS
+V16   PASS
+V17   PASS
+V18   PASS
+V19   PASS
+V20   PASS
+V21   PASS
+V22   PASS
+V23   PASS
+V24   PASS
+V25   PASS
+V26   PASS
+V27   PASS
+V28   PASS
+V29   PASS
+V30   PASS
+V31   PASS
+V32   PASS
+V33   PASS
+V34   PASS
+V35   PASS
+V36   PASS
+V37   PASS
+V38   PASS
+V39   PASS
+V40   PASS
+V41   PASS
+V42   PASS
+V43   PASS
+V44   PASS
+V45   PASS
+V46   PASS
+V47   PASS
+V48   PASS
+V49   PASS
+V50   PASS
+V51   PASS
+V52   PASS
+V53   PASS
+V54   PASS
+V55   PASS
+V56   PASS
+V57   PASS
+V58   PASS
+V59   PASS
+V60   PASS
+V61   PASS
+V62   PASS
+V63   PASS
+V64   PASS
+V65   PASS
+V66   PASS
+V67   PASS
+V68   PASS
+V69   PASS
+V70   PASS
+V71   PASS
+V72   PASS
+V73   PASS
+V74   PASS
+V75   PASS
+V76   PASS
+V77   PASS
+V78   PASS
+V79   PASS
+V80   PASS
+V81   PASS
+V82   PASS
+V83   PASS
+V84   PASS
+V85   PASS
+V86   PASS
+V87   PASS
+V88   PASS
+V89   PASS
+V90   PASS
+V91   PASS
+V92   PASS
+V93   PASS
+V94   PASS
+V95   PASS
+V96   PASS
+V97   PASS
+V98   PASS
+V99   PASS
+V100  PASS
+V101  PASS
+V102  PASS
+V103  PASS
+V104  PASS
+V105  PASS
+V106  PASS
+V107  PASS
+V108  PASS
+V109  PASS
+V110  PASS
+V111  PASS
+V112  PASS
+V113  PASS
+V114  PASS
+V115  PASS
+GATE  PASS
+run_all_checks: PASS (V1-V9 + aliases V10-V13 + V14-V33 + V34-V115 + gate self-test)
+RUN_ALL_EXIT=0

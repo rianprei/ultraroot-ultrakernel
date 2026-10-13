@@ -7,6 +7,8 @@ Este documento resume o que está feito, o que está bloqueado e o que é arrisc
 - **H8 (escrita JNI de `SET_APP_PROFILE`):** conferência independente em `docs/history/reports/review_h8r_2026-10-13.txt`, veredito APROVADO e "H8 fecha". O único achado não bloqueante foi o caso `ret > 0` sem teste. A correção está em `ultraroot/core-backend/src/test/native/fill_test.cc`, na função `ioctlPositiveReturnIsPassedThrough`.
 - **H1, H2, H3, H4, H5, H6, L1 e L2:** fechados segundo `docs/ultraroot/plan.md` §9 e `docs/history/handoffs/HANDOFF-ultraroot-2026-10-13-v3.md`.
 - **H3, build ui10:** APK assinado em V2 (cert SHA-256 `efb8d49f…`), com registro em `docs/ultraroot/plan.md` §9. O APK em si não está no repo.
+- **UltraKernel, host (2026-10-13):** `Image` compilada a partir do clone publicado (`CONFIG_KSU=y`, 0 avisos); gate de CRC PASS (2309 símbolos, 0 divergências); `run_all_checks` do lake com 116 de 116 na árvore corrigida; selftest do guard de fastboot com 44 de 44. Relatórios em `docs/history/reports/` (arquivos `uk2_…`, `uk3_…`, `uk4_…` e `uk5_…`, de 2026-10-13). Tarefas em `docs/ultrakernel/TODOS.md`, UK-2 a UK-5.
+- **UltraRoot, host (2026-10-13):** a partir do clone, com cache Gradle vazio, `core-backend` passa em 20 testes, `app` passa em 41, e o APK de debug é gerado. Relatório: `docs/history/reports/app_gradle_clone_2026-10-13.txt`.
 
 ## Bloqueado pelo dono
 
@@ -26,9 +28,11 @@ O APK `ui10` não contém o símbolo JNI `Java_dev_superroot_core_EngineNatives_
 - **Grant não provado (E4):** "su via KSU não está provado". Qualquer texto de tela ou de documento que afirme que o root funciona está errado até a prova.
 - **Cota:** a janela semanal do Codex estava esgotada em 2026-10-13, com reset em 6 dias e 16 horas, segundo `usage.js --refresh`. Enquanto isso, trabalho com Codex fica parado.
 - **Lake sem publicação:** o repo público do lake está em `ffe583a`. O commit `c8e7812` (usado como snapshot em `kernel/lake/`) não está no GitHub.
+- **Erros para revisão:** `docs/ERROS-PARA-REVISAO.md` lista os erros conhecidos, com evidência e estado. A correção da redação do certificado público do GKI (ERR-01) está publicada em `main`. Há um item de risco e uma decisão do dono sobre o histórico (ERR-03).
 - **Dados pessoais:** serial de aparelho, IP privado e um e-mail foram redigidos. Os locais estão em `docs/history/REDACOES.txt`.
 
 ## Próximo passo técnico (sem aparelho)
 
 - Escolher a copy do E1 (dono). Depois, implementar H7 com teste de integração.
 - Próximo build com H8 incluída (depois de E2).
+- Agente de nuvem: resolver os itens ABERTOS de `docs/ERROS-PARA-REVISAO.md`. As decisões do dono ficam em `docs/PENDENCIAS-DO-DONO.md`.

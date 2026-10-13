@@ -372,7 +372,7 @@ case_run 80 "V67 modsig signer extraction broken" verify_modsig.sh '^V67 FAIL' \
 
 # V68: recorded fingerprint dropped from docs must FAIL
 case_run 81 "V68 fingerprint dropped from docs" check_docs_numbers.sh '^V68 FAIL' \
-  "sed -i 's/[redigido: mac]:[redigido: mac]:[redigido: mac]:[redigido: mac]:[redigido: mac]:72:A1/00:00/' docs/KMI-GATES.md"
+  "sed -i 's/76:FB:DF:D1:3F:6B:A6:12:75:6E:AE:36:E9:9F:88:50:8F:A3:20:2A:A3:51:17:70:4C:26:D5:5A:99:CC:72:A1/00:00/' docs/KMI-GATES.md"
 
 # V6: generic destructive-command classes must FAIL
 case_run 82 "V6 dd literal target fails" check_destructive_ops.sh '^V6 FAIL' \

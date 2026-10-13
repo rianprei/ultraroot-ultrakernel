@@ -1,0 +1,206 @@
+UltraRoot a partir do clone publicado (commit 0f3fbe3c6aa177f4a90ff863a9f5b9b53a96d65b), 2026-10-13.
+Ambiente: JDK 21.0.12 (JAVA_HOME explícito; o padrão da máquina é 25), ANDROID_HOME com plataforma android-37.0, build-tools 37.0.0, NDK 29.0.14206865, CMake 3.22.1.
+Cache Gradle: diretório novo, criado nesta execução (891 MB ao fim). Sem local.properties no clone. O clone ficou sem arquivos não ignorados depois do build.
+Fase 1 (sem --offline): :core-backend:testDebugUnitTest, :core-backend:externalNativeBuildDebug, :app:assembleDebug. BUILD SUCCESSFUL em 2m 08s. APK de debug: app-debug.apk, 30.469.704 bytes. O build não define signingConfig, então a assinatura é a de debug padrão do AGP (não conferida com apksigner: o clone foi apagado depois do teste).
+Fase 2 (comandos documentados, --offline): BUILD SUCCESSFUL. As tarefas já estavam prontas, por isso saíram UP-TO-DATE.
+Testes do core-backend: 20 de 20 passam (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10).
+Testes do app (:app:testDebugUnitTest --offline): 41 de 41 passam, 0 falhas, 0 erros. Log: seção 'app' abaixo.
+
+== fase 1 e 2
+java: openjdk version "21.0.12.1" 2026-08-18
+ANDROID_HOME=<ANDROID_HOME> (sem local.properties no clone: sim)
+2026-10-13T20:19:24-03:00
+== fase 1: primeira compilação, cache vazio, sem --offline
+Fetching distribution.
+Downloading https://services.gradle.org/distributions/gradle-9.7.1-bin.zip
+..............10%..............20%...............30%..............40%...............50%..............60%...............70%..............80%..............90%...............100%
+
+Welcome to Gradle 9.7.1!
+
+Here are the highlights of this release:
+ - Isolated Projects graduates to incubating
+ - Broader Configuration Cache compatibility
+ - Resilient Sync helps you fix broken builds
+ - More source locations in problem reports
+
+For more details see https://docs.gradle.org/9.7.1/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :core-backend:preBuild UP-TO-DATE
+> Task :core-backend:preDebugBuild UP-TO-DATE
+> Task :core-backend:generateDebugResources
+> Task :core-backend:packageDebugResources
+> Task :core-backend:processDebugNavigationResources
+> Task :core-backend:preDebugUnitTestBuild UP-TO-DATE
+> Task :core-backend:javaPreCompileDebug
+> Task :core-backend:javaPreCompileDebugUnitTest
+> Task :core-backend:parseDebugLocalResources
+> Task :core-backend:configureCMakeDebug[arm64-v8a]
+> Task :core-backend:generateDebugRFile
+> Task :core-backend:buildCMakeDebug[arm64-v8a]
+> Task :core-backend:externalNativeBuildDebug
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :core-backend:generateDebugUnitTestStubRFile
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :core-backend:compileDebugKotlin
+> Task :app:processDebugNavigationResources
+> Task :core-backend:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-backend:bundleLibRuntimeToJarDebug
+> Task :core-backend:bundleLibCompileToJarDebug
+> Task :core-backend:processDebugJavaRes
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :core-backend:generateDebugAssets UP-TO-DATE
+> Task :app:javaPreCompileDebug
+> Task :core-backend:mergeDebugAssets
+> Task :app:parseDebugLocalResources
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:generateDebugRFile
+> Task :core-backend:compileDebugUnitTestKotlin
+> Task :app:generateDebugGlobalSynthetics
+> Task :core-backend:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core-backend:processDebugUnitTestJavaRes
+> Task :core-backend:testDebugUnitTest
+> Task :app:desugarDebugFileDependencies
+> Task :app:checkDebugDuplicateClasses
+> Task :core-backend:bundleLibRuntimeToDirDebug
+> Task :core-backend:writeDebugAarMetadata
+> Task :app:compileDebugKotlin
+> Task :app:mergeExtDexDebug
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes
+> Task :app:mergeLibDexDebug
+> Task :app:mapDebugSourceSetPaths
+> Task :app:checkDebugAarMetadata
+> Task :app:mergeDebugJavaResource
+> Task :app:compileDebugNavigationResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :core-backend:extractDeepLinksDebug
+> Task :core-backend:mapDebugSourceSetPaths
+> Task :core-backend:compileDebugLibraryResources
+> Task :app:mergeDebugJniLibFolders
+> Task :core-backend:mergeDebugJniLibFolders
+> Task :core-backend:mergeDebugNativeLibs
+> Task :app:validateSigningDebug
+> Task :core-backend:processDebugManifest
+> Task :core-backend:copyDebugJniLibsProjectOnly
+> Task :app:mergeDebugResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:writeDebugAppMetadata
+> Task :app:mergeDebugNativeLibs
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:processDebugManifestForPackage
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libultraroot.so. Run with --info option to learn more.
+
+> Task :app:processDebugResources
+> Task :app:dexBuilderDebug
+> Task :app:mergeProjectDexDebug
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+
+BUILD SUCCESSFUL in 2m 8s
+64 actionable tasks: 64 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html
+GRADLE_EXIT=0
+2026-10-13T20:21:33-03:00
+== fase 2: comandos documentados, com --offline
+> Task :core-backend:preBuild UP-TO-DATE
+> Task :core-backend:preDebugBuild UP-TO-DATE
+> Task :core-backend:configureCMakeDebug[arm64-v8a]
+> Task :core-backend:buildCMakeDebug[arm64-v8a]
+> Task :core-backend:externalNativeBuildDebug
+
+BUILD SUCCESSFUL in 922ms
+3 actionable tasks: 3 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html
+OFFLINE_NATIVE_EXIT=0
+> Task :core-backend:preBuild UP-TO-DATE
+> Task :core-backend:preDebugBuild UP-TO-DATE
+> Task :core-backend:generateDebugResources UP-TO-DATE
+> Task :core-backend:packageDebugResources UP-TO-DATE
+> Task :core-backend:processDebugNavigationResources UP-TO-DATE
+> Task :core-backend:parseDebugLocalResources UP-TO-DATE
+> Task :core-backend:generateDebugRFile UP-TO-DATE
+> Task :core-backend:compileDebugKotlin UP-TO-DATE
+> Task :core-backend:javaPreCompileDebug UP-TO-DATE
+> Task :core-backend:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-backend:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-backend:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core-backend:preDebugUnitTestBuild UP-TO-DATE
+> Task :core-backend:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :core-backend:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :core-backend:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :core-backend:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core-backend:processDebugJavaRes UP-TO-DATE
+> Task :core-backend:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :core-backend:testDebugUnitTest UP-TO-DATE
+
+BUILD SUCCESSFUL in 792ms
+15 actionable tasks: 15 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html
+OFFLINE_TEST_EXIT=0
+2026-10-13T20:21:35-03:00
+== clone após o build (vazio = nenhum arquivo não ignorado foi criado):
+CLONE_STATUS_DONE
+GRADLE_WRAPPER_DONE=0
+
+== app: :app:testDebugUnitTest --offline
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :core-backend:preBuild UP-TO-DATE
+> Task :core-backend:preDebugBuild UP-TO-DATE
+> Task :core-backend:processDebugNavigationResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :core-backend:generateDebugResources UP-TO-DATE
+> Task :core-backend:packageDebugResources UP-TO-DATE
+> Task :core-backend:parseDebugLocalResources UP-TO-DATE
+> Task :core-backend:generateDebugRFile UP-TO-DATE
+> Task :core-backend:compileDebugKotlin UP-TO-DATE
+> Task :core-backend:javaPreCompileDebug UP-TO-DATE
+> Task :core-backend:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-backend:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-backend:writeDebugAarMetadata UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :core-backend:extractDeepLinksDebug UP-TO-DATE
+> Task :core-backend:processDebugManifest UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :core-backend:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core-backend:compileDebugLibraryResources UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest
+> Task :core-backend:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-backend:processDebugJavaRes UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes
+> Task :app:testDebugUnitTest
+
+BUILD SUCCESSFUL in 4s
+39 actionable tasks: 6 executed, 33 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html

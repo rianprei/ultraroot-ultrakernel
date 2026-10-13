@@ -1,0 +1,124 @@
+UK-2 repetido a partir do clone publicado (commit 0f3fbe3c6aa177f4a90ff863a9f5b9b53a96d65b), 2026-10-13.
+Procedimento: kernel/README.md (gki_defconfig, merge_config com kernelsu.fragment, olddefconfig), depois prepare e Image com -j6.
+Compilador: clang r510928 (18.0.0, Android). Saída fora do clone. Avisos (warning/error) no log: 0.
+Linhas de progresso (CC/AR/LD...) omitidas: 4974. O log completo fica fora do repo.
+
+clone HEAD: 0f3fbe3c6aa177f4a90ff863a9f5b9b53a96d65b
+clang: Android (11368308, +pgo, +bolt, +lto, +mlgo, based on r510928) clang version 18.0.0 (https://android.googlesource.com/toolchain/llvm-project 477610d4d0d988e69dbc3fae4fe86bff3f07f2b5)
+2026-10-13T20:08:09-03:00
+== gki_defconfig
+make: Entrando no diretório '<clone>/kernel/common'
+
+make[1]: Entrando no diretório '<saida-do-build>'
+
+#
+# configuration written to .config
+#
+make[1]: Saindo do diretório '<saida-do-build>'
+
+make: Saindo do diretório '<clone>/kernel/common'
+
+== merge_config kernelsu.fragment
+Using <saida-do-build>/.config as base
+Merging <clone>/kernel/common/arch/arm64/configs/kernelsu.fragment
+#
+# merged configuration written to <saida-do-build>/.config (needs make)
+#
+== olddefconfig
+make: Entrando no diretório '<clone>/kernel/common'
+
+make[1]: Entrando no diretório '<saida-do-build>'
+
+#
+# configuration written to .config
+#
+make[1]: Saindo do diretório '<saida-do-build>'
+
+make: Saindo do diretório '<clone>/kernel/common'
+
+CONFIG_KSU=y
+== prepare
+make: Entrando no diretório '<clone>/kernel/common'
+
+make[1]: Entrando no diretório '<saida-do-build>'
+
+mkdir -p <saida-do-build>/tools/bpf/resolve_btfids && make O=<saida-do-build> subdir=tools/bpf/resolve_btfids --no-print-directory -C bpf/resolve_btfids 
+<clone>/kernel/common/scripts/bpf_doc.py --header \
+	--file <clone>/kernel/common/tools/include/uapi/linux/bpf.h > <saida-do-build>/tools/bpf/resolve_btfids/libbpf/bpf_helper_defs.h
+rm -f <saida-do-build>/tools/bpf/resolve_btfids/libbpf/libbpf.a; llvm-ar rcs <saida-do-build>/tools/bpf/resolve_btfids/libbpf/libbpf.a <saida-do-build>/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 bpf.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 libbpf.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 btf.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 libbpf_common.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 libbpf_legacy.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 bpf_helpers.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 bpf_tracing.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 bpf_endian.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 bpf_core_read.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 skel_internal.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 libbpf_version.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 usdt.bpf.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+\
+		if [ ! -d ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf' ]; then install -d -m 755 ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'; fi; install -m 644 <saida-do-build>/tools/bpf/resolve_btfids/libbpf/bpf_helper_defs.h ''<saida-do-build>/tools/bpf/resolve_btfids/libbpf/'/include/bpf'
+clang   -o <saida-do-build>/tools/bpf/resolve_btfids/fixdep <saida-do-build>/tools/bpf/resolve_btfids/fixdep-in.o
+rm -f <saida-do-build>/tools/bpf/resolve_btfids/libsubcmd/libsubcmd.a && llvm-ar rcs <saida-do-build>/tools/bpf/resolve_btfids/libsubcmd/libsubcmd.a <saida-do-build>/tools/bpf/resolve_btfids/libsubcmd/libsubcmd-in.o
+\
+		if [ ! -d '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/' ]; then install -d -m 755 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'; fi; install exec-cmd.h -m 644 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'
+\
+		if [ ! -d '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/' ]; then install -d -m 755 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'; fi; install help.h -m 644 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'
+\
+		if [ ! -d '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/' ]; then install -d -m 755 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'; fi; install pager.h -m 644 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'
+\
+		if [ ! -d '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/' ]; then install -d -m 755 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'; fi; install parse-options.h -m 644 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'
+\
+		if [ ! -d '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/' ]; then install -d -m 755 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'; fi; install run-command.h -m 644 '<saida-do-build>/tools/bpf/resolve_btfids/libsubcmd//include/subcmd/'
+make[1]: Saindo do diretório '<saida-do-build>'
+
+make: Saindo do diretório '<clone>/kernel/common'
+
+== Image -j6
+make: Entrando no diretório '<clone>/kernel/common'
+
+make[1]: Entrando no diretório '<saida-do-build>'
+
+mkdir -p <saida-do-build>/tools/bpf/resolve_btfids && make O=<saida-do-build> subdir=tools/bpf/resolve_btfids --no-print-directory -C bpf/resolve_btfids 
+make[5]: 'install_headers' está atualizado. 
+..+.......+++++++++++++++++++++++++++++++++++++++++++++*.....+......+.+...+.........+...........+......+.+...+++++++++++++++++++++++++++++++++++++++++++++*..+....+.........+...........+................+.................+.......+...+...+...+..+.........+....+......+........+...+.......+++++
+......+..+..........+.....+.+.....+...+....+............+...+++++++++++++++++++++++++++++++++++++++++++++*.......+....+..+....+++++++++++++++++++++++++++++++++++++++++++++*...+...+..+...+............+.+...+.....+............+....+....................+......+....+.....+....+..+...+.......+...+..+.......+...........+................+...+...+.........+.........+..+.......+........+............+..................+.............+......+........+...+...............+...+.+...+..+.+...+..+.......+..+.+.....+.......+.....+.+..+.......+...+.....+....+...+..+.................................+..........+..+.........+......+...+..........+..+...+.......+........+.............+++++
+-----
+  ASN.1   crypto/rsapubkey.asn1.[ch]
+  ASN.1   crypto/rsaprivkey.asn1.[ch]
+  ASN.1   crypto/asymmetric_keys/x509.asn1.[ch]
+  ASN.1   crypto/asymmetric_keys/x509_akid.asn1.[ch]
+  ASN.1   crypto/asymmetric_keys/pkcs7.asn1.[ch]
+: > include/config/abi_gki_kmi_symbols
+-- KernelSU version: 32673
+-- KSU_NEW_DCACHE_FLUSH: 1
+-- KernelSU Manager package name: me.weishu.kernelsu
+-- KernelSU Manager signature size: 818
+-- KernelSU Manager signature hash: efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9
+-- KernelSU is PR Build: 0
+make[1]: Saindo do diretório '<saida-do-build>'
+
+make: Saindo do diretório '<clone>/kernel/common'
+
+2026-10-13T20:19:14-03:00
+== artefatos
+5d50b74c955cd7e2ab007f72eb5b6ce02f9f3e5325f637cf85ce02bbb8ebb00d  <saida-do-build>/arch/arm64/boot/Image
+-rwxr-xr-x 1 [usuario] [usuario]  36395520 13 out 20:19 <saida-do-build>/arch/arm64/boot/Image
+-rwxr-xr-x 1 [usuario] [usuario] 179941272 13 out 20:19 <saida-do-build>/vmlinux
+-rw-r--r-- 1 [usuario] [usuario]    997278 13 out 20:18 <saida-do-build>/vmlinux.symvers
+CLONE_BUILD_EXIT=0
+BUILD_WRAPPER_EXIT=0

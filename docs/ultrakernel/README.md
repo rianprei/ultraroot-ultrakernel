@@ -1,6 +1,6 @@
 # UltraKernel: índice e estado
 
-**Status:** a árvore do kernel está no repo (`kernel/`), a configuração com KernelSU foi verificada no host (UK-1) e o resto da lista está em `TODOS.md`. Overclock e undervolt dependem de dados do aparelho e de decisões do dono (ver `docs/PENDENCIAS-DO-DONO.md`). A visão original está em `SUPERKERNEL_VISION.md`, linha 29.
+**Status:** a árvore do kernel está no repo (`kernel/`). No host, estão feitos os itens UK-0 a UK-6: build da `Image`, gate de CRC, selftests do lake e o inventário de tunables (`UK6-INVENTARIO-TUNABLES.md`, aguardando a revisão do dono). A lista completa está em `TODOS.md`. Overclock e undervolt dependem de dados do aparelho e de decisões do dono (ver `docs/PENDENCIAS-DO-DONO.md`). A visão original está em `SUPERKERNEL_VISION.md`, linha 29.
 
 ## O que está aqui
 
@@ -16,4 +16,4 @@
 
 O UltraKernel só começa depois do UltraRoot. O roteiro detalhado ainda não foi escrito.
 
-O UltraKernel só começa depois do UltraRoot. A junção (root mais overclock mais tuning, tudo com gate) está na fase 5 do rascunho.
+A junção (root, overclock e tuning, tudo com gate) fica para depois do UltraRoot.

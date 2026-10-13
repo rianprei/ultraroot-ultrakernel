@@ -1,0 +1,113 @@
+UK-4: kernel/lake/tools/gate_kmi_crc.sh com o vmlinux.symvers do build do clone (commit 0f3fbe3c6), contra data/official-vmlinux.symvers.
+Selftest do gate (selftest_gates.sh) na mesma sessão.
+
+== gate
+modules.files=557 modules.unique=370
+symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+compared=2309 mismatches=0 missing_exports=0 conflicting_crcs=0
+export_type_mismatches=0 namespace_mismatches=0
+unresolved=0
+PASS
+
+== selftest_gates.sh
+### [1/6] POSITIVO: symvers de referência (stock oficial do Google)
+    modules.files=557 modules.unique=370
+    symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+    compared=2309 mismatches=0 missing_exports=0 conflicting_crcs=0
+    export_type_mismatches=0 namespace_mismatches=0
+    unresolved=0
+    PASS
+  => OK   [positivo] exit=0, casou /^PASS$/
+
+### [2/6] NEGATIVO (i): 1 CRC exigido corrompido (mutex_lock: 0xd5977bfb -> 0xdeadbeef)
+    modules.files=557 modules.unique=370
+    symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+    compared=2309 mismatches=1 missing_exports=0 conflicting_crcs=0
+    export_type_mismatches=0 namespace_mismatches=0
+    unresolved=0
+    MISMATCH mutex_lock required=0xd5977bfb new=0xdeadbeef
+    FAIL
+  => OK   [crc-sabotado] exit=1, casou /MISMATCH mutex_lock required=0xd5977bfb new=0xdeadbeef/
+
+### [3/6] NEGATIVO (ii): 1 export exigido removido do symvers (mutex_lock)
+    modules.files=557 modules.unique=370
+    symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+    compared=2308 mismatches=0 missing_exports=1 conflicting_crcs=0
+    export_type_mismatches=0 namespace_mismatches=0
+    unresolved=1
+    MISSING_EXPORT mutex_lock
+    UNRESOLVED mutex_lock
+    FAIL
+  => OK   [export-removido] exit=1, casou /^MISSING_EXPORT mutex_lock$/
+
+### [4/6] NEGATIVO (iii): symvers vazio
+    modules.files=557 modules.unique=370
+    symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+    compared=0 mismatches=0 missing_exports=2309 conflicting_crcs=0
+    export_type_mismatches=0 namespace_mismatches=0
+    unresolved=2309
+    MISSING_EXPORT __ClearPageMovable
+    MISSING_EXPORT __SetPageMovable
+    MISSING_EXPORT ___drm_dbg
+    MISSING_EXPORT ___pskb_trim
+    MISSING_EXPORT ___ratelimit
+    MISSING_EXPORT __alloc_pages
+    MISSING_EXPORT __alloc_percpu
+    MISSING_EXPORT __alloc_percpu_gfp
+    MISSING_EXPORT __alloc_skb
+    MISSING_EXPORT __arch_copy_from_user
+    MISSING_EXPORT __arch_copy_to_user
+    MISSING_EXPORT __arm_smccc_hvc
+    MISSING_EXPORT __arm_smccc_smc
+    MISSING_EXPORT __arm_smccc_sve_check
+    MISSING_EXPORT __bio_add_page
+    MISSING_EXPORT __bitmap_set
+    MISSING_EXPORT __bitmap_weight
+    MISSING_EXPORT __blk_alloc_disk
+    MISSING_EXPORT __check_object_size
+    MISSING_EXPORT __clk_get_hw
+    UNRESOLVED __ClearPageMovable
+    UNRESOLVED __SetPageMovable
+    UNRESOLVED ___drm_dbg
+    UNRESOLVED ___pskb_trim
+    UNRESOLVED ___ratelimit
+    UNRESOLVED __alloc_pages
+    UNRESOLVED __alloc_percpu
+    UNRESOLVED __alloc_percpu_gfp
+    UNRESOLVED __alloc_skb
+    UNRESOLVED __arch_copy_from_user
+    UNRESOLVED __arch_copy_to_user
+    UNRESOLVED __arm_smccc_hvc
+    UNRESOLVED __arm_smccc_smc
+    UNRESOLVED __arm_smccc_sve_check
+    UNRESOLVED __bio_add_page
+    UNRESOLVED __bitmap_set
+    UNRESOLVED __bitmap_weight
+    UNRESOLVED __blk_alloc_disk
+    UNRESOLVED __check_object_size
+    UNRESOLVED __clk_get_hw
+    FAIL
+  => OK   [symvers-vazio] exit=1, casou /compared=0 .*missing_exports=2309/
+
+### [5/6] EXATIDÃO (U4): símbolo que só difere por prefixo não casa (mutex_lock vs mutex_lockX)
+    modules.files=557 modules.unique=370
+    symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+    compared=2308 mismatches=0 missing_exports=1 conflicting_crcs=0
+    export_type_mismatches=0 namespace_mismatches=0
+    unresolved=1
+    MISSING_EXPORT mutex_lock
+    UNRESOLVED mutex_lock
+    FAIL
+  => OK   [prefixo-exato] exit=1, casou /^MISSING_EXPORT mutex_lock$/
+
+### [6/6] NEGATIVO (item 42): export_type de um símbolo exigido diverge
+    modules.files=557 modules.unique=370
+    symbols.required=4138 symbols.reference_exports=8795 symbols.reference_provides=2309
+    compared=2309 mismatches=0 missing_exports=0 conflicting_crcs=0
+    export_type_mismatches=1 namespace_mismatches=0
+    unresolved=0
+    XTYPE_MISMATCH mutex_lock ref=EXPORT_SYMBOL new=EXPORT_SYMBOL_GPL_SABOTAGE
+    FAIL
+  => OK   [export-type] exit=1, casou /^XTYPE_MISMATCH mutex_lock /
+
+SELFTEST PASS (positivo PASS + 4 sabotagens FAIL + 1 exatidão de chave)

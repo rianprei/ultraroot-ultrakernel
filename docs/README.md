@@ -4,12 +4,13 @@
 |---|---|---|
 | `docs/PRE-REQUISITOS.md` | O que está no repo, o que instalar, o que foi testado de verdade e os erros encontrados | Antes de compilar qualquer coisa |
 | `docs/ESTADO.md` | Estado consolidado, com o que está feito, bloqueado e arriscado | Sempre, primeiro |
+| `docs/ERROS-PARA-REVISAO.md` | Erros conhecidos, com evidência e estado (corrigido, aberto ou decisão do dono) | Antes de mexer no repo, depois de `ESTADO.md` |
 | `docs/PENDENCIAS-DO-DONO.md` | Tudo que depende do dono, com a frase exata que libera cada passo | Antes de qualquer passo de aparelho ou publicação |
 | `docs/ultraroot/README.md` | Índice dos documentos do UltraRoot | Para a parte de root |
 | `docs/ultraroot/plan.md` | Plano de execução, regras fixas (§1), estado (§9) | Para retomar o UltraRoot |
 | `docs/ultraroot/TODOs.md` | Checklist de produto (§1 é o SP1) | Para escolher a próxima tarefa |
 | `docs/ultraroot/E1-OPCOES-COPY-LAYOUT.md` | Duas opções de copy e layout dos cartões de estado e da busca | Quando o dono decidir o E1 |
-| `docs/ultrakernel/README.md` | Índice e status do UltraKernel (visão, não iniciado) | Para a parte de kernel |
+| `docs/ultrakernel/README.md` | Índice e status do UltraKernel (visão, tarefas feitas no host) | Para a parte de kernel |
 | `docs/ultrakernel/TODOS.md` | Lista de tarefas do UltraKernel (UK-n), com o que é host e o que depende do dono | Para trabalhar no kernel |
 | `kernel/README.md` | Árvore do kernel no repo: GKI no commit base 5a0ffb4, o delta com KernelSU, o snapshot do lake e o pin do KernelSU | Antes de compilar |
 | `docs/ultrakernel/SUPERKERNEL_VISION.md` | Visão original do UltraKernel | Antes de planejar o UltraKernel |

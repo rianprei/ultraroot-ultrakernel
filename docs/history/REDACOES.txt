@@ -1,16 +1,21 @@
+Redações feitas na montagem do repo (2026-10-13). Formato: arquivo:linha: tipo. Só o valor é redigido; este registro nunca guarda o valor.
+
+Mantidas redigidas (dado pessoal, identificador do aparelho ou e-mail de autor):
 ./docs/history/handoffs/HANDOFF-ultraroot-2026-10-12-v3.md:5: ip privado
 ./docs/history/evidence/2026-10-11_manager_grant_teste.txt:3: ip privado
-./docs/history/research/phase4/drivers.Makefile.orig:5: e-mail
-docs/ultraroot/MODULE_MIGRATION_lake.md:3: serial
-docs/ultraroot/COMPAT_MATRIX.md:23: serial
-docs/ultraroot/CONTRATO_grok_modmigration.txt:1: serial
-kernel/lake/docs/KMI-GATES.md:25: serial
-kernel/lake/docs/KMI-GATES.md:25: mac
-kernel/lake/docs/PLAN-AND-FINDINGS.pt-BR.md:53: serial
-kernel/lake/docs/PLAN-AND-FINDINGS.pt-BR.md:53: mac
-kernel/lake/docs/research/CODEX2_kleaf_repro.md:76: e-mail
-kernel/lake/docs/research/CODEX2_kleaf_repro.md:77: e-mail
-kernel/lake/docs/research/CODEX4_dew_tree.md:8: e-mail
-kernel/lake/docs/research/CODEX5_build_signing.md:133: serial
-kernel/lake/docs/research/raw/OPENCODE4_review_codex5.md:156: mac
-kernel/lake/tools/selftest_backprop.sh:375: mac
+docs/ultraroot/MODULE_MIGRATION_lake.md:3: serial do aparelho (em adb -s)
+docs/ultraroot/COMPAT_MATRIX.md:23: serial do aparelho (em adb -s)
+docs/ultraroot/CONTRATO_grok_modmigration.txt:1: serial do aparelho (em adb -s)
+./docs/history/research/phase4/drivers.Makefile.orig:5: e-mail de mantenedor (política: nenhum e-mail no repo)
+kernel/lake/docs/research/CODEX2_kleaf_repro.md:76: e-mail de autor de commit (política)
+kernel/lake/docs/research/CODEX2_kleaf_repro.md:77: e-mail de autor de commit (política)
+kernel/lake/docs/research/CODEX4_dew_tree.md:8: e-mail de autor de commit (política)
+
+Restaurados em 2026-10-13 (falso positivo: fingerprint e serial do certificado público do GKI, e um fixture de teste).
+A regra de MAC da primeira montagem casava qualquer 6 pares com ":"; a fingerprint de 32 pares virou "[redigido: mac]" e quebrou V1, V68 e V77 do lake.
+A linha original foi restaurada e a regra do verificador ganhou borda e teste (tools/verify_repo.sh, V3). Ver docs/history/reports/.
+kernel/lake/docs/KMI-GATES.md:25: serial e mac (cert público)
+kernel/lake/docs/PLAN-AND-FINDINGS.pt-BR.md:53: serial e mac (cert público)
+kernel/lake/docs/research/CODEX5_build_signing.md:133: serial e mac (cert público)
+kernel/lake/docs/research/raw/OPENCODE4_review_codex5.md:156: mac (serial do cert público)
+kernel/lake/tools/selftest_backprop.sh:375: mac (fixture com a fingerprint pública)
