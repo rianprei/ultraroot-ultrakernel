@@ -2,6 +2,7 @@
 
 | Caminho | O que é | Quando ler |
 |---|---|---|
+| `docs/PRE-REQUISITOS.md` | O que está no repo, o que instalar, o que foi testado de verdade e os erros encontrados | Antes de compilar qualquer coisa |
 | `docs/ESTADO.md` | Estado consolidado, com o que está feito, bloqueado e arriscado | Sempre, primeiro |
 | `docs/PENDENCIAS-DO-DONO.md` | Tudo que depende do dono, com a frase exata que libera cada passo | Antes de qualquer passo de aparelho ou publicação |
 | `docs/ultraroot/README.md` | Índice dos documentos do UltraRoot | Para a parte de root |

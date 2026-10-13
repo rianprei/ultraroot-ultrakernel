@@ -13,3 +13,8 @@
 | ee651ac8a61ca50cb2ebf43b567541a5e2dcc577ce33927f753f1c1b4b85fd17 | kernel/policy/allowlist.c |
 | b336bc03c3b4d323c0c29b46a06ace735ca74de016ec3d9d37c916eba23de34d | kernel/manager/manager_identity.h |
 | 5fcd7974f6864b13f689c721a2af4c0bbdda5e7e1a6bb5324850a237b8e1063d | userspace/ksud/src/ksucalls.rs |
+
+
+## Árvore completa do pin
+
+`kernel/upstream/KernelSU/` contém a árvore inteira do commit (`git archive`, 679 arquivos). Os sete arquivos da tabela acima estão incluídos com o mesmo conteúdo.

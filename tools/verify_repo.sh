@@ -5,18 +5,18 @@ FAIL=0
 fail() { echo "FALHA: $*"; FAIL=1; }
 
 FILES=$(find . -path ./.git -prune -o -path ./build -prune -o -type f -print | sed 's#^\./##' | sort)
-TEXT=$(for f in $FILES; do case "$f" in kernel/common/*) continue ;; esac; grep -Iq . "$f" 2>/dev/null && echo "$f"; done)
+TEXT=$(for f in $FILES; do case "$f" in kernel/common/*|kernel/upstream/*) continue ;; esac; grep -Iq . "$f" 2>/dev/null && echo "$f"; done)
 
 # V1: arquivos proibidos. kernel/common é upstream: só extensões de chave e binário, sem nomes de pasta.
 PEM_OK='google_gki_ab13771415_modsign_cert.pem'
 for f in $FILES; do
   case "$f" in
-    ultraroot/gradle/wrapper/gradle-wrapper.jar|*/$PEM_OK|$PEM_OK) continue ;;
-    kernel/common/*.log) continue ;;
+    ultraroot/gradle/wrapper/gradle-wrapper.jar|*/gradle/wrapper/gradle-wrapper.jar|*/$PEM_OK|$PEM_OK) continue ;;
+    kernel/common/*.log|kernel/upstream/*.log) continue ;;
     *.jks|*.keystore|*.p12|*.pem|*.key|*.pass|*.apk|*.aab|*.img|*.so|*.o|*.dex|*.ap_|*.jar|*.log) fail "V1 arquivo proibido: $f"; continue ;;
   esac
   case "$f" in
-    kernel/common/*) ;;
+    kernel/common/*|kernel/upstream/*) ;;
     keys/*|backups/*|Magisk/*|out/*|*/build/*|*/.gradle/*|*/.kotlin/*|*/.cxx/*|*/captures/*|*/.idea/*) fail "V1 pasta proibida: $f" ;;
   esac
 done
@@ -29,7 +29,7 @@ for f in $TEXT; do
 done
 
 # V2b: chave privada na árvore do kernel (única checagem de segredo feita lá)
-if grep -rl --exclude-dir=.git -E 'BEGIN [A-Z ]*PRIVATE KEY' kernel/common 2>/dev/null | head -n 1 | grep -q .; then fail "V2 chave privada em kernel/common"; fi
+if grep -rl --exclude-dir=.git -E 'BEGIN [A-Z ]*PRIVATE KEY' kernel/common kernel/upstream 2>/dev/null | head -n 1 | grep -q .; then fail "V2 chave privada em kernel/common ou kernel/upstream"; fi
 
 # V3: dado pessoal e caminho local. Fora da checagem: o próprio verificador, registros, regras escritas e pin upstream.
 PII='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}|(^|[^A-Za-z])(serial|Serial)[ :=]+[A-Za-z]*[0-9][A-Za-z0-9-]{4,}|adb -s [A-Za-z0-9]{8,}|\b192\.168\.[0-9]+\.[0-9]+|\b10\.[0-9]+\.[0-9]+\.[0-9]+\b|([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|[Ii][Mm][Ee][Ii][^0-9]{0,12}[0-9]{15}'

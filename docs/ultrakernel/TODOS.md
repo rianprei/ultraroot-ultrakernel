@@ -8,9 +8,9 @@ Estados: FEITO (com prova), NÃO INICIADO, PENDENTE-DONO (depende de entrada ou 
 
 ## Host (sem aparelho)
 
-- **UK-0. Ambiente de build.** clang, make, flex, bison, bc, libssl-dev. Registrar versões. Critério: `make ARCH=arm64 LLVM=1 O=<saida> gki_defconfig` sai com 0. Estado: FEITO no host (clang 23.1.1, `/usr/bin/clang`, gki_defconfig exit 0). Confirmar a variante 4G do 2410FPCC5G: PENDENTE-DONO (fonte: `docs/ultraroot/DIAG_BACKEND_INDISPONIVEL.md`, linha 4).
+- **UK-0. Ambiente de build.** clang r510928 (GKI), make, flex, bison, bc, perl, libelf, pahole, cabeçalhos do openssl. Registrar versões. Critério: `make ARCH=arm64 LLVM=1 O=<saida> gki_defconfig` sai com 0. Estado: FEITO no host (clang 23.1.1, `/usr/bin/clang`, gki_defconfig exit 0). Confirmar a variante 4G do 2410FPCC5G: PENDENTE-DONO (fonte: `docs/ultraroot/DIAG_BACKEND_INDISPONIVEL.md`, linha 4).
 - **UK-1. Configuração com KernelSU.** `gki_defconfig` + `arch/arm64/configs/kernelsu.fragment` + `olddefconfig`. Critério: `CONFIG_KSU=y` no `.config`. Estado: FEITO no host (saída fora do repo).
-- **UK-2. Build completo do kernel.** `make ARCH=arm64 LLVM=1 O=<saida> -j<n> Image`, e `modules` se o gate pedir. Critério: `Image` gerado, sha256 registrado em `docs/history/`. Estado: NÃO INICIADO.
+- **UK-2. Build completo do kernel.** `make ARCH=arm64 LLVM=1 O=<saida> -j<n> Image`, e `modules` se o gate pedir. Critério: `Image` gerado, sha256 registrado. Estado: FEITO no host (clang r510928, sem avisos; `Image` sha256 `1fe3d6b8…7861a`, ver `docs/PRE-REQUISITOS.md`).
 - **UK-3. Gates existentes do lake.** Rodar `kernel/lake/tools/run_all_checks.sh` e os `selftest_*.sh`. Critério: saída registrada, sem falha sem correção. Estado: NÃO INICIADO.
 - **UK-4. Gate KMI/CRC de módulos.** `kernel/lake/tools/gate_kmi_crc.sh` contra `kernel/lake/tools/data/modules_required_crcs.tsv`. Depende de UK-2. Critério: zero divergência. Estado: NÃO INICIADO.
 - **UK-5. Selftest do guard de fastboot.** `kernel/lake/tools/selftest_fastboot_guard.sh` (só host). Critério: 44 de 44 (fonte: `docs/history/research/MASTER_PLAN.md`, linha 63). Estado: NÃO INICIADO.
