@@ -25,3 +25,6 @@ backups/
 Magisk/
 *.log
 __pycache__/
+
+# Árvore do kernel e do lake: os padrões acima (build/, keys/, *.log, *.pem) não se aplicam ao código-fonte
+!kernel/**
