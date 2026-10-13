@@ -25,7 +25,7 @@ O APK `ui10` não contém o símbolo JNI `Java_dev_superroot_core_EngineNatives_
 - **Magisk coexistindo (E3):** a coroação completa depende de SP2 e SP3.
 - **Grant não provado (E4):** "su via KSU não está provado". Qualquer texto de tela ou de documento que afirme que o root funciona está errado até a prova.
 - **Cota:** a janela semanal do Codex estava esgotada em 2026-10-13, com reset em 6 dias e 16 horas, segundo `usage.js --refresh`. Enquanto isso, trabalho com Codex fica parado.
-- **Lake sem publicação:** o repo público do lake está em `ffe583a`. O commit `c8e7812` (base do guard e do selftest copiados aqui) não está no GitHub.
+- **Lake sem publicação:** o repo público do lake está em `ffe583a`. O commit `c8e7812` (usado como snapshot em `kernel/lake/`) não está no GitHub.
 - **Dados pessoais:** serial de aparelho, IP privado e um e-mail foram redigidos. Os locais estão em `docs/history/REDACOES.txt`.
 
 ## Próximo passo técnico (sem aparelho)

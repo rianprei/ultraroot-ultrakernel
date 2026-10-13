@@ -5,7 +5,7 @@ Repositório único com o plano, as tarefas, o histórico e o código do **Ultra
 ## O que é cada parte
 
 - **UltraRoot:** gerenciador de root em Jetpack Compose (Material 3) sobre o KernelSU integrado ao kernel "lake" do POCO C75 (codename `lake`, kernel `6.6.89-android15-8-4k`). Fonte: `docs/ultraroot/DIAG_BACKEND_INDISPONIVEL.md`, linhas 4 e 8.
-- **UltraKernel:** visão futura de kernel com ajuste de desempenho e overclock, feita só depois do UltraRoot. Status: **não iniciado**. Fonte: `docs/ultrakernel/SUPERKERNEL_VISION.md`, linha 29.
+- **UltraKernel:** kernel customizado para o POCO C75 (`lake`), com ajuste de desempenho e overclock depois do UltraRoot. A árvore do kernel está em `kernel/common/` (GKI no commit `5a0ffb4`, com o KernelSU integrado). A configuração com KernelSU foi verificada no host. A lista de tarefas está em `docs/ultrakernel/TODOS.md`.
 
 ## Estado (2026-10-13)
 
@@ -57,3 +57,4 @@ Nenhuma licença definida. Todos os direitos reservados. A escolha é decisão d
 1. `AGENTS.md`: regras de trabalho para agentes.
 2. `docs/ESTADO.md`: estado atual e o que está bloqueado.
 3. `docs/README.md`: índice de todos os documentos.
+4. `docs/ultrakernel/TODOS.md`: tarefas do UltraKernel. `docs/ultraroot/TODOs.md`: tarefas do UltraRoot.

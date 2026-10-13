@@ -9,6 +9,8 @@
 | `docs/ultraroot/TODOs.md` | Checklist de produto (§1 é o SP1) | Para escolher a próxima tarefa |
 | `docs/ultraroot/E1-OPCOES-COPY-LAYOUT.md` | Duas opções de copy e layout dos cartões de estado e da busca | Quando o dono decidir o E1 |
 | `docs/ultrakernel/README.md` | Índice e status do UltraKernel (visão, não iniciado) | Para a parte de kernel |
+| `docs/ultrakernel/TODOS.md` | Lista de tarefas do UltraKernel (UK-n), com o que é host e o que depende do dono | Para trabalhar no kernel |
+| `kernel/README.md` | Árvore do kernel no repo: GKI no commit base 5a0ffb4, o delta com KernelSU, o snapshot do lake e o pin do KernelSU | Antes de compilar |
 | `docs/ultrakernel/SUPERKERNEL_VISION.md` | Visão original do UltraKernel | Antes de planejar o UltraKernel |
 | `docs/history/TIMELINE.md` | Linha do tempo de 2026-10-05 a 2026-10-13 | Para entender como chegamos aqui |
 | `docs/history/handoffs/` | Handoffs de sessão (passagens de contexto) | Para o detalhe de cada dia |

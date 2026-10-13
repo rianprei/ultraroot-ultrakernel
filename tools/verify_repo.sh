@@ -5,13 +5,18 @@ FAIL=0
 fail() { echo "FALHA: $*"; FAIL=1; }
 
 FILES=$(find . -path ./.git -prune -o -path ./build -prune -o -type f -print | sed 's#^\./##' | sort)
-TEXT=$(for f in $FILES; do grep -Iq . "$f" 2>/dev/null && echo "$f"; done)
+TEXT=$(for f in $FILES; do case "$f" in kernel/common/*) continue ;; esac; grep -Iq . "$f" 2>/dev/null && echo "$f"; done)
 
-# V1: arquivos proibidos (chave, binário, saída de build, log, dado de aparelho)
+# V1: arquivos proibidos. kernel/common é upstream: só extensões de chave e binário, sem nomes de pasta.
+PEM_OK='google_gki_ab13771415_modsign_cert.pem'
 for f in $FILES; do
   case "$f" in
-    ultraroot/gradle/wrapper/gradle-wrapper.jar) ;;
-    *.jks|*.keystore|*.p12|*.pem|*.key|*.pass|*.apk|*.aab|*.img|*.so|*.o|*.dex|*.ap_|*.jar|*.log) fail "V1 arquivo proibido: $f" ;;
+    ultraroot/gradle/wrapper/gradle-wrapper.jar|*/$PEM_OK|$PEM_OK) continue ;;
+    kernel/common/*.log) continue ;;
+    *.jks|*.keystore|*.p12|*.pem|*.key|*.pass|*.apk|*.aab|*.img|*.so|*.o|*.dex|*.ap_|*.jar|*.log) fail "V1 arquivo proibido: $f"; continue ;;
+  esac
+  case "$f" in
+    kernel/common/*) ;;
     keys/*|backups/*|Magisk/*|out/*|*/build/*|*/.gradle/*|*/.kotlin/*|*/.cxx/*|*/captures/*|*/.idea/*) fail "V1 pasta proibida: $f" ;;
   esac
 done
@@ -19,19 +24,28 @@ done
 # V2: segredos (só file:line; o valor nunca é impresso)
 SECRET='gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|sk-[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(storepass|keypass|password|senha)[[:space:]]*[:=][[:space:]]*[^[:space:]]{4,}'
 for f in $TEXT; do
-  [ "$f" = tools/verify_repo.sh ] && continue
+  case "$f" in tools/verify_repo.sh|kernel/lake/tools/selftest_backprop.sh) continue ;; esac  # fixture de teste do lake: token falso que testa a redação
   if grep -qE "$SECRET" "$f"; then fail "V2 segredo: $f:$(grep -nE "$SECRET" "$f" | head -n 1 | cut -d: -f1)"; fi
 done
 
+# V2b: chave privada na árvore do kernel (única checagem de segredo feita lá)
+if grep -rl --exclude-dir=.git -E 'BEGIN [A-Z ]*PRIVATE KEY' kernel/common 2>/dev/null | head -n 1 | grep -q .; then fail "V2 chave privada em kernel/common"; fi
+
 # V3: dado pessoal e caminho local. Fora da checagem: o próprio verificador, registros, regras escritas e pin upstream.
 PII='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}|(^|[^A-Za-z])(serial|Serial)[ :=]+[A-Za-z]*[0-9][A-Za-z0-9-]{4,}|adb -s [A-Za-z0-9]{8,}|\b192\.168\.[0-9]+\.[0-9]+|\b10\.[0-9]+\.[0-9]+\.[0-9]+\b|([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|[Ii][Mm][Ee][Ii][^0-9]{0,12}[0-9]{15}'
-LOCAL='/home/rianprei|~/superroot|~/Documentos|superroot/scratch|Documentos/mods|(^|[ "`(=:])/tmp/'
+LOCAL='/home/rianprei|~/superroot|~/Documentos|superroot/scratch|Documentos/mods'
 for f in $TEXT; do
   case "$f" in
     tools/verify_repo.sh|AGENTS.md|docs/history/PATHMAP.md|docs/history/EXCLUSOES.txt|docs/history/REDACOES.txt|kernel/upstream/*) continue ;;
   esac
   if grep -qE "$PII" "$f"; then fail "V3 dado pessoal: $f:$(grep -nE "$PII" "$f" | head -n 1 | cut -d: -f1)"; fi
   if grep -qE "$LOCAL" "$f"; then fail "V3 caminho local: $f:$(grep -nE "$LOCAL" "$f" | head -n 1 | cut -d: -f1)"; fi
+done
+
+# /tmp/ literal: proibido fora dos fixtures de teste do lake (exceção declarada no PATHMAP)
+for f in $TEXT; do
+  case "$f" in tools/verify_repo.sh|docs/history/PATHMAP.md|kernel/lake/*) continue ;; esac
+  if grep -qE '(^|[ "`(=:])/tmp/' "$f"; then fail "V3 /tmp/ literal: $f"; fi
 done
 
 # V4: referências internas. Estritas nos documentos de entrada; nos históricos, só contagem de aviso
@@ -82,9 +96,9 @@ else
   fail "V6 teste nativo não compila"
 fi
 
-# V7: nenhum arquivo rastreado acima de 5 MB
+# V7: nenhum arquivo rastreado acima de 100 MB (limite do GitHub)
 if git rev-parse --verify -q HEAD >/dev/null; then
-  git ls-files -z | xargs -0 -r du -k | awk '$1>5120{print "V7 acima de 5 MB: "$2; bad=1} END{exit bad}' || fail "V7 arquivo grande"
+  git ls-files -z | xargs -0 -r du -k | awk '$1>102400{print "V7 acima de 100 MB: "$2; bad=1} END{exit bad}' || fail "V7 arquivo grande"
 fi
 
 # V8: manifesto de integridade (se existir)

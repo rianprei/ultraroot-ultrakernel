@@ -1,9 +1,11 @@
 Fora do repo, e por quê:
-- keys/ (chaves de assinatura, senhas): segurança.
-- backups/ e Magisk/: volume e imagens de firmware de terceiros.
-- scratch/ (exceto relatórios, prompts e código listados em PATHMAP.md): volume e artefatos de build.
-- APK, IMG, SO, O, DEX, JAR (exceto gradle-wrapper.jar), build/, .gradle/, out/: binários gerados.
+- keys/ (chaves de assinatura e senhas): segurança.
+- backups/ e Magisk/: volume, e imagens de firmware de terceiros.
+- scratch/ (exceto relatórios, prompts, código do app e pins listados em PATHMAP.md): volume e artefatos de build.
+- Binários gerados: APK, IMG (imagens de boot), SO, O, DEX, out/ do Bazel. Os dtbo e as imagens stock do aparelho ficam com o dono.
 - research/phase4/c01_dmesg.txt: log bruto de aparelho.
 - docs/ultraroot/evidence/*.png: capturas de tela do aparelho (ver NAO-INCLUIDO.txt).
+- kernel/common/tools/testing/selftests/sgx/sign_key.pem: chave privada de teste do upstream. O GitHub bloqueia push com chave privada, e o arquivo não entra no build.
 - prompt_repo_*: contratos de montagem deste próprio repo.
-- Lake, exceto tools/fastboot_guard.sh, tools/selftest_fastboot_guard.sh e a nota de pending: os outros scripts dependem da árvore completa do kernel; tools/data/ tem 913 KB.
+- Referências em documentos históricos (handoffs, relatórios, pesquisa) a APKs, planos do Superpowers e árvores que ficaram fora. O verificador conta essas referências como aviso, sem bloquear.
+- Árvore do kernel (kernel/common): texto do upstream não é varrido por segredo, dado pessoal e caminho local. Só a checagem de chave privada e de extensões proibidas roda ali. Integridade pelo commit base 5a0ffb4 e pelo delta em kernel/patches/.

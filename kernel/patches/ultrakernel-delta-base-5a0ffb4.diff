@@ -1,0 +1,33 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index 783df99093a3..6d5560e08c74 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -155,6 +155,8 @@ define_common_kernels(target_configs = {
+         "protected_exports_list": "android/abi_gki_protected_exports_aarch64",
+         "protected_modules_list": ":gki_aarch64_protected_modules",
+         "module_implicit_outs": get_gki_modules_list("arm64") + get_kunit_modules_list("arm64"),
++        "system_trusted_key": "google_gki_ab13771415_modsign_cert.pem",
++        "defconfig_fragments": ["arch/arm64/configs/kernelsu.fragment"],
+         "make_goals": _GKI_AARCH64_MAKE_GOALS,
+         "ddk_headers_archive": ":kernel_aarch64_ddk_headers_archive",
+         "extra_dist": [
+diff --git a/drivers/Kconfig b/drivers/Kconfig
+index efb66e25fa2d..a2874c223f36 100644
+--- a/drivers/Kconfig
++++ b/drivers/Kconfig
+@@ -243,4 +243,6 @@ source "drivers/hte/Kconfig"
+ 
+ source "drivers/cdx/Kconfig"
+ 
++source "drivers/kernelsu/Kconfig"
++
+ endmenu
+diff --git a/drivers/Makefile b/drivers/Makefile
+index 1bec7819a837..b244fe67380a 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -199,3 +199,4 @@ obj-$(CONFIG_DRM_ACCEL)		+= accel/
+ obj-$(CONFIG_CDX_BUS)		+= cdx/
+ 
+ obj-$(CONFIG_S390)		+= s390/
++obj-$(CONFIG_KSU)		+= kernelsu/

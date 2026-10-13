@@ -1,6 +1,6 @@
 # UltraKernel: índice e estado
 
-**Status: visão apenas. Não iniciado.** Fonte: `docs/ultrakernel/SUPERKERNEL_VISION.md`, linha 29. A prioridade atual é o UltraRoot (`docs/history/research/MASTER_PLAN.md`, linha 21).
+**Status:** a árvore do kernel está no repo (`kernel/`), a configuração com KernelSU foi verificada no host (UK-1) e o resto da lista está em `TODOS.md`. Overclock e undervolt dependem de dados do aparelho e de decisões do dono (ver `docs/PENDENCIAS-DO-DONO.md`). A visão original está em `SUPERKERNEL_VISION.md`, linha 29.
 
 ## O que está aqui
 

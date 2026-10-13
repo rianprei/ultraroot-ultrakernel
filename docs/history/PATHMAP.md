@@ -13,6 +13,12 @@ Este arquivo é a única exceção: contém caminhos originais de propósito.
 | `~/superroot/research/` | `docs/history/research/` (sem c01_dmesg.txt; visão do UltraKernel em `docs/ultrakernel/`) |
 | `~/superroot/scratch/codex4/*.txt` e `~/superroot/scratch/opencode2/review_*.txt` | `docs/history/reports/` |
 | `~/superroot/scratch/maestro/prompt_*.txt` | `docs/history/prompts/` |
-| `~/Documentos/mods/poco-c75-lake-kernel/` (commit c8e7812) | `kernel/lake/` (2 scripts, pending) |
+| `~/Documentos/mods/poco-c75-lake-kernel/` (commit c8e7812) | `kernel/lake/` (snapshot completo, `git archive`) |
+| `~/superroot/scratch/grok/c01-build/src/common/` (base 5a0ffb4 + delta) | `kernel/common/` (sem `.git`; delta em `kernel/patches/`) |
 
 Exceções de /tmp/: nenhuma no repo além de `tools/verify_repo.sh`, que cita o padrão para detectá-lo.
+
+## Exceções declaradas
+- `/tmp/` aparece como exemplo de procedimento em textos do lake (`kernel/lake/`). O repo não grava nada em `/tmp`. O verificador não bloqueia esses textos.
+- `kernel/lake/tools/selftest_backprop.sh` tem um token falso (`ghp_` seguido de letras `A`) como fixture do teste de redação. O verificador não bloqueia esse arquivo.
+- `kernel/common/**/*.log`: fixtures do KUnit do upstream, não logs nossos.
