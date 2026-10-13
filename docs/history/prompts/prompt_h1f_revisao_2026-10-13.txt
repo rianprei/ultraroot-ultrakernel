@@ -1,0 +1,61 @@
+Objetivo: revisar a correção H1F (ULTRAROOT-H1F-2026-10-13), feita pelo Codex #4, no readMode do core-backend do UltraRoot. Responder: (1) o defeito original está fechado? (2) as provas do relatório do autor conferem com o disco? (3) há defeito novo? Leitura no projeto original. Sabotagem independente só em cópia.
+
+Correlation id: ULTRAROOT-H1FR-2026-10-13. Autor: Codex #4. Revisor: você (OpenCode #2).
+
+Fatos já medidos pelo maestro (ponto de partida; confira, não aceite):
+- Defeito original: readMode() devolvia Ok(KsuMode(false, false, false)) quando o driver não respondia. kernelFlags() volta 0, e readNative só converte erro de biblioteca ausente. Correção esperada: com kernelVersion == 0, Unavailable(KsuBackend.UNAVAILABLE), qualquer que seja flags.
+- Raiz do projeto: ultraroot/ (não é git).
+- sha256 no disco agora: KsuMode.kt cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a; KsuBackend.kt 98122bdf58cda04a790076eafab529db50bd8a9a96d9d648ea697b26201367c1; KsuModeTest.kt f148e9160599d9d1f571b8a11672155ffd0fe13ed2e3f9cdd5835ad54e8737e6; engine.cc 6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f; EngineNatives.kt 05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e.
+- O sha256 de KsuMode.kt não é o do H1 (6b21b9a5...). Isso é esperado: a correção acrescenta decodeKernelMode e o KDoc. Não use 6b21b9 como referência.
+- Linhas atuais (cat -n, maestro): KsuMode.kt: KDoc 3-11; decodeKsuMode 18-22; decodeKernelMode 24-29. KsuBackend.kt: readMode 70-76. KsuModeTest.kt: testes antigos 8-44; novos 46-71. engine.cc: kernelFlags 105-106. supercall.h: bits 28-30.
+- Erros de linha da sua revisão anterior do H1: engine.cc:89-92 é kernelVersion, não kernelFlags. Os bits LKM, MANAGER e LATE_LOAD estão em supercall.h:28-30, não 30-32. Confira cada linha com cat -n ou grep -n antes de citar.
+- Testes no disco (XML de 10:21:06): KsuModeTest 10 com 0 falhas; KsuBackendHostTest 3 com 0; BackendStateTest 7 com 0.
+- Ponto em aberto: KsuMode.kt linha 5 diz "lkm is false in a built-in build (the lake kernel)". Busca em kernel/lake não achou CONFIG_KSU em nenhum defconfig. Os documentos de pesquisa do lake dizem CONFIG_KSU=y em árvore, sem medida. Logo, "(the lake kernel)" não está provado.
+- Concorrência: outro agente (Codex #4, H2) está criando arquivos novos em core-backend e em app/ (RootGrant*.kt). Eles não são alvo desta revisão. Não os revise e não os cite como achado.
+
+Escopo de leitura (somente leitura no original):
+1. ultraroot/core-backend/src/main/java/dev/superroot/core/KsuMode.kt (inteiro)
+2. ultraroot/core-backend/src/main/java/dev/superroot/core/KsuBackend.kt, linhas 60-80
+3. ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt (inteiro)
+4. docs/history/reports/h1_fix_readmode_2026-10-13.txt (relatório do autor; confira cada prova)
+5. kernel/upstream/KernelSU/kernel/supercall/dispatch.c, linhas 40-60 e 70-90
+6. kernel/upstream/KernelSU/kernel/manager/manager_identity.h, linhas 40-55
+7. kernel/lake: só grep, para o item do KDoc.
+
+Escrita: somente docs/history/reports/review_h1f_2026-10-13.txt (até 100 linhas) e a cópia em docs/history/reports/copy_h1f/ (para a sabotagem). Nada mais.
+
+Tarefa:
+T1. Defeito original fechado? Com kernelVersion == 0, readMode devolve Unavailable(KsuBackend.UNAVAILABLE) para qualquer flags? Cite as linhas de decodeKernelMode e de readMode. Responda SIM ou NÃO, com prova.
+T2. Confira cada prova do relatório do autor contra o disco: sha256 atual, linhas dos testes, saídas de Gradle e XML. Para cada afirmação: CONFERE ou NÃO CONFERE, com arquivo:linha. Atenção ao R3 do relatório: ele diz que os arquivos restaurados batem com a cópia pré-sabotagem (cb26f43...), e não com o sha do H1.
+T3. Testes novos (KsuModeTest.kt:46-71): cada um testa o que o nome diz, com version e flags corretos? Algum passaria com implementação errada? Se sim, dê o mutante e a linha. Se não, escreva NENHUM e liste o que você checou.
+T4. KDoc de KsuMode.kt:3-11: confira as três referências de fonte contra o pin (dispatch.c:44-45, :51-52, :54-55; manager_identity.h:47-49). Cite o trecho literal de cada uma. Sobre "(the lake kernel)": diga se está provado no repositório do lake. Se não estiver, é achado: proponha a frase exata, usando só o que for verificável no pin.
+T5. Caça de defeito novo, nesta ordem: (a) decodeKernelMode com version negativa, ou com bit 31 em flags; (b) exceção lançada dentro de decodeKernelMode, que readNative trataria de forma errada; (c) o when de readMode perde o tipo ou reempacota Unavailable; (d) cast não verificado nos testes e warnings de compilação; (e) readCapability e readAllowList mudaram? Confirme com grep -n "fun readCapability\|fun readAllowList" e pelo corpo; (f) readModeWithoutLibIsUnavailable continua cobrindo o caminho sem biblioteca; (g) idioma dos comentários consistente com BackendState.kt e KsuBackend.kt.
+T6. Sabotagem independente, SÓ NA CÓPIA. Crie a cópia sem artefatos: mkdir -p docs/history/reports/copy_h1f docs/history/reports/tmp && rsync -a --exclude build --exclude .gradle --exclude out ultraroot/ docs/history/reports/copy_h1f/ (se rsync não existir, use tar com as mesmas exclusões).
+   Na cópia, em core-backend/src/main/java/dev/superroot/core/KsuMode.kt:
+   S1: copie o arquivo para KsuMode.kt.antes_S1 e registre o sha256. Troque o corpo de decodeKernelMode por KsuRead.Ok(decodeKsuMode(flags)), sem if. Rode: cd docs/history/reports/copy_h1f && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline. Esperado: decodeKernelModeWithoutAnswerIsUnavailable FALHA. Registre a linha da falha. Restaure a partir da cópia e confira o sha256.
+   S2: copie de novo e troque lkm = flags and 1 != 0 por lkm = flags and 2 != 0. Rode o mesmo comando. Esperado: decodeLkmBit FALHA. Restaure e confira o sha256.
+   Registre as linhas de FAILED e o total do Gradle. Não toque no original.
+   Se S1 ou S2 NÃO derrubar o teste esperado, isso é achado grave: o teste não prova o contrato.
+T7. Escopo do original: find ultraroot/core-backend/src ultraroot/app/src -type f -mmin -240. Esperado: os cinco de H1 (engine.cc, EngineNatives.kt, KsuBackend.kt, KsuMode.kt, KsuModeTest.kt). Arquivos RootGrant* são do H2 e ficam fora. Qualquer outro arquivo é achado.
+T8. Escreva o relatório.
+
+Não deve:
+- Editar qualquer arquivo do projeto original. Só o relatório e a cópia.
+- Rodar Gradle no original. Gradle só na cópia.
+- Corrigir achados. Proponha a correção exata, sem aplicar.
+- Tocar o aparelho (adb, fastboot), fazer commit, push, usar /tmp, abrir [chaves locais do dono, fora do repo]/ ou criar arquivos em docs/.
+- Chamar subagentes ou skills.
+- Escrever "parece correto" ou "passa" sem prova. Sem prova, NÃO VERIFICADO.
+
+Teto: 14 chamadas de ferramenta. Registre o número no fim do relatório.
+
+Rubrica:
+R1. Cada achado tem arquivo:linha e trecho literal curto, conferido com cat -n ou grep -n nesta revisão.
+R2. Cada afirmação marcada como [LIDO] (vista no arquivo), [DEDUZIDO] ou NÃO VERIFICADO.
+R3. S1 e S2 reproduzidas na cópia, com as linhas de falha.
+R4. T1 e T2 respondidos com SIM/NÃO e prova.
+R5. Veredito: APROVADO (nenhum achado aberto), APROVADO COM CORREÇÕES (lista exata), ou REPROVADO.
+
+Formato da resposta no chat (até 20 linhas): veredito; uma linha por T1 a T7; caminho do relatório; número de chamadas.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

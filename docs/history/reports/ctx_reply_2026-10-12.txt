@@ -1,0 +1,50 @@
+› Objetivo: montar um dossiê de contexto do UltraRoot a partir de fontes locais, para o orquestrador (Claude Code) retomar o…
+• Ran sed -i '4a\Caminhos curtos usados abaixo: evidence/... = docs/history/evidence/...; app/build.gradle.kts …
+  └
+    Caminhos curtos usados abaixo: evidence/... = docs/history/evidence/...; app/build.gradle.kts = [fora do repo]…
+    ## 1. Aparelho
+    + 5 lines (^t to expand)                                                                                                  
+ 
+• Ran sed -i '5i\DIAG_BACKEND_INDISPONIVEL.md = docs/ultraroot/; os cabeçalhos e relatórios abreviados nas seções…
+  └ 33:- (b) **Feito no código/selftest, validação somente host documentada:** rollback prepara flash de `boot_b`, reativa só…
+    34:- (c) **Feito no script, aceite no device aberto:** script exige uid=0, evidência KSU (ksud ou /data/adb/ksu), UAPI 5 …
+    70:2. **C0.3 no device:** handoff v2 afirma flash/boot, TODO e plano atuais não fecham prova específica; gate de flash é …
+    + 12 lines (^t to expand)                                                                                                 
+ 
+• Completude: seções 1–8 do dossiê têm fontes e linhas. UNKNOWN: validação de boot específica do C0.3, renderização e testes
+  de ui9, execução dos oito módulos sob KSU. Coleta somente de leitura; dossiê com 91 linhas.
+ 
+  Fatos principais:
+ 
+  1. O handoff registra ui8 instalada e ui9 como build mais recente, ainda não instalada; os hashes conferem com os APKs
+     (HANDOFF v3:6,13-14; sha256sum).
+ 
+  2. O kernel reconheceu o manager como UID 10296 e a allowlist foi lida vazia; o grant não foi testado, e o aceite atual
+     reprova contexto Magisk (HANDOFF v3:7-9; evidência de 2026-10-12).
+ 
+  3. C0.3 tem hash 2977e1dc…, cert efb8d49f… e gate host sem mismatch; o status de boot no device diverge entre o handoff v2 e
+     o TODO atual (C03_stablekey_result.md:64-88; TODOs.md:32).
+ 
+  4. Os três ajustes de auditoria estão registrados como feitos, mas a revisão cruzada segue pendente; o checkout do kernel
+     tem dois arquivos modificados (TODOs.md:35-36; git status).
+ 
+  5. Estão abertos 44 OBRIG e 8 OBRIG-PROPOSTO. Os oito módulos permanecem pendentes antes da coroação, com dependências
+     nativas KSU, SP2 ou SP3 (CAPABILITIES.md; TODOs.md:38,41-48).
+ 
+  Perguntas ao orquestrador:
+ 
+  1. Qual evidência fecha a validação de C0.3 no device?
+  2. A próxima ação autorizada é instalar ui9 sem incremental e capturar a UI?
+  3. O aceite KSU deve esperar a migração dos módulos e a desativação autorizada do Magisk?
+  4. Quais provas são exigidas para cada módulo antes de desligar Magisk?
+  5. Quem fará a revisão independente dos ajustes a–c antes de qualquer flash?
+ 
+  Arquivo: CONTEXTO_codex4_2026-10-12.md (docs/ultraroot/CONTEXTO_codex4_2026-10-12.md)
+ 
+  Worked for 6m 56s • 12:54 AM                                                                                                
+ 
+ 
+› Ask Codex to do anything
+ 
+  GPT-6-Luna max · [fora do repo]/mods/tabs-agent-os · Executar análise do core SuperRoot
+  ? for shortcuts                                                                                  ⚠ 18 warnings · f2 to view

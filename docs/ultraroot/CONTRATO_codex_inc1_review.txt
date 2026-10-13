@@ -1,0 +1,8 @@
+PAPEL: review do incremento 1 do UltraRoot Manager (grok implementou). Read-only, sem device. Source em [artefato local, fora do repo]/grok/ultraroot-mgr/. Scratch [artefato local, fora do repo]/codex/inc1/.
+CAÇA (achados concretos arquivo:linha; se nada, "nenhum achado"):
+1. applicationId continua me.weishu.kernelsu (só o label/nome mudou)? mudar o applicationId quebraria a autorização do kernel.
+2. KsuBackend em core.backend só LÊ (Natives.version+UAPI), não reescreve/quebra Natives/KsuCli nem a comunicação ioctl com o kernel?
+3. A página Kernel&Performance exibe dado REAL do backend (não mock/hardcoded)? trata o caso "host/sem device" sem crashar?
+4. O branding UltraRoot é só string de UI, sem efeito colateral em pacote/assinatura?
+ENTREGA: docs/ultraroot/INC1_REVIEW_por_codex.md + VEREDITO: inc1 ACEITO | CORRIGIR(o quê).
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE / VEREDITO: ACEITO|CORRIGIR / APPID_INTACTO: sim/não / ACHADOS: n

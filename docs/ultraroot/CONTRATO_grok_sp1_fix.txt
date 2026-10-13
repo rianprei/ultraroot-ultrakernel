@@ -1,0 +1,18 @@
+PAPEL: corrigir os 3 achados do review do codex no SP1. Autônomo, HOST-ONLY, sem device. Leia o detalhe em docs/ultraroot/SP1_REVIEW_por_codex.md. TDD: cada fix com teste que falha antes e passa depois. Commit por fix.
+
+FIX 1 (alta) — Task 3 accept_ksu_root.sh FALSO-POSITIVO: hoje aprova com flags KSU + contexto não-magisk SEM comprovar uid=0. Corrigir: só APROVAR se as 3 condições valerem juntas — (a) `su -c id` retorna uid=0(root); (b) evidência POSITIVA de KSU (ksud//data/adb/ksu + prctl/supercall UAPI 5 respondendo); (c) contexto NÃO é magisk. Atualizar os fixtures/teste: caso "flags KSU presentes MAS su não dá uid=0" → DEVE REPROVAR; caso "uid=0 mas contexto magisk" → REPROVAR; só aprova com uid=0 + KSU + não-magisk.
+
+FIX 2 (média) — Task 4 RECOVERY_SUITE.md reboot: aplicar a correção que o codex apontou (ver o review). Provável: cenário de reboot tem que usar o caminho do guard/por-teclas, não `fastboot reboot`/reboot nu. Alinhar com o protocolo (nunca reboot entre Z0.4 e o flash; recuperação por teclas).
+
+FIX 3 (baixa) — remover instruções/hash OPERACIONAL de C0.1(74090569)/C0.2(9a34176d) do plano/guard_hashes/device-plan; só C0.3 (2977e1dc) é a imagem operacional. C0.1/C0.2 podem ser citados como histórico, não como alvo com hash na allowlist.
+
+VERIFICAR no fim: selftest_fastboot_guard 44/44 (ou mais) e run_all_checks PASS continuam; o teste do accept_ksu cobre os novos casos.
+
+ENTREGA: atualizar SP1_IMPL_REPORT.md com os 3 fixes + evidência.
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE|BLOCKED
+FIX1_ACCEPT_KSU: <uid=0 agora exigido? teste cobre reprovar sem uid=0?>
+FIX2_RECOVERY: <o que mudou>
+FIX3_C0x: <refs C0.1/C0.2 removidas do operacional?>
+CHECKS: selftest <n/n> run_all_checks <pass?>
+ABERTO: <lista>

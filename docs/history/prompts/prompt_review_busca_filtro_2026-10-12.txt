@@ -1,0 +1,33 @@
+Objetivo: revisar, sem editar, a busca e o filtro do Root Access (camada de lógica) e a alteração mínima na tela que a acompanha. Pergunta central: a lógica mostra o estado real da allowlist? Nenhum perfil indisponível pode aparecer como concedido ou negado, e nenhuma busca sem resultado pode aparecer como "nada concedido".
+Correlation id: ULTRAROOT-REVIEW-2026-10-12-C. Autor: maestro (Claude). Revisor: você.
+
+Escopo de leitura (somente leitura):
+1. ultraroot/app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt, inteiro.
+2. ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/RootAccessFilterTest.kt, inteiro (9 testes novos).
+3. ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/RootAccessPresenterTest.kt, inteiro (testes antigos, que não podem quebrar).
+4. ultraroot/app/src/main/java/dev/superroot/ultraroot/ui/RootAccessScreen.kt, linhas 53-82 (chamada e ramo novo).
+5. ultraroot/app/src/main/res/values/strings.xml, linhas 7-12.
+6. ultraroot/app/src/test/java/dev/superroot/ultraroot/StringsIdentityTest.kt, inteiro.
+
+Escrita (somente este arquivo): [artefato local, fora do repo]/claude2/review_busca_filtro_2026-10-12.txt, no máximo 80 linhas.
+
+Tarefa:
+T1. Confirme, com arquivo:linha, o contrato: GRANTED = allowSu verdadeiro; NOT_GRANTED = allowSu falso; perfil indisponível (null) só aparece em ALL; busca com trim e sem diferenciar maiúsculas no nome; UID casa pelos dígitos; NoMatch quando a lista não-vazia fica vazia; Empty só quando a allowlist inteira está vazia.
+T2. Procure mutante que sobreviva aos 9 testes de RootAccessFilterTest.kt. Se achar, cite até 3 mutantes com a linha alterada e o teste que deveria pegar. Se não achar, escreva NENHUM.
+T3. Tela: a chamada presentRootAccess(value) compila com os parâmetros padrão? O ramo NoMatch está correto, sem erro de exaustividade? Prova: linha.
+T4. Textos: as strings novas passam em StringsIdentityTest? A frase de NoMatch é verdadeira em todos os casos em que NoMatch aparece? Prova: linha.
+T5. Risco de design: a busca por dígitos casa substring (por exemplo, "1" casa muitos UIDs). Diga se é problema de honestidade ou de usabilidade, e recomende uma ação. Não implemente.
+T6. Falso positivo: algum dos 9 testes novos passaria com a regra errada? Se sim, cite a linha e o mutante. Se não, escreva NENHUM.
+
+Não deve:
+- Editar qualquer arquivo do projeto.
+- Rodar Gradle ou qualquer build.
+- Usar adb, aparelho, commit, push, /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+
+Teto: 10 chamadas de ferramenta. Registre o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Sem prova, escreva NÃO VERIFICADO. Separe o que você leu do que você deduziu.
+
+Formato da resposta no chat (no máximo 20 linhas): veredito APROVADO ou REPROVADO com as razões; uma linha por T1 a T6; caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa: entregue caminhos, linhas e trechos. Responda em português do Brasil.

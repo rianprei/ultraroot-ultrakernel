@@ -1,0 +1,8 @@
+PAPEL: rev.7 do spec UltraRoot — aplicar os 3 achados restantes do REV6_REVIEW_codex.md. Preservar tudo do rev.6; só fechar os 3.
+
+1. MAPA DE RASTREIO: adicionar às 44 linhas OBRIG de CAPABILITIES.md os campos que faltam do §4: origem/proveniência (repo+pin/doc), alvo (Android/kernel/ABI/device), risco/modo de falha, evidência atual, lacuna/próxima-ação. Onde não houver evidência ainda, status honesto (IMPL=NOT_STARTED/VALID=NOT_TESTED/evidência=—). Os 6 UR-* ganham origem própria.
+2. REGRA: no §36 (regra do dono), declarar explícito que **EXCLUDED-com-justificativa é EXCEÇÃO à obrigatoriedade** (resolve o conflito do MG-APP-STUB: real-no-pin mas fora do produto por quebrar a autorização por cert).
+3. C0.1: anexar a EVIDÊNCIA PRIMÁRIA que existe — `docs/history/research/phase4/c01_dmesg.txt` (o dmesg do boot do C0.1) + o rc0 do dmesg_new_errors — na linha de evidência do KSU-core/boot C0.1, pra sustentar DEVICE_TESTED. Se o log não bastar pra recontar 429/0-erro, baixar status pra relato/UNKNOWN no detalhe não-sustentado. Não inflar.
+
+ENTREGA: rev.7 no mesmo arquivo + CAPABILITIES.md atualizado. Changelog curto no topo.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE / CAMPOS_44_COMPLETOS: sim/não / EXCL_EXCECAO: add? / C01_EVIDENCIA: anexada(path)|baixado-p-UNKNOWN / LINHAS: n

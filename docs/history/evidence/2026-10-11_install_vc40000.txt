@@ -1,0 +1,30 @@
+# Evidência: instalação UltraRoot vc40000 (2026-10-11)
+
+Aparelho: WG7TPZOBHQGIMZZ5 (lake_p_global, 2410FPCC5G), via `adb -s`.
+
+## Pré-checagem (somente leitura)
+- ro.build.type: user
+- ro.boot.slot_suffix: _b
+- pm path me.weishu.kernelsu: /data/app/~~PVCUq2lt22qEgkmUCB3w_Q==/me.weishu.kernelsu-LiCqpmbx6HKJehitN9GBaQ==/base.apk
+- versionCode instalado: 32673 (reskin inc2b)
+
+## Backup do instalado antes da troca
+- Arquivo: [fora do repo]/ultraroot/reskin-inc2b-vc32673.apk (6206927 bytes)
+- sha256: 3429e23af62d1a2482e1cf0ee81177973f9e683ac176213c17fb395a0a13cc11
+
+## Tentativa (a): adb install -r -d com APK vc2 (sha256 a697228a22241b8edee89eaa1469eb12e80e7a50f302996adccc35af6165e813)
+- Saída: Failure [INSTALL_FAILED_VERSION_DOWNGRADE: Downgrade detected: Update version code 2 is older than current 32673]
+- Resultado: aparelho inalterado.
+
+## Operação (b): versionCode 40000
+- Artefato: ultraroot/out/UltraRoot-own-inc2-vc40000.apk
+- sha256: 7a3ae0b1a287b39b774ab5c8d99f37e6af7d7fad10ef3c859e4edb5a4593dc5f
+- Cert (apksigner, pré-install): efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9
+- Install com gate de cert:
+  - Performing Incremental Install
+  - Success
+  - Install command complete in 7665 ms
+
+## Pós-checagem
+- dumpsys: versionCode=40000 minSdk=31 targetSdk=37
+- pm path: /data/app/~~pUG9J92FSqwmJKf9_IaCEw==/me.weishu.kernelsu-mOWL8pCfGs3yj09-zbjHKw==/base.apk

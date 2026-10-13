@@ -1,0 +1,50 @@
+ULTRAROOT-H1FR-2026-10-13 — revisão H1F do readMode (Codex #4 autor; OpenCode #2 revisor). [LIDO]
+Original intocado; sabotagem só na cópia copy_h1f. Chamadas de ferramenta: 10 de 14. [LIDO]
+
+T1. Defeito original fechado? SIM. [LIDO]
+- KsuMode.kt:24-29 `decodeKernelMode(version, flags) = if (version == 0) { KsuRead.Unavailable(KsuBackend.UNAVAILABLE) } else { KsuRead.Ok(decodeKsuMode(flags)) }` — version==0 devolve Unavailable para QUALQUER flags (flags=7 testado).
+- KsuBackend.kt:70-76 readMode: `val read = readNative { decodeKernelMode(EngineNatives.kernelVersion(), EngineNatives.kernelFlags()) }`; `when (read) { is KsuRead.Unavailable -> read; is KsuRead.Ok -> read.value }`.
+- O when desempacota UMA camada: readNative<T> (KsuBackend.kt:104) com T=KsuRead<KsuMode> dá read: KsuRead<KsuRead<KsuMode>>; o ramo Ok devolve read.value (o KsuRead<KsuMode> de decodeKernelMode) e o ramo Unavailable propaga. Tipo de retorno KsuRead<KsuMode> correto. [LIDO]
+
+T2. Provas do autor vs disco:
+- sha256 atuais 5/5 CONFEREM com o relatório (L81-85): KsuMode.kt cb26f43...; KsuBackend.kt 98122bd...; KsuModeTest.kt f148e91...; engine.cc 6fe79aa...; EngineNatives.kt 05fda95... [LIDO]
+- Linhas citadas CONFEREM: KsuMode.kt:25-28 (if/Unavailable/Ok); KsuBackend.kt:71-74; KsuModeTest.kt:48-50, 55-59, 65-69; engine.cc:105-106 (`Java_..._kernelFlags` + `return static_cast<jint>(read_info().flags);`); supercall.h:28-30 (LKM/MANAGER/LATE_LOAD = 1U<<0/1/2). [LIDO]
+- XMLs no disco CONFEREM com T7 do autor (L76-78): KsuModeTest 10/0 13:21:06.588Z; BackendStateTest 7/0 .625Z; KsuBackendHostTest 3/0 .648Z (UTC 13:21 = hora local 10:21 do maestro). [LIDO]
+- Backups do autor existem: docs/history/reports/KsuMode.kt.antes_S1 e .antes_S2, ambos sha cb26f43... — CONFERE (relatório L45-46/L66-67). [LIDO]
+- R3 do autor: restaurado == cb26f43 (pós-correção), != 6b21b9 (sha H1) — CONFERE e é o esperado (fix acrescenta decodeKernelMode+KDoc); o autor declara isso (L111-114). [LIDO]
+- T1 do autor (vermelho por Unresolved reference) NÃO VERIFICADO nesta revisão (estado pré-fix não re-executado).
+
+T3. Testes novos (KsuModeTest.kt:46-71): cada um testa o que o nome diz. [LIDO]
+- :47-51 version=0, flags=7 → Unavailable + reason UNAVAILABLE.
+- :54-61 version=12000, flags=0 → Ok com (false,false,false).
+- :64-71 version=12000, flags=5 → Ok com (lkm=true, lateLoad=true).
+- Falso positivo: NENHUM identificado. Mutantes checados: inversão `version != 0` (pego :49); reason trocado (pego :50); Ok incondicional (pego :49); Unavailable condicionado a flags (pego :56); máscara trocada em decodeKsuMode (pego :58-59/:68-69 + testes antigos :15/:20/:25/:35-36 — provado empiricamente na S2, 3 falhas).
+
+T4. KDoc (KsuMode.kt:3-11) — 4 referências CONFEREM: [LIDO]
+- dispatch.c:44-45 `#ifdef MODULE` / `cmd.flags |= KSU_GET_INFO_FLAG_LKM;`
+- dispatch.c:51-52 `if (is_manager())` / `cmd.flags |= KSU_GET_INFO_FLAG_MANAGER;`
+- dispatch.c:54-55 `if (ksu_late_loaded)` / `cmd.flags |= KSU_GET_INFO_FLAG_LATE_LOAD;`
+- manager_identity.h:47-49 `is_manager()` / `ksu_manager_appid == current_uid().val % KSU_PER_USER_RANGE`.
+- "(the lake kernel)" (KsuMode.kt:5): NÃO PROVADO. grep CONFIG_KSU no lake: 0 em defconfigs e arch/arm64/configs; só em docs/research/CODEX2_kleaf_repro.md:120,122 (inferred/a aplicar) e data/config_safety_table.csv:17 (UNVERIFIED, NEEDS-GATES). ACHADO 1 (documentação): afirmar "built-in build (the lake kernel)" sem medida. Frase proposta (só o que o pin sustenta): "lkm is false when KernelSU is built into the kernel instead of loaded as a module (dispatch.c sets the bit only under #ifdef MODULE); a false value does not mean KernelSU is absent."
+
+T5. Defeito novo:
+(a) version negativa → Ok (else); irreal com driver real (KERNEL_SU_VERSION positivo); bit 31 de flags não afeta máscaras 1/2/4. Sem defeito prático. [DEDUZIDO]
+(b) decodeKernelMode é pura, não lança; exceções só de kernelVersion/kernelFlags (lib ausente), capturadas por readNative (KsuBackend.kt:104-118 → Unavailable). [LIDO]
+(c) when não perde tipo nem reempacota: KsuRead sealed (KsuBackend.kt:19-21), Ok<T>(val value: T); ramos :73/:74 corretos. [LIDO]
+(d) casts nos testes (:43/:50 Unavailable; :59/:69 Ok<KsuMode>) precedidos por assertTrue `is` (:42/:49/:56/:66); `is KsuRead.Ok<*>` evita o erro de tipo que o autor corrigiu (relatório L22-23). Build verde nos XMLs. [LIDO]
+(e) readCapability (:62-68) e readAllowList (:78-84) com corpos idênticos ao H1 (deslocados ~1 linha); grep -n confirma. [LIDO]
+(f) readModeWithoutLibIsUnavailable (:40-44) cobre o caminho sem lib; readMode novo propaga o Unavailable do readNative; XML 10/0. [LIDO]
+(g) KDoc em inglês, consistente com KsuBackend.kt:12 (`// Version 0 goes first...`). [LIDO]
+
+T6. Sabotagem independente (cópia docs/history/reports/copy_h1f; original intocado):
+- Cópia via rsync --exclude build/.gradle/out; sha KsuMode.kt da cópia = cb26f43... antes das mutações. [LIDO]
+- S1 (decodeKernelMode → KsuRead.Ok(decodeKsuMode(flags)) sem if): BUILD FAILED; `KsuModeTest > decodeKernelModeWithoutAnswerIsUnavailable FAILED / java.lang.AssertionError at KsuModeTest.kt:49`; 10 tests completed, 1 failed (log tmp/s1_gradle.log:23-40). Coincide com o autor (L41-43). Restaurado, sha cb26f43. [LIDO]
+- S2 (lkm = flags and 2 != 0): BUILD FAILED; 3 falhas — decodeKernelModeWithAnswerDecodesFlags :67, decodeManagerBit :20, decodeLkmBit :15 (log tmp/s2_gradle.log:25-34). Coincide com o autor (L54-64). Restaurado, sha cb26f43. [LIDO]
+- S1 e S2 derrubaram exatamente os testes esperados: os testes provam o contrato.
+
+T7. Escopo (find core-backend/src app/src -mmin -240): os 5 do H1 + RootGrantFlow.kt, RootGrantPort.kt, FakeRootGrantPort.kt, RootGrantFlowTest.kt (H2, fora desta revisão, como avisado). Nenhum outro arquivo. [LIDO]
+
+VEREDITO: APROVADO COM CORREÇÕES.
+- Fechado e validado: o defeito original (Ok zeros com driver mudo) não ocorre mais; prova por código, testes e mutantes S1/S2.
+- Achado 1 (único, documentação): "(the lake kernel)" em KsuMode.kt:5 sem medida no repo do lake; aplicar a frase proposta em T4. Não aplicado (sem edição no original).
+Relatório: docs/history/reports/review_h1f_2026-10-13.txt

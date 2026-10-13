@@ -1,0 +1,116 @@
+ULTRAROOT-H1F-2026-10-13 — Codex #4; revisor OpenCode #2
+VEREDITO: CORRIGIDO E VALIDADO NO HOST; R3 literal exige ressalva descrita abaixo.
+Raiz dos caminhos relativos: ultraroot
+Saídas registradas: extratos literais do Gradle e XML desta execução.
+
+Comandos exatos:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
+
+T0: PASSOU — cinco hashes iguais aos resultados do H1; nenhum arquivo sobrescrito antes da conferência.
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+907b8dd81dbfbf0a90aafa1cfddfd5b1e4db96448eb48f2e84cea68bddc79b22  core-backend/src/main/java/dev/superroot/core/KsuBackend.kt
+13e5c2fb6dd159807eaaae60e540a4a1d0b0b5e7b3fe1f4f83c5bf4e3072cfa4  core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt
+6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f  core-backend/src/main/cpp/engine.cc
+05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e  core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+
+T1: PASSOU — vermelho por função ausente, exit 1.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:48:22 Unresolved reference 'decodeKernelMode'.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:55:22 Unresolved reference 'decodeKernelMode'.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:65:22 Unresolved reference 'decodeKernelMode'.
+BUILD FAILED in 1s
+Primeira execução também acusou: KsuModeTest.kt:56:30 One type argument expected. Use 'KsuRead.Ok<*>' if you do not intend to pass type arguments.
+Correção só nos testes novos: is KsuRead.Ok -> is KsuRead.Ok<*> nas linhas 56 e 66; repetido T1 ainda sem implementação.
+
+T2: PASSOU — exit 0; decodeKernelMode e KDoc adicionados; readMode ainda igual a T0.
+BUILD SUCCESSFUL in 4s
+<testsuite name="dev.superroot.core.KsuModeTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:18:45.498Z" hostname="rianpreiChyOs" time="0.019">
+T3: PASSOU — exit 0; alterado somente o corpo de readMode.
+BUILD SUCCESSFUL in 2s
+<testsuite name="dev.superroot.core.KsuModeTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:19:08.258Z" hostname="rianpreiChyOs" time="0.025">
+
+T4: PASSOU — módulo 20/20, exit 0.
+BUILD SUCCESSFUL in 1s
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.BackendStateTest.xml:2: <testsuite name="dev.superroot.core.BackendStateTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:19:25.448Z" hostname="rianpreiChyOs" time="0.039">
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuBackendHostTest.xml:2: <testsuite name="dev.superroot.core.KsuBackendHostTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:19:25.489Z" hostname="rianpreiChyOs" time="0.012">
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuModeTest.xml:2: <testsuite name="dev.superroot.core.KsuModeTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:19:25.511Z" hostname="rianpreiChyOs" time="0.002">
+
+T5/S1: PASSOU — guarda retirada; teste de ausência falhou; restauração da implementação corrigida comprovada.
+10 tests completed, 1 failed
+BUILD FAILED in 1s
+KsuModeTest > decodeKernelModeWithoutAnswerIsUnavailable FAILED
+    java.lang.AssertionError at KsuModeTest.kt:49
+decodeKernelModeWithoutAnswerIsUnavailable FAILED: java.lang.AssertionError at KsuModeTest.kt:49
+sha256sum antes de S1 (fonte e cópia):
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S1
+Cópia conferida por sha256sum ANTES de restaurar:
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S1
+sha256sum depois de restaurar S1:
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S1
+
+T6/S2: PASSOU — máscara LKM 1 -> 2; três falhas; restauração da implementação corrigida comprovada.
+KsuModeTest > decodeKernelModeWithAnswerDecodesFlags FAILED
+    java.lang.AssertionError at KsuModeTest.kt:67
+KsuModeTest > decodeManagerBit FAILED
+    java.lang.AssertionError at KsuModeTest.kt:20
+KsuModeTest > decodeLkmBit 
+10 tests completed, 3 failed
+    java.lang.AssertionError at KsuModeTest.kt:15
+BUILD FAILED in 1s
+decodeKernelModeWithAnswerDecodesFlags FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=true, manager=false, lateLoad=true)> but was:<KsuMode(lkm=false, manager=false, lateLoad=true)>; at dev.superroot.core.KsuModeTest.decodeKernelModeWithAnswerDecodesFlags(KsuModeTest.kt:67)
+decodeManagerBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=false, manager=true, lateLoad=false)> but was:<KsuMode(lkm=true, manager=true, lateLoad=false)>; at dev.superroot.core.KsuModeTest.decodeManagerBit(KsuModeTest.kt:20)
+decodeLkmBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=true, manager=false, lateLoad=false)> but was:<KsuMode(lkm=false, manager=false, lateLoad=false)>; at dev.superroot.core.KsuModeTest.decodeLkmBit(KsuModeTest.kt:15)
+sha256sum antes de S2 (fonte e cópia):
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S2
+Cópia conferida por sha256sum ANTES de restaurar:
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S2
+sha256sum depois de restaurar S2:
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S2
+
+T7: PASSOU — módulo 20/20 após as duas restaurações, exit 0.
+BUILD SUCCESSFUL in 1s
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.BackendStateTest.xml:2: <testsuite name="dev.superroot.core.BackendStateTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:21:06.625Z" hostname="rianpreiChyOs" time="0.022">
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuBackendHostTest.xml:2: <testsuite name="dev.superroot.core.KsuBackendHostTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:21:06.648Z" hostname="rianpreiChyOs" time="0.011">
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuModeTest.xml:2: <testsuite name="dev.superroot.core.KsuModeTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:21:06.588Z" hostname="rianpreiChyOs" time="0.035">
+
+T8/R1: PASSOU — engine.cc e EngineNatives.kt iguais a T0; apenas três fontes alteradas.
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+98122bdf58cda04a790076eafab529db50bd8a9a96d9d648ea697b26201367c1  core-backend/src/main/java/dev/superroot/core/KsuBackend.kt
+f148e9160599d9d1f571b8a11672155ffd0fe13ed2e3f9cdd5835ad54e8737e6  core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt
+6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f  core-backend/src/main/cpp/engine.cc
+05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e  core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+Comparação de 111 arquivos não gerados: só KsuMode.kt, KsuBackend.kt e KsuModeTest.kt mudaram; 108 iguais; zero inclusões/remoções.
+Exclusões da comparação: build, .gradle, .cxx, .kotlin, .idea (saídas e caches gerados pelos testes).
+Comparação de conteúdo: sete testes existentes intactos; decodeKsuMode intacto; KsuBackend diferente somente no corpo de readMode.
+Comando: find core-backend/src app/src -type f -mmin -120
+core-backend/src/main/cpp/engine.cc
+core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+core-backend/src/main/java/dev/superroot/core/KsuBackend.kt
+core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt
+
+Provas de comportamento e documentação:
+core-backend/src/main/java/dev/superroot/core/KsuMode.kt:25-28: if (version == 0); KsuRead.Unavailable(KsuBackend.UNAVAILABLE); else KsuRead.Ok(decodeKsuMode(flags)).
+core-backend/src/main/java/dev/superroot/core/KsuBackend.kt:71-74: readNative { decodeKernelMode(EngineNatives.kernelVersion(), EngineNatives.kernelFlags()) }; is KsuRead.Ok -> read.value.
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:48-50: version = 0, flags = 7; assertTrue(result is KsuRead.Unavailable); assertEquals(KsuBackend.UNAVAILABLE, ...reason).
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:55-59: version = 12000, flags = 0; KsuMode(lkm = false, manager = false, lateLoad = false).
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:65-69: version = 12000, flags = 5; KsuMode(lkm = true, manager = false, lateLoad = true).
+core-backend/src/main/cpp/engine.cc:105-106: Java_dev_superroot_core_EngineNatives_kernelFlags; return static_cast<jint>(read_info().flags);
+core-backend/src/main/cpp/uapi/supercall.h:28-30: LKM=(1U << 0); MANAGER=(1U << 1); LATE_LOAD=(1U << 2).
+R4: PASSOU — KDoc inglês em KsuMode.kt:3-11, quatro referências verificadas:
+KernelSU/kernel/supercall/dispatch.c:44-45: #ifdef MODULE; cmd.flags |= KSU_GET_INFO_FLAG_LKM;
+KernelSU/kernel/supercall/dispatch.c:51-52: if (is_manager()); cmd.flags |= KSU_GET_INFO_FLAG_MANAGER;
+KernelSU/kernel/supercall/dispatch.c:54-55: if (ksu_late_loaded); cmd.flags |= KSU_GET_INFO_FLAG_LATE_LOAD;
+KernelSU/kernel/manager/manager_identity.h:47-49: is_manager(); ksu_manager_appid == current_uid().val % KSU_PER_USER_RANGE.
+
+R2: PASSOU — 10/10 em T2/T3; 20/20 em T4/T7. R5: PASSOU — provas e saídas registradas.
+R3 literal: FALHOU a igualdade com T0; detectar mutantes e restaurar as cópias anteriores a S1/S2 PASSOU.
+T0 era o arquivo sem KDoc e sem decodeKernelMode (6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63).
+A implementação corrigida e ambas as cópias/restaurações têm SHA cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a.
+Restaurar literalmente o SHA de T0 removeria a função exigida e quebraria os três testes novos; não declarado APROVADO integralmente.
+readMode com JNI real: NÃO VERIFICADO no host; readModeWithoutLibIsUnavailable passou; lógica pura coberta pelos testes novos.
+T9: PASSOU — relatório gravado; wc -l conferido após escrita, limite 120.

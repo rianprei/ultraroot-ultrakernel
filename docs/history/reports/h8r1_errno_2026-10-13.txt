@@ -1,0 +1,72 @@
+ULTRAROOT-H8R1-2026-10-13 — TDD do errno no retorno JNI
+Projeto: ultraroot
+
+T0 — hashes antes da edição
+app_profile_fill.h 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9
+engine.cc 60c44448ae91514fb3e25bccbe36afdb255ef57cf18b451418f57c185292eaeb
+EngineNatives.kt 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf
+Status T0: PASSOU.
+
+T1 — vermelho antes de ioctl_status
+Comando: cd ultraroot/core-backend/src/test/native && g++ -std=c++17 -Wall -Werror -I shim -I ultraroot/core-backend/src/main/cpp fill_test.cc -o fill_test
+Exit 1; compilação falhou como esperado:
+fill_test.cc:63:12: error: ‘ioctl_status’ was not declared in this scope
+fill_test.cc:68:12: error: ‘ioctl_status’ was not declared in this scope
+fill_test.cc:73:12: error: ‘ioctl_status’ was not declared in this scope
+Status T1: PASSOU (vermelho esperado).
+
+T2 — helper, JNI e fill_test
+app_profile_fill.h inclui <cerrno> e define ioctl_status com o comentário pedido.
+Diff engine.cc, único trecho alterado:
+-    return ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd);
++    const int ret = ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd);
++    return ioctl_status(ret);
+fill_test compilado com -std=c++17 -Wall -Werror; 11/11 PASS:
+validUid, negativeUidRejected, nullKeyRejected, emptyKeyRejected,
+key255Accepted, key256Rejected, allowSuUsesMinimalDefaultRootProfile,
+allowSuFalseMarksRevoke, ioctlSuccessIsZero, ioctlFailureReturnsEperm,
+ioctlFailureReturnsEinval.
+Status T2: PASSOU.
+
+T3 — sabotagem S10 (ioctl_status retorna ret diretamente)
+Cópia antes da sabotagem: app_profile_fill.h.antes_S10
+SHA antes: e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+Saída: os 8 casos antigos, ioctlSuccessIsZero e ioctlFailureReturnsEperm passaram;
+ioctlFailureReturnsEinval falhou em fill_test.cc:73:
+Assertion `ioctl_status(-1) == -EINVAL' failed. Exit 134.
+EPERM NÃO foi detectado: em Linux EPERM=1, portanto o retorno bruto -1 é igual a -EPERM. O caso especificado ioctl_status(-1) não distingue o mapeamento correto da mutação return ret.
+Host: gcc -dM -E -include errno.h - </dev/null | grep EPERM -> #define EPERM 1.
+Restaurado da cópia. SHA da cópia e do header restaurado:
+e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+Status T3: FALHOU parcialmente — S10 derrubou EINVAL, mas não EPERM; expectativa da rubrica R3 não é satisfeita pelo caso EPERM especificado.
+
+Após restauração — teste host
+Comando: g++ -std=c++17 -Wall -Werror -I shim -I ultraroot/core-backend/src/main/cpp fill_test.cc -o fill_test && ./fill_test
+Os 11 casos PASS; exit 0. Header restaurado SHA-256 e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f.
+
+T4 — compilação nativa
+Comando: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
+Saída: configureCMakeDebug[arm64-v8a], buildCMakeDebug[arm64-v8a], BUILD SUCCESSFUL in 2s.
+Status T4: PASSOU.
+
+T5 — testes Kotlin do módulo
+Comando: ./gradlew :core-backend:testDebugUnitTest --offline (mesmo TMPDIR/JAVA_TOOL_OPTIONS de T4).
+XML: BackendStateTest 7 testes/0 falhas; KsuBackendHostTest 3/0;
+KsuModeTest 10/0. Total 20 testes, 0 falhas; BUILD SUCCESSFUL (Gradle marcou a task UP-TO-DATE).
+Status T5: PASSOU.
+
+T6 — escopo e grep
+EngineNatives.kt final: 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf (igual T0).
+SHA finais: app_profile_fill.h e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f; engine.cc b339102e1c3fe7c7003bdcf7495d29aea451bd4889c265b948ccf126243fd8f1.
+grep -rn 'ioctl_status' core-backend/src app/src encontrou só:
+core-backend/src/main/cpp/engine.cc:228: return ioctl_status(ret);
+core-backend/src/main/cpp/app_profile_fill.h:9: static inline int ioctl_status(int ret) {
+Status T6: PASSOU.
+
+Rubrica
+R1 PASSOU — helper e engine.cc alterados; fill_test.cc atualizado no scratch; EngineNatives.kt preservado.
+R2 PASSOU — host 11/11, NDK arm64 BUILD SUCCESSFUL, Kotlin 20/20.
+R3 FALHOU parcialmente — a mutação não derruba ioctlFailureReturnsEperm porque -1 == -EPERM; derruba ioctlFailureReturnsEinval.
+R4 PASSOU — os oito casos anteriores permaneceram e passaram; mudanças no teste foram aditivas.
+R5 PASSOU — hashes, saída dos testes e grep registrados acima.
+Nenhum aparelho foi usado; sem chamada de UI ou commit.

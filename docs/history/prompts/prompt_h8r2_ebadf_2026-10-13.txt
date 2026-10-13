@@ -1,0 +1,34 @@
+Objetivo: corrigir um caso de teste que não prova nada. ioctlFailureReturnsEperm (fill_test.cc) não distingue o mapeamento certo do errado: em Linux EPERM = 1, então -EPERM == -1 == o retorno bruto do ioctl. A sabotagem S10 não o derruba. Trocar o caso por EBADF (9), que é o erro real quando o driver não tem fd. Só o teste muda. Sem aparelho. Sem commit.
+
+Correlation id: ULTRAROOT-H8R2-2026-10-13. Autor: Codex #4.
+
+Contexto (verificado pelo maestro; host: EPERM=1, EBADF=9, ENOENT=2, EINVAL=22):
+- Teste: ultraroot/core-backend/src/test/native/fill_test.cc. Casos novos da H8R1: ioctlSuccessIsZero, ioctlFailureReturnsEperm (errno = EPERM; esperado -EPERM), ioctlFailureReturnsEinval (errno = EINVAL; esperado -EINVAL).
+- Helper: core-backend/src/main/cpp/app_profile_fill.h, função ioctl_status(int ret) (linha 9). Sha atual e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f. NÃO MUDAR o helper.
+- Relatório anterior: ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt (S10 derrubou só EINVAL).
+
+Escopo: somente ultraroot/core-backend/src/test/native/fill_test.cc. Nenhum outro arquivo.
+
+Tarefa, em ordem:
+T0. sha256sum de app_profile_fill.h (esperado e9ad688c...), de fill_test.cc (registrar o valor atual) e de core-backend/src/main/cpp/engine.cc (esperado b339102e1c3fe7c7003bdcf7495d29aea451bd4889c265b948ccf126243fd8f1). Se o header ou o engine.cc não baterem, parar e reportar.
+T1. Em fill_test.cc: renomear ioctlFailureReturnsEperm para ioctlFailureReturnsEbadf, com errno = EBADF e esperado -EBADF. Atualizar a chamada no main. Não mexer nos outros 10 casos. Compilar e rodar: g++ -std=c++17 -Wall -Werror -I ultraroot/core-backend/src/test/native/shim -I ultraroot/core-backend/src/main/cpp ultraroot/core-backend/src/test/native/fill_test.cc -o ultraroot/core-backend/src/test/native/fill_test && ultraroot/core-backend/src/test/native/fill_test. Esperado: 11 de 11 PASS, exit 0. Registrar.
+T2. Sabotagem S10 (o caso precisa pegar o retorno bruto): copiar app_profile_fill.h para ultraroot/core-backend/src/test/native/app_profile_fill.h.antes_S10b e registrar o sha256. No header, trocar o corpo de ioctl_status por `return ret;`. Compilar e rodar. Esperado: ioctlFailureReturnsEbadf FALHA e ioctlFailureReturnsEinval FALHA. Registrar as duas linhas de falha (linha do teste e a asserção). Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
+T3. Rodar de novo: 11 de 11 PASS com o header restaurado. Registrar o sha final do header.
+T4. Escopo: sha256 de engine.cc e de EngineNatives.kt iguais aos de T0 (EngineNatives.kt esperado 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf).
+T5. Relatório.
+
+Artefatos:
+- Relatório: ultraroot/core-backend/src/test/nativer2_ebadf_2026-10-13.txt, até 60 linhas. Conteúdo: sha de T0; diff de fill_test.cc (só o caso renomeado e o valor); saídas de T1, T2 (as duas linhas de falha) e T3; sha da cópia antes de S10b e do header restaurado; sha de T4; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 10 linhas, com o caminho do relatório.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só fill_test.cc mudou (um caso renomeado e seu valor esperado). Header e engine.cc com o sha de T0.
+R2. 11 de 11 PASS antes e depois da sabotagem.
+R3. S10 derruba ioctlFailureReturnsEbadf E ioctlFailureReturnsEinval. Header volta ao sha de T0.
+R4. Os 10 casos não tocados continuam com nomes e corpos iguais.
+R5. Cada afirmação com prova.
+
+Não deve:
+- Mudar app_profile_fill.h ou engine.cc. Tocar o aparelho. Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/.
+
+Diretivas: execute diretamente, sem pedir permissão. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

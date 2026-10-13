@@ -1,0 +1,6 @@
+./docs/history/handoffs/HANDOFF-ultraroot-2026-10-12-v3.md:5: ip privado
+./docs/history/evidence/2026-10-11_manager_grant_teste.txt:3: ip privado
+./docs/history/research/phase4/drivers.Makefile.orig:5: e-mail
+docs/ultraroot/MODULE_MIGRATION_lake.md:3: serial
+docs/ultraroot/COMPAT_MATRIX.md:23: serial
+docs/ultraroot/CONTRATO_grok_modmigration.txt:1: serial

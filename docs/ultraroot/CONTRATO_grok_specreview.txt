@@ -1,0 +1,8 @@
+PAPEL: revisar o INVENTÁRIO funcional anexado ao spec UltraRoot ([fora do repo]/docs/superpowers/specs/2026-10-11-ultraroot-design.md, linhas 64-1001 = catálogo Magisk/KSU/APatch). Read-only. Você fez a RE desses projetos — verifique CONTRA A REALIDADE. Scratch [artefato local, fora do repo]/grok/specrev/.
+CAÇA (achado concreto: linha do spec + evidência no source/doc real; se nada, "nenhum achado"):
+1. Feature INVENTADA/overclaim: alguma função listada que NÃO existe de fato no Magisk/KSU/APatch (ou na versão/pin que a gente tem)? marcar com a linha.
+2. Feature que é EVASÃO/ocultação indetectável disfarçada (boundary): listar pra marcar FORA-do-produto.
+3. Feature marcada como de um backend mas que na real é de outro / depende de fork.
+4. Dependência de backend/versão/kernel/device NÃO sinalizada (o inventário diz que deve sinalizar).
+ENTREGA: docs/ultraroot/SPECREV_grok.md — achados numerados + veredito: inventário FIEL (serve de spec funcional) | corrigir X.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE / FEATURES_INVENTADAS: n(lista) / EVASAO_A_MARCAR: n(lista) / ACHADOS: n / VEREDITO: FIEL|CORRIGIR

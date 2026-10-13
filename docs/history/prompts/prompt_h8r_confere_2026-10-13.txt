@@ -1,0 +1,37 @@
+Objetivo: conferir de forma independente a correção do H8 (escrita nativa do perfil SET_APP_PROFILE no core-backend do UltraRoot). A revisão anterior pediu que o retorno de erro do JNI passasse a devolver -errno, e não o -1 do ioctl. Esta conferência responde: (1) a correção está aplicada e certa nas linhas citadas? (2) a sabotagem S10b é reproduzida nas linhas do teste que a correção declara? (3) o errno que chega a ioctl_status está certo também no caminho em que o fd do driver não existe? (4) sobra algum defeito ou algum teste fraco? Original somente leitura; sabotagem só em cópia.
+
+Correlation id: ULTRAROOT-H8RC-2026-10-13. Autor da correção: Codex #4 (relatórios H8R1 e H8R2). Revisor: você (OpenCode #2). Autor diferente do revisor.
+
+Fatos do maestro (confira, não aceite):
+- Raiz do projeto: ultraroot/ (não é git).
+- Revisão anterior, que achou o errno: docs/history/reports/review_h8_2026-10-13.txt
+- Relatório H8R1: ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt
+- Relatório H8R2: ultraroot/core-backend/src/test/nativer2_ebadf_2026-10-13.txt
+- SHA-256 esperados (estado final após H8R2):
+  - core-backend/src/main/cpp/app_profile_fill.h = e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+  - core-backend/src/main/cpp/engine.cc = b339102e1c3fe7c7003bdcf7495d29aea451bd4889c265b948ccf126243fd8f1
+  - core-backend/src/main/java/dev/superroot/core/EngineNatives.kt = 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf
+  - ultraroot/core-backend/src/test/native/fill_test.cc = adc212460c1388711620d94af3f47ee6ebda05e1100ff05c1d8c47eec7dc2a67
+- Linhas citadas pelo autor (confira com grep -n ou cat -n): app_profile_fill.h:4 (#include <cerrno>), :9-10 (ioctl_status), :43 (fill_app_profile); engine.cc:8 (#include <cerrno>), :58-64 (ksuctl), :206-207 (assinatura JNI), :212 e :220 (GetStringUTFChars e ReleaseStringUTFChars), :225-228 (cmd, ksuctl, ioctl_status); EngineNatives.kt:20 (declaração); fill_test.cc:66-68 (ioctlFailureReturnsEbadf), :71-73 (ioctlFailureReturnsEinval), :76-89 (RUN_TEST).
+- Ponto de atenção 1: engine.cc:58-64 — quando driver_fd < 0, ksuctl chama scan_driver_fd() e depois ioctl(driver_fd, ...). Sem fd, ioctl(-1, ...) falha com EBADF. Confirme que nada entre o ioctl (:63) e a leitura de errno em ioctl_status (:228) altera errno. Confirme o valor inicial de `found` em scan_driver_fd (aprox. engine.cc:25-56) e o que acontece sem fd.
+- Ponto de atenção 2: EPERM (=1) não é discriminado por `return ret`, porque -(-1) = -EPERM. O H8R2 trocou esse caso por EBADF (9). Diga se EBADF e EINVAL bastam para derrubar as mutações plausíveis do retorno (return ret; return constante -1; sinal invertido). Nomeie qualquer mutação que sobreviva.
+- O helper inclui "uapi/app_profile.h". Para o teste compilar, o -I precisa apontar para ultraroot/core-backend/src/main/cpp (pai de uapi).
+
+Escrita permitida: somente docs/history/reports/review_h8r_2026-10-13.txt (até 120 linhas) e a pasta de cópia docs/history/reports/h8r/ (sabotagem).
+
+Tarefa:
+T1. sha256sum dos quatro arquivos acima contra os valores esperados. Conferem? Se algum não conferir, pare e reporte sem seguir para os demais passos.
+T2. Helper: cite literalmente app_profile_fill.h:4 e :9-10. Confirme (a) ioctl_status(0) devolve 0; (b) ioctl_status(-1) devolve -errno; (c) ioctl_status(n>0) devolve n.
+T3. JNI e caminho sem fd: cite literalmente engine.cc:8, :58-64, :206-207, :225-228. Responda com linha: (a) a assinatura C++ bate com EngineNatives.kt:20 (jobject, jint, jstring, jboolean)? (b) qual o valor inicial de `found` em scan_driver_fd e que valor e errno chegam a ioctl_status no caminho sem fd? (c) há chamada entre o ioctl e a leitura de errno que possa alterá-lo?
+T4. Teste na cópia: crie docs/history/reports/h8r/ e copie para lá: app_profile_fill.h (do original), fill_test.cc e o diretório shim (de ultraroot/core-backend/src/test/native/; leia os dois antes de rodar). Compile e rode: cd docs/history/reports/h8r && g++ -std=c++17 -Wall -Werror -I shim -I ultraroot/core-backend/src/main/cpp fill_test.cc -o fill_test && ./fill_test. Esperado: 11 linhas "PASS" e exit 0. Cite a saída.
+T5. Sabotagem S10b, só na cópia: guarde app_profile_fill.h.antes_S10b, depois troque a linha 10 de h8r/app_profile_fill.h por `    return ret;` (ioctl_status passa o ret direto). Recompile e rode. Esperado: falha em fill_test.cc:68 (EBADF) e em fill_test.cc:73 (EINVAL). Cite a saída literal. Restaure da cópia, confira sha256 = e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f, recompile e veja 11 PASS.
+T6. Sabotagem S11, só na cópia: troque a linha 10 de h8r/app_profile_fill.h por `    return ret == 0 ? 0 : (ret < 0 ? errno : ret);` (sinal invertido). Esperado: falha em EBADF ou EINVAL. Cite a saída. Restaure da cópia e confira sha256 = e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f.
+T7. Escopo: grep -rn "setAppProfile" ultraroot/app/src ultraroot/core-backend/src/main/java. Esperado: só EngineNatives.kt:20. Nenhuma tela chama.
+T8. Veredito: APROVADO, APROVADO COM CORREÇÕES (liste arquivo:linha e texto exato da correção), ou REPROVADO. Se APROVADO, escreva "H8 fecha" numa linha própria.
+
+Formato: cada afirmação com arquivo:linha e trecho literal, conferido nesta revisão (grep -n ou cat -n). Sem prova, escreva NÃO VERIFICADO. Se não houver achado, escreva "nenhum achado" seguido da lista do que foi verificado. Proibido: "parece correto", "o passo restante é rotineiro".
+Não deve: editar o original; rodar Gradle; usar /tmp; abrir [chaves locais do dono, fora do repo]/; usar adb ou fastboot; chamar subagentes.
+Teto: 16 chamadas de ferramenta. Registre o número usado no fim do relatório.
+Ao terminar, responda ao maestro (Claude Code) com uma linha: VEREDITO + caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão; não repita a tarefa, entregue artefatos concretos. Responda em português do Brasil.

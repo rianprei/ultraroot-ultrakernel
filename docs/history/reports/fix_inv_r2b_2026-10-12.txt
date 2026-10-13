@@ -1,0 +1,50 @@
+› Objetivo: concluir, no inventário MAGISK_KSU_UI_INVENTORY.md (95 linhas, já corrigido na rodada 1), o que falta da correçã…
+                                                                              AppProfileTemplateScreenMaterial(
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   TemplateEditorScreen             inventariado    73                        K/ui/screen/templateeditor/
+                                                                              TemplateEditorScreen.kt:137 —
+                                                                              TemplateEditorScreenMaterial(
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   ChooseKmiDialog — 3 variantes    inventariado    74                        K/ui/component/choosekmidialog/
+                                                                              ChooseKmiDialogMaterial.kt:49 —
+                                                                              onSelected(selectedKmi.value)
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   DownloadDialog                   inventariado    75                        K/ui/component/dialog/DownloadDialog.kt:70 —
+                                                                              onConfirm(url.trim())
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   UninstallDialog — 3 variantes    inventariado    76                        K/ui/component/uninstalldialog/
+                                                                              UninstallDialogMaterial.kt:101 —
+                                                                              confirmDialog.showConfirm(title = dialogTitle,
+                                                                              content = dialogContent)
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   SendLogDialog                    inventariado    77                        K/ui/component/miuix/SendLogDialog.kt:127 —
+                                                                              Intent(Intent.ACTION_SEND)
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   SendLogBottomSheet               inventariado    78                        K/ui/component/material/
+                                                                              SendLogBottomSheet.kt:103,153 —
+                                                                              ModalBottomSheet(; Intent(Intent.ACTION_SEND)
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   RebootListPopup — 3 variantes    inventariado    79                        K/ui/component/rebootlistpopup/
+                                                                              RebootListPopup.kt:51 — Natives.isLateLoadMode
+                                                                              && reason.isEmpty()
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   B — caminhos da rec. 12          corrigido       112                       MAGISK_KSU_UI_INVENTORY.md:112 — K/ui/screen/
+                                                                              settings/SettingsMaterial.kt:201-214 e K/ui/
+                                                                              screen/settings/SettingsMaterial.kt:217-229
+  ───────────────────────────────  ──────────────  ────────────────────────  ─────────────────────────────────────────────────
+   C — separação entre subseções    corrigido       56, 80–81                 MAGISK_KSU_UI_INVENTORY.md:80 — linha vazia
+                                                                              antes de ## 3. Padrões de UI observados
+ 
+  [x] Leitura integral; [x] todos os itens de A; [x] B/C; [x] linhas novas conferidas com sed e fontes existentes; [x] wc
+  final.
+ 
+  Contagem final: 120 linhas, limite de 150. Único arquivo editado: MAGISK_KSU_UI_INVENTORY.md ([fora do repo]/docs/
+  ultraroot/MAGISK_KSU_UI_INVENTORY.md).
+ 
+  Worked for 5m 44s • 12:56 PM                                                                                                
+ 
+ 
+› Ask Codex to do anything
+ 
+  GPT-6.1-Sol high · [fora do repo]/mods/tabs-agent-os · Concluir correção 11 do inventário
+  ? for shortcuts                                                                                  ⚠ 16 warnings · f2 to view

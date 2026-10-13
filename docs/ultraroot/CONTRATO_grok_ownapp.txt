@@ -1,0 +1,8 @@
+PAPEL: iniciar o APP PRÓPRIO UltraRoot (não reskin do KSU manager) — Material 3 dark, do zero. HOST-ONLY (design+scaffold+build; sem device). Novo módulo/app em ultraroot/ (projeto Android Compose NOVO, não o fork do KSU).
+REGRAS:
+- UI/UX/arquitetura 100% nossas: Material 3 (m3.material.io), tema DARK/preto (dynamic color opcional, mas base escura), navegação própria, componentes próprios. NÃO copiar as telas/identidade do manager KSU.
+- Reusar SÓ a camada de backend que fala com o engine: portar o KsuBackend (JNI/ioctl pro ksud/kernel — version, UAPI, allowlist, perfil) como um módulo `:core-backend` isolado; o app novo consome essa API. Nada de UI do KSU.
+- applicationId: usar o NOSSO (ex. `dev.superroot.ultraroot`) PORÉM lembrar que o kernel C0.3 autoriza `me.weishu.kernelsu` pelo cert — então, pra funcionar no device, ou (a) mantém package me.weishu.kernelsu por ora (rebrand de package fica pra decisão com o dono) ou (b) documenta que precisará recasar o cert no kernel. REGISTRAR essa decisão, não quebrar a autorização sem avisar.
+- 1º incremento: scaffold do projeto + tema M3 dark + navegação das 6 seções (Root Access, Module Center, System Toolkit, Kernel&Performance, Boot&Recovery, Extensions Hub) como telas próprias, e Kernel&Performance JÁ lendo dado real via :core-backend (não mock). Build o APK (assinar com a chave fixa). Host-safe (sem lib não crasha).
+ENTREGA: docs/ultraroot/OWNAPP_INC1.md (arquitetura + tema + o que é próprio vs reusado + decisão de package) + APK em out/. Sem device.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS / APP_PROPRIO: scaffold+M3dark? / BACKEND_ISOLADO: :core-backend? / PACKAGE_DECISAO: <qual + impacto cert> / APK: path / ABERTO

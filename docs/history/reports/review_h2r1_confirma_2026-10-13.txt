@@ -1,0 +1,32 @@
+ULTRAROOT-H2R1CONF-2026-10-13 — confirmação da correção H2R1 (achados 1 e 2 da revisão H2). Revisor: OpenCode #2. [LIDO]
+Original intocado; S7 só na cópia copy_h2r1. Chamadas de ferramenta: 7. [LIDO]
+
+T1. diff antes_H2R1 vs atual: só as linhas 40 e 56 mudam (saída literal): [LIDO]
+40c40
+<         // Close confirmation before the first port call.
+---
+>         // Fecha a confirmação antes da primeira chamada à porta.
+56c56
+<             // Preserve completed results even when the port throws.
+---
+>             // Preserva os resultados já obtidos, mesmo quando a porta lança exceção.
+sha256: antes_H2R1 = 073e5e48... (estado revisado no H2); atual = d7817993... (esperado). Teste = 99363734... (esperado). [LIDO]
+
+T2. Reconstrução do teste sem o bloco novo: o corte sugerido (head -n 230 + tail -n +243) deu sha be63175e... (≠ esperado) porque removia também o `}` do teste anterior (linha 231) e a linha em branco (232). Ajuste: o arquivo antigo tem 232 linhas = linhas 1-231 + `}` final. Com head -n 231 + tail -n +243:
+e78ba01e418a7aa44843aa2b90cfa80a900b8d2d8454a98d5ec737a8847d9812  (232 linhas)
+= exatamente o sha esperado (RootGrantFlowTest.kt da H2 final). Prova que a única mudança no teste é o bloco novo (linhas 232-242: linha em branco + @Test 233 + teste 234-242). [LIDO]
+
+T3. Teste novo (sed -n 233,242p): SIM, distingue checagem por uid de checagem por objeto inteiro. Entrada (linha 237): `val sameUid = GrantTarget(uid = a.uid, packageName = "dev.example.other")` — mesmo uid (10123) com packageName diferente de a ("dev.example.a"). Um check por objeto (`targets.toSet()`) aceitaria esse par (objetos distintos) e o assertFalse da linha 239 falharia; o check por uid (:31 `targets.map { it.uid }`) recusa. [LIDO]
+
+T4. Sabotagem S7 na cópia (sha antes = d7817993...): trocado :31 por `if (targets.toSet().size != targets.size) {`. Resultado:
+EXIT=1; `RootGrantFlowTest > requestWithSameUidAndOtherPackageIsRefused FAILED / java.lang.AssertionError at RootGrantFlowTest.kt:239`; 15 tests completed, 1 failed; BUILD FAILED in 6s. requestWithRepeatedUidIsRefused NÃO falhou (0 ocorrências; 14 verdes) — exatamente o esperado: o teste novo pega o mutante, o antigo não pega. Restaurado, sha d7817993... O teste prova a regra. [LIDO]
+
+T5. Comentários: grep -n "//" no RootGrantFlow.kt atual → só :40 (`// Fecha a confirmação antes da primeira chamada à porta.`) e :56 (`// Preserva os resultados já obtidos, mesmo quando a porta lança exceção.`), ambos em português. grep "Close confirmation\|Preserve completed" → NONE (exit 1). [LIDO]
+
+T6. XML (disco): RootGrantFlowTest tests="15" failures="0" timestamp 2026-10-13T13:59:19.531Z. [LIDO]
+
+VEREDITO: FECHADO.
+- Achado 1 (H2): resolvido — teste novo requestWithSameUidAndOtherPackageIsRefused (233-242) com par mesmo-uid/package-diferente; S7 comprova que ele derruba a checagem por objeto enquanto requestWithRepeatedUidIsRefused fica verde.
+- Achado 2 (H2): resolvido — comentários :40/:56 em português, frases antigas ausentes; diff toca só essas duas linhas.
+- Provas do maestro conferem (shas 073e5e48/d7817993/99363734, XML 15/0); reconstrução T2 prova diff mínimo no teste.
+Relatório: docs/history/reports/review_h2r1_confirma_2026-10-13.txt

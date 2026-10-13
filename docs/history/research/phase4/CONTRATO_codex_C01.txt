@@ -1,0 +1,22 @@
+PAPEL: produzir a RECEITA de implementação do critério C0.1 (kernel KernelSU-integrado que builda, passa o gate e boota) + a spec do GATE novo. Autônomo. READ-ONLY: NÃO compile, NÃO flashe, NÃO toque no device, NÃO crie repo. SEMPRE -X GET em gh api. Scratch só em [artefato local, fora do repo]/codex/c01/ (nunca /tmp).
+
+ENTRADA (ler): ~/lake-build/src/common + o .config/Module.symvers/System.map do build (paths no G1a_feasibility.md), checkout KernelSU pinado em [artefato local, fora do repo]/*/KernelSU (commit 6e38604), e os relatórios phase2/G1a_feasibility.md, phase2/G1b_integrated_build.md, phase2/PHASE2_ADJUSTMENTS.md.
+
+PRODUZA docs/history/research/phase4/C01_integration_recipe.md, concreto e verificável (arquivo:linha, nada de genérico):
+1. FIAÇÃO exata do KSU in-tree na árvore GKI via Kleaf/Bazel: quais arquivos editar (BUILD.bazel, Kconfig, Kbuild, defconfig/gki_defconfig), como o kernel/ e userspace/ do KSU entram, e como garantir CONFIG_KSU=y no .config FINAL (o default y não basta — como fixar/conferir). Diga o que o G1b já provou aceito.
+2. ASSINATURA: com KSU in-tree (parte do vmlinux, não .ko), os 6 símbolos do G1a e o problema MODULE_SIG_PROTECT ainda se aplicam? (justifique: não, pois não é módulo carregado). Confirme que o CONFIG_SYSTEM_TRUSTED_KEYS (cert do Google, do kernel atual) carrega junto pros módulos de vendor continuarem sig_ok.
+3. GATE NOVO (vmlinux modificado) — spec executável: checklist do que verificar no artefato — CONFIG_KSU=y presente, símbolo ksu_* no vmlinux, gate_kmi_crc dos 557 ainda PASS, tratamento de vermagic, e o que o dmesg-accept precisa cobrir (init do KSU + registro dos hooks). Esboce o script/critério de PASS por item.
+4. SEQUÊNCIA de device sob as travas (NÃO executar, só documentar): repack do boot.img, flash boot_b via fastboot_guard, slot B nunca A, aceite estilo T3 (dmesg_new_errors + checar wifi/BT/su), backup antes, nada sem "sim" do dono.
+5. PLANO DE RECURSO pro link caber aqui: LTO já off; flags de memória do bazel; worktree vs in-place dado disco a ~95%; estimativa de pico de RAM/disco do link.
+6. RISCOS abertos + o que ainda é NÃO-VERIFICADO até o build real.
+
+Confiança por afirmação. Não invente. Isto NÃO cumpre o C0.1 (só o build+device cumpre) — é a receita que torna o C0.1 um "só rodar".
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+ARQUIVO: docs/history/research/phase4/C01_integration_recipe.md (<n linhas>)
+FIACAO: <resumo do que editar>
+GATE_NOVO: <itens de PASS>
+RECURSO: <viável aqui? como>
+NAO_VERIFICADO: <o que só o build real resolve>
+ABERTO: <lista ou nenhum>

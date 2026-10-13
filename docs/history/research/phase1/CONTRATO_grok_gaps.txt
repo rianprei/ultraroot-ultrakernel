@@ -1,0 +1,18 @@
+PAPEL: fechar as lacunas do inventário de RE do SuperRoot. Autônomo, sem pedir permissão. REA já instalado. Scratch SÓ em [artefato local, fora do repo]/grok/ (disco, nunca /tmp). Evidência file:line obrigatória.
+
+CONTEXTO: sua matriz GROK_matriz_features.md (30 features × 9 motores) e GROK_dossie.md já existem. Ficaram 3 buracos a fechar:
+
+TAREFA 1 — Magisk Alpha: o APK do Magisk Alpha (vvb2060, versionCode 31000) não decompilou no REA na 1ª rodada. Tente de novo (baixe de fonte oficial do vvb2060 se preciso, em [artefato local, fora do repo]/grok/alpha/). Se falhar de novo, registre O MOTIVO exato (erro do REA/JADX) e siga. Se abrir, preencha as células da coluna Alpha hoje NÃO-VERIFICÁVEL.
+
+TAREFA 2 — células NÃO-VERIFICÁVEL: para cada célula marcada NÃO-VERIFICÁVEL na matriz (Next, Suki, bsxx, rs, MKSU — features 3,4,7,8,9,12,16,21 etc.), abra o CORPO da implementação no checkout correspondente e troque por ACOPLADA/PORTÁVEL/AUSENTE com file:line. Não precisa reconfirmar o que já está decidido.
+
+TAREFA 3 — susfs: mapeie onde SukiSU-Ultra e KernelSU-Next integram o cliente susfs (userspace) E se o patch de kernel do susfs existe (é repo externo — ache o nome/URL, registre que é dependência externa, NÃO clone kernel inteiro). Diga em 1 parágrafo o que o susfs adiciona em termos de feature e se é portável pro nosso core.
+
+ENTREGA: atualize GROK_matriz_features.md (células) E escreva docs/history/research/phase1/GROK_gaps_closed.md (delta: o que fechou, com evidência; o que permanece impossível de verificar e por quê). Scratch limpo ao final.
+
+BLOCO FINAL (rode `maestri ask "Claude Code" "<bloco>"` ao terminar):
+STATUS: DONE|BLOCKED
+ALPHA: <abriu e preenchi | falhou: motivo>
+CELULAS_FECHADAS: <n de NÃO-VERIFICÁVEL resolvidas / total>
+SUSFS: <resumo 1 linha + portável? + dependência externa>
+RESTAM_ABERTAS: <lista ou nenhuma>

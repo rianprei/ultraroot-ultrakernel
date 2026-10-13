@@ -1,0 +1,43 @@
+Objetivo: revisar, sem editar, o H1 do Codex #4: exposição dos flags do GET_INFO no core-backend do UltraRoot (bits LKM, MANAGER e LATE_LOAD), pela função JNI kernelFlags, pela função pura decodeKsuMode e por KsuBackend.readMode. Perguntas: os bits batem com o header? A decodificação está certa? A assinatura JNI e o retorno estão corretos? Os testes provam os bits e há falso positivo? Algo chega à UI?
+
+Correlation id: ULTRAROOT-H1R-2026-10-13. Autor: Codex #4. Revisor: você (OpenCode #2).
+
+Escopo de leitura (somente leitura). Raiz: ultraroot/
+1. core-backend/src/main/cpp/uapi/supercall.h, linhas 26-46 (bits e structs de get_info).
+2. core-backend/src/main/cpp/engine.cc, linhas 60-110 (read_info, kernelFlags e vizinhos).
+3. core-backend/src/main/java/dev/superroot/core/EngineNatives.kt (inteiro).
+4. core-backend/src/main/java/dev/superroot/core/KsuMode.kt (inteiro).
+5. core-backend/src/main/java/dev/superroot/core/KsuBackend.kt, linhas 60-75.
+6. core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt (inteiro).
+7. Para checar a UI: grep -rn "readMode\|KsuMode\|kernelFlags" app/src. Nada além disso.
+
+Escrita (somente este arquivo): docs/history/reports/review_h1_flags_2026-10-13.txt, com no máximo 80 linhas.
+
+Fatos já medidos pelo maestro. Use como ponto de partida, não como prova para você:
+- core-backend: 17 de 17 testes verdes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 7).
+- Compilação nativa arm64: BUILD SUCCESSFUL.
+- Nas últimas 2 horas, só cinco arquivos mudaram em core-backend/src e app/src: engine.cc, EngineNatives.kt, KsuBackend.kt, KsuMode.kt (novo) e KsuModeTest.kt (novo).
+- Hash de KsuMode.kt: 6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63.
+
+Tarefa:
+T1. Bits: comparar LKM, MANAGER e LATE_LOAD de KsuMode.kt com supercall.h:28-30. Dizer se batem, com arquivo:linha dos dois lados.
+T2. Posição do campo flags nas duas structs (ksu_get_info_cmd e ksu_get_info_legacy_cmd). Confirmar que está em supercall.h:36 e :43, logo depois de version nas duas. Citar as linhas.
+T3. JNI: a função Java_dev_superroot_core_EngineNatives_kernelFlags tem assinatura compatível com as outras (JNIEnv *, jobject) e retorno jint? Citar engine.cc. A declaração external em EngineNatives.kt confere com o nome e com o tipo Int?
+T4. Kotlin: em decodeKsuMode, "flags and 1 != 0" é lido como (flags and 1) != 0? Explicar pela precedência de infix e de igualdade na linguagem Kotlin. Dizer se o resultado é o pretendido.
+T5. readMode: usa readNative do mesmo jeito que readCapability e readAllowList? Citar a linha. O contrato de erro (Unavailable com UNAVAILABLE) está preservado? Dizer sim ou não, com prova.
+T6. Falso positivo em KsuModeTest.kt: um teste que passaria com decodificação errada, por exemplo com máscara trocada. Citar a linha e o mutante. Se não houver, escrever NENHUM.
+T7. Escopo e UI: confirmar pelo grep do escopo que a UI não usa readMode, KsuMode nem kernelFlags. Dizer se algum arquivo fora dos cinco mudou, comparando com a lista acima.
+T8. Bug real fora de T1 a T7: citar a linha e o cenário de entrada que falha. Se não houver, escrever NENHUM.
+
+Não deve:
+- Editar qualquer arquivo do projeto. A única escrita é o relatório.
+- Rodar Gradle ou qualquer build. Não usar adb nem fastboot, nem tocar o aparelho.
+- Fazer commit ou push. Não usar /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+
+Teto: 12 chamadas de ferramenta. Registrar o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Marcar [LIDO] o que você viu e [DEDUZIDO] o que inferiu. Sem prova, escrever NÃO VERIFICADO.
+
+Formato da resposta no chat (no máximo 20 linhas): veredito APROVADO, APROVADO COM CORREÇÕES ou REPROVADO, com as razões; uma linha por T1 a T8; caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

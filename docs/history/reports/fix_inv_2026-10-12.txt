@@ -1,0 +1,49 @@
+       state.kernelVers
+                                                                                                             ion.isGKI(); :22
+                                                                                                             3 exibe o motivo
+                                                                                                             de kernel não
+                                                                                                             suportado.
+  ──────────  ────────────────────────────────────  ──────────────────────────────────────────────────────  ──────────────────
+   10          Aplicada                                                                                76    SuperUserMateria
+                                                                                                             l.kt:298 agrupa
+                                                                                                             por
+                                                                                                             item.uid; :487
+                                                                                                             deriva userId de
+                                                                                                             group.uid.
+  ──────────  ────────────────────────────────────  ──────────────────────────────────────────────────────  ──────────────────
+   11          Aplicada; número 26 não confirmado     40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,    Inventariei 15
+                                                                                               53, 54, 55    funções/telas
+                                                                                                             Miuix em 14
+                                                                                                             arquivos de
+                                                                                                             tela;
+                                                                                                             ModuleRepoMiuix.
+                                                                                                             kt:134 e :1031
+                                                                                                             são duas telas
+                                                                                                             no mesmo
+                                                                                                             arquivo. A
+                                                                                                             contagem local
+                                                                                                             por *Miuix.kt em
+                                                                                                             ui/screen
+                                                                                                             retornou 14
+                                                                                                             arquivos.
+  ──────────  ────────────────────────────────────  ──────────────────────────────────────────────────────  ──────────────────
+   12          Aplicada                                                                                93    strings.xml:137
+                                                                                                             — Hide the
+                                                                                                             Magisk app; :180
+                                                                                                             — to prevent
+                                                                                                             detection; :153
+                                                                                                             descreve
+                                                                                                             DenyList como
+                                                                                                             reversão de
+                                                                                                             modificações.
+ 
+  O inventário atualizado está em MAGISK_KSU_UI_INVENTORY.md (docs/ultraroot/
+  MAGISK_KSU_UI_INVENTORY.md) e ficou com 95 linhas, abaixo do limite de 150.
+ 
+  Worked for 15m 25s • 1:18 AM                                                                                                
+ 
+ 
+› Ask Codex to do anything
+ 
+  GPT-6-Luna max · [fora do repo]/mods/tabs-agent-os · Executar análise do core SuperRoot
+  ? for shortcuts                                                                                  ⚠ 18 warnings · f2 to view

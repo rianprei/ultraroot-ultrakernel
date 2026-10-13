@@ -1,0 +1,115 @@
+ULTRAROOT-ESTADO-2026-10-12-A — estado honesto / TDD — 2026-10-12
+VEREDITO: APROVADO pelos critérios R1-R6; o ramo Ok continua reservado ao dono, terminando em TODO().
+Projeto: ultraroot
+Comando exato em T2, T3 e T4 (mesmo comando, nesse diretório):
+TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.BackendStateTest' --offline
+Gradle 9.7.1; ./gradlew --version --offline: Launcher JVM 25.0.4.1; Daemon JVM /usr/lib/jvm/java-21-openjdk (from org.gradle.java.home).
+gradle.properties:2: org.gradle.java.home=/usr/lib/jvm/java-21-openjdk. /usr/lib/jvm contém Java 21/25; JDK 17 não encontrado. Não houve bloqueio de JDK nem instalação.
+TMPDIR e java.io.tmpdir apontados para docs/history/reports/tmp; nenhuma gravação intencional em /tmp.
+T1 PASSOU: KsuBackend.kt e KsuBackendHostTest.kt lidos; estilo JUnit 4 (KsuBackendHostTest.kt:3-5), indentação 4 espaços e vírgulas finais preservados.
+T2 PASSOU: teste escrito antes de BackendState.kt; Gradle exit=1 por compilação, conforme esperado; nenhum teste executou.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt:10:22 Unresolved reference 'classifyBackend'.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt:11:22 Unresolved reference 'BackendState'.
+> Task :core-backend:compileDebugUnitTestKotlin FAILED
+BUILD FAILED in 13s
+T3 PASSOU: contrato implementado com TODO(); Gradle exit=1, esperado; 1 teste passou e 4 falharam por NotImplementedError.
+5 tests completed, 4 failed
+BackendStateTest > uapiMismatchIsIncompatibleWithBothNumbers FAILED
+    kotlin.NotImplementedError at BackendStateTest.kt:31
+BackendStateTest > matchingUapiIsActiveWithVersion FAILED
+    kotlin.NotImplementedError at BackendStateTest.kt:63
+BackendStateTest > zeroVersionIsAbsentEvenWhenUapiDiffers FAILED
+    kotlin.NotImplementedError at BackendStateTest.kt:16
+BackendStateTest > legacyKernelWithoutUapiIsIncompatible FAILED
+    kotlin.NotImplementedError at BackendStateTest.kt:49
+BUILD FAILED in 3s
+T3 XML (capturado antes da sabotagem): <testcase name="unavailableReadIsAbsentWithSameReason" classname="dev.superroot.core.BackendStateTest" time="0.014"/>
+T4 PASSOU: mutação somente TODO() -> BackendState.Active(read.value.kernelVersion, read.value.kernelUapi); Gradle exit=1, esperado.
+BackendStateTest > uapiMismatchIsIncompatibleWithBothNumbers FAILED
+    java.lang.AssertionError at BackendStateTest.kt:40
+BackendStateTest > zeroVersionIsAbsentEvenWhenUapiDiffers FAILED
+    java.lang.AssertionError at BackendStateTest.kt:25
+BackendStateTest > legacyKernelWithoutUapiIsIncompatible FAILED
+    java.lang.AssertionError at BackendStateTest.kt:58
+5 tests completed, 3 failed
+BUILD FAILED in 1s
+T4 XML: <testcase name="unavailableReadIsAbsentWithSameReason" classname="dev.superroot.core.BackendStateTest" time="0.012"/>
+T4 XML: <testcase name="matchingUapiIsActiveWithVersion" classname="dev.superroot.core.BackendStateTest" time="0.0"/>
+Cópia: docs/history/reports/BackendState.kt.orig (cp antes da mutação).
+sha256 antes da sabotagem (BackendState.kt): 3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50
+sha256 da cópia .orig: 3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50
+sha256 depois de cp .orig -> BackendState.kt: 3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50
+Restauração PASSOU: hashes iguais; conteúdo final idêntico ao contrato fornecido; BackendState.kt:12 TODO(human), :13 TODO().
+T5 PASSOU: baseline antes de T2=54 arquivos; final=56; existentes alterados/removidos=0; novos inesperados=0.
+Comando de hashes executado antes de T2 e no fim: find core-backend/src app/src -type f -print0 | sort -z | xargs -0 sha256sum
+SHA256 do manifesto baseline (saída UTF-8 do comando): 538798178293616d505d4dfc630b70f17062498852f06d5871964ddc5bf2bda6
+SHA256 do manifesto final filtrado para os mesmos 54 caminhos: 538798178293616d505d4dfc630b70f17062498852f06d5871964ddc5bf2bda6
+Comparação caminho -> SHA256: 54/54 iguais. A seguir, cada hash ANTES = DEPOIS (impresso uma vez por serem idênticos):
+b22b0e45b8b176c9f23871e11e7d3c15db157e3b4b32d5bd313fa906aa3f1652  app/src/main/AndroidManifest.xml
+84e1e6e0240829ce3b08b346de944775d837e92b8a5ed22dbd0e17b0016d667e  app/src/main/java/dev/superroot/ultraroot/MainActivity.kt
+c85f237837be73a8fe27effb3b986a5d0974bd9353684b526874233194390518  app/src/main/java/dev/superroot/ultraroot/Section.kt
+fc2cda03c071c2a329e602f5130051ec3912b924075d6b6e95cd77095545ef00  app/src/main/java/dev/superroot/ultraroot/UltraRootApp.kt
+9a9113bfe1021329d292c145b522f1a04386542c9f71e67e565a7c44738498be  app/src/main/java/dev/superroot/ultraroot/theme/Color.kt
+760e457a828b8d4b7674bbfe3d6e061b514b6698a8c312df540223d61d8dec55  app/src/main/java/dev/superroot/ultraroot/theme/Motion.kt
+1ebf2da28d911ed55fdcf4156d634fd6621debece432a36ead8f54d62508bb5f  app/src/main/java/dev/superroot/ultraroot/theme/Shape.kt
+b699153c28f22ba52bf52d1e11a1eca3979f6c5129a58acf39ab8db560fd4e5c  app/src/main/java/dev/superroot/ultraroot/theme/Type.kt
+3cb5a71b4cc21aaef42c58266696ab07f31cf4867077b7057ce021fba07a8241  app/src/main/java/dev/superroot/ultraroot/theme/UltraTheme.kt
+1fec56e7561465e51e710b9217b6159875a5e120114a0407993c2906e9eb6a9f  app/src/main/java/dev/superroot/ultraroot/ui/KernelPerformanceScreen.kt
+2e7129b89f9b122ae9664579047617e15de176c3768d28e29f7274c0d37e1457  app/src/main/java/dev/superroot/ultraroot/ui/RootAccessScreen.kt
+010a6029827197e5877dc583f82eb43a005a95a57df8e6e9578e9399e4bf3ddb  app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt
+2e393941b60c9a2e5ffaa7a8dc603b352218597f26e93a0c1e5a126f99904aa6  app/src/main/java/dev/superroot/ultraroot/ui/SectionPlaceholder.kt
+130710a0e1371623697c49f9ffd76c75b6bd2b827a867fcbbf18c8fa587630de  app/src/main/java/dev/superroot/ultraroot/ui/components/EmptyState.kt
+140cd97d825df6dd6c571e592e437573e574282d6cf11be1f9dfdef2dde3e714  app/src/main/java/dev/superroot/ultraroot/ui/components/KeyValueRow.kt
+05bf40a8ebb7132575a850d57829e58355114ffa9f4423abea9b040f022ab25c  app/src/main/java/dev/superroot/ultraroot/ui/components/LoadingState.kt
+2b6b398d5f55677177aae767060db6842276a8eb49688e2416d2a6c7df31e025  app/src/main/java/dev/superroot/ultraroot/ui/components/RetryButton.kt
+0205310b8579cec145ed50c42cb9534c4836d5c5562f0dbf0cb7cb3eb312c81e  app/src/main/java/dev/superroot/ultraroot/ui/components/StatusCard.kt
+bbaa789f3ccd68140e6936e139fc86f56dd99bf7ba66b13e9bf475ee1c89bd22  app/src/main/res/drawable/ic_mark.xml
+d03d20b2e161527e98cc63433fceead6b4f748e3c4952c2af9bcfcf555fbf7c3  app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+d03d20b2e161527e98cc63433fceead6b4f748e3c4952c2af9bcfcf555fbf7c3  app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+1497da67a1c59136428712d3f6fe844294e0caefa337f07fed529a8c04dfb2db  app/src/main/res/mipmap-hdpi/ic_launcher.png
+4dff66790848df402c583e763585e7c7aa1609a2df5872fd6f74fc3036e5c99b  app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png
+1497da67a1c59136428712d3f6fe844294e0caefa337f07fed529a8c04dfb2db  app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+74926ec893d00fd38bb920cc61bd5afa6da800c51f48241813dc2c07f4362aec  app/src/main/res/mipmap-mdpi/ic_launcher.png
+87e91330129cfde1f5bfa3c1317f6dfcd59eba901d8bcf7797363cae6cdd9f6c  app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png
+74926ec893d00fd38bb920cc61bd5afa6da800c51f48241813dc2c07f4362aec  app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+4c578139e2d8203e06be28f1efe5f95527d759d3a1bee87a17f334a1c34c5476  app/src/main/res/mipmap-xhdpi/ic_launcher.png
+7353165aadcbbfdd46789ed9ea81e14020d40a2aa2300b894298d8bcca1fc996  app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png
+4c578139e2d8203e06be28f1efe5f95527d759d3a1bee87a17f334a1c34c5476  app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+ef7ca6075c358121a9128ffdf59265606d153f2323b9ab786f4c6234341e4174  app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+e34a6b6a951fc675bcc7334b76b3665747799bff474bc4391875e099375c7b62  app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png
+ef7ca6075c358121a9128ffdf59265606d153f2323b9ab786f4c6234341e4174  app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+3ea8150fbbd5a26fb5dc31e1436abbe959eb6c3a2e0bbc84cb1083e402cb4087  app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+51f1362283f58af9076e3b317397a3b8dcaa76f476cd32d75c017a3331802423  app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png
+3ea8150fbbd5a26fb5dc31e1436abbe959eb6c3a2e0bbc84cb1083e402cb4087  app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+b54bc246c11f5e12b46926eef269f08b67cf612cc8e9a9580f86d95820b1a2b1  app/src/main/res/values/colors.xml
+609a5be6e28e68437678a706fd4a37de4d771a724f054f9296c0feafef961fcf  app/src/main/res/values/strings.xml
+70f5bfc98de488a279be3a4a65c07839adf4c08a89c15e7643c7aa3ddd25760c  app/src/main/res/values/themes.xml
+ef9e88489206a9ac513abb0ce236b7d138ca1d9f78838bed4af3132ba3c1c43e  app/src/test/java/dev/superroot/ultraroot/StringsIdentityTest.kt
+574ca561fe62a4aef9ffb1fb37b40f52f32dbd2ac15deffd60c600a017aafa62  app/src/test/java/dev/superroot/ultraroot/theme/ContrastTest.kt
+297db2aca9bf5dddff5fa3eeb4530f411eef71b1b8aff77ecac845851f5ccf54  app/src/test/java/dev/superroot/ultraroot/ui/RootAccessPresenterTest.kt
+daa0fb1f32ba7ea85a07ef6302ab3d58c3407d7fd2aa03ec132cb9e38e8d9849  core-backend/src/main/AndroidManifest.xml
+d6e0428f0c72da225dc81dc6323c8b960a9948351ec4e5fec68dedc197ae1a3e  core-backend/src/main/cpp/CMakeLists.txt
+2a6148b98ea08a69bc5e0f2dfc5ac6a3cea74159f77f49f030febe810ac22e71  core-backend/src/main/cpp/engine.cc
+dffad173122bb7bb183a61b5c24269e3cb36e3d4f22598cd34c0130945bed615  core-backend/src/main/cpp/uapi/app_profile.h
+20f14ca2e1e5ae8d1035ddaeef2fc80f49445b88a609facfdc73557ea50df729  core-backend/src/main/cpp/uapi/feature.h
+0fd450a02d80ffd0ee0ae0294e6e6a12135ae0b67e67778ff994df7b83eddc77  core-backend/src/main/cpp/uapi/ksu.h
+965766f25f042ebde0608df4f939cc9977ef83d597367ae298a3cedcc7b1ba27  core-backend/src/main/cpp/uapi/selinux.h
+a84726fb3e103f134b0900a0c41ece3d6ce72f89ba97ad2fc4365729f7c64a9c  core-backend/src/main/cpp/uapi/sulog.h
+9ec7d55185d9d76ff3d1dca8b37f4658bc3d6021d987891d153300420df90a2c  core-backend/src/main/cpp/uapi/supercall.h
+00e2830bfbf47feecd2b679af29c2ff7db8408e4505e408c370648323da6d863  core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+f772897f1ccbe5ce8aa3f753a575688e1b3520872ace983cdc50817213a095c1  core-backend/src/main/java/dev/superroot/core/KsuBackend.kt
+0092e1b8234fc300d8d70e84f250cf9046e9c6d33b0af97e624a677264c0f159  core-backend/src/test/java/dev/superroot/core/KsuBackendHostTest.kt
+Novos autorizados (hash final):
+3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50  core-backend/src/main/java/dev/superroot/core/BackendState.kt
+202690325b7e3fc37ce539d6c5b137710575064ead4afc1f4a0bfc6403738ee7  core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt
+grep -rn "TODO(human)" core-backend/src app/src — exatamente 1 linha:
+core-backend/src/main/java/dev/superroot/core/BackendState.kt:12:        // TODO(human): implementar o ramo Ok. Os testes 2 a 5 em BackendStateTest.kt definem as saídas. Atenção à ordem das checagens.
+wc -l: BackendState.kt=15; BackendStateTest.kt=74; total=89.
+R1 PASSOU: BackendState.kt:1-15 confere byte a byte com o contrato; BackendStateTest.kt:9,15,30,48,62 contém os cinco nomes exatos e dados pedidos.
+R2 PASSOU: grep acima retorna apenas BackendState.kt:12; nenhuma ocorrência no app/src.
+R3 PASSOU: T3 colado acima; XML confirma teste 1 sem failure; quatro erros kotlin.NotImplementedError em BackendState.kt:13.
+R4 PASSOU: T4 colado acima; somente testes 2/3/4 falharam; 1/5 passaram; hash da restauração igual à cópia.
+R5 PASSOU: baseline/final idênticos para todos os existentes; somente os dois novos listados.
+R6 PASSOU: saídas Gradle, XML, hashes, grep e wc registrados; nenhum resultado de execução presumido.
+T6 PASSOU: relatório neste arquivo, até 120 linhas; último XML em build refere-se à sabotagem T4; evidência T3 foi preservada acima.
+Device: NÃO VERIFICADO, fora do escopo; nenhuma chamada adb/fastboot/APK, git, instalação, edição de build.gradle.kts, acesso a keys ou gravação em docs.

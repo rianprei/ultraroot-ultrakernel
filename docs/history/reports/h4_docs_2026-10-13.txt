@@ -1,0 +1,88 @@
+ULTRAROOT-H4-2026-10-13 — atualização documental
+Escopo de escrita: TODOs.md, CAPABILITIES.md, COMPAT_MATRIX.md.
+Relatório limitado a estado provado em 2026-10-13; sem build ou aparelho.
+
+T0 — SHA-256 antes:
+TODOs.md 7022a7597ea24ed4e24d63ce65228a2cd56cea7c19f9b6e733c56b1b9d9f9e49
+CAPABILITIES.md b8da0e82fde5c4cbbdf68eaf99c901508319488c6f0afbe0e0dcfc5b1a3e2d95
+COMPAT_MATRIX.md ba655afaffd233848cad449e5e5af53146f5deaf6f0800a511cc962f207326f8
+T0 status: PASSOU.
+
+T1 — classificação da leitura integral antes das edições. Intervalos inclusivos; números são linhas físicas originais.
+TODOs.md: CORRETA 8-12,18-19,236-237,424; DESATUALIZADA 4,28-29,31-32,37,233-235,243,246-249,254-255,497,664,679; NÃO VERIFICADA 17,26-27,30,35-36,38,41-48,52-58,65-72,75-82,85-86,89-90,93-96,99-108,111-116,119-120,123-124,127-131,134-135,138-145,148-157,160-173,176-183,186-193,196-203,206-215,218-223,226-227,231,238,241-242,250-253,256,259-267,271-277,280-288,291-300,303-307,310-316,319-325,329-332,335-337,340-341,348-357,360-371,374-381,384-392,395-398,401-407,410-415,423,425-433,437-446,448-450,453-460,463-468,470-476,479-488,494,498-502,505-510,513-524,527-534,537-543,546-552,555-557,563-568,573-578,584-587,590-598,601-619,622-628,631-635,640-644,652-663,665,673-678,680-702.
+CAPABILITIES.md: CORRETA 11,29; DESATUALIZADA 3,9,19,27,54,79,85; NÃO VERIFICADA 5,7,10,15,31,33-53,55-78,80-84,86-92,94.
+COMPAT_MATRIX.md: CORRETA 10,13,20; DESATUALIZADA 3,9,14; NÃO VERIFICADA 7,11-12,24-26.
+T1 status: PASSOU; cada linha de estado identificada está classificada acima.
+
+Provas usadas nos registros de edição (P):
+P0 — docs/ultraroot/plan.md:40-46: “ui8 (vc40008) instalado”; “nada consultado hoje”; linha 45 registra C0.3 UNKNOWN.
+P1 — app/build.gradle.kts:21-22: “40010”, “0.2.0-ui10”; TODOs.md:29 no snapshot T0 preserva o registro antigo; h3_build_ui10_2026-10-13.txt:39,58,62-65,68-76: build/alinhamento, SHA cc7212b6…, assinatura não executada; out/badging-ui10.txt:1,5: pacote e label.
+P2 — BackendState.kt:9-23: “cap.kernelVersion == 0”; BackendStateTest.kt:8-108 e XML:2: 7 testes, 0 falhas; KsuBackend.kt:62-102: readCapability/readMode/readAllowList.
+P3 — KsuMode.kt:18-29: máscaras 1/2/4 e guarda version==0; KsuBackend.kt:70-76: readMode; KsuModeTest.kt:8-71 e XML:2: 10 testes, 0 falhas.
+P4 — RootAccessState.kt:24-27,49-72: query/filter; RootAccessScreen.kt:44,57: “readAllowList()”, “presentRootAccess(value)”; RootAccessFilterTest.kt:34-160 (17), RootAccessPresenterTest.kt:13-83 (5), XMLs:2.
+P5 — RootGrantPort.kt:3-6: “Sem implementação nativa”; RootGrantFlow.kt:27-57: confirmação e resultado por alvo; RootGrantFlowTest.kt:15-242 e XML:2: 15 testes, 0 falhas; EngineNatives.kt:8-17: JNI de leitura; grep RootGrantFlow|RootGrantPort em *Screen.kt: sem ocorrências.
+P6 — engine.cc:22-55,59-62: “scan_driver_fd”, “readlink”, “[ksu_driver]”; plan.md:46,93,105: fd não medido, D2/E2 pendentes; KsuMode.kt:5-9 não prova configuração CONFIG_KSU do lake.
+P7 — KernelPerformanceScreen.kt:41,61-93: readCapability e valor bruto; RootAccessScreen.kt:57 passa só value, sem query/filter.
+
+T2/T3 — linhas documentadas; “antigo → novo”; prova P acima.
+TODOs.md:4→4 “Data: 2026-10-11” → atualização 2026-10-13 e estados atuais; [P0].
+TODOs.md:28→28 boot C0.1 → histórico da base 2026-10-11, aparelho hoje NÃO VERIFICADO; [P0].
+TODOs.md:29→29 APK vc40000 → histórico explicitamente datado; [P1].
+TODOs.md:31→31 instalação vc40000 → histórico 2026-10-11; ui8 é o último estado documentado, sem medida hoje; [P0].
+TODOs.md:32→32 C0.3 sem log → sem nova medida em 2026-10-13; [P0].
+TODOs.md:37→46 grant do manager e estado de 12/10 → histórico, H2 só host e grant no aparelho NÃO TESTADO; [P0,P5].
+TODOs.md:233→242 título “KernelSU integrado” → modalidade no lake NÃO VERIFICADA; [P6].
+TODOs.md:234→243 DEVICE_TESTED → recorte histórico e aparelho hoje NÃO VERIFICADO; [P0].
+TODOs.md:235→244 boot KSU → histórico da base 2026-10-11; [P0].
+TODOs.md:243→252 “Grant provado” → grant no aparelho NÃO TESTADO; [P5].
+TODOs.md:246→255 NOT_TESTED → HOST_TESTED parcial, aparelho NÃO TESTADO; [P2,P3,P5].
+TODOs.md:247→256 leitor na cópia ultraroot-mgr → KsuBackend atual; integração JNI/tela não verificada; [P2,P7].
+TODOs.md:248→257 concessão no aparelho → NÃO TESTADO; [P5].
+TODOs.md:249→258 revogação no aparelho → NÃO TESTADO; [P5].
+TODOs.md:254→263 detectar backend pendente → classificador host, integração pendente; [P2,P7].
+TODOs.md:255→264 tela de lista → busca/filtro só no presenter, integração pendente; [P4].
+TODOs.md:424→433 tela de versão/UAPI → valor bruto, sem classifyBackend/readMode, H7 pendente; [P7].
+TODOs.md:497→506 Dashboard pendente → classificador parcial host, Dashboard completo NÃO VERIFICADO; [P2,P7].
+TODOs.md:664→673 e 679→688 suposição “integrado” → modalidade e .ko no lake NÃO VERIFICADOS; [P6].
+TODOs.md:34 título novo → estado host provado em 2026-10-13; [P0-P7].
+TODOs.md:35 novo → ui8 vc40008: último registro de 12/10, sem medida hoje; [P0].
+TODOs.md:36 novo → ui10 vc40010, APK alinhado/não assinado, hash, assinatura pendente e não instalado; [P1].
+TODOs.md:37 novo → estado honesto, 7 testes host, tela pendente; [P2,P7].
+TODOs.md:38 novo → flags H1/H1F, 10 testes host, aparelho NÃO VERIFICADO; [P3].
+TODOs.md:39 novo → busca/filtro, 17+5 testes host, tela sem parâmetros; [P4].
+TODOs.md:40 novo → grant/revoke, 15 testes fakes, sem JNI/tela, aparelho NÃO TESTADO; [P5].
+TODOs.md:41 novo → fd NÃO MEDIDA e CONFIG_KSU lake NÃO VERIFICADO; [P6].
+CAPABILITIES.md:3→3 data-base 11/10 → atualização 13/10 e estado atual de aparelho desconhecido; [P0].
+CAPABILITIES.md:9→9 DEVICE_TESTED → recorte histórico, estado atual NÃO VERIFICADO; [P0].
+CAPABILITIES.md:19→19 status geral → KSU-ROOT/UR-DASH parciais host, UR-PERF-READ sem nodes e UI pendente; [P2,P3,P7].
+CAPABILITIES.md:27→27 leitor antigo ultraroot-mgr → leitor atual e H2 sem escrita nativa; [P5].
+CAPABILITIES.md:54→54 KSU-ROOT → testes host 7+10+15+17+5; aparelho e grant real NÃO TESTADOS; [P0,P2,P3,P4,P5].
+CAPABILITIES.md:79→79 UR-PERF-READ → nodes físicos NÃO VERIFICADOS, UI sem integração; [P2,P3,P7].
+CAPABILITIES.md:85→85 UR-DASH NOT_STARTED → classificador parcial HOST_TESTED, Dashboard completo NÃO VERIFICADO; [P2,P7].
+COMPAT_MATRIX.md:3→3 estado de flags agora distingue host e aparelho; [P3].
+COMPAT_MATRIX.md:9→9 “KSU integrado” → modalidade no lake NÃO VERIFICADA; validação antiga é histórica; [P0,P6].
+COMPAT_MATRIX.md:14→14 linha F01–F30 mantida; três linhas inseridas após ela.
+COMPAT_MATRIX.md:15 nova linha GET_INFO:LKM — host VALIDATED; aparelho UNKNOWN até D2; bit 1; [P3].
+COMPAT_MATRIX.md:16 nova linha GET_INFO:MANAGER — host VALIDATED; aparelho UNKNOWN até D2; bit 2; [P3].
+COMPAT_MATRIX.md:17 nova linha GET_INFO:LATE_LOAD — host VALIDATED; aparelho UNKNOWN até D2; bit 4; [P3].
+T2/T3 status: PASSOU; conteúdo limitado às três solicitações e com referências de prova.
+
+T4 — SHA-256 depois:
+TODOs.md 1971461dbcebe896101f6fcea638381c2c065337d4db8e81f41aa092619f7648
+CAPABILITIES.md 4b233a47700f6709c9d5a30381ccfe3edefcad5ba52a4662fe24e8e4f72addc9
+COMPAT_MATRIX.md eeedbd819c8b9ebea7576e2ade2a6cf1b5ce4652907cca5bdf8c2f47b40b0b92
+T4 status: PASSOU.
+
+T5 — verificações finais:
+grep -n 'vc40000' nos três arquivos: somente TODOs.md:29 e TODOs.md:31; ambos dizem “Histórico” e estão datados de 2026-10-11.
+grep -nE 'built-in|built in' nos três arquivos: exit 1, saída vazia (NONE).
+T5 status: PASSOU.
+
+Auditoria de escopo:
+O digest dos 176 arquivos fora dos três alvos era 5290bd90acd51e99386a53efce0b32518b3fb33a871cad26b5620b6a980442fc em T0 e 4b93f305f5475749099c08d59ef3b42ad07b2497e4e634011e87f4632b554f09 no fim. Substituir no digest final o hash de plan.md pelo hash do snapshot inicial (24dc8a5544efe51ec3d1eab2568ed6b74df90a79a04dbbd09c9ec709dfb440aa) reproduz exatamente o digest T0. plan.md atual tem SHA 03fafe1bab4de102890a9984e086375187abe1ce3435437512ab816444c70e9b; foi lido, não editado por esta tarefa. Portanto, a comparação da árvore detecta uma mudança concorrente/externa em plan.md; não atribuo essa edição a este trabalho.
+R1: FALHOU na comparação global T0/final devido a plan.md fora do escopo; as escritas desta tarefa foram apenas os três arquivos autorizados.
+R2: PASSOU; cada linha alterada/inserida está listada acima com prova P.
+R3: PASSOU; ui8 e estados de aparelho estão explicitamente NÃO VERIFICADO/NÃO TESTADO.
+R4: PASSOU; ui8 é indicado como último estado documentado em 2026-10-12, sem medida hoje.
+R5: PASSOU; saída de T5 contém só menções históricas e nenhum “built-in/built in”.
+T6 — relatório gravado; wc -l = 88; nenhum build ou acesso ao aparelho.

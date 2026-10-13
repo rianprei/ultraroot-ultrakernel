@@ -1,0 +1,8 @@
+PAPEL: review do inc1-fix + inc2 do UltraRoot Manager (grok). Read-only, source [artefato local, fora do repo]/grok/ultraroot-mgr/. Scratch [artefato local, fora do repo]/codex/inc2/.
+CAÇA (concreto arquivo:linha; se nada "nenhum achado"):
+1. Fix inc1: o wrapper pega mesmo UnsatisfiedLinkError/ExceptionInInitializerError/NoClassDefFoundError e devolve "indisponível" sem crashar? O host test (KsuBackendHostTest) é real (não stub que sempre passa)?
+2. inc2 Root Access Center: lê a allowlist REAL (getAllowListUids → KSU_IOCTL_NEW_GET_ALLOW_LIST), sem mock, SÓ-leitura (sem setAppProfile/grant/revoke nesta fatia)? trata host/sem-device gracioso?
+3. applicationId intacto (me.weishu.kernelsu) + cert efb8d49f (não quebra auth do kernel)?
+4. O achado aberto do grok (perfil zerado em falha de ioctl; barras antigas sem wrapper) — é risco real ou pré-existente aceitável nesta fatia?
+ENTREGA: docs/ultraroot/INC2_REVIEW_codex.md + veredito.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE / VEREDITO: ACEITO|CORRIGIR / APPID_CERT_OK: sim/não / ACHADOS: n

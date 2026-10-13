@@ -1,0 +1,35 @@
+Objetivo: revisar, sem editar, o diff não commitado do lake e o commit c8e7812. Perguntas: o guard continua recusando flash no slot A e set_active a? O rollback reativa o b depois de flashar boot_b? O selftest prova isso sem tocar o aparelho?
+
+Correlation id: ULTRAROOT-L1-2026-10-13. Autor do diff: Codex #4. Revisor: OpenCode #2.
+
+Escopo de leitura (somente leitura). Repositório: kernel/lake
+1. tools/fastboot_guard.sh (inteiro).
+2. tools/selftest_fastboot_guard.sh (inteiro).
+3. git -C kernel/lake diff (somente leitura).
+4. git -C kernel/lake show c8e7812 --stat e o diff do commit.
+
+Escrita (somente este arquivo): docs/history/reports/review_lake_guard_2026-10-13.txt, com no máximo 80 linhas.
+
+Pode rodar: bash kernel/lake/tools/selftest_fastboot_guard.sh. O selftest usa um stub de fastboot no PATH e não toca o aparelho. Registrar o exit code e a saída. Se falhar, registrar e não corrigir.
+
+Tarefa:
+T1. Listar cada mudança do diff não commitado, com arquivo:linha e o efeito.
+T2. Provar que o guard recusa flash no slot A e set_active a. Citar a linha.
+T3. Provar que o rollback flasha boot_b antes de reativar o b. Citar a linha e a ordem.
+T4. O selftest cobre rollback, recusa de set_active a e recusa de comando fora da allowlist? Citar o caso e a linha.
+T5. Achar falso positivo no selftest: um caso que passaria com o guard errado. Citar a linha. Se não houver, escrever NENHUM.
+T6. Confirmar que o selftest não chama o fastboot real. Citar a linha que cria o stub no PATH.
+T7. Achar bug real fora de T1 a T6. Citar a linha e o cenário de entrada que falha. Se não houver, escrever NENHUM.
+
+Não deve:
+- Editar qualquer arquivo do lake ou do projeto.
+- Rodar fastboot real, adb ou qualquer comando que toque o aparelho.
+- Fazer commit ou push. Não usar /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+
+Teto: 12 chamadas de ferramenta. Registrar o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Marcar [LIDO] o que você viu e [DEDUZIDO] o que você inferiu. Sem prova, escrever NÃO VERIFICADO.
+
+Formato da resposta no chat (no máximo 20 linhas): veredito APROVADO, APROVADO COM CORREÇÕES ou REPROVADO, com as razões; uma linha por T1 a T7; exit code do selftest; caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

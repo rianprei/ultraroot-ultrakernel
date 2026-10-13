@@ -1,0 +1,11 @@
+PAPEL: produzir o rev.6 do spec UltraRoot ([fora do repo]/docs/superpowers/specs/2026-10-11-ultraroot-design.md) aplicando SPECREV_grok.md + SPECREV_codex.md. Read-only fora do spec+CAPABILITIES.md. Preservar o conteúdo REAL do dono; não inventar.
+
+APLICAR:
+1. REMOVER do conjunto obrigatório as 5 features INVENTADAS (não existem no pin 6e386044): hw-breakpoint (L433), memória-física (L436), intercept-syscall-genérica (L437), kpm-proteção-partição (L525), meta-overlayfs (L368). Marcar cada uma NÃO-REAL/UNKNOWN com a linha e o motivo (não está no source). Não apagar silencioso — registrar como "removida: não existe no pin".
+2. MARCAR as 3 de EVASÃO como FORA-DO-PRODUTO (boundary), com o disfarce exposto: selinux-bypass-via-hook (L461, accctl.c:239), "apagar da memória invisibly" (L436), "reduces detection surface" do meta-overlayfs (L368/module.md:179).
+3. REGRA DO DONO (adicionar explícito, destaque): **toda capacidade REAL do inventário (não-inventada, não-evasão) é OBRIGATÓRIA de implementar** — como implementada / integrada / adapter / extensão; nenhuma sai por "escopo". Rastreada até a conclusão.
+4. Contradições (codex): gate → rev.6; cenário boot_b marcado EXCLUSIVO DO LAKE + operação genérica por detecção de slot ativo; §2 com campos de evidência (path/hash/comando/versão/data) e NÃO marcar manager-grant como validado (está NOT_TESTED, Task 7 não rodou — só KSU-live é provado).
+5. Lacunas (codex): MAPA DE RASTREIO — cada capacidade real recebe ID + seção-UI (das 6) + adapter/runtime + IMPL/VALID + dep + teste (aplicar os campos do §4 ao inventário inteiro; popular/atualizar CAPABILITIES.md com esses IDs). APM com dono (adapter/runtime ou EXCLUDED c/ motivo). Auto-update do APK UltraRoot (adicionar, com recuperação de update inválido). Backup/logs: eliminar duplicação, definir dono dos dados + retenção + rollback + contrato central de logs (regra nunca logar SuperKey no centro).
+
+ENTREGA: rev.6 no mesmo arquivo + um CHANGELOG no topo (removidas/excluídas/adicionadas) + CAPABILITIES.md com os IDs. Honesto; nada inventado.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE / INVENTADAS_REMOVIDAS: 5? / EVASAO_FORA: 3? / REGRA_OBRIGATORIO: add? / MAPA_RASTREIO: add? / LINHAS: <n>

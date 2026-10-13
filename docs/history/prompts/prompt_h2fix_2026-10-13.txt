@@ -1,0 +1,105 @@
+Objetivo: corrigir três defeitos verificados pelo maestro no fluxo de confirmação do H2 (RootGrantFlow.kt). Por TDD: escrever os três testes novos, vê-los falhar, depois corrigir. Sem aparelho. Sem mexer em nada além dos dois arquivos do escopo.
+
+Correlation id: ULTRAROOT-H2F-2026-10-13. Autor: Codex #4. Revisor: OpenCode #2 (depois).
+
+Contexto (lido pelo maestro em 2026-10-13; raiz ultraroot/, não é git):
+- Arquivo: app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt (68 linhas). sha256 atual: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0.
+- Testes: app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt (178 linhas), 11 testes. sha256 atual: e3d9da56090af9c281694cca4689252d0e4f7983985d9c6737559852790a1717.
+- Defeito 1 (confirm, linhas 35-51): o estado só vira Done depois do laço. Se a porta lançar exceção no segundo alvo, o estado fica Confirming. Uma nova chamada a confirm() repete as escritas que já tinham rodado. Nenhum teste cobre isso.
+- Defeito 2 (request, linhas 27-33): aceita uid repetido. request(GRANT, [A, A]) chama grant(A) duas vezes. Nenhum teste cobre isso.
+- Defeito 3 (request, linha 31): guarda a lista recebida por referência. Se quem chamou alterar a lista depois de request, confirm() executa alvos que não foram confirmados. Nenhum teste cobre isso.
+
+Escopo (somente estes dois arquivos):
+1. app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+2. app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt: acrescentar três testes. Os onze existentes ficam como estão, sem editar corpo nem nome.
+
+Fora do escopo, não tocar: FakeRootGrantPort.kt (sha 8c67d7d59343e9987f3905decfe1b03fba73f2ca1e4c59add643c04620f08387), RootGrantPort.kt (sha 4c78dff41b5fd013ddfd819bc061857780add5eac93b38f53a1b814fcc113f38), qualquer arquivo de core-backend/, app/src/main/java/dev/superroot/ultraroot/ui/*Screen.kt, RootAccessState.kt, strings.xml, build.gradle.kts.
+
+Correções (forma esperada; ajustar só se o compilador exigir, sem mudar o contrato):
+
+fun request(action: GrantAction, targets: List<GrantTarget>): Boolean {
+    if (state != GrantState.Idle || targets.isEmpty()) {
+        return false
+    }
+    if (targets.map { it.uid }.toSet().size != targets.size) {
+        return false   // uid repetido: recusa
+    }
+    state = GrantState.Confirming(action, targets.toList())   // cópia: o que foi confirmado é o que roda
+    return true
+}
+
+fun confirm(): Boolean {
+    val pending = state as? GrantState.Confirming ?: return false
+    // Fecha a barreira antes da primeira chamada à porta. Se a porta lançar, o estado não pode ficar Confirming,
+    // senão uma nova chamada repetiria as escritas que já rodaram.
+    state = GrantState.Done(pending.action, emptyList())
+    val results = mutableListOf<AppGrantResult>()
+    try {
+        for (target in pending.targets) {
+            val response = when (pending.action) {
+                GrantAction.GRANT -> port.grant(target.uid)
+                GrantAction.REVOKE -> port.revoke(target.uid)
+            }
+            val outcome = when (response) {
+                is KsuRead.Ok -> GrantOutcome.Applied
+                is KsuRead.Unavailable -> GrantOutcome.Failed(response.reason)
+            }
+            results += AppGrantResult(target, outcome)
+        }
+    } finally {
+        // Exceção da porta propaga, mas o estado fica Done com os resultados já obtidos. Não há nova tentativa.
+        state = GrantState.Done(pending.action, results.toList())
+    }
+    return true
+}
+
+cancel() e dismiss() não mudam.
+
+Testes novos (nomes exatos, em RootGrantFlowTest.kt):
+- requestWithRepeatedUidIsRefused: request(GRANT, [a, a]) retorna false; state continua Idle; port.calls vazio.
+- requestCopiesTargetsAtConfirmation: val list = mutableListOf(a); request(GRANT, list) retorna true; depois list.add(b); confirm() retorna true; port.calls == ["grant 10123"]; state == Done(GRANT, [AppGrantResult(a, Applied)]).
+- confirmDoesNotRepeatGrantsWhenPortThrows: porta de teste (classe local ou objeto anônimo que implementa RootGrantPort) em que grant(10124) lança IllegalStateException("boom") e os demais devolvem KsuRead.Ok(Unit). request(GRANT, [a, b]) retorna true. assertThrows(IllegalStateException::class.java) { flow.confirm() }. state == Done(GRANT, [AppGrantResult(a, Applied)]). assertFalse(flow.confirm()). Lista de chamadas == ["grant 10123", "grant 10124"].
+
+Tarefa, em ordem (TDD):
+T0. Registrar sha256sum dos dois arquivos do escopo, de FakeRootGrantPort.kt e de RootGrantPort.kt. Os valores devem bater com os listados acima. Se algum não bater, parar e reportar.
+T1. Acrescentar os três testes novos. Rodar só RootGrantFlowTest. Esperado: os três falham (exit 1), e os onze antigos passam. Registrar a saída. Os três novos devem falhar por asserção, não por erro de compilação. Se falharem por compilação, corrigir só o teste, sem mudar RootGrantFlow.kt, e registrar.
+T2. Aplicar as correções em RootGrantFlow.kt. Rodar RootGrantFlowTest: 14 de 14 verdes. Registrar.
+T3. Rodar o módulo app: ./gradlew :app:testDebugUnitTest --offline. Esperado: 40 testes (26 do baseline + 14 do H2), 0 falhas. Registrar o total por XML.
+T4. Sabotagem S4 (exceção deixa o estado aberto): copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_S4 e registrar sha256. Remover a linha que fecha a barreira no início de confirm e o bloco finally, deixando o laço sem try. Rodar. Esperado: confirmDoesNotRepeatGrantsWhenPortThrows FALHA. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao de T0 de RootGrantFlow.kt... não: igual ao sha da cópia antes de S4 (o arquivo corrigido).
+T5. Sabotagem S5 (uid repetido aceito): copiar para ...antes_S5, registrar sha256. Remover o bloco que recusa uid repetido. Rodar. Esperado: requestWithRepeatedUidIsRefused FALHA. Restaurar, conferir sha256.
+T6. Sabotagem S6 (lista por referência): copiar para ...antes_S6, registrar sha256. Trocar targets.toList() por targets. Rodar. Esperado: requestCopiesTargetsAtConfirmation FALHA. Restaurar, conferir sha256.
+T7. Rodar RootGrantFlowTest de novo (14 de 14) e o módulo app inteiro (40 de 40), depois das restaurações.
+T8. Escopo: sha256 de FakeRootGrantPort.kt e RootGrantPort.kt iguais aos de T0. Os onze testes antigos continuam com os mesmos nomes (grep -n "fun " no arquivo, comparar com a lista). Nenhum arquivo de core-backend/ mudou nesta tarefa.
+T9. Escrever o relatório e responder.
+
+Comando de teste (caminhos absolutos):
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+
+Não deve:
+- Tocar o aparelho: nada de adb, fastboot, instalação ou leitura do aparelho.
+- Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Alterar os onze testes antigos, nem sua assinatura.
+- Mudar a assinatura pública de RootGrantFlow, GrantState, GrantOutcome, AppGrantResult ou GrantTarget.
+- Restaurar um arquivo de sabotagem sem conferir o sha256.
+- Dizer que algo passou sem a saída do Gradle.
+
+Artefatos:
+- Relatório: docs/history/reports/h2_fix_2026-10-13.txt, com até 150 linhas. Conteúdo: saída de T1 (vermelho dos três), de T2, T3, T4, T5 e T6 (linhas de falha), sha256 de T0 e de cada sabotagem, totais de T3 e T7, resultado de T8, status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 20 linhas, com o caminho do relatório e o veredito.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só dois arquivos mudaram: RootGrantFlow.kt e RootGrantFlowTest.kt. Os demais com o sha256 de T0.
+R2. RootGrantFlowTest 14 de 14. Módulo app 40 de 40.
+R3. Cada um dos três novos testes vermelho antes da correção e verde depois. Cada sabotagem derruba o teste indicado. Cada arquivo volta com o sha256 da cópia antes da sabotagem.
+R4. Os onze testes antigos com os mesmos nomes e corpos.
+R5. Cada afirmação com prova. Sem prova, NÃO VERIFICADO.
+
+Falhas conhecidas:
+- Gradle offline falha: registrar a mensagem exata. Status NÃO VERIFICADO. Não dizer que passou.
+- assertThrows não existir no JUnit do projeto: usar try/catch com fail(), sem mudar o contrato. Registrar.
+- Erro de tipo no try/finally ou no when: ajustar só a forma. Registrar.
+- Se um teste novo não puder falhar sem a correção, parar e reportar: o teste não prova nada.
+
+Limite conhecido, registrar no relatório e não corrigir: RootGrantFlow não é thread-safe. Assume uso a partir de uma única thread (a UI).
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

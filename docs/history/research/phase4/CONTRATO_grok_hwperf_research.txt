@@ -1,0 +1,25 @@
+PAPEL: RESEARCH (fase AUDIT/RESEARCH do lifecycle) — matriz de hardware/performance do POCO C75 (lake), pra determinar POR EVIDÊNCIA o que é controlável (incl. se há margem de overclock). Autônomo. READ-ONLY: sem device, sem flash, sem build, sem aplicar nada. NÃO inventar valores. Scratch [artefato local, fora do repo]/grok/hwperf/ (disco). -X GET, sem repo.
+
+FONTES (temos):
+- DTBO: [fora do repo]/mods/lake-kernel/backup-2026-10-05/dtbo_a.img e dtbo_b.img (tabelas OPP de CPU/GPU vivem aqui / no DTB).
+- Vendor drivers: super.img (8.6G) no mesmo backup contém vendor_dlkm (cpufreq/gpufreq/thermal da MediaTek, .ko fechados). Extrair read-only no scratch pra inspecionar (não precisa rodar).
+- Kernel source GKI: ~/lake-build/src/common (governors, cpufreq core, devfreq, thermal core — a parte genérica).
+- SoC: MT6768/MT6769 (Helio G-series), GPU Mali.
+
+INVESTIGUE (cadeia completa de cada controle: sysfs→driver→kernel→device tree→reguladores→limites):
+1. Tabelas OPP de CPU (clusters) e GPU no DTBO/DTB: quais freq×volt existem, qual o teto atual.
+2. cpufreq/gpufreq/thermal de vendor: onde os limites são impostos; dá pra adicionar OPP mais alto, ou o driver/firmware/thermal trava?
+3. Interfaces userspace reais (sysfs cpufreq/devfreq/thermal) — quais existem e se realmente alteram o HW vs só solicitam.
+4. I/O scheduler, zRAM/swap, cgroups, VM — o que é ajustável no GKI.
+5. Overclock: há MARGEM técnica demonstrável? Decida por evidência — nem "impossível" nem "viável" sem prova. Se bloqueado, diga EXATAMENTE onde (driver/firmware/thermal/regulador).
+
+ENTREGA: docs/history/research/phase4/HW_PERF_MATRIX_lake.md — matriz por componente×recurso, cada controle: implementado+validável | só-integração-externa | bloqueado(onde) | não-suportado-HW | UNKNOWN-pendente. Seção "overclock: veredito por evidência" (margem? onde trava?). Evidência (arquivo/offset/símbolo/linha do dts). NADA inventado; sem prova = UNKNOWN.
+
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE|BLOCKED
+OPP_CPU: <tetos achados / onde>
+OPP_GPU: <idem>
+OVERCLOCK_VEREDITO: margem-evidenciada | bloqueado(onde) | UNKNOWN(o que falta investigar)
+AJUSTAVEL_SEGURO: <governors/IO/zRAM/etc. que dá pra mexer sem risco>
+ARQUIVO: docs/history/research/phase4/HW_PERF_MATRIX_lake.md
+ABERTO: <lista>

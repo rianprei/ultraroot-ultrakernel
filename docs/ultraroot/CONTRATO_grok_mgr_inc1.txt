@@ -1,0 +1,17 @@
+PAPEL: implementar o INCREMENTO 1 do UltraRoot Manager. HOST-ONLY (build+sign, SEM instalar no device). Base: o source do manager KSU (pin 6e386044) + o audit docs/ultraroot/MANAGER_AUDIT.md. Trabalhe numa cópia (reflink/clone) em [artefato local, fora do repo]/grok/ultraroot-mgr/, NÃO na pristina. -X GET, sem repo novo, sem workflow.
+
+INCREMENTO 1 (real, testável, nada de botão falso):
+1. KSU_NAME = "UltraRoot" (string/branding da UI). NÃO mudar applicationId (fica me.weishu.kernelsu — o kernel C0.3 autoriza por cert, não por nome).
+2. Criar `core.backend.KsuBackend` que lê Natives.version + UAPI (capability discovery inicial do backend KSU). Não reescrever Natives/KsuCli — só consumir.
+3. Adicionar 1 página "Kernel & Performance" (subir PAGE_COUNT + when(page) em MainActivity.kt) que EXIBE esses valores reais (versão KSU, UAPI). Dado real do backend, não mock.
+4. Build do APK (gradle, debug ou release) e **assinar com a chave FIXA** [chaves locais do dono, fora do repo]/superroot-release.jks (apksigner). Saída: [artefato local, fora do repo]/grok/ultraroot-mgr/out/UltraRoot-mgr-inc1.apk.
+5. CONFERIR: cert sha256 do APK == efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9 (apksigner verify --print-certs) — pro kernel C0.3 continuar autorizando. Se não bater, BLOQUEADO.
+
+NÃO instalar no device (isso é passo gated separado). Evidência (comando+saída) em tudo.
+
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE|BLOCKED
+BUILD: <apk path>  CERT_SHA256: <= efb8d49f? sim/não>
+UI_NOME: UltraRoot? sim/não
+SECAO_KP: exibe version+UAPI reais? sim/não
+ABERTO: <lista>

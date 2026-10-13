@@ -1,0 +1,66 @@
+Objetivo: expor no core-backend do UltraRoot os flags do GET_INFO do KernelSU que o app não lê hoje (bits LKM, MANAGER e LATE_LOAD), por TDD. Sem alterar Active, Absent, Incompatible, KsuCapability nem os testes existentes. Sem aparelho.
+
+Correlation id: ULTRAROOT-H1-2026-10-13. Autor: Codex #4. Revisor: OpenCode #2.
+
+Contexto (provas conferidas pelo maestro em 2026-10-13):
+- Bits: core-backend/src/main/cpp/uapi/supercall.h:28 LKM = 1<<0; :29 MANAGER = 1<<1; :30 LATE_LOAD = 1<<2; :31 PR_BUILD = 1<<3; :32 BUNDLED = 1<<4.
+- Struct ksu_get_info_cmd: campo flags em supercall.h:36. Na struct legacy, flags está em supercall.h:43, no mesmo offset depois de version. Não é preciso tratar o caminho legado.
+- engine.cc: read_info() em :67-75 preenche g_info. kernelVersion em :89-92, kernelUapi em :94-97, managerUapi em :99-102.
+- No kernel do pin, LKM é setado só com #ifdef MODULE, MANAGER por is_manager() (depende do processo que chama), LATE_LOAD por ksu_late_loaded (kernel/supercall/dispatch.c, do_get_info).
+- A tela não lê flags hoje: app/src/main/java/dev/superroot/ultraroot/ui/KernelPerformanceScreen.kt:67-93.
+
+Escopo (somente estes arquivos):
+1. core-backend/src/main/cpp/engine.cc: adicionar Java_dev_superroot_core_EngineNatives_kernelFlags(JNIEnv *, jobject) logo após managerUapi, no mesmo padrão de kernelVersion, retornando static_cast<jint>(read_info().flags).
+2. core-backend/src/main/java/dev/superroot/core/EngineNatives.kt: adicionar external fun kernelFlags(): Int logo após managerUapi.
+3. NOVO core-backend/src/main/java/dev/superroot/core/KsuMode.kt: data class KsuMode(val lkm: Boolean, val manager: Boolean, val lateLoad: Boolean) e a função pura fun decodeKsuMode(flags: Int): KsuMode, com máscaras 1, 2 e 4. PR_BUILD e BUNDLED não entram neste passo.
+4. core-backend/src/main/java/dev/superroot/core/KsuBackend.kt: acrescentar somente fun readMode(): KsuRead<KsuMode> = readNative { decodeKsuMode(EngineNatives.kernelFlags()) }. Nada mais muda nesse arquivo.
+5. NOVO core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt, em JUnit 4, no estilo de KsuBackendHostTest.kt.
+
+Testes (nomes exatos):
+- decodeZeroFlagsHasNoBits: decodeKsuMode(0) dá KsuMode com os três campos false.
+- decodeLkmBit: decodeKsuMode(1) dá só lkm true.
+- decodeManagerBit: decodeKsuMode(2) dá só manager true.
+- decodeLateLoadBit: decodeKsuMode(4) dá só lateLoad true.
+- decodeAllKnownBits: decodeKsuMode(7) dá os três true.
+- decodeIgnoresPrBuildAndBundledBits: decodeKsuMode(8) e decodeKsuMode(16) dão os três false.
+- readModeWithoutLibIsUnavailable: KsuBackend.readMode() dá KsuRead.Unavailable com reason igual a KsuBackend.UNAVAILABLE, como os testes de KsuBackendHostTest.kt.
+
+Tarefa, em ordem (TDD):
+T1. Escrever KsuModeTest.kt. Rodar. Deve falhar por referência não resolvida. Registrar a saída.
+T2. Escrever KsuMode.kt com decodeKsuMode. Rodar. Os seis testes de decode ficam verdes. readModeWithoutLibIsUnavailable continua vermelho, porque readMode ainda não existe. Registrar.
+T3. Adicionar kernelFlags em engine.cc e EngineNatives.kt, e readMode em KsuBackend.kt. Rodar. Os sete testes do KsuModeTest ficam verdes. Registrar.
+T4. Compilação nativa: ./gradlew :core-backend:externalNativeBuildDebug --offline. Se a task não existir, listar com ./gradlew :core-backend:tasks --all | grep -i native e usar a correta. Registrar a saída. Se falhar por NDK ausente, registrar a mensagem exata e marcar NÃO VERIFICADO.
+T5. Sabotagem: copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_da_sabotagem e registrar sha256sum. Trocar a máscara de lkm de 1 para 2 em decodeKsuMode. Rodar. decodeLkmBit deve falhar. Restaurar a partir da cópia e provar com sha256sum que o arquivo voltou igual ao original.
+T6. Rodar o módulo inteiro: ./gradlew :core-backend:testDebugUnitTest --offline. Esperado: 17 testes, sendo KsuBackendHostTest 3, BackendStateTest 7 e KsuModeTest 7. Registrar.
+T7. Escrever o relatório e responder.
+
+Comando de teste, com caminhos absolutos:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+
+Não deve:
+- Tocar o aparelho: nada de adb, fastboot, instalação de APK ou leitura do aparelho.
+- Fazer commit, push ou criar branch.
+- Escrever em /tmp, abrir [chaves locais do dono, fora do repo]/ ou criar arquivo em docs/.
+- Alterar app/*, build.gradle.kts, BackendState.kt, BackendStateTest.kt, KsuBackendHostTest.kt, RootAccessState.kt, RootAccessScreen.kt ou strings.xml.
+- Mudar KsuCapability, Active, Absent ou Incompatible.
+- Chamar readMode a partir da UI.
+
+Artefatos:
+- Relatório: docs/history/reports/h1_flags_2026-10-13.txt, com no máximo 120 linhas. Conteúdo: saída do vermelho (T1), do verde (T3), da compilação nativa (T4), da sabotagem com os testes que falharam (T5), sha256 antes e depois (T5), total do módulo (T6), comando exato e status por item: PASSOU, FALHOU ou NÃO VERIFICADO.
+- Resposta no chat: no máximo 20 linhas, com o caminho do relatório e o veredito.
+- Exemplo de linha no relatório: "decodeLkmBit FAILED: expected true but was false".
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Os dois arquivos novos e os três arquivos alterados, e só esses.
+R2. KsuModeTest 7 de 7 verde. Módulo core-backend 17 de 17 verde.
+R3. A sabotagem derruba decodeLkmBit, e o arquivo volta com o mesmo sha256.
+R4. Compilação nativa verde, ou NÃO VERIFICADO com a mensagem exata.
+R5. Nenhum arquivo fora do escopo alterado. Relatar sha256 antes e depois dos arquivos existentes do escopo.
+R6. Cada afirmação com prova. Sem prova, escrever NÃO VERIFICADO.
+
+Falhas conhecidas:
+- Gradle offline falha: registrar a mensagem exata; status NÃO VERIFICADO; não dizer que passou.
+- Erro de sintaxe no JNI ou no Kotlin: corrigir só a sintaxe, sem mudar o contrato; registrar a correção.
+- Se a posição de flags não bater com supercall.h:36 e :43: parar e reportar. Não adivinhar.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

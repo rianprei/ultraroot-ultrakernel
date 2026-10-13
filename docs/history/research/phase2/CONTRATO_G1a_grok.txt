@@ -1,0 +1,22 @@
+PAPEL: executar o G1a — viabilidade ESTÁTICA do core KernelSU contra o nosso kernel. Autônomo, read-only, SEM build, SEM device, SEM insmod. Scratch só em [artefato local, fora do repo]/grok/ (nunca /tmp). Você já tem os checkouts do KernelSU da rodada de RE.
+
+CRITÉRIO (defina PASS/FAIL por item, com evidência file:line / símbolo):
+Referências nossas: árvore ~/lake-build/src/common; o `.config` e `Module.symvers` do build (em ~/lake-build/src/out/...); `System.map` do mesmo build; vermagic de referência 6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k.
+Alvo: KernelSU oficial tiann no commit que você pinou (registre o commit).
+
+1. SÍMBOLOS: liste os símbolos de kernel que o SOURCE do kernelsu chama (funções exportadas que ele usa — ex.: register_kprobe/unregister_kprobe, register_kretprobe, tracepoint). Para cada, confirme presença no nosso `Module.symvers` (com CRC) OU no `System.map`. Marque os que faltam.
+2. ALVOS DE HOOK POR NOME: liste os nomes que o KSU passa a register_kretprobe / tracepoint (ex.: syscall_regfunc, syscall_unregfunc, sys_enter) e confirme cada um no nosso `System.map`/kallsyms. Marque ausentes.
+3. CONFIG: confirme no nosso `.config`: KPROBES, KRETPROBES (ou equivalente), tracepoint de syscall (CONFIG_TRACEPOINTS/FTRACE_SYSCALLS conforme o caminho real do commit), EXT4_FS, MODULES, OVERLAY_FS. Liste valor de cada.
+4. VERMAGIC + assinatura: diga qual vermagic o módulo produziria e se bate com a referência; registre MODULE_SIG_FORCE e CONFIG_SYSTEM_TRUSTED_KEYS do nosso kernel e o que isso implica pra insmod do .ko (sem resolver agora).
+
+ENTREGA: docs/history/research/phase2/G1a_feasibility.md — tabela item×PASS/FAIL×evidência + veredito: VIÁVEL (pode ir pro build G1b) ou BLOQUEADO (lista o que falta). Não compile.
+
+BLOCO FINAL (`maestri ask "Claude Code" "<bloco>"`):
+STATUS: DONE
+COMMIT_KSU: <hash>
+G1a: VIÁVEL|BLOQUEADO
+SIMBOLOS_FALTANDO: <lista ou nenhum>
+ALVOS_HOOK_FALTANDO: <lista ou nenhum>
+CONFIG_FALTANDO: <lista ou nenhum>
+VERMAGIC: <bate|diverge>
+ABERTO: <lista ou nenhum>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UltraRoot</string>
+    <string name="open_sections">Abrir seções</string>
+    <string name="placeholder_title">Em construção</string>
+
+    <string name="root_loading">Lendo a allowlist do kernel…</string>
+    <string name="root_unavailable_title">Leitura da allowlist indisponível</string>
+    <string name="root_empty_title">Nada concedido ainda</string>
+    <string name="root_empty_body">Conceder e revogar acesso chega num incremento futuro.</string>
+    <string name="root_nomatch_title">Nenhum resultado</string>
+    <string name="root_nomatch_body">Nenhum app corresponde aos critérios atuais.</string>
+    <string name="root_unknown_package">Pacote não identificado</string>
+    <string name="root_label_uid">UID</string>
+    <string name="root_grant_allowed">Permitido</string>
+    <string name="root_grant_denied">Negado</string>
+    <string name="root_grant_profile_unavailable">Perfil indisponível</string>
+
+    <string name="kp_intro">Dados lidos do kernel. Se o backend não responder, o motivo aparece aqui.</string>
+    <string name="kp_waiting">Lendo o backend do kernel…</string>
+    <string name="kp_unavailable_title">Leitura do kernel indisponível</string>
+    <string name="kp_label_kernel_version">Versão do root no kernel</string>
+    <string name="kp_label_kernel_uapi">UAPI do kernel</string>
+    <string name="kp_label_app_uapi">UAPI deste app</string>
+    <string name="root_unavailable_hint">Verifique se o backend de root está ativo e se o kernel reconhece este app.</string>
+    <string name="kp_unavailable_hint">Sem resposta do kernel não há valores para mostrar. Verifique o backend de root e tente de novo.</string>
+    <string name="nav_more">Mais</string>
+    <string name="nav_more_title">Mais seções</string>
+    <string name="root_summary_label">apps com root concedido</string>
+    <string name="kp_summary_label">versão do root no kernel</string>
+    <string name="action_retry">Tentar novamente</string>
+</resources>

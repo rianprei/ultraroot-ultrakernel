@@ -1,0 +1,9 @@
+Fora do repo, e por quê:
+- keys/ (chaves de assinatura, senhas): segurança.
+- backups/ e Magisk/: volume e imagens de firmware de terceiros.
+- scratch/ (exceto relatórios, prompts e código listados em PATHMAP.md): volume e artefatos de build.
+- APK, IMG, SO, O, DEX, JAR (exceto gradle-wrapper.jar), build/, .gradle/, out/: binários gerados.
+- research/phase4/c01_dmesg.txt: log bruto de aparelho.
+- docs/ultraroot/evidence/*.png: capturas de tela do aparelho (ver NAO-INCLUIDO.txt).
+- prompt_repo_*: contratos de montagem deste próprio repo.
+- Lake, exceto tools/fastboot_guard.sh, tools/selftest_fastboot_guard.sh e a nota de pending: os outros scripts dependem da árvore completa do kernel; tools/data/ tem 913 KB.

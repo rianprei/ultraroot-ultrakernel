@@ -1,0 +1,21 @@
+PAPEL: tornar o par kernel↔manager estável com uma CHAVE DE ASSINATURA FIXA. Autônomo. HOST-ONLY (sem device). Cópia reflink/scratch, nunca pristina. -X GET, sem repo, sem workflow.
+
+SEGREDO (crítico): a chave/keystore/senha são SEGREDO. Gere e guarde em [chaves locais do dono, fora do repo]/ (crie o dir). NUNCA commitar, NUNCA pôr em repo público, NUNCA escrever a senha/chave em relatório/memória/MASTER_PLAN. Só registre o CAMINHO do keystore e o sha256 PÚBLICO do certificado resultante. Adicione [chaves locais do dono, fora do repo]/ a um .gitignore local.
+
+TAREFAS:
+1. Gerar keystore release fixo: [chaves locais do dono, fora do repo]/superroot-release.jks (keytool, RSA 2048/4096, validade longa, alias superroot). Guardar a senha num arquivo só-leitura em [chaves locais do dono, fora do repo]/ (fora de qualquer repo).
+2. Re-assinar o APK atual ([artefato local, fora do repo]/grok/manager/out/*.apk) com essa chave (apksigner sign --ks ...), ou rebuildar o manager assinado com ela. Saída: [artefato local, fora do repo]/grok/manager/out/SuperRoot-manager-release.apk. Extrair o novo cert sha256 (apksigner verify --print-certs) e o tamanho do cert (para EXPECTED_SIZE).
+3. Rebuild do kernel (C0.3) na cópia reflink: EXPECTED_HASH = novo cert sha256, EXPECTED_SIZE = tamanho do novo cert; KSU_VERSION 32673; UAPI 5; DISABLE_MANAGER off; package me.weishu.kernelsu intacto.
+4. gate_kmi_crc → 0 mismatch. Repack → [artefato local, fora do repo]/grok/c01-build/C03_ksu_boot_b.img (size 67108864/magic/sha).
+
+ENTREGA: docs/history/research/phase4/C03_stablekey_result.md — caminho do keystore (NÃO a senha), novo cert sha256 (público), EXPECTED_SIZE/HASH no kernel, gate, C03 img+sha. Veredito: C0.3 PRONTO|BLOQUEADO.
+
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE|BLOCKED
+KEYSTORE: <caminho> (senha NÃO)
+CERT_SHA256_NOVO: <hash público>
+EXPECTED_NO_KERNEL: <= cert novo? sim/não>
+GATE_557: compared/mismatches/missing
+C03_IMG: <path> SHA256:<hash> SIZE/MAGIC ok?
+VEREDITO: PRONTO|BLOQUEADO
+ABERTO: <lista>

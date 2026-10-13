@@ -1,0 +1,19 @@
+PAPEL: varredura de forks do APatch. Scratch SÓ em [artefato local, fora do repo]/grok/apatch-forks/.
+ALVOS: https://github.com/bmax121/APatch e seus forks (https://github.com/bmax121/APatch/forks?sort=stargazer_counts). Inclua o KernelPatch (bmax121/KernelPatch) e forks dele se houver.
+OBJETIVO: achar TODOS os forks que adicionam FEATURE NOVA (não clone trivial), mapear a feature com evidência, e dizer se já está na nossa matriz (phase1/GROK_matriz_features.md, 9 motores) ou é NOVA. Autônomo, sem pedir permissão. PROIBIDO rodar workflow/ultracode — entrega única e determinística. Scratch SÓ no seu dir de disco indicado (nunca /tmp).
+
+MÉTODO (bound de esforço — não varrer os milhares de clones):
+1. Enumerar forks por estrelas/atividade via gh api:
+   gh api -X GET repos/OWNER/REPO/forks -f sort=stargazers -f per_page=100 --paginate --jq ".[] | [.stargazers_count, .full_name, .pushed_at, .size] | @tsv" | sort -rn | head -60
+2. Dos top ~40 por estrela + qualquer fork notório que você conheça: ver se está AHEAD do upstream (gh api repos/OWNER/REPO/compare/UPSTREAM...FORK:branch --jq .ahead_by, ou olhar releases/README do fork). Clonar só os que parecem adicionar feature (shallow, no seu scratch).
+3. Para cada fork com feature nova: nome da feature, arquivo/commit de evidência, e NOVA vs já-na-matriz.
+
+ENTREGA: docs/history/research/phase3/<ARQ>.md — tabela (fork | estrelas | ahead? | feature nova | evidência file/commit | NOVA|na-matriz) + lista curta "TOP features novas a absorver no SuperRoot". Sem inventar; fork sem feature verificável = marcar [não-verificado].
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+FORKS_COM_FEATURE_NOVA: <n>
+NOVAS_vs_MATRIZ: <lista curta das features NOVAS que ainda não temos>
+ARQUIVO: <path>
+ABERTO: <lista ou nenhum>
+ARQUIVO: docs/history/research/phase3/APATCH_forks.md

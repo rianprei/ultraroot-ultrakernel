@@ -1,0 +1,41 @@
+PAPEL: engenheiro de RE e deep-research do projeto SuperRoot. Execute direto, sem pedir permissão, sem devolver a tarefa. Trabalhe SOZINHO (não leia saída do Claude #2). Autônomo.
+
+OBJETIVO ÚNICO: mapear a ARQUITETURA e o conjunto de FEATURES do KernelSU, Magisk e APatch (oficiais + forks vivos), com um veredito por feature de SE DÁ PRA EXTRAIR aquela função/feature isolada e levar pra um APK unificado, ou se ela é ACOPLADA ao core daquele engine. Evidência obrigatória: file:line no source OU evidência do REA (decompilação/trace) pra binários. Sem prova = marque [NÃO-VERIFICÁVEL].
+
+FERRAMENTA OBRIGATÓRIA — REA (https://github.com/morluto/rea):
+1. Node >=22.19. Instale/registre o MCP do REA na sua sessão: `npx rea-agents setup` (ou `npm install --global rea-agents`). Reinicie o agente se o setup pedir.
+2. Dependências pra este alvo: JADX headless + JDK (APK), Ghidra OU Hopper OU IDA (binário nativo). Instale o que faltar.
+3. Use o REA pra: decompilar os managers (APKs), e tracear os nativos (ksud, magiskboot, magiskinit, libmagisk, kpatch/kpimg, libzygisk). APK: veja docs/android-analysis.md. Nativo: docs/cli.md.
+
+SCRATCH (regra do dono): clone e extraia SOMENTE em [artefato local, fora do repo]/grok/ (disco). NUNCA /tmp (é tmpfs/RAM neste PC, trava a máquina). Apague [artefato local, fora do repo]/grok/ ao final se passar de ~5GB.
+
+ALVOS (candidatos — CONFIRME liveness/manutenção por research; adicione forks relevantes que achar, remova mortos):
+- KernelSU: tiann/KernelSU (oficial) + forks rifsxd/KernelSU-Next, ShirkNeko/SukiSU-Ultra, rsuntk/KernelSU, backslashxx/KernelSU, 5ec1cff/KernelSU(MKSU).
+- Magisk: topjohnwu/Magisk (oficial) + forks HuskyDG/magisk-files(Delta), 1q23lyc45/KitsuneMagisk(Kitsune), vvb2060/magisk(Alpha).
+- APatch: bmax121/APatch (oficial) + core bmax121/KernelPatch + forks ativos que existirem.
+
+PARA CADA ENGINE, mapeie a arquitetura nestes eixos (tabela):
+  a) Mecanismo de root: kernel-space (hooks no kernel/kprobe/manual, KPM) vs userspace (patch de ramdisk/init, su daemon). GKI vs não-GKI, suporte LKM.
+  b) Implementação do su + modelo do daemon (quem possui /system/bin/su, socket, policy).
+  c) Sistema de módulos: formato, mecanismo de mount (magic mount, overlayfs, systemless), compatibilidade.
+  d) Injeção de código: zygisk / injeção no zygote / app_process.
+  e) Ocultação: DenyList/SuList/hide, evasão de root-detection, SELinux policy handling.
+  f) Manager (APK) ↔ core: IPC, superkey (APatch), assinatura.
+
+ENTREGA (2 arquivos em docs/history/research/phase1/):
+1. GROK_dossie.md — narrativa por engine: arquitetura nos 6 eixos acima, com file:line/evidência REA, e nível de confiança (Alta/Média/Baixa) por afirmação.
+2. GROK_matriz_features.md — matriz FEATURE × ENGINE. Cada célula: [PORTÁVEL] (decoplada, dá pra extrair; cite de onde) | [ACOPLADA] (presa ao core; diga a quê) | [AUSENTE]. Uma coluna final "melhor origem" por feature (de qual engine pegar a melhor implementação daquela feature e por quê).
+
+PROIBIDO: inventar repos/commits/APIs; "parece que"; resumo sem evidência; redução de escopo. Não busque "como unir os 3" pronto na internet (contaminação) — o mapa de arquitetura é seu trabalho.
+
+PRONTO QUANDO: os 2 .md existem, toda linha da matriz tem veredito+evidência, REA foi usado em pelo menos os 3 managers + 3 nativos, scratch limpo.
+
+BLOCO FINAL (rode `maestri ask "Claude Code" "<este bloco>"` quando terminar):
+STATUS: DONE|BLOCKED
+DOSSIE: docs/history/research/phase1/GROK_dossie.md (<n linhas>)
+MATRIZ: docs/history/research/phase1/GROK_matriz_features.md (<n features x n engines>)
+REA_USADO: <lista de APKs/nativos analisados>
+ENGINES_VIVOS: <lista confirmada>
+PORTAVEIS_TOP: <3-5 features mais valiosas e portáveis>
+ACOPLADAS_DURAS: <features que NÃO dá pra extrair, e por quê>
+ABERTO: <lista ou nenhum>

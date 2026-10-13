@@ -1,0 +1,18 @@
+PAPEL: revisor (ultrareview) do mecanismo de autorização de manager do KernelSU. Autônomo, read-only, sem device. Scratch [artefato local, fora do repo]/codex/review-sig/.
+
+PERGUNTA: pra o KSU (kernel) conceder root ao NOSSO manager APK, basta setar no kernel a assinatura esperada = o cert do nosso APK (size 744 + sha256 b830cb5194e9bdb0f2a7c2cb295cd6e4123aaecf9b262f5adac7d90ce1d0620f)? Ou há MAIS checagens (nome de pacote me.weishu.kernelsu, versão kernel×userspace compatível, múltiplas assinaturas, etc.) que precisam casar pra o `su`/grant funcionar?
+
+ANALISE (com evidência no source do KSU, commit 6e386044):
+1. Onde e COMO o kernel valida o manager (apk_sign.c / ksu_is_manager / fluxo de throne_tracker). Size+hash é suficiente?
+2. O nome do pacote precisa bater? Nosso APK é me.weishu.kernelsu (debug)? Se o applicationId do build mudou (ex.: sufixo .debug), isso quebra a detecção?
+3. Compatibilidade de versão kernel(32673)×userspace(32673): o manager recusa kernel de versão incompatível? O fallback 16 quebraria?
+4. Riscos do approach de casar debug cert (muda a cada rebuild) e recomendação (chave fixa).
+
+ENTREGA: docs/history/research/phase4/REVIEW_sig_por_codex.md — achados numerados (evidência arquivo:linha) + veredito: o fix do grok (assinatura+versão) é SUFICIENTE pra KSU conceder root, ou falta X.
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE
+SUFICIENTE: sim|não (+ o que falta)
+PACOTE_NOME_OK: <sim/não/risco>
+VERSAO_OK: <sim/não>
+ACHADOS: <n>

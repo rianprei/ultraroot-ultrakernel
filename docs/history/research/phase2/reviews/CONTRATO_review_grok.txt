@@ -1,0 +1,18 @@
+PAPEL: revisor adversarial do plano de arquitetura do SuperRoot. Autônomo, read-only. Você NÃO escreveu esses arquivos — ataque-os. Scratch só em [artefato local, fora do repo]/grok/ (nunca /tmp).
+
+ALVO (leia): docs/history/research/phase2/PHASE2_BLUEPRINT.md + docs/history/research/phase1/CODEX_core_decision.md. (NÃO revise sua própria matriz.) Pode cruzar com sua matriz como evidência.
+
+LISTA DE CAÇA (achados CONCRETOS; se nada, "nenhum achado", nunca "parece ok"):
+1. A decisão KernelSU×APatch se sustenta contra a SUA matriz? Alguma feature-alvo prioritária que só o APatch/KPM entrega e que inviabiliza KernelSU? Aponte a feature (nº da matriz).
+2. Arquitetura de 5 camadas: falta alguma camada, ou duas que o blueprint junta mas que de fato conflitam (dono do su, mount)? 
+3. Gate G1: o critério de PASS (kernelsu.ko do DDK pinado, sem símbolo indefinido, CRC/KMI + vermagic + arquitetura batendo, trust resolvida) é SUFICIENTE pra garantir que o módulo encaixa no nosso 6.6.89? O que ele deixa passar que não deveria? Compare com a lógica do nosso tools/gate_kmi_crc.sh.
+4. A camada de compat de módulo é realista dadas as ressalvas da sua matriz (webroot ausente no Magisk/Alpha; diferenças de instalação KSU×Magisk)?
+5. Os pontos de autorização do dono cobrem todo write/flash? Falta algum ponto irreversível sem "sim"?
+
+ENTREGA: docs/history/research/phase2/reviews/REVIEW_blueprint_por_grok.md — achados numerados (severidade, evidência, correção) + veredito: o plano está pronto pro G1, ou ajustar X antes.
+
+BLOCO FINAL (`maestri ask "Claude Code" "<bloco>"`):
+STATUS: DONE
+ACHADOS: <n concretos>
+G1_SUFICIENTE: <sim/não + o que falta>
+AJUSTE_NECESSARIO: <lista ou nenhum>

@@ -1,0 +1,47 @@
+Objetivo: atualizar três documentos de estado do UltraRoot para refletir só o que está provado em 2026-10-13. Somente documentos. Sem código, sem aparelho, sem build.
+
+Correlation id: ULTRAROOT-H4-2026-10-13. Autor: Codex #4. Revisor: OpenCode #2, depois.
+
+Arquivos (somente estes três): docs/ultraroot/TODOs.md, docs/ultraroot/CAPABILITIES.md, docs/ultraroot/COMPAT_MATRIX.md.
+
+Fatos provados (cada um com arquivo:linha no código, raiz ultraroot/):
+- Código atual: app/build.gradle.kts:21-22 = versionCode 40010 e versionName "0.2.0-ui10".
+- ui10: APK alinhado e não assinado em out/UltraRoot-own-ui10-aligned.apk, sha256 cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894. Assinatura pendente do dono. Não instalado. Fonte: docs/history/reports/h3_build_ui10_2026-10-13.txt.
+- ui8 (vc40008): o último estado de aparelho documentado é este, de 2026-10-12, em docs/ultraroot/plan.md §2. NÃO foi medido hoje. Escreva assim.
+- Estado honesto: core-backend/src/main/java/dev/superroot/core/BackendState.kt:9-23 (classifyBackend). 7 testes em BackendStateTest.kt. Só host.
+- Flags GET_INFO: core-backend/src/main/java/dev/superroot/core/KsuMode.kt (decodeKsuMode, decodeKernelMode) e KsuBackend.kt:70-76 (readMode). 10 testes em KsuModeTest.kt. Só host. No aparelho: NÃO VERIFICADO.
+- Busca e filtro: app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt (presentRootAccess com query e filter). 17 + 5 testes. A tela ainda não usa busca nem filtro: RootAccessScreen.kt chama presentRootAccess sem esses parâmetros. Só host.
+- Grant e revoke, só host: core-backend/src/main/java/dev/superroot/core/RootGrantPort.kt (interface, sem implementação nativa) e app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt (barreira de confirmação, resultado por app). 15 testes em RootGrantFlowTest.kt. Sem JNI de escrita, sem tela. No aparelho: NÃO TESTADO.
+- Origem do fd [ksu_driver]: NÃO MEDIDA (plano E2).
+- Lake: NÃO verificado no repositório: a configuração CONFIG_KSU do kernel do aparelho. Não afirme que o KSU é built-in.
+
+Tarefa, em ordem:
+T0. sha256sum dos três arquivos. Registrar.
+T1. Ler os três arquivos inteiros, com número de linha (cat -n). Para cada linha que afirme estado (versão, APK, cobertura de testes, status de aparelho, status de funcionalidade), marcar: CORRETA, DESATUALIZADA, ou NÃO VERIFICADA.
+T2. TODOs.md: atualizar as linhas desatualizadas. Em especial: a menção a vc40000 como APK do aparelho (ver também plan §2); e incluir estado honesto, busca e filtro, H1, H2 e ui10, com o status de cada um (host / aparelho). Cada linha nova com prova arquivo:linha no relatório.
+T3. CAPABILITIES.md: atualizar as células de KSU-ROOT, UR-DASH e UR-PERF-READ que os fatos acima cobrem. Onde não houver prova, escrever NÃO VERIFICADO, sem chutar.
+T4. COMPAT_MATRIX.md: atualizar as células de flags (LKM, MANAGER, LATE_LOAD). Host: provado (KsuModeTest.kt). Aparelho: NÃO VERIFICADO até o diagnóstico D2.
+T5. Conferir: grep -n "vc40000" nos três arquivos deve dar só menções históricas marcadas como tal. grep -n "built-in\|built in" deve dar NONE, exceto se citar a frase de KsuMode.kt com prova.
+T6. Escrever o relatório.
+
+Regras:
+- Não invente número, status de aparelho nem resultado de teste. Sem prova: NÃO VERIFICADO.
+- Não apague histórico: quando algo mudou, escreva o estado novo e mantenha a data da mudança.
+- Não mude nenhum outro arquivo.
+
+Artefatos:
+- Relatório: docs/history/reports/h4_docs_2026-10-13.txt, até 150 linhas. Conteúdo: sha de T0 e de cada arquivo depois da edição; a lista de cada linha alterada com arquivo:linha antes e depois, e a prova (arquivo:linha no código); saídas de T5; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 15 linhas, com o caminho do relatório.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só os três arquivos mudaram.
+R2. Cada linha alterada tem prova arquivo:linha no relatório.
+R3. Nenhum status de aparelho sem marcação NÃO VERIFICADO / NÃO TESTADO.
+R4. ui8 descrito como último estado documentado de 2026-10-12, sem medida de hoje.
+R5. T5 passou.
+
+Não deve:
+- Tocar o aparelho (adb, fastboot). Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo novo em docs/ (só editar os três).
+- Editar código, build.gradle.kts ou qualquer APK em out/.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

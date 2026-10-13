@@ -1,0 +1,4 @@
+PAPEL: fix único do inc2 (achado codex, integridade de dado). HOST-ONLY, cópia [artefato local, fora do repo]/grok/ultraroot-mgr/, re-assinar com a chave fixa (cert efb8d49f).
+FIX: em KsuBackend.kt:43-55 + jni.cc:203,229-239 — distinguir "GET_APP_PROFILE falhou" de "perfil padrão/sem root". Quando o ioctl do perfil de uma UID falha (-EOPNOTSUPP/-EFAULT/-ENOENT, dispatch.c:342-370), NÃO converter em AllowGrant com allowSu=false; propagar erro até KsuBackend e a tela renderizar aquela UID como "perfil indisponível"/atualizar lista — nunca apresentar leitura falha como perfil confirmado. TDD: teste host que simula falha de perfil e espera "indisponível", não "sem root". Não grava/concede/revoga.
+Build UltraRoot-mgr-inc2b.apk; conferir cert efb8d49f. NÃO instalar.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE|BLOCKED / FIX: perfil-falho vira indisponível? teste host? / APK: path / CERT: efb8d49f? / ABERTO: <lista>

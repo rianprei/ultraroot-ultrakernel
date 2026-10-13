@@ -1,0 +1,3 @@
+diff-nao-commitado-2026-10-13.diff é trabalho local, ainda não commitado no repo do lake.
+O commit c8e7812 (base destes scripts) existe só localmente. O remoto público do lake está em ffe583a.
+Publicar exige a decisão do dono: "sim, commitar" e "sim, push".

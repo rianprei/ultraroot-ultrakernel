@@ -1,0 +1,39 @@
+ULTRAROOT-H1R-2026-10-13 | revisão H1 flags GET_INFO. [LIDO]
+Revisor: OpenCode #2. Somente leitura. Chamadas usadas: 5 de 12. [LIDO]
+
+T1. Bits [LIDO]:
+- Header supercall.h L30 `KSU_GET_INFO_FLAG_LKM = (1U << 0)` -> 1; L31 `...MANAGER = (1U << 1)` -> 2; L32 `...LATE_LOAD = (1U << 2)` -> 4.
+- KsuMode.kt L9-13: lkm = flags and 1 != 0; manager = flags and 2 != 0; lateLoad = flags and 4 != 0.
+- Veredito: batem exatamente (L30,L31,L32 vs L10-12). Trecho header/decode alinhados.
+
+T2. Campo flags na struct [LIDO]:
+- ksu_get_info_cmd L35 version, L36 flags (imed. após version), L37 features, L38 uapi_version.
+- ksu_get_info_legacy_cmd L42 version, L43 flags, L44 features.
+- flags está logo depois de version nas duas. [LIDO]
+
+T3. JNI [LIDO]:
+- engine.cc L89-92: `extern "C" JNIEXPORT jint JNICALL Java_dev_superroot_core_EngineNatives_kernelFlags(JNIEnv *, jobject) { return static_cast<jint>(read_info().flags); }`.
+- EngineNatives.kt L11: `external fun kernelFlags(): Int`. Assinatura compatível (JNIEnv*, jobject, retorno jint = Int, nome canonical JNI para dev.superroot.core.EngineNatives). [DEDUZIDO].
+
+T4. Precedência Kotlin [LIDO]:
+- `flags and 1 != 0` compila, logo Kotlin lê `flags and 1` (Int) primeiro e compara com 0; se fosse `flags and (1 != 0)`, seria Boolean e não compilaria. Resultado = pretendido (bit 0 ativo).
+- Dito o mesmo para bit 1 (value 2) e bit 2 (value 4).
+
+T5. readMode [LIDO]:
+- L70-72 `fun readMode(): KsuRead<KsuMode> = readNative { decodeKsuMode(EngineNatives.kernelFlags()) }`, mesmo estilo que readCapability L61-67 (readNative + EngineNatives).
+- Contrato de erro: KsuModeTest L40-44 verifica `result is KsuRead.Unavailable` e `reason == KsuBackend.UNAVAILABLE`. readMode usa readNative, portanto preservado. [DEDUZIDO: readNative não reaberto além dessa prova de teste].
+
+T6. Falso positivo em KsuModeTest.kt: NENHUM identificado. [LIDO]
+- L9-36 veredictos tigh tight (zero flags 0; 1,2,4 isolados; 7; 8 e 16 esperando todos falso).
+- As quatro bits "extra" (8, 16) só são testadas isoladas; mas não há mutante que passe em todas as assertions (p. ex. swap lkm/manager falharia L15/L20).
+
+T7. Escopo e UI [LIDO]:
+- grep app/src `readMode|KsuMode|kernelFlags` = NONE (saída "NONE"). UI não consome readMode.
+- Ficheiros mudados nas últimas 2 h sob core-backend/src ou app/src conforme find -mmin 120: exatamente 5 — engine.cc, EngineNatives.kt, KsuBackend.kt, KsuMode.kt, KsuModeTest.kt. [LIDO] (lista do maestro confirmada).
+- Nenhum outro arquivo fonte alterado nessa faixa.
+
+T8. Bug real: NENHUM além do escopo (cache g_info na função read_info L60-67 e readNative sem reabertura). [DEDUZIDO].
+Síntese: 17/17 testes verdes pelo maestro (como ponto de partida), bits validados, JNI/Kotlin conformes, UI limpa, sem bug identificado.
+Relatório: docs/history/reports/review_h1_flags_2026-10-13.txt
+Nenhuma edição, build, adb ou commit.
+`

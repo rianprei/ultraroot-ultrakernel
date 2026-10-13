@@ -1,0 +1,30 @@
+PAPEL: analista de decisão de arquitetura do SuperRoot. Execute direto, autônomo, sem pedir permissão. Trabalhe SOZINHO — NÃO leia os arquivos em andamento do grok (GROK_*.md) nem os do Claude #2 (CLAUDE2_*.md): perspectiva independente. Read-only no device/kernel (não compile, não flashe).
+
+PERGUNTA ÚNICA A RESPONDER COM EVIDÊNCIA: para o SuperRoot (um engine unificado que hospeda "o melhor" de KernelSU/Magisk/APatch sob UM core) rodando no POCO C75 4G com nosso GKI 6.6.89 custom JÁ RODANDO — qual deve ser o CORE ÚNICO: KernelSU ou APatch? Entregue recomendação + trade-off, NÃO decida pelo dono (ele decide).
+
+FATO-CHAVE que mudar tudo: nós TEMOS a árvore de source do kernel em ~/lake-build/src/common e o build reproduzível (gates passam). Então "precisa recompilar o kernel" NÃO é blocker pra nós — é uma opção disponível.
+
+AVALIE CONCRETAMENTE (cada um com evidência: arquivo/doc/símbolo, não achismo):
+1. KernelSU como core: caminho de integração no 6.6.89 — precisa de patch no source (temos) ou tem LKM/GKI-module path? Quais CONFIG_*, símbolos e hooks (manual hook vs kprobe) ele exige? Nosso kernel é KMI-compatível com o que o KSU precisa? Chece contra ~/lake-build/src/common o que for verificável.
+2. APatch/KernelPatch como core: patch na boot image sem árvore (kpatch/kpimg), modelo KPM, superkey. O que ele precisa do kernel concreto? Vantagem/risco vs ter a árvore.
+3. Para o objetivo REAL (hospedar módulos estrangeiros — módulos Magisk, módulos KSU, KPM — sob um core): qual core dá a MELHOR superfície de adaptador? Lembre: o caminho é "um core + adaptadores seletivos / reimplementar", NÃO carregar binários as-is.
+4. Pontos de concessão que sobram em qualquer escolha (su/daemon, SELinux, ocultação) e como cada core lida.
+
+ENTREGA: docs/history/research/phase1/CODEX_core_decision.md
+- Tabela de trade-off KernelSU × APatch (eixos: esforço de integração dado que temos a árvore, superfície de adaptador p/ módulos estrangeiros, risco de brick/boot, manutenção, maturidade do zygisk-compat, ocultação).
+- Recomendação com nível de confiança (Alta/Média/Baixa) e o PORQUÊ.
+- "O que mudaria minha recomendação": liste quais dados da matriz de RE do grok poderiam virar a decisão.
+Confiança por afirmação. Não invente; se não souber de um fork/símbolo, diga.
+
+SCRATCH: [artefato local, fora do repo]/codex/ (disco), NUNCA /tmp. Apague ao final se grande.
+
+PRONTO QUANDO: CODEX_core_decision.md existe com a tabela + recomendação + seção "o que mudaria".
+
+BLOCO FINAL (rode `maestri ask "Claude Code" "<este bloco>"` quando terminar):
+STATUS: DONE|BLOCKED
+ARQUIVO: docs/history/research/phase1/CODEX_core_decision.md (<n linhas>)
+RECOMENDACAO: <KernelSU|APatch> (confiança <Alta|Média|Baixa>)
+RAZAO_1LINHA: <por quê>
+CONCESSOES_RESTANTES: <su/daemon, SELinux, ocultação — resumo>
+O_QUE_MUDARIA: <quais dados do grok virariam a decisão>
+ABERTO: <lista ou nenhum>

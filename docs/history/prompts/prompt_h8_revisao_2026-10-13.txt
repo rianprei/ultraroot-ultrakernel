@@ -1,0 +1,29 @@
+Objetivo: revisar o H8 do Codex #4: escrita nativa de perfil (SET_APP_PROFILE) no core-backend do UltraRoot, sem chamada na UI. Responder: (1) o helper fill_app_profile está correto? (2) o caminho JNI está correto, incluindo o retorno de erro? (3) as sabotagens S8 e S9 são reproduzidas? (4) há defeito novo? Somente leitura no original; sabotagem só em cópia.
+
+Correlation id: ULTRAROOT-H8R-2026-10-13. Autor: Codex #4. Revisor: você (OpenCode #2).
+
+Fatos do maestro (confira, não aceite):
+- Raiz: ultraroot/ (não é git).
+- Relatório do autor: ultraroot/core-backend/src/test/native_profile_write_2026-10-13.txt.
+- Arquivos do escopo, sha256 esperados: core-backend/src/main/cpp/app_profile_fill.h 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9; core-backend/src/main/cpp/engine.cc 60c44448ae91514fb3e25bccbe36afdb255ef57cf18b451418f57c185292eaeb; core-backend/src/main/java/dev/superroot/core/EngineNatives.kt 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf.
+- Helper: app_profile_fill.h linhas 36-67. JNI: engine.cc linhas 206-227. ioctl: KSU_IOCTL_SET_APP_PROFILE (uapi/supercall.h:178). ksuctl (engine.cc, ~linha 58-63) devolve o retorno de ioctl(): -1 em erro, com errno.
+- Ponto a checar pelo revisor: engine.cc:227 `return ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd);` devolve -1 em falha. O errno se perde. O contrato diz "negativo em falha". O diagnóstico D2 precisa do errno. Confirme se é achado e proponha a correção exata.
+- Kernel (pin kernel/upstream/KernelSU/): kernel/supercall/dispatch.c:373-390; kernel/policy/allowlist.c:166-230 (ksu_set_app_profile), :355-368 (use_default e allow_su), :32 (domínio padrão).
+- Static_assert do layout: app_profile_fill.h linhas 6-34, compilados pelo NDK arm64 (.so de debug regenerado às 11:40:39).
+
+Escrita: somente docs/history/reports/review_h8_2026-10-13.txt (até 100 linhas) e a cópia docs/history/reports/h8/ (para sabotagem).
+
+Tarefa:
+T1. sha256sum dos três arquivos do escopo contra os valores acima. Conferem?
+T2. Helper (app_profile_fill.h, 36-67). Confira linha por linha: (a) key nula, vazia, ou com 256 caracteres é rejeitada? (b) o terminador NUL de profile.key existe? (profile = {} zera a struct). (c) uid negativo é rejeitado? (d) para allow_su false, o perfil que o kernel lê fica consistente (use_default falso, allow_su falso)? Cite cada linha.
+T3. JNI (engine.cc 206-227): (a) GetStringUTFChars e ReleaseStringUTFChars em todos os caminhos? (b) retorno de erro: confirme o achado sobre -1 e errno. Diga SIM ou NÃO e proponha a linha exata corrigida (ex.: int ret = ksuctl(...); return ret == 0 ? 0 : -errno;). Confira que errno está disponível (cerrno incluído?).
+T4. Kernel: confira no pin, com linha, que allow_su true + use_default true + domínio "u:r:ksu:s0" é um perfil aceito por ksu_set_app_profile (allowlist.c:135-147 e 171-174). Se alguma condição falhar, é achado.
+T5. Sabotagem independente, só em cópia: mkdir -p docs/history/reports/h8 && cp ultraroot/core-backend/src/main/cpp/app_profile_fill.h docs/history/reports/h8/ e reconstruir o shim e o teste a partir do relatório do autor (ultraroot/core-backend/src/test/native/ tem o fill_test.cc e o shim: copie-os para a sua pasta; leia-os antes). Compile: g++ -std=c++17 -Wall -Werror -I <shim> -I ultraroot/core-backend/src/main/cpp/uapi -I docs/history/reports/h8 fill_test.cc -o fill_test && ./fill_test. Esperado: 8 casos PASS. Depois S8 (curr_uid = 0 no helper, na cópia): esperado FALHA no caso de uid. Restaure e confira sha256. Depois S9 (remova a checagem de tamanho >= KSU_MAX_PACKAGE_NAME): esperado FALHA no caso de 256 caracteres. Restaure e confira sha256. Registre as linhas de falha.
+T6. Escopo: grep -rn "setAppProfile" ultraroot/app/src ultraroot/core-backend/src/main/java. Esperado: só a declaração em EngineNatives.kt. Confirme que nenhuma tela chama.
+T7. Veredito: APROVADO, APROVADO COM CORREÇÕES (lista exata com linha e texto corrigido), ou REPROVADO.
+
+Formato: cada afirmação com arquivo:linha e trecho literal, conferido por grep -n ou cat -n nesta revisão. Sem prova: NÃO VERIFICADO.
+Não deve: editar o original; rodar Gradle; usar /tmp; abrir [chaves locais do dono, fora do repo]/; chamar subagentes.
+Teto: 16 chamadas de ferramenta. Registre o número no fim.
+
+Diretivas: execute diretamente, sem pedir permissão. Responda em português do Brasil.

@@ -1,0 +1,30 @@
+ULTRAROOT-UI10R-2026-10-13 — conferência do APK final assinado ui10. Revisor: OpenCode #2. Somente leitura; sem keystore, sem .pass, sem Gradle, sem aparelho. Chamadas: 6. [LIDO]
+
+T1. sha256 do APK final vs out/UltraRoot-own-ui10.sha256.txt:
+b5f5bb369caf64af01c4897d9a1e07eced876e2cd29f60602e09a8576ebf6934  out/UltraRoot-own-ui10.apk (sha256sum, igual ao arquivo .sha256.txt e ao prefixo do maestro). CONFERE. [LIDO]
+
+T2. apksigner verify --print-certs --verbose (saída literal relevante):
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+(v3.1, v3.2, v4 e SourceStamp: false)
+Number of signers: 1
+V2 Signer: certificate DN: CN=SuperRoot, OU=lake, O=SuperRoot, C=BR
+V2 Signer: certificate SHA-256 digest: efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9
+CONFERE: V2 apenas (v1/v3 false), 1 signer, cert SHA-256 = esperado (efb8d49f...d99ad9). [LIDO]
+
+T3. aapt2 dump badging (linhas relevantes):
+package: name='me.weishu.kernelsu' versionCode='40010' versionName='0.2.0-ui10' ...
+application-label:'UltraRoot'
+CONFERE os quatro valores. [LIDO]
+
+T4. Final vs alinhado: CONTEÚDO DIFERENTE, como esperado:
+- UltraRoot-own-ui10.apk: b5f5bb36...f6934 (23628211 bytes, 11:38:22)
+- UltraRoot-own-ui10-aligned.apk: cc7212b6...55894 (23619915 bytes, 11:09:01)
+Diferença de 8296 bytes = bloco de assinatura V2 adicionado sobre o APK alinhado; origem intacta. [LIDO]
+
+T5. VEREDITO: PRONTO PARA INSTALAR (D1 aguarda o "sim, instalar ui10").
+- Hash íntegro e registrado; assinatura V2-only válida com o cert do projeto (efb8d49f...), 1 signer; identidade/versão corretas (me.weishu.kernelsu, 40010, 0.2.0-ui10, UltraRoot); o APK rejeitado v3only (23636602 bytes, 11:37:54) permanece ao lado como registro de descarte, sem uso.
+- Nenhum passo dado em direção ao aparelho: instalação é D1, gated por "sim, instalar ui10" (plan.md:92).
+Relatório: docs/history/reports/review_ui10_final_2026-10-13.txt

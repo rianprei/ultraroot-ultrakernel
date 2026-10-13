@@ -1,0 +1,19 @@
+PAPEL: auditar o CÓDIGO do manager KernelSU (Compose) que já temos, pra planejar a transformação em UltraRoot Manager. READ-ONLY, sem device, sem build. Scratch [artefato local, fora do repo]/grok/mgraudit/. Source do manager: no checkout do KSU usado pra buildar o APK ([artefato local, fora do repo]/*/KernelSU/manager/ ou re-clone raso do pin 6e386044). Evidência arquivo:linha.
+
+OBJETIVO: mapear a estrutura real do app (não inventar) pra saber ONDE encaixar as 6 seções do UltraRoot Manager + a camada de adapter + capability discovery, SEM quebrar a comunicação com o kernel (package me.weishu.kernelsu + assinatura).
+
+LEVANTAR:
+1. Estrutura do app: módulos gradle, pacotes, telas Compose existentes (root/grant, módulos, settings, WebUI), ViewModels, como o app fala com o ksud/kernel (Natives/JNI, prctl/supercall UAPI 5).
+2. Onde ficam: a lista de apps/grants (Root Access), a tela de módulos (Module Center base), settings/log.
+3. Pontos de extensão: onde adicionar as seções novas (System Toolkit, Kernel&Performance, Boot&Recovery, Extensions Hub) e uma CAMADA DE ADAPTER (interface comum + detector de backend) sem reescrever o núcleo.
+4. O que REUSAR vs o que CRIAR. Riscos de mexer no package/assinatura (não mexer agora).
+
+ENTREGA: docs/ultraroot/MANAGER_AUDIT.md — estrutura real (arquivo:linha) + proposta de onde cada uma das 6 seções e a camada de adapter encaixam + plano de 1º incremento (menor fatia útil: ex. renomear UI pra UltraRoot + adicionar o esqueleto do capability-discovery + 1 seção nova stub que LÊ dado real, não botão falso). NÃO implementar — só auditar+propor.
+
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE|BLOCKED
+ESTRUTURA: <stack/telas-chave + como fala com kernel>
+PONTOS_EXTENSAO: <onde as 6 seções + adapter entram>
+PRIMEIRO_INCREMENTO: <a menor fatia útil proposta>
+ARQUIVO: docs/ultraroot/MANAGER_AUDIT.md
+ABERTO: <lista>

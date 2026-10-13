@@ -1,0 +1,36 @@
+Objetivo: corrigir uma linha de KDoc em KsuMode.kt. É o único achado da revisão H1F do OpenCode #2 (docs/history/reports/review_h1f_2026-10-13.txt, achado 1). Só isso. Nenhuma outra mudança.
+
+Correlation id: ULTRAROOT-H1KDOC-2026-10-13. Autor: Codex #4. Conferência: maestro, depois o OpenCode #2.
+
+Contexto (provas do maestro e do revisor, 2026-10-13):
+- Arquivo: ultraroot/core-backend/src/main/java/dev/superroot/core/KsuMode.kt, linha 5, dentro do KDoc da data class KsuMode.
+- Texto atual da linha 5: " * lkm is false in a built-in build (the lake kernel), which does not mean KernelSU is absent."
+- Motivo: "(the lake kernel)" não tem prova. Nenhum CONFIG_KSU aparece em defconfig do repositório do lake (kernel/lake). Documentos de pesquisa dizem CONFIG_KSU=y sem medida.
+- Semântica que o pin sustenta: dispatch.c:44-45 seta o bit LKM só sob #ifdef MODULE.
+
+Escopo: somente core-backend/src/main/java/dev/superroot/core/KsuMode.kt, e só a linha 5.
+
+Texto exato da nova linha 5 (substitui a atual; mantém o espaço e o asterisco do início):
+ * lkm is false when KernelSU is built into the kernel instead of loaded as a module (dispatch.c sets the bit only under #ifdef MODULE); a false value does not mean KernelSU is absent.
+
+Não tocar: nenhuma outra linha de KsuMode.kt, nem os outros arquivos do H1 (KsuBackend.kt, KsuModeTest.kt, engine.cc, EngineNatives.kt), nem qualquer arquivo app/ ou RootGrant*.kt.
+
+Tarefa, em ordem:
+T0. sha256sum dos cinco arquivos do H1 (KsuMode.kt, KsuBackend.kt, KsuModeTest.kt, engine.cc, EngineNatives.kt), sob core-backend/src. Esperados: KsuMode.kt cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a; KsuBackend.kt 98122bdf58cda04a790076eafab529db50bd8a9a96d9d648ea697b26201367c1; KsuModeTest.kt f148e9160599d9d1f571b8a11672155ffd0fe13ed2e3f9cdd5835ad54e8737e6; engine.cc 6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f; EngineNatives.kt 05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e. Se algum não bater, parar e reportar, sem editar.
+T1. Copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_R2 e registrar o sha256 da cópia.
+T2. Trocar a linha 5 pelo texto exato acima. Não mudar mais nada. Registrar: diff docs/history/reports/KsuMode.kt.antes_R2 core-backend/src/main/java/dev/superroot/core/KsuMode.kt. O diff deve mostrar só a linha 5.
+T3. Rodar: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline. Esperado: 20 testes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10), 0 falhas. Registrar o total dos XML em core-backend/build/test-results/testDebugUnitTest/.
+T4. Conferir o sha256 dos quatro arquivos do H1 que não deviam mudar (KsuBackend.kt, KsuModeTest.kt, engine.cc, EngineNatives.kt): iguais aos de T0.
+T5. grep -n "lake kernel" core-backend/src/main/java/dev/superroot/core/KsuMode.kt deve dar NONE. grep -n "lkm is false when" ... deve dar exatamente uma linha. Registrar as duas saídas.
+T6. Escrever o relatório.
+
+Artefatos:
+- Relatório: docs/history/reports/h1_kdoc_fix_2026-10-13.txt, até 60 linhas. Conteúdo: sha de T0, sha de T1, sha de T2 do KsuMode.kt, o diff de T2, o total de T3, o resultado de T4 e de T5, e o status (PASSOU, FALHOU ou NÃO VERIFICADO) de cada item.
+- Resposta no chat: até 10 linhas, com o caminho do relatório e o veredito.
+
+Não deve:
+- Tocar o aparelho (adb, fastboot). Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Editar qualquer linha além da 5 de KsuMode.kt.
+- Rodar testes de app/ ou sequer abrir RootGrant*.kt: esses arquivos estão em revisão por outro agente.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

@@ -1,0 +1,28 @@
+Objetivo: confirmar, somente leitura, que a correção do KDoc de KsuMode.kt (ULTRAROOT-H1KDOC-2026-10-13) fecha o achado 1 da sua revisão H1F (docs/history/reports/review_h1f_2026-10-13.txt). Responder: a correção mudou só a linha 5, e o texto novo é o que você propôs?
+
+Correlation id: ULTRAROOT-H1KDOCR-2026-10-13. Autor da correção: Codex #4. Revisor: você (OpenCode #2).
+
+Fatos do maestro (confira, não aceite):
+- Arquivo corrigido: ultraroot/core-backend/src/main/java/dev/superroot/core/KsuMode.kt.
+- Cópia de antes da correção: docs/history/reports/KsuMode.kt.antes_R2. Seu sha256 esperado: cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a (é o estado que você revisou).
+- sha256 atual de KsuMode.kt esperado: 47148567e73c3d2b8e3079a9900b9b52e7db51931cc1b17bba87b7bc4063ac7f.
+- Relatório do autor: docs/history/reports/h1_kdoc_fix_2026-10-13.txt.
+
+Escopo de leitura (somente leitura): os dois KsuMode.kt acima, o relatório do autor, e os XMLs em ultraroot/core-backend/build/test-results/testDebugUnitTest/. Não rode Gradle. Não edite nada.
+
+Escrita: somente docs/history/reports/review_h1kdoc_confirma_2026-10-13.txt (até 30 linhas).
+
+Tarefa:
+T1. diff docs/history/reports/KsuMode.kt.antes_R2 ultraroot/core-backend/src/main/java/dev/superroot/core/KsuMode.kt. Esperado: só a linha 5 muda. Cole a saída literal.
+T2. sha256sum das duas cópias. Confira com os valores esperados acima.
+T3. sed -n '5p' no arquivo atual. Confirme que o texto é exatamente: " * lkm is false when KernelSU is built into the kernel instead of loaded as a module (dispatch.c sets the bit only under #ifdef MODULE); a false value does not mean KernelSU is absent." Cole a linha.
+T4. A frase de T3 está sustentada pelo pin? Confira em kernel/upstream/KernelSU/kernel/supercall/dispatch.c, linhas 44-45 (#ifdef MODULE e a atribuição do bit LKM). Diga SIM ou NÃO, com a linha.
+T5. grep -n "lake kernel" no arquivo atual. Esperado: nenhuma saída.
+T6. Nos XMLs de core-backend: KsuModeTest 10/0, BackendStateTest 7/0, KsuBackendHostTest 3/0. Confira com grep e cole o total.
+T7. Veredito: FECHADO (achado 1 do H1F resolvido) ou NÃO FECHADO, com o motivo.
+
+Formato: até 30 linhas. Cada afirmação com a saída que a sustenta. Sem prova: NÃO VERIFICADO.
+
+Não deve: editar qualquer arquivo; rodar Gradle; usar /tmp; abrir [chaves locais do dono, fora do repo]/; chamar subagentes.
+
+Diretivas: execute diretamente, sem pedir permissão. Responda em português do Brasil.

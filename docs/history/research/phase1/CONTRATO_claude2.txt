@@ -1,0 +1,39 @@
+PAPEL: arquiteto de integração e analista de conflito do projeto SuperRoot. Execute direto, sem pedir permissão. Trabalhe SOZINHO (NÃO leia a saída do grok — independência; você é a perspectiva paralela). ANÁLISE/ARQUITETURA, não RE de binário.
+
+OBJETIVO ÚNICO: responder, com rigor, DUAS perguntas:
+  (A) Onde KernelSU + Magisk + APatch COLIDEM em runtime se rodarem juntos? (mapa de conflito)
+  (B) Qual ARQUITETURA um ÚNICO APK precisaria pra hospedar "o melhor dos três" sem auto-conflito? (desenho candidato + veredito de viabilidade)
+
+MAPA DE CONFLITO (A) — analise cada ponto de colisão e diga se é conflito DURO (mutuamente exclusivo) ou CONCILIÁVEL (com qual mecanismo):
+  1. Core de root no kernel: dois cores kernel-space ao mesmo tempo (KernelSU manual-hooks/kprobe vs APatch KPM) — é possível coexistir ou é exclusivo?
+  2. Posse do su / daemon / socket (/system/bin/su, magisk daemon, ksud, apd).
+  3. Mount de módulos: magic mount (Magisk) vs overlayfs (KernelSU/APatch) sobre os mesmos paths.
+  4. Injeção no zygote: zygisk vs equivalentes — double-hook.
+  5. SELinux: dois patchers de policy.
+  6. Ocultação: DenyList vs SuList disputando os mesmos alvos.
+
+ARQUITETURA (B) — proponha um desenho em camadas com veredito de viabilidade por camada:
+  - Core único (escolher/abstrair 1 mecanismo kernel) vs multi-core.
+  - Camada de compat de módulos: rodar módulos Magisk + módulos KernelSU + KPM num runtime só — como?
+  - Manager/UI unificado + IPC.
+  - Zygisk-compat.
+  Diga o que é REALISTA, o que é PESQUISA-ABERTA, e o que é IMPOSSÍVEL com o estado atual.
+
+ENTREGA (1 arquivo): docs/history/research/phase1/CLAUDE2_conflito_arquitetura.md
+  - Seção A: matriz de conflito (6 pontos × {DURO|CONCILIÁVEL|mecanismo}).
+  - Seção B: diagrama em camadas (ASCII) + veredito por camada + riscos.
+  - Seção C: pergunta decisiva que o dono precisa responder pro design fechar.
+  Toda afirmação com confiança (Alta/Média/Baixa). Sem fabricar.
+
+PROIBIDO: inventar; "parece ok"; copiar design pronto da net. Base-se em como esses engines funcionam de fato (seu conhecimento + docs oficiais que puder citar).
+
+PRONTO QUANDO: o .md existe com as 3 seções, matriz de conflito completa (6 pontos), arquitetura com veredito por camada.
+
+BLOCO FINAL (rode `maestri ask "Claude Code" "<este bloco>"` quando terminar):
+STATUS: DONE|BLOCKED
+ARQUIVO: docs/history/research/phase1/CLAUDE2_conflito_arquitetura.md (<n linhas>)
+CONFLITOS_DUROS: <quais dos 6 são mutuamente exclusivos>
+CORE_RECOMENDADO: <qual mecanismo kernel único, ou multi-core, e por quê>
+VIABILIDADE: <REALISTA|PESQUISA-ABERTA|IMPOSSÍVEL + 1 linha>
+PERGUNTA_AO_DONO: <a decisão que falta>
+ABERTO: <lista ou nenhum>

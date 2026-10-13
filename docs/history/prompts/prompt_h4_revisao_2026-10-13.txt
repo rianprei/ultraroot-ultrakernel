@@ -1,0 +1,31 @@
+Objetivo: revisar, somente leitura, a atualização documental H4 feita pelo Codex #4 em três arquivos de docs/ultraroot/: TODOs.md, CAPABILITIES.md e COMPAT_MATRIX.md. Responder: (1) só esses três mudaram? (2) cada afirmação de estado nova tem prova e está correta? (3) há afirmação de aparelho sem marcação NÃO VERIFICADO? Não editar nada.
+
+Correlation id: ULTRAROOT-H4R-2026-10-13. Autor: Codex #4. Revisor: você (OpenCode #2).
+
+Fatos do maestro (confira, não aceite):
+- Relatório do autor: docs/history/reports/h4_docs_2026-10-13.txt (88 linhas).
+- sha256 esperados depois da edição: TODOs.md 1971461dbcebe896101f6fcea638381c2c065337d4db8e81f41aa092619f7648; CAPABILITIES.md 4b233a47700f6709c9d5a30381ccfe3edefcad5ba52a4662fe24e8e4f72addc9; COMPAT_MATRIX.md eeedbd819c8b9ebea7576e2ade2a6cf1b5ce4652907cca5bdf8c2f47b40b0b92.
+- Mtimes: docs/history/handoffs/HANDOFF-ultraroot-2026-10-13.md (10:04) e MAGISK_KSU_UI_INVENTORY.md (10:02) são anteriores à tarefa e não foram tocados por ela. plan.md (11:14:35) foi editado pelo maestro, durante a tarefa: essa é a causa da falha R1 que o autor registrou. Não é mudança do Codex. Conte isso como explicação, não como achado contra o autor. Os três docs do autor: CAPABILITIES.md 11:19:39, COMPAT_MATRIX.md 11:19:39, TODOs.md 11:22:12.
+- Bits GET_INFO no header: supercall.h (ultraroot/core-backend/src/main/cpp/uapi/supercall.h) linhas 28-30.
+- Testes no disco (XML): BackendStateTest 7, KsuModeTest 10, RootGrantFlowTest 15, RootAccessFilterTest 17, RootAccessPresenterTest 5, KsuBackendHostTest 3, StringsIdentityTest 2, ContrastTest 2.
+- Artefato ui10: ultraroot/out/UltraRoot-own-ui10-aligned.apk, sha256 esperado cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894. Assinatura: pendente do dono, não feita.
+
+Escopo de leitura: os três docs acima; plan.md §2 e §9 (o estado de referência); os arquivos de código citados pelo autor, só para conferir números e nomes.
+Escrita: somente docs/history/reports/review_h4_docs_2026-10-13.txt (até 60 linhas).
+
+Tarefa:
+T1. Hashes dos três docs contra os valores acima. Conferem? SIM ou NÃO.
+T2. Escopo: ls -la --time-style=full-iso em docs/ultraroot/ e comparar com as horas acima. Quais arquivos mudaram durante a tarefa? Confirme que nenhum dos três foi alterado depois de 11:22:12 (fora o TODOs.md, que é o último), e que HANDOFF e MAGISK são anteriores a 11:00.
+T3. COMPAT_MATRIX.md: as três linhas novas de GET_INFO (LKM, MANAGER, LATE_LOAD) dizem bit 1, 2 e 4? Confira em supercall.h:28-30. Citar linha por linha.
+T4. CAPABILITIES.md: a linha que soma testes (7+10+15+17+5) confere com os XMLs listados acima? A soma dá 54? Confirme.
+T5. TODOs.md: a linha 36 (ui10, hash cc7212b6) confere com o sha256 do APK alinhado? Confira com sha256sum.
+T6. Busca por afirmação de aparelho sem marcação: em TODOs.md, CAPABILITIES.md e COMPAT_MATRIX.md, procure "PASSOU", "funciona", "testado", "verificado", "aprovado", "instalado" perto de palavras de aparelho (device, aparelho, DEVICE, [DEVICE]). Para cada ocorrência: linha, trecho, e se está marcada como histórica ou NÃO VERIFICADA. Liste só as que não estão marcadas.
+T7. Afirmações sobre o kernel do lake ("integrado", "built-in", "in-tree", "modulo"): qualquer uma sem NÃO VERIFICADA ou sem prova é achado. Liste.
+T8. Veredito: APROVADO, APROVADO COM CORREÇÕES (lista exata de linhas e texto corrigido sugerido), ou REPROVADO.
+
+Formato: cada achado com arquivo:linha e trecho literal curto, conferido por grep -n nesta revisão. Sem prova: NÃO VERIFICADO.
+
+Não deve: editar nenhum arquivo; rodar Gradle; usar /tmp; abrir [chaves locais do dono, fora do repo]/; chamar subagentes.
+Teto: 14 chamadas de ferramenta. Registre o número no fim do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Responda em português do Brasil.

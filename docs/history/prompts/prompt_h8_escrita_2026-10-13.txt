@@ -1,0 +1,53 @@
+Objetivo: adicionar a escrita nativa de perfil de app (SET_APP_PROFILE) ao core-backend do UltraRoot, sem nenhuma chamada na UI, com a struct conferida campo a campo contra o header do pin. TDD no host (C++ e Kotlin). Sem aparelho. Sem commit.
+
+Correlation id: ULTRAROOT-H8-2026-10-13. Autor: Codex #4. Revisor: OpenCode #2, depois.
+
+Contexto (verificado pelo maestro em 2026-10-13; raiz do projeto ultraroot/, não é git):
+- Ioctl: KSU_IOCTL_SET_APP_PROFILE = _IOC(_IOC_WRITE, 'K', 12, 0), em core-backend/src/main/cpp/uapi/supercall.h:178. Argumento: struct ksu_set_app_profile_cmd { struct app_profile profile; }, em supercall.h:107-108.
+- struct app_profile e root_profile: core-backend/src/main/cpp/uapi/app_profile.h. KSU_APP_PROFILE_VER = 4 (linha 6). KSU_MAX_PACKAGE_NAME = 256 (linha 7).
+- Kernel do pin (kernel/upstream/KernelSU/): kernel/supercall/dispatch.c:373-390 (do_set_app_profile: copy_from_user e chamada de ksu_set_app_profile) e kernel/policy/allowlist.c:166-230 (ksu_set_app_profile: validações, alocação; o aviso de chave trocada está na linha 197). Ler os dois antes de decidir o perfil mínimo.
+- Leitura já existente: engine.cc:161-172 (readProfile) preenche version, curr_uid e key, e chama get_app_profile. Use o mesmo padrão.
+- EngineNatives.kt hoje só tem leitura. RootGrantPort (H2) não tem implementação nativa, e assim continua.
+
+Escopo (somente estes arquivos):
+1. NOVO core-backend/src/main/cpp/app_profile_fill.h: header sem JNI, que inclui só uapi/app_profile.h. Função static inline bool fill_app_profile(app_profile &profile, int32_t uid, const char *key, bool allow_su). Regras: version = KSU_APP_PROFILE_VER; curr_uid = uid; allow_su = allow_su; key = key. Rejeitar: key nulo, key vazio, strlen(key) >= KSU_MAX_PACKAGE_NAME, uid negativo. Para allow_su = true, preencher só o mínimo válido segundo os dois arquivos do kernel, declarando a escolha e a linha do kernel que a justifica. Para allow_su = false, definir o campo que o kernel usa para revogar, com a linha que justifica.
+   O header também tem static_assert de layout (sizeof e offsetof dos campos usados), com os valores da tabela de T2, para o NDK conferir no aarch64.
+2. core-backend/src/main/cpp/engine.cc: incluir o header e acrescentar, depois de readProfile, a função JNI extern "C" JNIEXPORT jint JNICALL Java_dev_superroot_core_EngineNatives_setAppProfile(JNIEnv *env, jobject, jint uid, jstring packageName, jboolean allowSu). Obter a string com GetStringUTFChars e liberar com ReleaseStringUTFChars em todos os caminhos. Se fill_app_profile falhar, retornar -EINVAL. Senão, montar ksu_set_app_profile_cmd cmd{}; cmd.profile = profile; e retornar ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd). Retorno: 0 em sucesso; negativo em falha.
+3. core-backend/src/main/java/dev/superroot/core/EngineNatives.kt: acrescentar external fun setAppProfile(uid: Int, packageName: String, allowSu: Boolean): Int, com KDoc em inglês: "Writes a profile through SET_APP_PROFILE. Not called from the UI: the UI call waits for the fd origin decision (E2)."
+
+Fora do escopo, não tocar: KsuBackend.kt, KsuMode.kt, BackendState.kt, todos os testes Kotlin existentes, RootGrantPort.kt, RootGrantFlow.kt, todo arquivo de app/, build.gradle.kts, strings.xml, out/, docs/.
+
+Tarefa, em ordem:
+T0. sha256sum de: core-backend/src/main/cpp/engine.cc, core-backend/src/main/java/dev/superroot/core/EngineNatives.kt, core-backend/src/main/cpp/uapi/app_profile.h, core-backend/src/main/cpp/uapi/supercall.h, core-backend/src/main/java/dev/superroot/core/KsuBackend.kt. Comparar uapi/app_profile.h com o do pin (kernel/upstream/KernelSU/uapi/app_profile.h), por sha256. Registrar se são iguais.
+T1. Ler kernel/supercall/dispatch.c:373-390 e kernel/policy/allowlist.c:166-230 do pin. No relatório, escrever o que o kernel lê e grava do perfil quando allow_su é true e quando é false, com linha. Não decidir os campos antes dessa leitura.
+T2. Scratch do host: ultraroot/core-backend/src/test/native/. Criar o shim ultraroot/core-backend/src/test/native/shim/linux/types.h com __u8, __u16, __u32, __u64, __s32, __s64 e o que mais o uapi precisar. Escrever layout_test.cc, que imprime offsetof e sizeof de app_profile, root_profile e non_root_profile (campo, offset, tamanho). Compilar: g++ -std=c++17 -I ultraroot/core-backend/src/test/native/shim -I ultraroot/core-backend/src/main/cpp/uapi layout_test.cc -o layout_test && ./layout_test. Registrar a tabela. Ela é o gabarito dos static_assert.
+T3. Escrever fill_test.cc ANTES do header. Casos: uid válido; uid negativo (rejeitado); key nulo; key vazia; key de 255 caracteres (aceito); key de 256 caracteres (rejeitado); allow_su true (campos esperados); allow_su false (campo de revogação esperado). Compilar e rodar. Deve FALHAR, porque o header ainda não existe. Registrar.
+T4. Escrever app_profile_fill.h. Compilar e rodar fill_test.cc com -Wall -Werror. Todos verdes. Registrar.
+T5. Sabotagem S8: copiar app_profile_fill.h para ultraroot/core-backend/src/test/native/app_profile_fill.h.antes_S8 e registrar sha256. Trocar curr_uid = uid por curr_uid = 0. Rodar. Esperado: o caso de uid FALHA. Restaurar e conferir o sha256.
+T6. Sabotagem S9: copiar para ...antes_S9 e registrar sha256. Remover a checagem de tamanho da key. Rodar. Esperado: o caso de key de 256 caracteres FALHA. Restaurar e conferir o sha256.
+T7. Editar engine.cc (item 2 do escopo) e EngineNatives.kt (item 3).
+T8. Compilação nativa arm64, com o NDK, que confere os static_assert: ./gradlew :core-backend:tasks --all | grep -i native, para achar a task certa; depois rodá-la com TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' e --offline. Registrar. Se falhar por NDK ausente, NÃO VERIFICADO com a mensagem exata.
+T9. Testes Kotlin do módulo: cd ultraroot && TMPDIR=... ./gradlew :core-backend:testDebugUnitTest --offline. Esperado: 20 testes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10), 0 falhas. Registrar.
+T10. Escopo: sha256 dos arquivos fora do escopo iguais aos de T0. grep -rn "setAppProfile" app/src core-backend/src/main/java deve mostrar só a declaração em EngineNatives.kt.
+T11. Escrever o relatório.
+
+Artefatos:
+- Relatório: ultraroot/core-backend/src/test/native_profile_write_2026-10-13.txt, até 150 linhas. Conteúdo: sha de T0; comparação do app_profile.h com o pin; leituras de T1 com linhas; tabela de T2; saídas de T3, T4, T5 e T6; saída de T8 e de T9; saída do grep de T10; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 15 linhas, com o caminho do relatório.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só três arquivos mudaram: app_profile_fill.h (novo), engine.cc e EngineNatives.kt.
+R2. uapi/app_profile.h igual ao do pin (sha).
+R3. fill_test verde (com pelo menos os 8 casos de T3) e vermelho antes do header.
+R4. S8 e S9 derrubam os casos indicados. Cada arquivo volta ao sha da cópia.
+R5. Os static_assert compilam no NDK arm64 (T8), ou NÃO VERIFICADO com a mensagem.
+R6. Nenhuma chamada a setAppProfile fora da declaração (T10).
+R7. Cada campo do perfil escrito tem a linha do kernel que o justifica (T1).
+R8. Testes Kotlin 20/20.
+
+Não deve:
+- Chamar setAppProfile de app/ ou de qualquer tela. Não implementar RootGrantPort aqui.
+- Tocar o aparelho (adb, fastboot). Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Testar a escrita no kernel: não há aparelho nesta tarefa.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

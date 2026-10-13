@@ -1,0 +1,100 @@
+ULTRAROOT-H8-2026-10-13 — relatório
+Raiz: ultraroot
+
+T0 — hashes SHA-256 iniciais
+engine.cc: 6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f
+EngineNatives.kt: 05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e
+uapi/app_profile.h local: dffad173122bb7bb183a61b5c24269e3cb36e3d4f22598cd34c0130945bed615
+uapi/app_profile.h pin:   dffad173122bb7bb183a61b5c24269e3cb36e3d4f22598cd34c0130945bed615 (iguais)
+uapi/supercall.h: 9ec7d55185d9d76ff3d1dca8b37f4658bc3d6021d987891d153300420df90a2c
+KsuBackend.kt: 98122bdf58cda04a790076eafab529db50bd8a9a96d9d648ea697b26201367c1
+Status T0: PASSOU.
+
+T1 — leitura do kernel pin (scratch/grok/src/KernelSU)
+dispatch.c:382 copia cmd.profile do usuário; :387 chama ksu_set_app_profile; :389-390 persiste e atualiza processos.
+allowlist.c:171-174 rejeita perfil inválido; :135-147, quando allow_su=true, limita groups_count e exige domínio SELinux não vazio e terminado.
+allowlist.c:200-210 substitui o perfil existente; :229 copia novo perfil. :194-199 registra aviso se a chave do mesmo UID mudou.
+allowlist.c:355-368 só usa perfil concedido com allow_su; use_default seleciona o perfil root padrão. :334-374 mostra que allow_su=false não concede e deixa a seleção no padrão.
+Escolha para grant: rp_config.use_default=true e domínio mínimo "u:r:ksu:s0"; allowlist.c:32, :51 justificam o domínio padrão e :356-368 o perfil padrão. groups_count permanece zero, dentro do limite de :135-140.
+Escolha para revoke: allow_su=false; allowlist.c:355-368 condiciona uso do perfil a allow_su. Perfil é copiado/substituído em :200-210 e :229.
+Status T1: PASSOU.
+
+T2 — layout host, g++ -std=c++17, header UAPI do projeto
+root_profile: sizeof 248, align 8
+uid 0/4; gid 4/4; groups_count 8/4; groups 12/128
+capabilities 144/24; effective 144/8; permitted 152/8; inheritable 160/8
+selinux_domain 168/64; namespaces 232/4; flags 240/8
+non_root_profile: sizeof 1, align 1; umount_modules 0/1
+app_profile: sizeof 784, align 8
+version 0/4; key 4/256; curr_uid 260/4; allow_su 264/1
+rp_config 272/512; use_default 272/1; template_name 273/256
+rp_config.profile 536/248; profile.selinux_domain 704/64
+nrp_config 272/2; use_default 272/1; profile 273/1
+Comando de layout: g++ -std=c++17 -I shim -I ../ultraroot-app/core-backend/src/main/cpp/uapi layout_test.cc -o layout_test && ./layout_test — exit 0.
+Status T2: PASSOU; esses valores são usados nos static_assert.
+
+T3 — vermelho antes do header
+g++ ... fill_test.cc — exit 1:
+fill_test.cc:5:10: fatal error: app_profile_fill.h: No such file or directory
+compilation terminated.
+Status T3: PASSOU (falha esperada antes da implementação).
+
+T4 — teste do helper com -Wall -Werror
+Comando: g++ -std=c++17 -Wall -Werror -I shim -I ../ultraroot-app/core-backend/src/main/cpp fill_test.cc -o fill_test && ./fill_test
+validUid PASS
+negativeUidRejected PASS
+nullKeyRejected PASS
+emptyKeyRejected PASS
+key255Accepted PASS
+key256Rejected PASS
+allowSuUsesMinimalDefaultRootProfile PASS
+allowSuFalseMarksRevoke PASS
+Status T4: PASSOU, 8/8.
+
+T5 — sabotagem S8 (curr_uid = 0)
+app_profile_fill.h antes_S8: 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9
+Falha: fill_test.cc:11: validUid(): Assertion 'profile.curr_uid == 10123' failed. Exit 134.
+Restaurado: app_profile_fill.h SHA-256 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9 (igual à cópia).
+Status T5: PASSOU.
+
+T6 — sabotagem S9 (removida validação de tamanho)
+app_profile_fill.h antes_S9: 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9
+Falha: fill_test.cc:42: key256Rejected(): Assertion '!fill_app_profile(profile, 10123, key.c_str(), false)' failed. Exit 134.
+Restaurado: app_profile_fill.h SHA-256 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9 (igual à cópia).
+Reexecução final do fill_test: os mesmos 8 casos PASS; exit 0.
+Status T6: PASSOU.
+
+T7 — arquivos de integração e hashes finais
+app_profile_fill.h (novo): 5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9
+engine.cc: 60c44448ae91514fb3e25bccbe36afdb255ef57cf18b451418f57c185292eaeb
+EngineNatives.kt: 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf
+Status T7: PASSOU; os três arquivos do escopo são os únicos arquivos de fonte pretendidos.
+
+T8 — compilação NDK arm64
+Task encontrada: :core-backend:externalNativeBuildDebug
+Comando: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
+Saída: :core-backend:configureCMakeDebug[arm64-v8a]; :core-backend:buildCMakeDebug[arm64-v8a]; BUILD SUCCESSFUL in 1s.
+Status T8: PASSOU; static_assert validados para arm64-v8a.
+
+T9 — testes Kotlin
+Comando: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
+XML: BackendStateTest 7 testes/0 falhas; KsuBackendHostTest 3/0; KsuModeTest 10/0. Total 20/20; BUILD SUCCESSFUL.
+Status T9: PASSOU.
+
+T10 — escopo e ausência de chamada
+SHA finais: app_profile.h dffad173122bb7bb183a61b5c24269e3cb36e3d4f22598cd34c0130945bed615; supercall.h 9ec7d55185d9d76ff3d1dca8b37f4658bc3d6021d987891d153300420df90a2c; KsuBackend.kt 98122bdf58cda04a790076eafab529db50bd8a9a96d9d648ea697b26201367c1 — iguais a T0.
+grep -rn 'setAppProfile' app/src core-backend/src/main/java:
+core-backend/src/main/java/dev/superroot/core/EngineNatives.kt:20: external fun setAppProfile(uid: Int, packageName: String, allowSu: Boolean): Int
+Manifesto SHA dos 61 arquivos restantes de core-backend/src e app/src: antes e depois b90b4b17a97a7b7c467fe6a132af10346891f3e9ba784b015ce0cd1c2f9d7fda.
+Status T10: PASSOU; nenhuma chamada fora da declaração, arquivos alheios inalterados.
+
+Veredito da rubrica
+R1 PASSOU — helper novo e somente engine.cc/EngineNatives.kt alterados.
+R2 PASSOU — UAPI local idêntico ao pin.
+R3 PASSOU — fill_test vermelho antes do helper e 8/8 verde depois.
+R4 PASSOU — S8 e S9 falharam nos casos previstos; helper restaurado aos hashes das cópias.
+R5 PASSOU — build nativo arm64 concluído com static_assert.
+R6 PASSOU — grep encontrou apenas a declaração Kotlin.
+R7 PASSOU — escolhas dos campos justificadas por linhas do kernel em T1.
+R8 PASSOU — testes Kotlin 20/20.
+Limite: escrita no kernel não foi testada em aparelho; nenhuma chamada de UI foi adicionada.

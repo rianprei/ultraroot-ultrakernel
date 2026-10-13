@@ -1,0 +1,32 @@
+Objetivo: verificar, sem editar, o estado real dos artefatos das Tasks 3, 4 e 6 do plano SP1 (docs/superpowers/plans/2026-10-11-ultraroot-sp1.md). Dizer o que existe, o que falta e o que passa, com prova. Nada é criado nesta etapa.
+
+Correlation id: ULTRAROOT-H6-2026-10-13. Revisor: você (OpenCode #2). Autor dos artefatos: Codex #4 e maestro.
+
+Escopo de leitura (somente leitura). Caminhos relativos a [fora do repo]:
+1. docs/superpowers/plans/2026-10-11-ultraroot-sp1.md: as seções Task 3, Task 4 e Task 6, com seus passos e critérios.
+2. docs/ultraroot/accept_ksu_root.sh (inteiro).
+3. docs/ultraroot/RECOVERY_SUITE.md (inteiro).
+4. docs/ultraroot/MODULE_PARITY.md (inteiro).
+5. Procurar fixtures e testes existentes com find, somente dentro de [fora do repo]/docs e [artefato local, fora do repo]. Nunca em /tmp. Procurar: test_accept_ksu.sh, qualquer module.prop, qualquer post-fs-data.sh.
+
+Escrita (somente este arquivo): docs/history/reports/review_h6_sp1_tasks_2026-10-13.txt, com no máximo 80 linhas.
+
+Tarefa:
+T1 (Task 3, accept). O plano exige três cenários: A, su em contexto magisk deve reprovar; B, evidência de KSU deve aprovar; C, nada deve reprovar. Para cada um, dizer se existe teste que o executa, com arquivo:linha, ou NÃO EXISTE. Dizer também se accept_ksu_root.sh contém "|| true" (grep -c e linha) e se há checagem explícita de rc.
+T2 (Task 4, recovery). Listar os cenários de RECOVERY_SUITE.md com o status de cada um. Para cada um, dizer se é host-simulável, pela regra do próprio arquivo, com arquivo:linha. Dizer se há procedimento e critério de sucesso para cada cenário: sim ou não.
+T3 (Task 6, paridade). Dizer se existem os dois fixtures mínimos que o plano pede: módulo KSU com module.prop, post-fs-data.sh e marcador; módulo Magisk com module.prop, service.sh e system/. Citar o caminho ou NÃO EXISTE. Dizer se MODULE_PARITY.md tem o checklist das etapas (scripts, system.prop, sepolicy.rule, mount, estágios de init, magic mount e overlayfs), com arquivo:linha.
+T4 (faltantes). Para cada item que não existe, escrever exatamente o que falta: nome do arquivo esperado, conteúdo mínimo exigido pelo plano e a linha do plano que pede.
+T5 (execução). Não executar nada. Se a decisão depender de rodar um teste, escrever NÃO VERIFICADO.
+
+Não deve:
+- Editar ou criar qualquer arquivo do projeto. A única escrita é o relatório.
+- Executar accept_ksu_root.sh ou qualquer script que chame adb, fastboot ou o aparelho.
+- Fazer commit ou push. Não usar /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+
+Teto: 12 chamadas de ferramenta. Registrar o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Marcar [LIDO] o que você viu e [DEDUZIDO] o que inferiu. Sem prova, escrever NÃO VERIFICADO.
+
+Formato da resposta no chat (no máximo 20 linhas): uma linha por T1 a T5, com o estado de cada item (EXISTE, NÃO EXISTE, PARCIAL ou NÃO VERIFICADO), e o caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

@@ -1,0 +1,37 @@
+ULTRAROOT-H8R-2026-10-13 — revisão H8: escrita nativa de perfil (SET_APP_PROFILE). Autor: Codex #4; revisor: OpenCode #2. [LIDO]
+Original intocado; sabotagens S8/S9 só na cópia docs/history/reports/h8. Chamadas: 10 de 16. [LIDO]
+
+T1. sha256 dos três arquivos do escopo: CONFEREM (medi = esperados):
+app_profile_fill.h 5ee15449...471e0d9; engine.cc 60c44448...292eaeb; EngineNatives.kt 2d84e412...294accf. [LIDO]
+
+T2. Helper app_profile_fill.h:36-67 — correto em (a)-(d):
+(a) key nula → :37 `if (key == nullptr || uid < 0) return false;`; vazia → :45 `key_length == 0`; 256 chars → :45 `key_length >= KSU_MAX_PACKAGE_NAME` (=256, uapi/app_profile.h:7), com o laço :42 parando em 256. ✓
+(b) terminador NUL: :49 `profile = {}` zera a struct inteira; após copiar key_length < 256 bytes (:53-55), o restante de key[] permanece '\0' — provado por fill_test.cc:36 `assert(profile.key[255] == '\0')` PASS. ✓
+(c) uid negativo: :37 `uid < 0` → false. ✓
+(d) allow_su=false: :52 `profile.allow_su = allow_su` (false) e rp_config.use_default permanece false (zerado em :49; o bloco :57-64 não roda). No kernel, allowlist.c:355 condiciona o uso do perfil root a `allow_su` — perfil de revoke consistente (use_default falso, allow_su falso). ✓
+
+T3. JNI engine.cc:205-227:
+(a) Memória: :212 `GetStringUTFChars`, :220 `ReleaseStringUTFChars` em TODOS os caminhos com key adquirido (release antes do if !valid :221 e do ksuctl :227); packageName null → :209 `-EINVAL` sem aquisição; falha de aquisição → :214 `-ENOMEM` sem release pendente. ✓ [LIDO]
+(b) Retorno de erro: SIM, É ACHADO. :227 `return ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd);` — ksuctl :63 `return ioctl(driver_fd, op, arg);` devolve -1 em falha e o errno SE PERDE; o contrato "negativo em falha" até se cumpre (-1), mas o D2 precisa do errno (EBADF sem fd, EPERM, EINVAL...). errno disponível: engine.cc:8 `#include <cerrno>`. Correção exata proposta (NÃO aplicada), substituindo :227:
+    ksu_set_app_profile_cmd cmd{};
+    cmd.profile = profile;
+    const int ret = ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd);
+    return ret == 0 ? 0 : (ret < 0 ? -errno : ret);
+
+T4. Kernel (pin) — perfil do helper é ACEITO (SIM): [LIDO]
+- profile_valid (allowlist.c:130-148): :130 version == KSU_APP_PROFILE_VER (helper :50 = 4, app_profile.h:6); :137 groups_count 0 ≤ KSU_MAX_GROUPS; :143-148 selinux_domain com strnlen em (0, 64) — helper escreve "u:r:ksu:s0" (len 10, static_assert :34).
+- ksu_set_app_profile (allowlist.c:166-190): :171-174 rejeita inválido; :188 uid==9999 só com key "$" (não se aplica a uid de app).
+- Runtime: allowlist.c:355-368 — com allow_su e use_default=true (:356), a concessão usa default_root_profile (:366-368); o domínio "u:r:ksu:s0" é o padrão do kernel (:32 `KSU_DEFAULT_SELINUX_DOMAIN "u:r:" KERNEL_SU_DOMAIN ":s0"`). dispatch.c:373-390 copia e chama ksu_set_app_profile. Sem achado.
+
+T5. Sabotagem independente (cópia própria; helper copiado do original, sha 5ee15449...):
+- Build de base: g++ -std=c++17 -Wall -Werror -I shim -I .../core-backend/src/main/cpp -I h8 fill_test.cc → 8/8 PASS, exit 0 (validUid, negativeUidRejected, nullKeyRejected, emptyKeyRejected, key255Accepted, key256Rejected, allowSuUsesMinimalDefaultRootProfile, allowSuFalseMarksRevoke). Nota de método: o include do helper é "uapi/app_profile.h", então o -I resolve no diretório cpp (pai do uapi), como no relatório do autor (h8_profile_write:43); o -I .../uapi sugerido não resolveria o prefixo. [LIDO]
+- S8 (curr_uid = 0 no helper): `fill_test: fill_test.cc:11: void validUid(): Assertion 'profile.curr_uid == 10123' failed.` EXIT=134 — mesma linha do autor (h8_profile_write:56). Restaurado, sha 5ee15449... ✓
+- S9 (removida a checagem `|| key_length >= KSU_MAX_PACKAGE_NAME`): `fill_test: fill_test.cc:42: void key256Rejected(): Assertion '!fill_app_profile(profile, 10123, key.c_str(), false)' failed.` EXIT=134 — mesma linha do autor (:62). Restaurado, sha 5ee15449... ✓
+- Ambas derrubam exatamente o teste esperado: os testes provam o contrato do helper.
+
+T6. Escopo/uso: grep -rn "setAppProfile" app/src core-backend/src/main/java → única ocorrência EngineNatives.kt:20 `external fun setAppProfile(uid: Int, packageName: String, allowSu: Boolean): Int` (declaração). Nenhuma tela/Presenter chama. ✓ [LIDO]
+
+T7. VEREDITO: APROVADO COM CORREÇÕES.
+- Correção 1 (única, com linha e texto): engine.cc:227 — substituir `return ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd);` pelo bloco acima (ret + `-errno`), preservando 0 em sucesso e devolvendo -errno em falha para o D2. Não aplicada por esta revisão.
+- Helper correto nos 4 pontos (T2); JNI sem vazamento em nenhum caminho; perfil aceito pelo pin (T4); S8/S9 reproduzidas nas mesmas linhas; nenhuma chamada na UI (T6). Nenhum outro defeito.
+Relatório: docs/history/reports/review_h8_2026-10-13.txt

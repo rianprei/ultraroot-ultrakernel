@@ -1,0 +1,28 @@
+ULTRAROOT-H1KDOCR-2026-10-13 — confirmação da correção do KDoc (achado 1 do H1FR). Revisor: OpenCode #2. [LIDO]
+Chamadas de ferramenta: 3. Somente leitura; nenhum Gradle; nada editado.
+
+T1. diff antes_R2 vs atual: somente a linha 5 muda (saída literal):
+5c5
+<  * lkm is false in a built-in build (the lake kernel), which does not mean KernelSU is absent.
+---
+>  * lkm is false when KernelSU is built into the kernel instead of loaded as a module (dispatch.c sets the bit only under #ifdef MODULE); a false value does not mean KernelSU is absent.
+CONFIRMA: só a linha 5. [LIDO]
+
+T2. sha256sum:
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  .../codex4/KsuMode.kt.antes_R2 (= estado revisado no H1FR, confere)
+47148567e73c3d2b8e3079a9900b9b52e7db51931cc1b17bba87b7bc4063ac7f  .../core/KsuMode.kt (= esperado do maestro, confere) [LIDO]
+
+T3. sed -n '5p' no atual: exatamente a frase proposta na minha revisão H1FR (T4/achado 1), palavra por palavra:
+" * lkm is false when KernelSU is built into the kernel instead of loaded as a module (dispatch.c sets the bit only under #ifdef MODULE); a false value does not mean KernelSU is absent." [LIDO]
+
+T4. Sustentação pelo pin: SIM. dispatch.c:44-45:
+#ifdef MODULE
+    cmd.flags |= KSU_GET_INFO_FLAG_LKM;
+O bit LKM só é setado sob #ifdef MODULE — a frase afirma exatamente isso e nada mais. [LIDO]
+
+T5. grep -n "lake kernel" no atual: NONE (exit 1) — menção não verificada ao lake removida. [LIDO]
+
+T6. XMLs core-backend (13:44:21): KsuModeTest tests="10" failures="0"; BackendStateTest tests="7" failures="0"; KsuBackendHostTest tests="3" failures="0". Total 20/20, 0 falhas. [LIDO]
+
+T7. VEREDITO: FECHADO — o achado 1 do H1FR está resolvido: a menção "(the lake kernel)" sem medida foi substituída pela frase verificável contra o pin (dispatch.c:44-45), apenas a linha 5 mudou, e o módulo continua 20/20.
+Relatório: docs/history/reports/review_h1kdoc_confirma_2026-10-13.txt

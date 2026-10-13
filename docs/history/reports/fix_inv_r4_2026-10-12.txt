@@ -1,0 +1,50 @@
+› Objetivo: investigar, no código local do KernelSU, duas questões que estão como gate no inventário MAGISK_KSU_UI_INVENTORY…
+                                                   neste pin.
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Item                                            Notificação de root por app
+   Classificação (a, b ou c)                       c — equivalente não verificado
+   Prova (arquivo:linha com trecho literal curto)  KernelSU/manager/app/src/main/java/me/weishu/kernelsu/ui/util/
+                                                   DownloadService.kt:230 — download_progress_title; comparação: M/ui/
+                                                   superuser/SuperuserDetailScreen.kt:190 — viewModel.updateNotify(item).
+   Ação no inventário                              Lacuna e gate mantidos nas recs 2/12.
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Item                                            Namespace: INHERITED
+   Classificação (a, b ou c)                       c — finalidade indeterminada
+   Prova (arquivo:linha com trecho literal curto)  KernelSU/kernel/infra/su_mount_ns.c:139-141 — KSU_NS_INHERITED, return;:
+                                                   mantém o namespace atual.
+   Ação no inventário                              Rec 3, linha 103: comportamento registrado; opção excluída.
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Item                                            Namespace: GLOBAL
+   Classificação (a, b ou c)                       c — finalidade indeterminada
+   Prova (arquivo:linha com trecho literal curto)  KernelSU/kernel/infra/su_mount_ns.c:57,71,93 — find_pid_ns(1,
+                                                   &init_pid_ns), ksu_sys_setns(fd, CLONE_NEWNS): entra no namespace do PID 1.
+   Ação no inventário                              Recs 3/12: gate mantido.
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Item                                            Namespace: INDIVIDUAL
+   Classificação (a, b ou c)                       c — finalidade indeterminada
+   Prova (arquivo:linha com trecho literal curto)  KernelSU/kernel/infra/su_mount_ns.c:119,128 — ksys_unshare(CLONE_NEWNS),
+                                                   MS_PRIVATE | MS_REC: cria namespace e torna a montagem raiz privada.
+   Ação no inventário                              Recs 3/12: isolamento comprovado; finalidade transparente ou de ocultação
+                                                   não comprovada.
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Item                                            Umount modules, mecanismo separado
+   Classificação (a, b ou c)                       b — oculta modificações para apps
+   Prova (arquivo:linha com trecho literal curto)  KernelSU/kernel/policy/allowlist.c:317 —
+                                                   profile->nrp_config.profile.umount_modules; KernelSU/kernel/feature/
+                                                   kernel_umount.c:119 — try_umount(entry->umountable, entry->flags).
+   Ação no inventário                              Exclusão existente em §6 preservada; distinção registrada na rec 3.
+ 
+  Comandos principais e contagens de linhas correspondentes. K abrevia kernel/upstream/KernelSU; I abrevia o
+  inventário.
+ 
+  • grep -RInEi --exclude-dir=.git 'notify|notification|log|logging|sulog|audit' "$K" | wc -l → 2167 achados brutos.
+  • Mesmo padrão aplicado separadamente às raízes: manager 1355; kernel 301; userspace 291; uapi 16.
+  • grep -RInEi --exclude-dir=.git 'notify|notification|logging' "$K" | wc -l → 81.
+  • grep -RInEi 'notify|notification|logging|sulog|audit' "$K"/manager/app/src/main/java/me/weishu/kernelsu/ui/{screen/
+    appprofile,component/profile} | wc -l → 0.
+ 
+ 
+› Ask Codex to do anything
+ 
+  GPT-6.1-Sol high · [fora do repo]/mods/tabs-agent-os · Concluir correção 11 do inventário
+  ? for shortcuts                                                                                  ⚠ 16 warnings · f2 to view

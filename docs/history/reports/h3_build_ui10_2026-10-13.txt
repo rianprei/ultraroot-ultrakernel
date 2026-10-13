@@ -1,0 +1,86 @@
+ULTRAROOT-H3-2026-10-13 — Codex #4; conferência OpenCode #2
+VEREDITO: APROVADO nos critérios locais R1–R6; APK alinhado e não assinado preparado.
+Raiz dos caminhos relativos: ultraroot
+
+T0: PASSOU — sha256sum app/build.gradle.kts:
+904e39c099c4895887a74d1d8f5738c4d8e2e3871289e87f9481e6259bc4fb1c  app/build.gradle.kts
+T1: PASSOU — cópia antes de editar:
+904e39c099c4895887a74d1d8f5738c4d8e2e3871289e87f9481e6259bc4fb1c  docs/history/reports/build.gradle.kts.antes_H3
+Comando: diff docs/history/reports/build.gradle.kts.antes_H3 app/build.gradle.kts
+Diff (exit 1, diferença esperada; somente linhas 21–22):
+21,22c21,22
+<         versionCode = 40009
+<         versionName = "0.2.0-ui9"
+---
+>         versionCode = 40010
+>         versionName = "0.2.0-ui10"
+
+T2: PASSOU — release offline, exit 0.
+Comando exato:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:assembleRelease --offline
+Últimas 20 linhas de stdout/stderr:
+> Task :app:sdkReleaseDependencyData UP-TO-DATE
+> Task :app:writeReleaseAppMetadata UP-TO-DATE
+> Task :app:writeReleaseSigningConfigVersions UP-TO-DATE
+> Task :app:processReleaseResources
+> Task :app:optimizeReleaseResources
+> Task :app:compileReleaseKotlin
+> Task :app:compileReleaseJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderRelease
+> Task :app:mergeReleaseGlobalSynthetics UP-TO-DATE
+> Task :app:processReleaseJavaRes UP-TO-DATE
+> Task :app:mergeReleaseJavaResource
+> Task :app:mergeDexRelease
+> Task :app:compileReleaseArtProfile
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+
+BUILD SUCCESSFUL in 14s
+65 actionable tasks: 32 executed, 33 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html
+Aviso literal observado durante o build:
+Unable to strip the following libraries, packaging them as they are: libultraroot.so. Run with --info option to learn more.
+
+T3: PASSOU — find app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk':
+app/build/outputs/apk/release/app-release-unsigned.apk
+Comando: cp app/build/outputs/apk/release/app-release-unsigned.apk out/UltraRoot-own-ui10-unsigned.apk
+sha256sum (origem e cópia idênticas):
+cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894  app/build/outputs/apk/release/app-release-unsigned.apk
+cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894  out/UltraRoot-own-ui10-unsigned.apk
+
+T4: PASSOU — alinhamento e verificação, exit 0 em ambos.
+[caminho local]/Android/Sdk/build-tools/37.0.0/zipalign -p -f 4 out/UltraRoot-own-ui10-unsigned.apk out/UltraRoot-own-ui10-aligned.apk
+[caminho local]/Android/Sdk/build-tools/37.0.0/zipalign -c -p 4 out/UltraRoot-own-ui10-aligned.apk
+Saída dos comandos acima: vazia; exit 0.
+Verificação adicional com saída explícita:
+[caminho local]/Android/Sdk/build-tools/37.0.0/zipalign -c -v -p 4 out/UltraRoot-own-ui10-aligned.apk
+Verification successful
+
+T5: PASSOU — identidade e versões confirmadas:
+[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump badging out/UltraRoot-own-ui10-aligned.apk > out/badging-ui10.txt
+out/badging-ui10.txt:1:package: name='me.weishu.kernelsu' versionCode='40010' versionName='0.2.0-ui10' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+out/badging-ui10.txt:5:application-label:'UltraRoot'
+T6: PASSOU — sha256sum do APK alinhado:
+cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894  out/UltraRoot-own-ui10-aligned.apk
+Os APKs unsigned e aligned têm SHA igual; a verificação confirmou alinhamento sem alterar os bytes.
+
+T7: PASSOU — comando abaixo APENAS ESCRITO, não executado:
+Executar a partir de ultraroot:
+~/Android/Sdk/build-tools/37.0.0/apksigner sign --ks [chaves locais do dono, fora do repo]/superroot-release.jks --out out/UltraRoot-own-ui10.apk out/UltraRoot-own-ui10-aligned.apk
+O dono digita a senha do keystore no prompt; nenhum arquivo de senha foi lido.
+Somente verificação de assinatura foi executada, sem keystore:
+TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' [caminho local]/Android/Sdk/build-tools/37.0.0/apksigner verify --verbose out/UltraRoot-own-ui10-aligned.apk
+Saída relevante (exit 1 esperado no APK sem assinatura):
+DOES NOT VERIFY
+ERROR: Missing META-INF/MANIFEST.MF
+
+Escopo/R1: PASSOU — comparação com 115 arquivos existentes: somente app/build.gradle.kts alterado; 114 idênticos.
+Arquivo final igual ao original após exclusivamente as duas substituições de versão.
+SHA final de app/build.gradle.kts: a70bc6d68c6a1bb35e06e478a8ef33e7fa2106f9219e7dc48b1266388558fd41
+Novos no projeto: out/UltraRoot-own-ui10-unsigned.apk; out/UltraRoot-own-ui10-aligned.apk; out/badging-ui10.txt.
+Comparação excluiu diretórios gerados build, .gradle, .cxx, .kotlin, .idea (build autorizado).
+Nenhum comando abriu/leu/listou [chaves locais do dono, fora do repo]/; esse caminho aparece apenas no texto de T7.
+R2 PASSOU: BUILD SUCCESSFUL; R3 PASSOU: zipalign exit 0; R4 PASSOU: badging; R5 PASSOU: sign não executado.
+R6 PASSOU — provas de diff, Gradle, ferramentas e hashes registradas.
+T8: PASSOU — relatório gravado; wc -l conferido após escrita, limite 100.

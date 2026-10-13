@@ -1,0 +1,37 @@
+ULTRAROOT-H3R-2026-10-13 — conferência do preparo do build ui10 (H3). Revisor: OpenCode #2. Somente leitura; sem Gradle, sem keystore. Chamadas: 7. [LIDO]
+
+T1. diff antes_H3 vs atual — somente as linhas 21-22 (saída literal):
+21,22c21,22
+<         versionCode = 40009
+<         versionName = "0.2.0-ui9"
+---
+>         versionCode = 40010
+>         versionName = "0.2.0-ui10"
+CONFIRMA: nenhuma outra linha. [LIDO]
+
+T2. sha256sum:
+a70bc6d68c6a1bb35e06e478a8ef33e7fa2106f9219e7dc48b1266388558fd41  app/build.gradle.kts  (= esperado)
+cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894  out/UltraRoot-own-ui10-unsigned.apk  (= esperado)
+cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894  out/UltraRoot-own-ui10-aligned.apk  (= esperado; idêntico ao unsigned) [LIDO]
+
+T3. zipalign -c -v -p 4 no aligned: "...(OK)" para todas as entradas e "Verification successful" na última linha. CONFIRMA alinhamento. [LIDO]
+
+T4. aapt2 dump badging | head -5:
+package: name='me.weishu.kernelsu' versionCode='40010' versionName='0.2.0-ui10' ...
+application-label:'UltraRoot'
+CONFIRMA os quatro valores exigidos. [LIDO]
+
+T5. apksigner verify --verbose (sem keystore):
+DOES NOT VERIFY
+ERROR: Missing META-INF/MANIFEST.MF
+exit=1. CONFIRMA: o APK NÃO está assinado (pronto para o dono assinar). Warnings exibidos são do wrapper Java (native access), não do APK. [LIDO]
+
+T6. Aviso de strip:
+- Já analisado: SIM. OWNAPP_INC2.md:70: "O log `out/gradle-own-inc2.log` linha 66 ainda diz `Unable to strip the following libraries, packaging them as they are: libultraroot.so`. O linker já tinha passado `--strip-all`. O `file` do `.so` empacotado diz `stripped`."
+- Stripped: SIM. unzip -p out/UltraRoot-own-ui10-aligned.apk lib/arm64-v8a/libultraroot.so | file -:
+"ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, for Android 31, built by NDK r29 (14206865), BuildID[sha1]=55939015..., stripped" [LIDO]
+
+T7. VEREDITO: PRONTO PARA ASSINATURA PELO DONO.
+- Versão correta (40010/0.2.0-ui10) isolada em 21-22; APK idêntico nos dois artefatos (cc7212b6...), alinhado (Verification successful), identidade confirmada (me.weishu.kernelsu/UltraRoot), sem assinatura (DOES NOT VERIFY, sem META-INF), aviso de strip já analisado e benigno (.so já stripped pelo linker).
+- Próximo passo (do dono, não meu): apksigner sign com o keystore release; comando registrado no relatório do autor (T7), não executado aqui.
+Relatório: docs/history/reports/review_h3_badging_2026-10-13.txt

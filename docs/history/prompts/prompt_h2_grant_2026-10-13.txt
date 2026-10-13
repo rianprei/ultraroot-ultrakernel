@@ -1,0 +1,114 @@
+Objetivo: implementar no host (H2, incremento 3) a lógica de concessão e revogação de root, com estado de confirmação e resultado por app, por TDD. Uso de uma porta (RootGrantPort) com fakes nos testes. Nenhuma escrita nativa: nada de JNI de escrita, nada de ligação à UI, nada de aparelho.
+
+Correlation id: ULTRAROOT-H2-2026-10-13. Autor: Codex #4. Revisor: OpenCode #2.
+
+Contexto (provas do maestro em 2026-10-13; raiz ultraroot/, não é git):
+- Leitura da allowlist já existe: core-backend/src/main/java/dev/superroot/core/KsuBackend.kt (readAllowList, AllowEntry, AllowGrant) e app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt (RootRow, presentRootAccess).
+- KsuRead (KsuBackend.kt:19-22): Ok(value) e Unavailable(reason). Usar esse tipo como retorno da porta.
+- EngineNatives.kt não tem nenhuma função de escrita. A escrita (SET_APP_PROFILE) é o H8, que depende de E2. Por isso o H2 usa só fakes.
+- Reservados ao H1F, que está sendo corrigido em paralelo por outro agente: core-backend/src/main/java/dev/superroot/core/KsuMode.kt, KsuBackend.kt, core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt, core-backend/src/main/cpp/engine.cc e EngineNatives.kt. Não tocar nenhum deles. Se precisar de algo deles, parar e reportar.
+
+Escopo (somente estes arquivos novos; nenhum existente muda):
+1. core-backend/src/main/java/dev/superroot/core/RootGrantPort.kt (NOVO)
+2. app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt (NOVO; mesmo pacote de RootAccessState.kt)
+3. app/src/test/java/dev/superroot/ultraroot/ui/FakeRootGrantPort.kt (NOVO; fake que registra as chamadas em ordem e devolve respostas roteirizadas por uid)
+4. app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt (NOVO)
+
+Fora do escopo, não tocar: RootAccessState.kt, RootAccessScreen.kt, KernelPerformanceScreen.kt, strings.xml, build.gradle.kts, BackendState.kt e seus testes, KsuBackendHostTest.kt, e qualquer arquivo do H1F listado acima.
+
+Contrato (assinaturas exatas):
+
+// core-backend, RootGrantPort.kt
+package dev.superroot.core
+/** Escrita da allowlist. Sem implementação nativa nesta fase: só fakes. */
+interface RootGrantPort {
+    fun grant(uid: Int): KsuRead<Unit>
+    fun revoke(uid: Int): KsuRead<Unit>
+}
+
+// app, RootGrantFlow.kt
+package dev.superroot.ultraroot.ui
+import dev.superroot.core.KsuRead
+import dev.superroot.core.RootGrantPort
+
+enum class GrantAction { GRANT, REVOKE }
+data class GrantTarget(val uid: Int, val packageName: String)
+sealed class GrantOutcome {
+    data object Applied : GrantOutcome()
+    data class Failed(val reason: String) : GrantOutcome()
+}
+data class AppGrantResult(val target: GrantTarget, val outcome: GrantOutcome)
+sealed class GrantState {
+    data object Idle : GrantState()
+    data class Confirming(val action: GrantAction, val targets: List<GrantTarget>) : GrantState()
+    data class Done(val action: GrantAction, val results: List<AppGrantResult>) : GrantState()
+}
+class RootGrantFlow(private val port: RootGrantPort) {
+    var state: GrantState = GrantState.Idle
+        private set
+    fun request(action: GrantAction, targets: List<GrantTarget>): Boolean   // true só se aceito
+    fun confirm(): Boolean
+    fun cancel(): Boolean
+    fun dismiss(): Boolean
+}
+
+Regras (cada uma tem teste):
+R-a. request só é aceito em Idle e com targets não vazio. Em qualquer outro caso retorna false e o estado não muda.
+R-b. request NÃO chama a porta. Ele só leva a Confirming(action, targets). Esta é a barreira de confirmação.
+R-c. cancel só é aceito em Confirming: volta a Idle, sem chamar a porta.
+R-d. confirm só é aceito em Confirming. Para cada alvo, na ordem da lista, chama port.grant(uid) (GRANT) ou port.revoke(uid) (REVOKE), uma única vez. Resultado por alvo: Applied se a resposta for Ok; Failed(reason) se for Unavailable(reason). Falha de um alvo NÃO interrompe os outros. Ao fim, estado vira Done(action, results), com um resultado por alvo, na mesma ordem, e cada resultado carrega o GrantTarget (packageName incluso).
+R-e. confirm fora de Confirming (Idle ou Done) retorna false, sem chamar a porta. Isso impede repetir a escrita.
+R-f. dismiss só é aceito em Done: volta a Idle.
+
+Testes (nomes exatos, em RootGrantFlowTest.kt):
+- requestDoesNotTouchThePort: request(GRANT, [A]) deixa state = Confirming e a lista de chamadas do fake vazia.
+- requestWithoutTargetsIsRefused: request(GRANT, []) retorna false e state continua Idle.
+- requestWhileConfirmingIsRefused: segundo request retorna false e não muda Confirming.
+- cancelReturnsToIdleWithoutPortCalls.
+- confirmGrantsEachTargetOnceInOrder: GRANT com uids 10123 e 10124 gera chamadas [grant 10123, grant 10124] e Done com dois Applied, na mesma ordem.
+- confirmRevokeUsesRevokePort: REVOKE com uid 10123 gera [revoke 10123].
+- failureOnOneTargetDoesNotStopTheOthers: grant(10123) devolve Unavailable("x"); grant(10124) devolve Ok. Resultados: Failed("x") para 10123 e Applied para 10124. Duas chamadas.
+- confirmOutsideConfirmingIsRefused: confirm() em Idle retorna false, sem chamadas. Em Done, retorna false e não aumenta a lista de chamadas.
+- dismissReturnsDoneToIdle, e dismiss fora de Done retorna false.
+- resultCarriesPackageName: cada AppGrantResult.target.packageName igual ao do alvo de entrada.
+
+Tarefa, em ordem (TDD):
+T0. Registrar sha256sum dos arquivos existentes do escopo e de RootAccessState.kt, RootAccessScreen.kt, KernelPerformanceScreen.kt, strings.xml e build.gradle.kts. Registrar a contagem de testes atual do app e do core-backend (sem rodar nada que mude arquivos).
+T1. Escrever FakeRootGrantPort.kt e RootGrantFlowTest.kt com os 11 testes. Rodar só RootGrantFlowTest. Deve falhar por referência não resolvida. Registrar.
+T2. Escrever RootGrantPort.kt. Escrever RootGrantFlow.kt com R-a a R-f. Rodar RootGrantFlowTest: 11 de 11 verdes. Registrar.
+T3. Rodar o módulo app: ./gradlew :app:testDebugUnitTest --offline. Registrar o total e a falha, se houver. O total precisa ser o baseline de T0 mais 11.
+T4. Sabotagem S1 (barreira de confirmação): copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_S1 e registrar sha256. Em request, chamar port.grant ou port.revoke diretamente antes de virar Confirming. Rodar RootGrantFlowTest. Esperado: requestDoesNotTouchThePort FALHA. Registrar a linha da falha. Restaurar a partir da cópia, conferir sha256 igual.
+T5. Sabotagem S2 (isolamento de falha): copiar para ...antes_S2 e registrar sha256. Em confirm, interromper o laço no primeiro Unavailable. Rodar. Esperado: failureOnOneTargetDoesNotStopTheOthers FALHA. Restaurar, conferir sha256.
+T6. Sabotagem S3 (repetição): copiar para ...antes_S3 e registrar sha256. Fazer confirm aceitar em Done, sem checar o estado. Rodar. Esperado: confirmOutsideConfirmingIsRefused FALHA. Restaurar, conferir sha256.
+T7. Rodar RootGrantFlowTest de novo: 11 de 11. Rodar :app:testDebugUnitTest completo: baseline mais 11.
+T8. Escopo: sha256 dos arquivos de T0 iguais aos de antes. grep -rn "RootGrantFlow\|RootGrantPort" app/src/main/java/dev/superroot/ultraroot/ui/*Screen.kt deve dar NONE. Nenhum JNI de escrita: grep -n "external fun" core-backend/src/main/java/dev/superroot/core/EngineNatives.kt deve ficar igual ao de T0.
+T9. Escrever o relatório e responder.
+
+Comando de teste (caminhos absolutos):
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+
+Não deve:
+- Tocar o aparelho: nada de adb, fastboot, instalação ou leitura do aparelho.
+- Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Ligar RootGrantFlow à tela, a ViewModel ou a qualquer JNI.
+- Mexer nos arquivos reservados ao H1F.
+- Restaurar um arquivo de sabotagem sem conferir o sha256.
+- Dizer que algo passou sem a saída do Gradle.
+
+Artefatos:
+- Relatório: docs/history/reports/h2_grant_flow_2026-10-13.txt, com até 150 linhas. Conteúdo: saídas de T1, T2, T3, T4, T5 e T6; sha256 de T0 e de cada sabotagem; totais de T3 e T7; resultado de T8; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 20 linhas, com o caminho do relatório e o veredito.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só os quatro arquivos novos. Os existentes do escopo com o sha256 de T0.
+R2. RootGrantFlowTest 11 de 11. Módulo app: baseline mais 11, sem falha.
+R3. S1 derruba requestDoesNotTouchThePort; S2 derruba failureOnOneTargetDoesNotStopTheOthers; S3 derruba confirmOutsideConfirmingIsRefused. Cada arquivo volta com o sha256 original.
+R4. Nenhuma ligação à UI nem a JNI. Nenhum arquivo de tela referencia a lógica nova.
+R5. Cada afirmação com prova. Sem prova: NÃO VERIFICADO.
+
+Falhas conhecidas:
+- Gradle offline falha: registrar a mensagem exata. Status NÃO VERIFICADO. Não dizer que passou.
+- Erro de compilação por causa de KsuRead ou de import: corrigir só o import, sem mudar o contrato. Registrar.
+- Se um teste pedido não puder ser escrito sem tocar um arquivo reservado: parar e reportar.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

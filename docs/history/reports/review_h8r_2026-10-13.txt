@@ -1,0 +1,47 @@
+ULTRAROOT-H8RC-2026-10-13 — conferência independente da correção H8 (errno no retorno JNI). Revisor: OpenCode #2. [LIDO]
+Original somente leitura; sabotagens S10b/S11 só na cópia docs/history/reports/h8r. Chamadas de ferramenta: 10 de 16. [LIDO]
+
+T1. sha256 dos quatro arquivos: CONFEREM (medi = esperados):
+app_profile_fill.h e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+engine.cc b339102e1c3fe7c7003bdcf7495d29aea451bd4889c265b948ccf126243fd8f1
+EngineNatives.kt 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf
+ultraroot/core-backend/src/test/native/fill_test.cc adc212460c1388711620d94af3f47ee6ebda05e1100ff05c1d8c47eec7dc2a67 [LIDO]
+
+T2. Helper (app_profile_fill.h), literal:
+:4  `#include <cerrno>`
+:9  `static inline int ioctl_status(int ret) {`
+:10 `    return ret == 0 ? 0 : (ret < 0 ? -errno : ret);`
+(a) ioctl_status(0) → 0: SIM (ramo `ret == 0 ? 0`); (b) ioctl_status(-1) → -errno: SIM (ramo `ret < 0 ? -errno`); (c) ioctl_status(n>0) → n: SIM (ramo final `: ret`). Confirmado por leitura e pelos testes para 0 e -1. [LIDO]
+
+T3. JNI e caminho sem fd (engine.cc, literal):
+:8  `#include <cerrno>`
+:58-64 `template <typename T> static int ksuctl(unsigned long op, T *arg) { if (driver_fd < 0) { driver_fd = scan_driver_fd(); } return ioctl(driver_fd, op, arg); }`
+:206-207 `Java_dev_superroot_core_EngineNatives_setAppProfile(JNIEnv *env, jobject, jint uid, jstring packageName, jboolean allowSu)`
+:212 `env->GetStringUTFChars(...)`; :220 `env->ReleaseStringUTFChars(packageName, key);`
+:225-228 `ksu_set_app_profile_cmd cmd{}; cmd.profile = profile; const int ret = ksuctl(KSU_IOCTL_SET_APP_PROFILE, &cmd); return ioctl_status(ret);`
+(a) Assinatura bate com EngineNatives.kt:20 `external fun setAppProfile(uid: Int, packageName: String, allowSu: Boolean): Int` (jint=Int, jstring=String, jboolean=Boolean, retorno jint=Int; jobject = instância do object). SIM. [LIDO]
+(b) scan_driver_fd: :28 `int found = -1;` — valor inicial -1. Sem fd "[ksu_driver]": found permanece -1 e :55 o devolve; driver_fd fica -1; ksuctl :63 executa ioctl(-1, op, arg) → retorna -1 e errno=EBADF; ioctl_status(-1) devolve -EBADF = -9. SIM, o errno certo chega a ioctl_status no caminho sem fd. [LIDO + DEDUZIDO]
+(c) Entre o ioctl (:63) e a leitura de errno (ioctl_status :228): NENHUMA chamada — ksuctl retorna direto, :227 apenas guarda em `ret`, :228 lê errno sem intermediários. As chamadas de scan_driver_fd (opendir/readdir/readlink/closedir) rodam ANTES do ioctl dentro de ksuctl; na falha o ioctl é a última chamada e seta errno (EBADF), sobrescrevendo resíduos. SIM, errno preservado. [LIDO]
+
+T4. Teste na cópia (shas da cópia = e9ad688c.../adc21246...; -I no diretório cpp, pai de uapi, pois o include é "uapi/app_profile.h"):
+g++ -std=c++17 -Wall -Werror -I shim -I .../core-backend/src/main/cpp fill_test.cc → ./fill_test:
+validUid PASS / negativeUidRejected PASS / nullKeyRejected PASS / emptyKeyRejected PASS / key255Accepted PASS / key256Rejected PASS / allowSuUsesMinimalDefaultRootProfile PASS / allowSuFalseMarksRevoke PASS / ioctlSuccessIsZero PASS / ioctlFailureReturnsEbadf PASS / ioctlFailureReturnsEinval PASS — 11 linhas PASS, EXIT=0. [LIDO]
+
+T5. Sabotagem S10b (linha 10 → `    return ret;`), só na cópia:
+- Execução 1: `fill_test: fill_test.cc:68: void ioctlFailureReturnsEbadf(): Assertion 'ioctl_status(-1) == -EBADF' failed.` EXIT=134.
+- Execução 2 (ordem das duas últimas RUN_TEST invertida na cópia do fill_test.cc, método do autor): `fill_test.cc:73: void ioctlFailureReturnsEinval(): Assertion 'ioctl_status(-1) == -EINVAL' failed.` EXIT=134.
+- Coincide com o H8R2 (:27-30). Restaurados header e fill_test.cc da cópia (shas e9ad688c.../adc21246...); recompilado: 11 PASS, EXIT=0. [LIDO]
+
+T6. Sabotagem S11 (linha 10 → `    return ret == 0 ? 0 : (ret < 0 ? errno : ret);`, sinal invertido):
+`fill_test: fill_test.cc:68: void ioctlFailureReturnsEbadf(): Assertion 'ioctl_status(-1) == -EBADF' failed.` EXIT=134 (devolve +9 em vez de -9). Restaurado, sha e9ad688c... [LIDO]
+
+Ponto de atenção 2 (EBADF/EINVAL bastam?): SIM para as mutações plausíveis — `return ret` e `return -1` constante dão -1, que falha contra -9 (EBADF) e -22 (EINVAL) (provado em S10b, ambas as linhas); sinal invertido dá +9 ≠ -9 (provado em S11). EPERM(=1) foi corretamente descartado como caso porque -1 == -EPERM (H8R1:37-38). MODO QUE SOBREVIVA aos 11 casos: `return ret == 0 ? 0 : -errno;` (descarta o ramo ret>0) — nenhum teste cobre ret positivo; risco prático nulo (ioctl deste comando devolve 0 ou -1; ksu_set_app_profile devolve 0 ou -errno), mas é o teste fraco a nomear. Sugestão de reforço (NÃO aplicada): acrescentar caso `errno = EBADF; assert(ioctl_status(1) == 1);` em fill_test.cc. [DEDUZIDO]
+
+T7. Escopo: grep -rn "setAppProfile" app/src core-backend/src/main/java → única ocorrência EngineNatives.kt:20 (declaração). Nenhuma tela chama. [LIDO]
+
+T8. VEREDITO: APROVADO.
+- Achado de defeito: NENHUM. A correção do errno está aplicada e correta nas linhas citadas (app_profile_fill.h:4,9-10; engine.cc:227-228), o caminho sem fd chega com -EBADF e nada entre ioctl e a leitura de errno altera errno.
+- Teste fraco nomeado (não bloqueante): caso ret>0 do contrato (T2c) sem teste (mutante acima sobrevive); sugestão exata registrada, não aplicada.
+- Verificado: T1 hashes 4/4; T2 três ramos do helper; T3 assinatura JNI + scan_driver_fd(found=-1) + preservação de errno; T4 11/11 PASS; T5 S10b nas linhas 68 e 73; T6 S11 na linha 68; T7 escopo UI limpo.
+H8 fecha.
+Relatório: docs/history/reports/review_h8r_2026-10-13.txt

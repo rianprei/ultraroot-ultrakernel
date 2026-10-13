@@ -1,0 +1,8 @@
+PAPEL: (A) corrigir o inc1 e (B) implementar o inc2 do UltraRoot Manager. HOST-ONLY (build+sign, SEM instalar no device). Cópia [artefato local, fora do repo]/grok/ultraroot-mgr/. Re-assinar com a chave fixa [chaves locais do dono, fora do repo]/superroot-release.jks (cert tem que ficar efb8d49f).
+
+(A) FIX INC1 (achado codex): a chamada JNI (Natives/libkernelsu em KernelPerformanceScreen) estoura UnsatisfiedLinkError numa JVM host sem a lib. Envolver KsuBackend.readCapability() (ou a tela) com try/catch de UnsatisfiedLinkError e representar "backend indisponível" (não crashar). TDD: teste host que invoca o caminho SEM a lib e espera "indisponível", não exceção.
+
+(B) INC2 — seção Root Access Center (capacidade KSU-ROOT, OBRIG): nova página/seção que LÊ a allowlist real do KSU via KsuBackend/Natives (apps com grant, perfil por app) — SÓ LEITURA nesta fatia (listar grants; conceder/revogar fica pra fatia seguinte). Dado real do backend; sem mock; trata host/sem-device gracioso (como A). Não mexer em applicationId/assinatura.
+
+Build o APK: [artefato local, fora do repo]/grok/ultraroot-mgr/out/UltraRoot-mgr-inc2.apk; CONFERIR cert == efb8d49f (apksigner). NÃO instalar no device.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE|BLOCKED / FIX_INC1: ok? teste host passa? / INC2_ROOTACCESS: lê allowlist real? sem crash host? / APK: path / CERT: efb8d49f? / ABERTO: <lista>

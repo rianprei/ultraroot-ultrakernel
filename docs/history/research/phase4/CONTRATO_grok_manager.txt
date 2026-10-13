@@ -1,0 +1,20 @@
+PAPEL: construir o userspace do KernelSU — ksud (Rust) + o manager APK — a partir do source pinado. Autônomo. Host-only: NÃO instale no device, NÃO flashe. Disco tem ~486G. Scratch em [artefato local, fora do repo]/grok/manager/.
+
+CONTEXTO: C0.1 já validado (kernel KSU bootando no aparelho). Falta o userspace pra o KSU conceder root (hoje o root é do Magisk herdado). Source: KernelSU commit 6e38604 (checkout em [artefato local, fora do repo]/*/KernelSU ou re-clone raso).
+
+TAREFAS:
+1. FEASIBILITY primeiro: checar toolchain. ksud precisa de Rust + target aarch64-linux-android (NDK). Manager APK precisa de JDK + Android SDK/gradle. Reporte o que existe e o que falta ANTES de tentar build pesado. Se faltar SDK/NDK e não der pra instalar limpo, PARE e reporte o blocker (não force).
+2. Se viável: compilar o ksud (userspace/ksud, cargo + NDK) pra aarch64. Registrar o binário + versão.
+3. Se viável: buildar o manager APK (manager/, gradle) — debug é suficiente. Registrar o APK.
+4. Corrigir o KSU_VERSION (caiu no fallback 16 no C0.1) se afetar o manager/ksud — registrar a versão real.
+NÃO instalar nada no aparelho. Só produzir os artefatos + plano de instalação (adb install APK + push ksud) pra revisão depois, sob "sim" do dono.
+
+ENTREGA: docs/history/research/phase4/MANAGER_build.md — toolchain (tem/falta), artefatos (ksud path, APK path), versões, e plano de instalação no device (sem executar). Veredito: MANAGER PRONTO | BLOQUEADO(toolchain X).
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+TOOLCHAIN: <rust/ndk/jdk/sdk: tem|falta>
+KSUD: <path|não>
+APK: <path|não>
+VEREDITO: PRONTO|BLOQUEADO(onde)
+ABERTO: <lista>

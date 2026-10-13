@@ -1,0 +1,2 @@
+[23163.957135] [ T2009] KernelSU: Found manager base.apk at path: /data/app/~~pVyoCVgeyGmjxz_t6gdmfg==/me.weishu.kernelsu-x9_qTMfEVFX4Sdo2XWINhQ==/base.apk, is_manager: 1
+[23163.957199] [ T2009] KernelSU: Crowning manager: uid=10296

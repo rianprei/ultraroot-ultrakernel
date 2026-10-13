@@ -1,0 +1,47 @@
+ULTRAROOT-H2R-2026-10-13 — revisão H2 final (grant/revoke flow, host). Autor: Codex #4; revisor: OpenCode #2. [LIDO]
+Original intocado; sabotagem só na cópia copy_h2. Chamadas de ferramenta: 11 de 16. [LIDO]
+
+T1. Regras do contrato (RootGrantFlow.kt):
+- R-a SIM (:28-29): `if (state != GrantState.Idle || targets.isEmpty()) return false`. Teste requestWithoutTargetsIsRefused (Test:26-33) e requestWhileConfirmingIsRefused (Test:36-44). [LIDO]
+- R-b SIM (:34-35): `state = GrantState.Confirming(action, targets.toList())`; nenhuma chamada a port em request. Teste requestDoesNotTouchThePort (Test:16-23, port.calls.isEmpty()). [LIDO]
+- R-c SIM (:62-68): `if (state !is GrantState.Confirming) return false; state = GrantState.Idle`. Teste cancelReturnsToIdleWithoutPortCalls (Test:47-64), inclusive cancel em Done recusado (Test:60-62). [LIDO]
+- R-d SIM: confirm só em Confirming (:39 `state as? GrantState.Confirming ?: return false`); uma chamada por alvo na ordem (:44-48 `for (target in pending.targets)` + port.grant/revoke); Applied para Ok (:50) e Failed(reason) para Unavailable (:51); falha de um alvo não interrompe (sem break; Teste failureOnOneTargetDoesNotStopTheOthers :101-120 exige [grant 10123, grant 10124] com a Failed e b Applied); Done com um resultado por alvo na ordem (:53 `results += AppGrantResult(target, outcome)`, :57 `state = GrantState.Done(pending.action, results.toList())`), GrantTarget incluído (:15, provado por resultCarriesPackageName Test:170-179). [LIDO]
+- R-e SIM (:39): `?: return false` antes de qualquer chamada à porta. Teste confirmOutsideConfirmingIsRefused (Test:123-140). [LIDO]
+- R-f SIM (:70-76): `if (state !is GrantState.Done) return false; state = GrantState.Idle`. Testes dismissReturnsDoneToIdle (Test:143-154) e dismissOutsideDoneIsRefused (Test:157-167). [LIDO]
+
+T2. Correções H2F — as três provadas:
+- F1: barreira :41 `state = GrantState.Done(pending.action, emptyList())` + try :43 + finally :55-57 `state = GrantState.Done(pending.action, results.toList())`. Teste confirmDoesNotRepeatGrantsWhenPortThrows (Test:208-231): porta lança em 10124 (Test:213-215), assertThrows (Test:224), estado = Done com parcial [AppGrantResult(a, Applied)] (Test:225-228), segunda confirm() recusada (Test:229), sem repetição de escritas (Test:230). Cobrem o caminho de exceção: SIM. Sem a correção o teste falha (S4 abaixo). [LIDO]
+- F2: :31-33 `if (targets.map { it.uid }.toSet().size != targets.size) return false`. Teste requestWithRepeatedUidIsRefused (Test:182-189). Sem o bloco o teste falha (S5). [LIDO]
+- F3: :34 `targets.toList()`. Teste requestCopiesTargetsAtConfirmation (Test:192-205): add(b) pós-request não entra no confirm (Test:200). Sem a cópia o teste falha (S6). [LIDO]
+
+T3. Caça de defeito novo:
+(a) Exceção → finally deixa Done com parciais: comportamento pretendido (comentário :56; Test:225-228). Done(emptyList()) só persiste se a exceção ocorrer antes do 1º resultado — correto. A barreira :41 cria Done(emptyList()) transitório intencional (comentário :40 "Close confirmation before the first port call"); nenhum caminho indevido identificado. [LIDO/DEDUZIDO]
+(b) Dois targets mesmo uid, packageName diferente: RECUSADO — a checagem :31 é por uid (`targets.map { it.uid }`), independente do packageName. [DEDUZIDO — ver Achado 1 sobre o teste]
+(c) Reentrância: a porta só recebe uid (RootGrantPort.kt:5-6), sem referência ao flow. Durante o laço state é Done(emptyList()) (:41): cancel() → false (:63); segunda confirm() → false (:39, sem repetir escritas); dismiss() retornaria true e poria Idle transitório, mas o finally :57 restaura Done(action, results) — estado final correto. [DEDUZIDO]
+(d) Done.results é List criada por results.toList() (:57); mutável apenas via cast inseguro (as MutableList); interface readonly. Risco baixo. Confirming.targets idem (:34). [DEDUZIDO]
+(e) data class + List.equals estrutural ordem-sensitiva: Confirming/Done comparam corretamente pela ordem exigida pelo contrato. [DEDUZIDO]
+(f) cancel em Done → false (:63, Test:60-62); dismiss em Confirming → false (:71, Test:163-165). SIM, recusados. [LIDO]
+(g) Falso positivo: ACHADO 1 — requestWithRepeatedUidIsRefused usa `listOf(a, a)` (Test:186), duplicata EXATA (mesmo uid E packageName). Mutante que recusasse apenas duplicatas completas (`targets.toSet().size != targets.size`) passaria no teste violando a regra real (recusa por uid, :31). Correção proposta (sem aplicar): acrescentar asserção com GrantTarget(10123, "dev.example.a") e GrantTarget(10123, "dev.example.other") esperando false. Demais mutantes checados e pegos: ordem invertida (Test:73), break em Unavailable (Test:109-119; S2 do autor), Done reutilizado (Test:132-136; S3 do autor), estado não atualizado em request (Test:21), sem packageName (Test:176-178). [LIDO/DEDUZIDO]
+(h) Comentários :40 e :56 em inglês; base vizinha em português (RootAccessState.kt:19, :61, :68; RootGrantPort.kt:3), embora core tenha inglês (KsuBackend.kt:12). Base mista; ACHADO 2 (estilo, não funcional). Proposta: traduzir :40/:56 ou padronizar a UI; não aplicado. [LIDO]
+(i) Thread-safety: grep -rn "RootGrantFlow" app/src/main/java → única ocorrência RootGrantFlow.kt:23 (a própria classe). Nenhuma tela/chamador. `var state ... private set` (:24-25) sem sincronização — confere com a declaração do autor (h2_fix:130-131): não thread-safe, UI como único chamador. [LIDO]
+
+T4. Sabotagem independente (cópia docs/history/reports/copy_h2; original intocado; sha antes = 073e5e48...):
+- S4 (barreira :41 + try/finally removidos, só o laço): EXIT=1; `confirmDoesNotRepeatGrantsWhenPortThrows FAILED / java.lang.AssertionError at RootGrantFlowTest.kt:225`; 14 tests completed, 9 failed (mutação literal remove todo set de Done; o autor, mantendo Done pós-laço, registrou 1 failed — ambos derrubam o teste-alvo na mesma linha). Restaurado, sha 073e5e48. [LIDO]
+- S5 (bloco uid repetido :31-33 removido): EXIT=1; `requestWithRepeatedUidIsRefused FAILED / AssertionError at RootGrantFlowTest.kt:186`; 14 tests completed, 1 failed. Restaurado, sha 073e5e48. [LIDO]
+- S6 (targets.toList() → targets na :34): EXIT=1; `requestCopiesTargetsAtConfirmation FAILED / AssertionError at RootGrantFlowTest.kt:200`; 14 tests completed, 1 failed. Restaurado, sha 073e5e48. [LIDO]
+- As três derrubaram exatamente os testes esperados, nas mesmas linhas registradas pelo autor (h2_fix:52, :56, :60). Os testes provam o contrato.
+
+T5. Provas dos relatórios vs disco:
+- sha finais 4/4 CONFEREM (medi = h2_fix:97-100): RootGrantFlow.kt 073e5e48...; RootGrantFlowTest.kt e78ba01e...; FakeRootGrantPort.kt 8c67d7d5...; RootGrantPort.kt 4c78dff4... [LIDO]
+- XMLs CONFEREM: RootGrantFlowTest 14/0 13:40:01.567Z; módulo app 40/40 (2+2+17+5+14, 13:40:01) = h2_fix:89-93. [LIDO]
+- Rodada H2 original (h2_grant_flow): sha intermediários 318adc6a (RootGrantFlow.kt, :85) e e3d9da56 (RootGrantFlowTest.kt, :12/:121) e XMLs 13:28/13:31 já não existem no disco (evoluíram na H2F) — NÃO VERIFICADO (esperado, estados intermediários).
+- S4/S5/S6 do autor: minhas execuções independentes confirmaram as mesmas falhas e linhas. CONFERE. [LIDO]
+
+T6. Escopo (find app/src core-backend/src -mmin -180): RootGrantFlow.kt, FakeRootGrantPort.kt, RootGrantFlowTest.kt, RootGrantPort.kt (desta revisão) + engine.cc, EngineNatives.kt, KsuBackend.kt, KsuMode.kt, KsuModeTest.kt (do H1/KDoc, fora desta revisão, como avisado). Nenhum outro arquivo. [LIDO]
+
+VEREDITO: APROVADO COM CORREÇÕES.
+- Contrato R-a..R-f: implementado e testado (14/14); F1/F2/F3 provadas por teste + mutantes S4/S5/S6.
+- Achado 1 (robustez de teste): requestWithRepeatedUidIsRefused (Test:186) não distingue recusa-por-uid de recusa-por-duplicata-exata; proposta em T3(g).
+- Achado 2 (estilo): comentários :40/:56 em inglês numa base de UI em português; proposta em T3(h).
+- Nenhum defeito funcional novo; thread-safety conforme declarado.
+Relatório: docs/history/reports/review_h2_2026-10-13.txt

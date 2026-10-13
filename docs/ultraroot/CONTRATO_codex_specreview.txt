@@ -1,0 +1,8 @@
+PAPEL: revisar o spec UltraRoot inteiro ([fora do repo]/docs/superpowers/specs/2026-10-11-ultraroot-design.md, 1001 linhas) na dimensão arquitetura/consistência/usabilidade. Read-only. Scratch [artefato local, fora do repo]/codex/specrev/.
+CAÇA (concreto, linha; se nada "nenhum achado"):
+1. O inventário (64-1001) mapeia limpo pra arquitetura control-plane+adapters+6 seções (§3)? Cada função cabe numa seção/adapter, ou há órfãs?
+2. Contradições entre o inventário e os limites honestos (§1): algo que promete o impossível, merge de runtime, ou "universal" sem o eixo device/UNKNOWN?
+3. Lacunas: função importante de manager que o inventário esqueceu (ex.: backup/restore, logs, boot image mgmt)?
+4. Usabilidade: dá pra derivar as tasks do manager a partir disso, ou está ambíguo/redundante demais?
+ENTREGA: docs/ultraroot/SPECREV_codex.md — achados + veredito: spec PRONTO como base da implementação do manager | ajustar X.
+BLOCO FINAL (maestri ask "Claude Code"): STATUS: DONE / MAPEIA_ARQUITETURA: sim/não / CONTRADICOES: n / LACUNAS: n / VEREDITO: PRONTO|AJUSTAR

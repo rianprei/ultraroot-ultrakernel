@@ -1,0 +1,58 @@
+Objetivo: revisar, sem editar, as duas alterações de código feitas hoje no app UltraRoot: (1) o estado honesto do backend, em BackendState.kt; (2) a busca e o filtro do Root Access, no presenter e na tela. Pergunta central: a lógica mostra o estado real do backend e da allowlist?
+
+Correlation id: ULTRAROOT-REVIEW-2026-10-12-D. Autor: maestro (Claude). Revisor: você (Codex #4).
+
+Invariantes a verificar:
+- I1: sem KSU (kernelVersion 0) nunca vira Active nem Incompatible.
+- I2: perfil indisponível (allowSu null) nunca vira concedido nem negado.
+- I3: busca sem resultado nunca vira Empty, que significa allowlist vazia.
+- I4: o total de concedidos (grantedTotal) conta a allowlist inteira, não as linhas filtradas.
+
+Escopo de leitura (somente leitura). Raiz: ultraroot/
+1. core-backend/src/main/java/dev/superroot/core/BackendState.kt (inteiro).
+2. core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt (inteiro).
+3. core-backend/src/main/java/dev/superroot/core/KsuBackend.kt (linhas 3-30 e 62-68, para contexto).
+4. app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt (inteiro).
+5. app/src/test/java/dev/superroot/ultraroot/ui/RootAccessFilterTest.kt (inteiro).
+6. app/src/test/java/dev/superroot/ultraroot/ui/RootAccessPresenterTest.kt (inteiro).
+7. app/src/main/java/dev/superroot/ultraroot/ui/RootAccessScreen.kt (o when sobre RootAccessUi e a chamada de AccessSummary).
+8. app/src/main/res/values/strings.xml (linhas com root_).
+9. app/src/test/java/dev/superroot/ultraroot/StringsIdentityTest.kt (inteiro).
+10. docs/ultraroot/OWNAPP_INC1.md (linha 34, sobre o fd [ksu_driver]) e core-backend/src/main/cpp/engine.cc (linhas 22-55), para conferir a frase corrigida.
+
+Resultados já medidos pelo maestro. Use como fatos. Não reexecute nada.
+- core-backend: BackendStateTest 6 de 6; KsuBackendHostTest 3 de 3.
+- app: RootAccessFilterTest 14 de 14; RootAccessPresenterTest 5 de 5; StringsIdentityTest 2 de 2; ContrastTest 2 de 2.
+- Mutantes já pegos pelos testes. Não repita estes:
+  (a) regra de versão zero trocada por version == 0 && uapi == 0;
+  (b) GRANTED trocado por allowSu != false;
+  (c) contains com ignoreCase trocado por packageName.contains(needle.lowercase());
+  (d) ifEmpty do nome removido;
+  (e) query = needle trocado por query = query no NoMatch;
+  (f) grantedTotal calculado sobre as linhas filtradas.
+
+Tarefa:
+T1. Para cada invariante I1 a I4, diga se o código garante, com arquivo:linha e trecho literal. Veredito: GARANTIDO, FALHA ou NÃO VERIFICADO.
+T2. Ache mutantes que sobrevivam às suítes atuais. Cite até 3, com a linha alterada e o teste que deveria pegar. Se nenhum, escreva NENHUM.
+T3. Ache falso positivo nos testes novos: um teste que passaria com a regra errada. Cite a linha. Se nenhum, escreva NENHUM.
+T4. Ache erro de compilação ou de idioma Kotlin nos arquivos listados: smart cast, exaustividade do when, valores padrão de parâmetro, tipos. Cite a linha. Se nenhum, escreva NENHUM e diga o que checou. Não rode build.
+T5. Confira a frase de NoMatch em strings.xml e a regra de palavras proibidas em StringsIdentityTest. Cite a linha. Diga se a frase vale em todo caso em que NoMatch aparece.
+T6. Confira se a frase corrigida em OWNAPP_INC1.md:34 é verdadeira diante de engine.cc:22-55. Cite a linha.
+T7. Ache código morto, constante sem uso ou comentário que contradiz o código. Cite a linha. Se nenhum, escreva NENHUM.
+T8. Ache qualquer bug real fora de T1 a T7. Cite a linha e o cenário de entrada que falha. Se nenhum, escreva NENHUM.
+
+Não deve:
+- Editar qualquer arquivo do projeto.
+- Rodar Gradle ou qualquer build.
+- Usar adb, aparelho, commit, push, /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+- Repetir os mutantes da lista de já medidos.
+
+Escrita (somente): docs/history/reports/review_codex_2026-10-12.txt, no máximo 100 linhas.
+
+Teto: 12 chamadas de ferramenta. Registre o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Marque [LIDO] o que você viu no arquivo e [DEDUZIDO] o que você inferiu. Sem prova, escreva NÃO VERIFICADO.
+
+Formato da resposta no chat (no máximo 20 linhas): veredito APROVADO, APROVADO COM CORREÇÕES ou REPROVADO, com as razões; uma linha por T1 a T8; caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

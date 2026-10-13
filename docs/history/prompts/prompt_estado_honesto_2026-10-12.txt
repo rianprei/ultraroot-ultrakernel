@@ -1,0 +1,80 @@
+Objetivo: criar o estado honesto do backend KSU no core-backend do UltraRoot, com testes de host escritos antes da implementação (TDD). Entregável: sealed class BackendState (Active, Absent, Incompatible) e a função pura classifyBackend(read: KsuRead<KsuCapability>): BackendState. O ramo KsuRead.Ok fica para o dono, marcado com TODO(human). Nada toca o device.
+Correlation id: ULTRAROOT-ESTADO-2026-10-12-A
+Motivo: hoje readCapability devolve Ok(0, 0, 5) quando não há KSU, e a tela mostra isso como dado (KernelPerformanceScreen.kt:67-93).
+
+Contexto (provas conferidas pelo maestro):
+- Projeto: ultraroot (não é repositório git).
+- KsuCapability: core-backend/src/main/java/dev/superroot/core/KsuBackend.kt:3-7. KsuRead: KsuBackend.kt:19-22. UNAVAILABLE = "backend indisponível": KsuBackend.kt:30.
+- readCapability devolve Ok sem comparar nada: KsuBackend.kt:62-68.
+- Sem KSU ou sem fd do driver, o engine devolve zeros: core-backend/src/main/cpp/engine.cc:65-75 (read_info; fallback GET_INFO_LEGACY com uapi_version = 0 em :70-71), kernelVersion em :91, kernelUapi em :96, managerUapi em :101 (KERNEL_SU_UAPI_VERSION = 5, uapi/supercall.h:13).
+- Logo, (0, 0, 5) é o caso "kernel sem KSU". Se a comparação de UAPI rodar antes do zero de versão, esse caso vira "incompatível" em vez de "ausente". A ordem das checagens importa.
+- Estilo dos testes: core-backend/src/test/java/dev/superroot/core/KsuBackendHostTest.kt, imports JUnit 4 nas linhas 3-5. junit 4.13.2 em core-backend/build.gradle.kts:52.
+
+Escopo (somente estes dois arquivos novos):
+1. core-backend/src/main/java/dev/superroot/core/BackendState.kt
+2. core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt
+Nenhum arquivo existente em core-backend/src ou app/src pode mudar. Leitura livre.
+
+Contrato do arquivo 1 (exato, salvo a linha do TODO):
+package dev.superroot.core
+
+sealed class BackendState {
+    data class Active(val version: Int, val uapi: Int) : BackendState()
+    data class Absent(val reason: String) : BackendState()
+    data class Incompatible(val kernelUapi: Int, val managerUapi: Int, val reason: String) : BackendState()
+}
+
+fun classifyBackend(read: KsuRead<KsuCapability>): BackendState = when (read) {
+    is KsuRead.Unavailable -> BackendState.Absent(read.reason)
+    is KsuRead.Ok -> {
+        // TODO(human): implementar o ramo Ok. Os testes 2 a 5 em BackendStateTest.kt definem as saídas. Atenção à ordem das checagens.
+        TODO()
+    }
+}
+
+Contrato do arquivo 2 (nomes exatos, JUnit 4, mesmo estilo de KsuBackendHostTest.kt):
+1. unavailableReadIsAbsentWithSameReason: Unavailable(KsuBackend.UNAVAILABLE) deve virar Absent(KsuBackend.UNAVAILABLE).
+2. zeroVersionIsAbsentEvenWhenUapiDiffers: Ok(KsuCapability(kernelVersion = 0, kernelUapi = 0, managerUapi = 5)) deve virar Absent com reason não vazio.
+3. uapiMismatchIsIncompatibleWithBothNumbers: Ok(KsuCapability(kernelVersion = 12000, kernelUapi = 4, managerUapi = 5)) deve virar Incompatible com kernelUapi = 4, managerUapi = 5 e reason não vazio.
+4. legacyKernelWithoutUapiIsIncompatible: Ok(KsuCapability(kernelVersion = 11000, kernelUapi = 0, managerUapi = 5)) deve virar Incompatible.
+5. matchingUapiIsActiveWithVersion: Ok(KsuCapability(kernelVersion = 12000, kernelUapi = 5, managerUapi = 5)) deve virar Active(version = 12000, uapi = 5).
+
+Tarefa, em ordem:
+T1. Ler KsuBackend.kt e KsuBackendHostTest.kt para o estilo: indentação de 4 espaços, vírgula final nos parâmetros, KDoc em inglês. Comentários de código curtos em inglês; o texto do TODO(human) em português.
+T2. Gravar o arquivo 2 primeiro e rodar o teste. Esperado: falha de compilação, porque BackendState e classifyBackend ainda não existem. Registrar a saída.
+T3. Gravar o arquivo 1 e rodar de novo. Esperado: teste 1 passa; testes 2 a 5 falham com NotImplementedError. Registrar a saída.
+T4. Prova de sabotagem: copiar BackendState.kt para docs/history/reports/BackendState.kt.orig e registrar o sha256sum. Trocar só o corpo do ramo Ok por:
+    BackendState.Active(read.value.kernelVersion, read.value.kernelUapi)
+Rodar. Esperado: testes 2, 3 e 4 falham; o 5 passa. Registrar quais falharam. Depois restaurar a partir da cópia e provar com sha256sum que o arquivo voltou idêntico ao original, com o TODO() de volta.
+T5. Conferência final: sha256sum dos arquivos existentes em core-backend/src e app/src, medido antes de T2 (baseline) e no fim. O conjunto deve ser idêntico, exceto pelos dois arquivos novos. grep -rn "TODO(human)" core-backend/src app/src deve dar exatamente 1 linha.
+T6. Escrever o relatório e responder.
+
+Comando de teste: cd ultraroot && ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.BackendStateTest' --offline. Se a task não existir com esse nome, listar com ./gradlew :core-backend:tasks --all | grep -i test e usar a correta. Se o JDK do sistema (openjdk 25) impedir o Gradle, procurar um JDK 17 em /usr/lib/jvm e registrar. Não instalar nada.
+
+Não deve:
+- Tocar o device: nada de adb, fastboot, instalação de APK ou aparelho.
+- Fazer commit, push ou criar branch.
+- Escrever em /tmp, abrir [chaves locais do dono, fora do repo]/ ou criar arquivo em docs/.
+- Mudar build.gradle.kts ou adicionar dependência.
+- Alterar KsuBackend.kt, EngineNatives.kt, engine.cc, uapi/*.h ou qualquer arquivo em app/.
+- Resolver o TODO(human). O ramo Ok termina com TODO().
+
+Artefatos:
+- Relatório: docs/history/reports/estado_honesto_2026-10-12.txt, no máximo 120 linhas. Conteúdo: wc -l dos dois arquivos novos; saída do teste em T2, T3 e T4 (nomes dos testes que falharam, com a linha de erro); sha256 do BackendState.kt antes da sabotagem e depois da restauração; saída de T5; grep do TODO(human) com arquivo:linha; comando exato usado; status por item: PASSOU, FALHOU ou NÃO VERIFICADO.
+- Resposta no chat: no máximo 20 linhas, com o caminho do relatório e o veredito.
+Exemplo de linha no relatório: "zeroVersionIsAbsentEvenWhenUapiDiffers FAILED: kotlin.NotImplementedError"
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Dois arquivos novos com o contrato exato.
+R2. Exatamente um TODO(human) no projeto.
+R3. Teste 1 passa. Testes 2 a 5 falham por NotImplementedError, com saída colada.
+R4. A sabotagem derruba os testes 2, 3 e 4. A restauração tem sha256 igual ao da cópia.
+R5. Nenhum arquivo existente alterado: sha256 antes e depois iguais.
+R6. Cada afirmação com prova. Sem prova, escrever NÃO VERIFICADO.
+
+Falhas conhecidas:
+- Gradle offline falha: registrar a mensagem exata; status NÃO VERIFICADO; não dizer que passou.
+- Erro de sintaxe no arquivo 1: corrigir só a sintaxe, sem mudar o contrato, e registrar a correção.
+- Sabotagem não restaurada: restaurar pela cópia antes de qualquer outra ação.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa: entregue caminhos, linhas e saídas. Responda em português do Brasil.

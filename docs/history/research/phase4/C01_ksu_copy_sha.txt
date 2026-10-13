@@ -1,0 +1,2 @@
+411ed68b70d4757fd8ee8cd74769942ae92dda4699d78247ed1f526506cdca73  drivers/kernelsu/Kconfig
+0e36a4b5895f0fe3f22575ba51a3fd67127a7f3bc2b735228f6e3cd8b9cbaa28  drivers/kernelsu/Kbuild

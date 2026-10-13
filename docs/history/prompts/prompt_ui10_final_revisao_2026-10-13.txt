@@ -1,0 +1,23 @@
+Objetivo: conferir, somente leitura, o APK final assinado do build ui10. Responder: está pronto para o dono instalar (D1)? Não assinar, não abrir [chaves locais do dono, fora do repo]/, não ler o arquivo .pass, não rodar Gradle, não instalar nada no aparelho.
+
+Correlation id: ULTRAROOT-UI10R-2026-10-13. Autor da assinatura: maestro. Revisor: você (OpenCode #2).
+
+Fatos do maestro (confira, não aceite):
+- APK final: ultraroot/out/UltraRoot-own-ui10.apk. sha256 esperado: b5f5bb369caf64af01c4897d9a1e07 (o início; o valor completo está em out/UltraRoot-own-ui10.sha256.txt).
+- Esquema esperado: V2 apenas (v1 false, v2 true, v3 false). Certificado esperado: SHA-256 efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9.
+- APK rejeitado, para comparação: out/UltraRoot-own-ui10-v3only-REJEITADO.apk (tinha só v3). Não usar.
+- APK alinhado de origem: out/UltraRoot-own-ui10-aligned.apk, sha cc7212b68e7c5bcefbe3.
+- Ferramentas: ~/Android/Sdk/build-tools/37.0.0/apksigner e aapt2 (não estão no PATH).
+
+Tarefa:
+T1. sha256sum do APK final e comparar com out/UltraRoot-own-ui10.sha256.txt. Confira os valores completos.
+T2. apksigner verify --print-certs --verbose out/UltraRoot-own-ui10.apk. Confira: Verifies; v1 false; v2 true; v3 false; cert SHA-256 digest efb8d49f...; 1 signer. Cole as linhas relevantes.
+T3. aapt2 dump badging out/UltraRoot-own-ui10.apk | head -3: name='me.weishu.kernelsu', versionCode='40010', versionName='0.2.0-ui10', application-label 'UltraRoot'.
+T4. O APK final e o alinhado têm conteúdo diferente (assinado vs não assinado)? Compare os sha. Esperado: diferentes.
+T5. Veredito: PRONTO PARA INSTALAR (D1 aguarda "sim, instalar ui10") ou NÃO PRONTO, com o motivo.
+
+Formato: cada afirmação com a saída que a sustenta. Sem prova: NÃO VERIFICADO.
+Escrita: somente docs/history/reports/review_ui10_final_2026-10-13.txt (até 40 linhas).
+Teto: 8 chamadas de ferramenta. Registre o número no fim.
+
+Diretivas: execute diretamente, sem pedir permissão. Responda em português do Brasil.

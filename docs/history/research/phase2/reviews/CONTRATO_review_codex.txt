@@ -1,0 +1,18 @@
+PAPEL: revisor adversarial do inventário de RE do SuperRoot. Autônomo, read-only. Você NÃO escreveu esses arquivos — ataque-os. Scratch só em [artefato local, fora do repo]/codex/ (nunca /tmp).
+
+ALVO (leia): docs/history/research/phase1/GROK_matriz_features.md + GROK_dossie.md + GROK_gaps_closed.md. (NÃO revise seu próprio CODEX_core_decision.md.)
+
+LISTA DE CAÇA (ache achados CONCRETOS — feature/arquivo/afirmação; se nada, diga "nenhum achado" naquele item, nunca "parece ok"):
+1. Classificação errada: alguma feature marcada PORTÁVEL que na verdade depende de mecanismo ACOPLADO (ex.: #17 metamount — o chamador é portável mas o efeito depende de mount acoplado? isso muda o veredito prático?).
+2. Overclaim de evidência: célula ACOPLADA/PORTÁVEL afirmada sem o corpo realmente lido (grok marcou algumas ressalvas — alguma conclusão depende de corpo não-lido?).
+3. Feature AUSENTE do mapa que um "1 APK de root capaz de tudo" exige e não está nas 30 (ex.: cobertura de estágio de boot, sobrevivência a OTA/A-B, atestação Play Integrity — só aponte a LACUNA no nível de capacidade, sem receita).
+4. A coluna "melhor origem" se sustenta? Algum caso em que a melhor origem indicada é pior que outra?
+5. Isso muda a decisão de core (KernelSU)? Sim/não + porquê.
+
+ENTREGA: docs/history/research/phase2/reviews/REVIEW_matriz_por_codex.md — lista numerada de achados (cada um: severidade, evidência, correção sugerida) + 1 veredito: a matriz sustenta a Fase 2 como está, ou precisa de ajuste X.
+
+BLOCO FINAL (`maestri ask "Claude Code" "<bloco>"`):
+STATUS: DONE
+ACHADOS: <n concretos>
+MUDA_CORE: <sim/não + 1 linha>
+AJUSTE_NECESSARIO: <lista ou nenhum>

@@ -1,0 +1,65 @@
+Objetivo: revisar o H2 final do UltraRoot (fluxo de confirmação de grant e revoke de root, no host), entregue pelo Codex #4 e corrigido na rodada H2F. Responder: (1) as regras do contrato estão implementadas em RootGrantFlow.kt? (2) as três correções da H2F estão provadas pelos testes? (3) há defeito novo? (4) as provas do relatório conferem com o disco? Leitura no projeto original. Sabotagem só em cópia.
+
+Correlation id: ULTRAROOT-H2R-2026-10-13. Autor: Codex #4. Revisor: você (OpenCode #2).
+
+Fatos já medidos pelo maestro (ponto de partida; confira, não aceite):
+- Raiz: ultraroot/ (não é git).
+- sha256 atuais: RootGrantFlow.kt 073e5e48c02dc4df6bca1f61934abecc48a4d6df497f2152660ee389961e4b30; RootGrantFlowTest.kt e78ba01e418a7aa44843aa2b90cfa80a900b8d2d8454a98d5ec737a8847d9812; FakeRootGrantPort.kt 8c67d7d59343e9987f3905decfe1b03fba73f2ca1e4c59add643c04620f08387; RootGrantPort.kt 4c78dff41b5fd013ddfd819bc061857780add5eac93b38f53a1b814fcc113f38.
+- Linhas (maestro, cat -n; confirme com grep -n antes de citar): RootGrantFlow.kt: request nas linhas 27-36 (recusa de uid repetido nas 31-33; targets.toList() na 34); confirm nas linhas 38-60 (barreira na 41; try na 43; finally nas 55-58). Os três testes novos estão em RootGrantFlowTest.kt, perto das linhas 182, 192 e 208.
+- XML do disco (13:40:01): RootGrantFlowTest 14 testes, 0 falhas; app 40 testes, 0 falhas (14 + 5 + 17 + 2 + 2).
+- Defeitos da rodada anterior (já corrigidos, cabe conferir se a correção é real): (F1) confirm deixava o estado em Confirming se a porta lançasse, e uma nova chamada repetia escritas; (F2) request aceitava uid repetido; (F3) request guardava a lista recebida por referência.
+- Concorrência: outro agente (Codex #4) está editando KsuMode.kt (core-backend) para trocar uma linha de KDoc. Não é alvo desta revisão. Não revisar nem citar KsuMode.kt.
+
+Escopo de leitura (original, somente leitura):
+1. app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt (inteiro)
+2. app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt (inteiro)
+3. app/src/test/java/dev/superroot/ultraroot/ui/FakeRootGrantPort.kt (inteiro)
+4. core-backend/src/main/java/dev/superroot/core/RootGrantPort.kt (inteiro)
+5. docs/history/reports/h2_grant_flow_2026-10-13.txt e docs/history/reports/h2_fix_2026-10-13.txt (relatórios do autor; confira cada prova)
+6. Para padrão de estilo: app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt (opcional)
+
+Escrita: somente docs/history/reports/review_h2_2026-10-13.txt (até 120 linhas) e a cópia docs/history/reports/copy_h2/ (para sabotagem). Nada mais.
+
+Tarefa:
+T1. Regras do contrato, uma por uma, com linha de RootGrantFlow.kt e SIM ou NÃO:
+  R-a: request só é aceito em Idle e com targets não vazio.
+  R-b: request não chama a porta; só vai a Confirming.
+  R-c: cancel só é aceito em Confirming, volta a Idle e não chama a porta.
+  R-d: confirm só é aceito em Confirming; uma chamada por alvo, na ordem; Applied para Ok e Failed(reason) para Unavailable; falha de um alvo não interrompe os outros; Done com um resultado por alvo, na mesma ordem, com o GrantTarget (packageName incluso).
+  R-e: confirm fora de Confirming retorna false e não chama a porta.
+  R-f: dismiss só é aceito em Done e volta a Idle.
+T2. Correções da H2F. Para cada uma: linha da correção em RootGrantFlow.kt; teste que a prova; e se o teste FALHARIA sem a correção (justifique pelo código, e confirme pela sabotagem em T4).
+  F1: exceção da porta não deixa o estado em Confirming e não permite repetir escritas. A prova cobre o caminho de exceção?
+  F2: uid repetido em request é recusado.
+  F3: request guarda cópia da lista, e alterar a lista depois não muda o que roda.
+T3. Caça de defeito novo, nesta ordem: (a) se a porta lançar, o finally deixa o estado em Done com resultados parciais. Isso é o comportamento pretendido? Algum caminho deixa Done(emptyList()) de forma indevida? (b) request com dois targets de mesmo uid e packageName diferente: é recusado? (c) dismiss ou cancel chamados pela porta durante o confirm (reentrância): o que acontece? Descreva o cenário e o resultado. (d) a lista dentro de Done é mutável por quem chama? Diga como. (e) igualdade de Confirming e Done com listas (data class). (f) cancel em Done e dismiss em Confirming: recusados? (g) testes: algum passaria com implementação errada? Dê o mutante e a linha. (h) comentários em inglês: consistentes com o resto da base? (i) thread-safety: o relatório declara que o fluxo não é thread-safe e que a UI é o único chamador. Confirme com grep -rn "RootGrantFlow" app/src/main/java e registre a saída (esperado: nenhuma ocorrência fora de RootGrantFlow.kt).
+T4. Sabotagem independente, só na cópia. Crie a cópia: mkdir -p docs/history/reports/copy_h2 docs/history/reports/tmp && rsync -a --exclude build --exclude .gradle --exclude out ultraroot/ docs/history/reports/copy_h2/ (se rsync não existir, use tar com as mesmas exclusões). Em copy_h2/app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:
+  S4: copie para RootGrantFlow.kt.antes_S4 e registre sha256. Remova a linha `state = GrantState.Done(pending.action, emptyList())` e troque o `try { ... } finally { ... }` por só o laço, sem try. Rode: cd docs/history/reports/copy_h2 && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline. Esperado: confirmDoesNotRepeatGrantsWhenPortThrows FALHA. Registre a linha da falha. Restaure a partir da cópia e confira sha256.
+  S5: remova o bloco de uid repetido em request (as linhas que recusam targets com uid repetido). Esperado: requestWithRepeatedUidIsRefused FALHA. Restaure e confira sha256.
+  S6: troque targets.toList() por targets em request. Esperado: requestCopiesTargetsAtConfirmation FALHA. Restaure e confira sha256.
+  Registre as linhas de FAILED de cada uma e o total do Gradle. Se alguma sabotagem NÃO derrubar o teste esperado, isso é achado grave.
+  Se o build da cópia falhar por causa de core-backend, registre a mensagem exata e pare: não tente corrigir o original.
+T5. Provas do relatório do autor: os sha256 que ele cita conferem com o disco? Os XMLs (14/0 e 40/0) conferem? Confira cada um e marque CONFERE ou NÃO CONFERE.
+T6. Escopo: find ultraroot/app/src ultraroot/core-backend/src -type f -mmin -180. Liste o resultado. Esperado para esta revisão: arquivos RootGrant* e os do H1. Qualquer outro arquivo é achado.
+T7. Escreva o relatório.
+
+Não deve:
+- Editar qualquer arquivo do projeto original. Só o relatório e a cópia.
+- Rodar Gradle no original. Gradle só na cópia.
+- Corrigir achados. Proponha a correção exata, sem aplicar.
+- Tocar o aparelho (adb, fastboot), fazer commit, push, usar /tmp, abrir [chaves locais do dono, fora do repo]/ ou criar arquivos em docs/.
+- Chamar subagentes ou skills.
+- Escrever "parece correto" ou "passa" sem prova. Sem prova, NÃO VERIFICADO.
+
+Teto: 16 chamadas de ferramenta. Registre o número no fim do relatório.
+
+Rubrica:
+R1. Cada achado tem arquivo:linha e trecho literal curto, conferido com cat -n ou grep -n nesta revisão.
+R2. Cada afirmação marcada como [LIDO] (vista no arquivo), [DEDUZIDO] ou NÃO VERIFICADO.
+R3. S4, S5 e S6 reproduzidas na cópia, com as linhas de falha. Ou falha reportada como achado grave.
+R4. T1 com SIM/NÃO por regra; T2 com as três correções provadas ou não.
+R5. Veredito: APROVADO (nenhum achado aberto), APROVADO COM CORREÇÕES (lista exata), ou REPROVADO.
+
+Formato da resposta no chat (até 20 linhas): veredito; uma linha por T1 a T6; caminho do relatório; número de chamadas.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

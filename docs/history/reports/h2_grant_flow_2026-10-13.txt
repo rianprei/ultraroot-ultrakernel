@@ -1,0 +1,150 @@
+ULTRAROOT-H2-2026-10-13 — Codex #4; revisor OpenCode #2
+VEREDITO: APROVADO nos critérios locais R1–R5; conferência independente pendente.
+Raiz dos caminhos relativos: ultraroot
+Saídas abaixo: extratos literais de Gradle/XML/SHA desta execução.
+
+Comandos exatos:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --offline
+
+T0: PASSOU — 111 arquivos existentes registrados antes de editar; os quatro novos não existiam.
+Baseline por leitura dos XMLs existentes e contagem de @Test, sem executar Gradle: app=26; core-backend=20.
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.StringsIdentityTest.xml:2: tests="2" failures="0" errors="0" timestamp="2026-10-12T19:38:59.866Z"
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.theme.ContrastTest.xml:2: tests="2" failures="0" errors="0" timestamp="2026-10-12T19:38:59.877Z"
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessFilterTest.xml:2: tests="17" failures="0" errors="0" timestamp="2026-10-12T19:38:59.824Z"
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessPresenterTest.xml:2: tests="5" failures="0" errors="0" timestamp="2026-10-12T19:38:59.892Z"
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.BackendStateTest.xml:2: tests="7" failures="0" errors="0" timestamp="2026-10-13T13:21:06.625Z"
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuBackendHostTest.xml:2: tests="3" failures="0" errors="0" timestamp="2026-10-13T13:21:06.648Z"
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuModeTest.xml:2: tests="10" failures="0" errors="0" timestamp="2026-10-13T13:21:06.588Z"
+Comando de confirmação estática: grep -rn '@Test' app/src/test core-backend/src/test | awk '/app\/src\/test/ {app++} /core-backend\/src\/test/ {core++} END {print "Test annotations: app=" app ", core-backend=" core}'
+Saída: Test annotations: app=26, core-backend=20
+sha256 de T0 dos existentes monitorados (iguais aos finais, confirmado em T8):
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+98122bdf58cda04a790076eafab529db50bd8a9a96d9d648ea697b26201367c1  core-backend/src/main/java/dev/superroot/core/KsuBackend.kt
+f148e9160599d9d1f571b8a11672155ffd0fe13ed2e3f9cdd5835ad54e8737e6  core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt
+6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f  core-backend/src/main/cpp/engine.cc
+05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e  core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+1fb0a0406ddaee6146518cd9cc5b570a66796df18c9a1e4acc9b063b19ab5299  app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt
+3b76433a983452fe73d2a29dc635af5d0509f64f26d0ff5c1bb8c4e069c19341  app/src/main/java/dev/superroot/ultraroot/ui/RootAccessScreen.kt
+1fec56e7561465e51e710b9217b6159875a5e120114a0407993c2906e9eb6a9f  app/src/main/java/dev/superroot/ultraroot/ui/KernelPerformanceScreen.kt
+c0bbf4cd1770eecc5ba0288e4f8341098a29c9003a24e10f254049fb4c3af172  app/src/main/res/values/strings.xml
+3e07b2edbed65526e9e8e9ace8494daaa1ed2f9e1ed0bab3162eee17a1c667db  build.gradle.kts
+904e39c099c4895887a74d1d8f5738c4d8e2e3871289e87f9481e6259bc4fb1c  app/build.gradle.kts
+fcee384cad57c717dbe9ec6ae5d953acd9c023568d4b8350f309d23f05b747c1  core-backend/build.gradle.kts
+
+T1: PASSOU — fake e onze testes escritos primeiro; vermelho esperado, exit 1.
+e: file://ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/FakeRootGrantPort.kt:4:27 Unresolved reference 'RootGrantPort'.
+e: file://ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt:10:21 Unresolved reference 'GrantTarget'.
+e: file://ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt:16:20 Unresolved reference 'RootGrantFlow'.
+BUILD FAILED in 2s
+A lista fornecida tinha dez nomes; dismiss fora de Done foi separado em dismissOutsideDoneIsRefused, completando onze.
+T2: PASSOU — porta e fluxo implementados; exit 0; onze testes verdes.
+BUILD SUCCESSFUL in 5s
+<testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:28:43.987Z" hostname="rianpreiChyOs" time="0.053">
+requestDoesNotTouchThePort PASSED
+requestWithoutTargetsIsRefused PASSED
+dismissReturnsDoneToIdle PASSED
+resultCarriesPackageName PASSED
+confirmRevokeUsesRevokePort PASSED
+cancelReturnsToIdleWithoutPortCalls PASSED
+confirmOutsideConfirmingIsRefused PASSED
+failureOnOneTargetDoesNotStopTheOthers PASSED
+confirmGrantsEachTargetOnceInOrder PASSED
+requestWhileConfirmingIsRefused PASSED
+dismissOutsideDoneIsRefused PASSED
+
+T3: PASSOU — módulo app, 26 + 11 = 37 testes; 0 falhas/erros/skips, exit 0.
+BUILD SUCCESSFUL in 1s
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.StringsIdentityTest.xml:2: <testsuite name="dev.superroot.ultraroot.StringsIdentityTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:28:57.654Z" hostname="rianpreiChyOs" time="0.057">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.theme.ContrastTest.xml:2: <testsuite name="dev.superroot.ultraroot.theme.ContrastTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:28:57.713Z" hostname="rianpreiChyOs" time="0.022">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessFilterTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootAccessFilterTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:28:57.741Z" hostname="rianpreiChyOs" time="0.03">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessPresenterTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootAccessPresenterTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:28:57.773Z" hostname="rianpreiChyOs" time="0.003">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootGrantFlowTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:28:57.778Z" hostname="rianpreiChyOs" time="0.011">
+
+T4/S1: PASSOU — inseridas chamadas da porta em request, antes de Confirming; teste exigido detectou.
+Execução sabotada: exit 1; 11 tests completed, 9 failed.
+BUILD FAILED in 4s39 actionable tasks: 4 executed, 35 up-to-date
+requestDoesNotTouchThePort FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.requestDoesNotTouchThePort(RootGrantFlowTest.kt:20)
+dismissReturnsDoneToIdle FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.dismissReturnsDoneToIdle(RootGrantFlowTest.kt:149)
+confirmRevokeUsesRevokePort FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.confirmRevokeUsesRevokePort(RootGrantFlowTest.kt:91)
+cancelReturnsToIdleWithoutPortCalls FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.cancelReturnsToIdleWithoutPortCalls(RootGrantFlowTest.kt:54)
+confirmOutsideConfirmingIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.confirmOutsideConfirmingIsRefused(RootGrantFlowTest.kt:134)
+failureOnOneTargetDoesNotStopTheOthers FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.failureOnOneTargetDoesNotStopTheOthers(RootGrantFlowTest.kt:107)
+confirmGrantsEachTargetOnceInOrder FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.confirmGrantsEachTargetOnceInOrder(RootGrantFlowTest.kt:71)
+requestWhileConfirmingIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.requestWhileConfirmingIsRefused(RootGrantFlowTest.kt:41)
+dismissOutsideDoneIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.dismissOutsideDoneIsRefused(RootGrantFlowTest.kt:164)
+T5/S2: PASSOU — if (response is KsuRead.Unavailable) { break } em confirm interrompeu o laço; detectado.
+Execução sabotada: exit 1; 11 tests completed, 1 failed.
+BUILD FAILED in 2s
+failureOnOneTargetDoesNotStopTheOthers FAILED: java.lang.AssertionError: expected:<[grant 10123, grant 10124]> but was:<[grant 10123]>; at dev.superroot.ultraroot.ui.RootGrantFlowTest.failureOnOneTargetDoesNotStopTheOthers(RootGrantFlowTest.kt:107)
+T6/S3: PASSOU — Done reutilizado como Confirming em confirm; repetição detectada.
+Execução sabotada: exit 1; 11 tests completed, 1 failed.
+BUILD FAILED in 2s
+confirmOutsideConfirmingIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.confirmOutsideConfirmingIsRefused(RootGrantFlowTest.kt:132)
+
+SHA original de RootGrantFlow.kt após T2: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0
+S1 — sha256sum antes da sabotagem (fonte e cópia):
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S1
+S1 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S1
+S1 — sha256sum depois da restauração:
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S1
+S2 — sha256sum antes da sabotagem (fonte e cópia):
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S2
+S2 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S2
+S2 — sha256sum depois da restauração:
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S2
+S3 — sha256sum antes da sabotagem (fonte e cópia):
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S3
+S3 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S3
+S3 — sha256sum depois da restauração:
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S3
+
+T7: PASSOU — após restaurações, fluxo 11/11 e módulo app 37/37; exit 0 em ambos.
+BUILD SUCCESSFUL in 2s
+<testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:31:17.577Z" hostname="rianpreiChyOs" time="0.052">
+BUILD SUCCESSFUL in 1s
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.StringsIdentityTest.xml:2: <testsuite name="dev.superroot.ultraroot.StringsIdentityTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:31:27.043Z" hostname="rianpreiChyOs" time="0.057">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.theme.ContrastTest.xml:2: <testsuite name="dev.superroot.ultraroot.theme.ContrastTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:31:27.101Z" hostname="rianpreiChyOs" time="0.021">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessFilterTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootAccessFilterTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:31:27.128Z" hostname="rianpreiChyOs" time="0.027">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessPresenterTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootAccessPresenterTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:31:27.156Z" hostname="rianpreiChyOs" time="0.003">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootGrantFlowTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:31:27.162Z" hostname="rianpreiChyOs" time="0.011">
+
+T8/R1: PASSOU — 111 existentes com SHA de T0; zero alterados/removidos; somente os quatro novos:
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+8c67d7d59343e9987f3905decfe1b03fba73f2ca1e4c59add643c04620f08387  app/src/test/java/dev/superroot/ultraroot/ui/FakeRootGrantPort.kt
+e3d9da56090af9c281694cca4689252d0e4f7983985d9c6737559852790a1717  app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt
+4c78dff41b5fd013ddfd819bc061857780add5eac93b38f53a1b814fcc113f38  core-backend/src/main/java/dev/superroot/core/RootGrantPort.kt
+Comparação excluiu somente diretórios gerados build, .gradle, .cxx, .kotlin, .idea.
+R4: PASSOU — nenhuma tela referencia o fluxo/porta; JNI igual a T0.
+Comando: grep -rn 'RootGrantFlow\|RootGrantPort' app/src/main/java/dev/superroot/ultraroot/ui/*Screen.kt
+Saída: NONE; exit 1 (nenhuma ocorrência).
+Comando: grep -n 'external fun' core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+8:    external fun kernelVersion(): Int
+9:    external fun kernelUapi(): Int
+10:    external fun managerUapi(): Int
+11:    external fun kernelFlags(): Int
+14:    external fun allowListUids(): IntArray?
+17:    external fun readProfile(uid: Int): EngineProfile?
+Saída acima idêntica em T0/T8; engine.cc e EngineNatives.kt têm SHA idêntico em T0/T8.
+
+Provas de implementação (arquivo:linha; trecho):
+core-backend/src/main/java/dev/superroot/core/RootGrantPort.kt:4-6: interface RootGrantPort; grant(uid: Int): KsuRead<Unit>; revoke(uid: Int): KsuRead<Unit>.
+app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:28-32: state != GrantState.Idle || targets.isEmpty(); state = GrantState.Confirming(action, targets).
+app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:36: state as? GrantState.Confirming ?: return false.
+app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:38-47: for (target in pending.targets); port.grant(target.uid); port.revoke(target.uid); AppGrantResult(target, outcome).
+app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:44-49: Ok -> Applied; Unavailable -> Failed(response.reason); state = GrantState.Done(pending.action, results).
+app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:54-57: state !is GrantState.Confirming; state = GrantState.Idle.
+app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt:62-65: state !is GrantState.Done; state = GrantState.Idle.
+app/src/test/java/dev/superroot/ultraroot/ui/FakeRootGrantPort.kt:13-19: calls += "grant $uid"; grantResponses[uid]; calls += "revoke $uid"; revokeResponses[uid].
+app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt:20,107,132: calls.isEmpty(); [grant 10123, grant 10124]; assertFalse(flow.confirm()).
+app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt:175-176: [dev.example.a, dev.example.b]; [10123, 10124].
+wc -l: RootGrantPort.kt=7; RootGrantFlow.kt=68; FakeRootGrantPort.kt=21; RootGrantFlowTest.kt=178.
+R2 PASSOU: T2/T7 e XMLs; R3 PASSOU: S1/S2/S3 detectados e três restaurações com SHA original; R5 PASSOU: provas registradas.
+T9: PASSOU — relatório gravado; wc -l conferido após escrita (limite 150).
+Escrita nativa/aparelho: NÃO VERIFICADO e não implementado nesta fase; testes usam exclusivamente FakeRootGrantPort.

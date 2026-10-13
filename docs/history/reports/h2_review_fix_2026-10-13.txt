@@ -1,0 +1,74 @@
+ULTRAROOT-H2R1-2026-10-13 — Codex #4; conferência OpenCode #2
+VEREDITO: APROVADO nos critérios locais R1–R5; conferência independente pendente.
+Raiz dos caminhos relativos: ultraroot
+Saídas: extratos literais de Gradle/XML/diff/SHA desta execução.
+Comandos exatos:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --offline
+
+T0: PASSOU — hashes iguais aos esperados; baseline de 115 arquivos existentes não gerados:
+073e5e48c02dc4df6bca1f61934abecc48a4d6df497f2152660ee389961e4b30  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+e78ba01e418a7aa44843aa2b90cfa80a900b8d2d8454a98d5ec737a8847d9812  app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt
+T1: PASSOU — cópia antes das mudanças:
+073e5e48c02dc4df6bca1f61934abecc48a4d6df497f2152660ee389961e4b30  docs/history/reports/RootGrantFlow.kt.antes_H2R1
+T2: PASSOU — C1 adicionado ao final; fluxo 15/15, exit 0:
+BUILD SUCCESSFUL in 3s
+<testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:58:04.274Z" hostname="rianpreiChyOs" time="0.043">
+T3: PASSOU — só os comentários 40 e 56; sem mudança de comportamento.
+Comando: diff docs/history/reports/RootGrantFlow.kt.antes_H2R1 app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+Saída (exit 1, diferenças esperadas):
+40c40
+<         // Close confirmation before the first port call.
+---
+>         // Fecha a confirmação antes da primeira chamada à porta.
+56c56
+<             // Preserve completed results even when the port throws.
+---
+>             // Preserva os resultados já obtidos, mesmo quando a porta lança exceção.
+
+T4/S7: PASSOU — targets.map { it.uid }.toSet().size -> targets.toSet().size; exit 1; 15 testes, 1 falha.
+BUILD FAILED in 1s
+requestWithSameUidAndOtherPackageIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.requestWithSameUidAndOtherPackageIsRefused(RootGrantFlowTest.kt:239)
+requestWithRepeatedUidIsRefused PASSED (S7; testcase no XML sem failure).
+T5/S5: PASSOU — retirada checagem por uid; exit 1; 15 testes, 2 falhas.
+BUILD FAILED in 1s
+requestWithRepeatedUidIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.requestWithRepeatedUidIsRefused(RootGrantFlowTest.kt:186)
+requestWithSameUidAndOtherPackageIsRefused FAILED: java.lang.AssertionError; at dev.superroot.ultraroot.ui.RootGrantFlowTest.requestWithSameUidAndOtherPackageIsRefused(RootGrantFlowTest.kt:239)
+
+Hashes das sabotagens e restaurações:
+S7 antes, fonte=cópia: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  docs/history/reports/RootGrantFlow.kt.antes_S7
+S7 — cópia conferida ANTES de restaurar: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  docs/history/reports/RootGrantFlow.kt.antes_S7
+S7 — restaurado: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+S7 — cópia após restauração: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  docs/history/reports/RootGrantFlow.kt.antes_S7
+S5 antes, fonte=cópia: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  docs/history/reports/RootGrantFlow.kt.antes_S5
+S5 — cópia conferida ANTES de restaurar: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  docs/history/reports/RootGrantFlow.kt.antes_S5
+S5 — restaurado: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+S5 — cópia após restauração: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  docs/history/reports/RootGrantFlow.kt.antes_S5
+
+T6: PASSOU — depois das restaurações, fluxo 15/15 e app 41/41; exit 0 em ambos.
+BUILD SUCCESSFUL in 1s
+<testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:59:18.058Z" hostname="rianpreiChyOs" time="0.051">
+BUILD SUCCESSFUL in 1s
+Total por XML: 2 + 2 + 17 + 5 + 15 = 41; zero falhas/erros/skips:
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.StringsIdentityTest.xml:2: <testsuite name="dev.superroot.ultraroot.StringsIdentityTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:59:19.446Z" hostname="rianpreiChyOs" time="0.035">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.theme.ContrastTest.xml:2: <testsuite name="dev.superroot.ultraroot.theme.ContrastTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:59:19.483Z" hostname="rianpreiChyOs" time="0.016">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessFilterTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootAccessFilterTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:59:19.503Z" hostname="rianpreiChyOs" time="0.017">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootAccessPresenterTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootAccessPresenterTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:59:19.522Z" hostname="rianpreiChyOs" time="0.006">
+app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootGrantFlowTest.xml:2: <testsuite name="dev.superroot.ultraroot.ui.RootGrantFlowTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-13T13:59:19.531Z" hostname="rianpreiChyOs" time="0.011">
+
+T7/R1: PASSOU — somente RootGrantFlowTest.kt e RootGrantFlow.kt mudaram; zero novos/removidos no projeto.
+Comparação SHA-256: 115 existentes, dois alterados, 113 idênticos; todos os não gerados de core-backend/ idênticos.
+Exclusões: diretórios gerados build, .gradle, .cxx, .kotlin, .idea.
+Hashes finais dos dois arquivos alterados:
+d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
+993637348a663fd6b28df3a76b06da78948c239e399760fa49db699765634542  app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt
+Hashes de FakeRootGrantPort, RootGrantPort e KsuMode iguais aos fornecidos:
+8c67d7d59343e9987f3905decfe1b03fba73f2ca1e4c59add643c04620f08387  app/src/test/java/dev/superroot/ultraroot/ui/FakeRootGrantPort.kt
+4c78dff41b5fd013ddfd819bc061857780add5eac93b38f53a1b814fcc113f38  core-backend/src/main/java/dev/superroot/core/RootGrantPort.kt
+47148567e73c3d2b8e3079a9900b9b52e7db51931cc1b17bba87b7bc4063ac7f  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+R4: PASSOU — remover só o bloco C1 reproduziu exatamente o texto original de RootGrantFlowTest.kt (nomes e corpos dos 14 antigos).
+Prova do escopo de C2: texto final de RootGrantFlow.kt igual ao original após somente as duas substituições de comentários.
+Prova de C1: RootGrantFlowTest.kt:237-241: uid = a.uid, packageName = "dev.example.other"; assertFalse(request(...listOf(a, sameUid))); Idle; calls.isEmpty().
+wc -l: RootGrantFlow.kt=77; RootGrantFlowTest.kt=243.
+R2 PASSOU: T2/T6 e XMLs; R3 PASSOU: S7/S5 detectados e SHA restaurado; R5 PASSOU: provas registradas.
+T8: PASSOU — relatório gravado; wc -l conferido após escrita (limite 80).

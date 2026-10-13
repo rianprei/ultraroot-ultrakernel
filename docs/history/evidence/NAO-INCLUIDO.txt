@@ -1,0 +1,2 @@
+2026-10-11_manager_grant_tela_root_access.png: captura de tela do aparelho; fora do repo (pode conter notificação ou dado pessoal)
+2026-10-12_ui3_root_access_backend_ok.png: captura de tela do aparelho; fora do repo (pode conter notificação ou dado pessoal)

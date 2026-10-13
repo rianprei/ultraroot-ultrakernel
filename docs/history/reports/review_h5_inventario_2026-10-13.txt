@@ -1,0 +1,36 @@
+ULTRAROOT-H5-2026-10-13 | revisão da linha 85 (Codex #4 autor/correções, maestro) - OpenCode #2 revisor. [LIDO]
+Correlação com H5. Escopo somente leitura. Chamadas de ferramenta usadas: 7 de 12. [LIDO]
+
+T1. Linha 85 atual (MAGISK_KSU_UI_INVENTORY.md:85) [LIDO]:
+"- Confirmações/sheets: Magisk confirma instalação local, grant revoke e fluxos do Home (M/ui/module/ModuleScreen.kt:110-153; M/ui/superuser/SuperuserDetailScreen.kt:200-216; M/ui/home/HomeScreen.kt:887-908); KSU confirma update e uninstall (K/ui/screen/module/ModuleMaterial.kt:203-241), o início de download de módulo (K/ui/screen/modulerepo/ModuleRepoMaterial.kt:714) e o reboot normal, sem motivo, em late-load (reason.isEmpty()), com o texto de jailbreak_reboot_warning (K/ui/component/rebootlistpopup/RebootListPopup.kt:51-52; manager/app/src/main/res/values/strings.xml:77). Para flash, há aviso de jailbreak só no flash de boot em late-load (K/ui/screen/flash/FlashScreen.kt:38) e confirmação do slot inativo (K/ui/screen/install/InstallMaterial.kt:231). Usa bottom sheet para enviar log (K/ui/screen/settings/SettingsMaterial.kt:361-366) e para atalhos (K/ui/screen/module/ModuleMaterial.kt:558-580)."
+
+T2. Verificação por citação [LIDO]:
+- ModuleScreen.kt:110-153 -> OK; provas L116 `awaitConfirm(... confirm_install...)`, L130 `confirmLocalInstall(uri)`.
+- SuperuserDetailScreen.kt:200-216 -> OK; L196 `onCheckedChange = { viewModel.updateLogging(item) }`, L199-213 `RevokeButton`/`performDelete`.
+- HomeScreen.kt:887-908 -> PARCIAL; L882-912 MagiskDialog de uninstall/restore e ManagerInstallComposableDialog (confirm flow, mas "fluxos do Home" sem enumerar todos).
+- ModuleMaterial.kt:203-241 -> OK; L203-238 `confirmDialog` + onConfirm Uninstall/Update.
+- ModuleRepoMaterial.kt:714 -> OK; L713-714 `confirmDialog.showConfirm(title = confirmTitle, content = startText)` (início download).
+- RebootListPopup.kt:51-52 -> OK; L49-51 `if (Natives.isLateLoadMode && reason.isEmpty()) { confirmDialog.showConfirm ... }`.
+- strings.xml:77 -> OK; L77 `<string name="jailbreak_reboot_warning">You are in Jailbreak mode...`.
+- FlashScreen.kt:38 -> OK; L38 `val needJailbreakWarning = flashIt is FlashIt.FlashBoot && Natives.isLateLoadMode`.
+- InstallMaterial.kt:231 -> OK; L231 `is InstallMethod.DirectInstallToInactiveSlot -> confirmDialog.showConfirm(...)`.
+- SettingsMaterial.kt:361-366 -> OK; L359-364 `if (showBottomSheet) { SendLogBottomSheet(...) }`.
+- ModuleMaterial.kt:558-580 -> OK; L558-562 `ModalBottomSheet (...) { Column (...) { Text(... module_shortcut_title ...) } }`.
+
+T3. Correções finais aplicadas [LIDO]:
+(a) APLICADA: "reboot normal, sem motivo, em late-load (reason.isEmpty()), com o texto de jailbreak_reboot_warning, ... RebootListPopup.kt:51-52". Prova L49-51 (somente no late-load e motivo vazio), trecho exato de strings.xml L77.
+(b) APLICADA: atalho + bottom sheet em `ModuleMaterial.kt:558-580`. Prova L558-580 (ModalBottomSheet + string module_shortcut_title).
+
+T4. Afirmação não sustentada pelo código lido? NENHUM. Todas as 11 citações acima existem e batem (com o PARCIAL acima, não inconsistência factual). [DEDUZIDO].
+
+T5. Veredito de cabeçalho de REVIEW_MAGISK_KSU_INVENTORY_haiku55.md [LIDO]:
+- Arquivo existe, 164 linhas. Última linha é L164. [LIDO]
+- L8 (cabeçalho): "Veredito: APROVADO COM CORREÇÕES". [LIDO]
+- Visível: histórico rodada 1-6, recomendações, seções 1-11 e Revisão v2, incluindo o nota sobre P1/P2 da saída salva (L~ final, "o cabeçalho do veredito e os pontos P1 e P2 não aparecem na saída salva, porque o arquivo começa no meio do P2"). [LIDO]
+- Não visível no resumo final / não fechado: o veredito dedicado da reimpressão P1/P2 na rodada 6 — o relatório apenas registra que não foi conferido. O veredito parcial "REPROVADO" do CC #2 na rodada 5 (com 3 pendentes) está descrito como não aceito em 2 pontos.
+- O arquivo não contém a frase "NÃO VERIFICADO" como veredito de cabeçalho: lá está "APROVADO COM CORREÇÕES". Veredito presente, não ausente; por isso NÃO VERIFICADO não se aplica aqui.
+
+Síntese: linha 85 sustentada pelo código lido para todas as citações, com 1 PARCIAL de enumeração (HomeScreen) e 2 correções (a)/(b) aplicadas. Revisão anterior: veredito APROVADO COM CORREÇÕES (L8), 164 linhas.
+Relatório: docs/history/reports/review_h5_inventario_2026-10-13.txt.
+Nenhuma edição, commit ou build. Nenhum toque no aparelho.
+`

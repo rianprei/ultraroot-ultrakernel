@@ -1,0 +1,23 @@
+PAPEL: rebuild do kernel KSU (C0.2) corrigindo versão + assinatura do manager, pra o KSU autorizar NOSSO manager APK. Autônomo. HOST-ONLY: sem device, sem flash, sem install. Trabalhe na cópia reflink já existente [artefato local, fora do repo]/grok/c01-build/src (ou refaça reflink de ~/lake-build/src se preciso; NUNCA a pristina). -X GET sempre, sem criar repo, sem workflow.
+
+CONTEXTO: C0.1 bootou mas o KSU não concede root porque (a) KSU_VERSION caiu no fallback 16 (userspace é 32673, v3.3.0-72-g6e386044); (b) o kernel espera assinatura de manager `size 0x033b, hash c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6`, mas nosso APK ([artefato local, fora do repo]/grok/manager/out/KernelSU_v3.3.0-72-g6e386044_32673-debug.apk) é cert `744 bytes, sha256 b830cb5194e9bdb0f2a7c2cb295cd6e4123aaecf9b262f5adac7d90ce1d0620f`.
+
+TAREFAS:
+1. No source do KSU dentro da árvore de build: setar a assinatura esperada do manager = a do NOSSO APK (size 744 + hash b830cb…). Achar o ponto exato (kernel/apk_sign.c / EXPECTED_SIZE / EXPECTED_HASH ou equivalente neste pin) e editar. Documentar arquivo:linha.
+2. Corrigir KSU_VERSION pra a versão real (32673 / derivar do git do pin), não o fallback 16.
+3. Rebuild do vmlinux (LTO off, --jobs limitado, guarda de RAM). Confirmar no build: KSU_VERSION=32673 e a nova assinatura esperada = b830cb…
+4. gate_kmi_crc no Module.symvers → mismatches=0 (os 557 continuam compat).
+5. Repack → [artefato local, fora do repo]/grok/c01-build/C02_ksu_boot_b.img (receita do T2, só kernel muda). Verificar size 67108864 / magic ANDROID! / difere do C0.1 só no kernel / sha256.
+NOTA: registrar que pra produção é melhor uma chave de assinatura FIXA do APK (debug cert muda a cada rebuild). Por ora casar o debug cert atual.
+
+ENTREGA: docs/history/research/phase4/C02_build_result.md — arquivos editados (apk_sign/version), KSU_VERSION confirmado, assinatura esperada confirmada, gate, hash do C02. Veredito: C0.2 PRONTO | BLOQUEADO.
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+EDITADO: <apk_sign arquivo:linha + version>
+KSU_VERSION: <valor>
+ASSINATURA_ESPERADA: <= b830cb…? sim/não>
+GATE_557: compared/mismatches/missing
+C02_IMG: <path> SHA256: <hash> SIZE/MAGIC: <ok?>
+VEREDITO: PRONTO|BLOQUEADO
+ABERTO: <lista>

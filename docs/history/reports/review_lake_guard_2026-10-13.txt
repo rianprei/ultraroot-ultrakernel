@@ -1,0 +1,45 @@
+ULTRAROOT-L1-2026-10-13 | revisão (Codex #4 autor / OpenCode #2 revisor) [LIDO]
+Repo: kernel/lake. Escopo de leitura; nenhuma escrita no lake/kernel.
+Chamadas de ferramenta usadas: 6 de 12. [LIDO]
+
+T1. Mudanças do diff não commitado (unstaged) [LIDO]:
+1. tools/fastboot_guard.sh:93 (flash path): base do mktemp ${TMPDIR:-/tmp} -> ${TMPDIR:-$HOME/.cache/fastboot_guard}, precedido de mkdir -p. Efeito: cópia privada sai de /tmp para cache por-usuário.
+2. tools/fastboot_guard.sh:114 (rollback path): mesmo ajuste da linha 93.
+3. tools/selftest_fastboot_guard.sh:32-33 (stub): substitui printf único de slot-unbootable:b por cache `unboot_line=...` + `printf 'FAKE-STATE %s\n' "$unboot_line" >> "$STUBLOG"` (linha 33) antes de emitir em stderr. Finalidade: R1 pode asserts um estado explícito.
+4. tools/selftest_fastboot_guard.sh:435-438 (R1): adiciona `grep -qx 'getvar slot-unbootable:b'` e `grep -qx 'FAKE-STATE slot-unbootable:b: yes'` ao checklist.
+5. tools/selftest_fastboot_guard.sh:441 (R1): mensagem impressa passou a incluir r1_log.
+Variante vs commit c8e7812 [LIDO]: commit adicionou rollback (guard L42-131, selftest L195-480) -> commit L42 DO_REACTIVATE=0, L104-129 rollback (file gates + set -- boot_b, DO_REACTIVATE=1, cmd=flash), L183-192 reativação pós-flash.
+
+T2. Prova de recusa de flash no slot A e set_active a:
+- Slot A recusado: guard L164 `if [ "$slot_val" != "b" ] || [ "$user_val" = "yes" ]; then ... exit 2` -> flash nunca sai (L166: `exit 2`). Selftest V102 "slot a recusa" L226.
+- current-slot vazio recusado: L162-164 com slot_val="" != b.
+- set_active a recusado: guard nao possui case set_active; L130-132 `*) refuse "comando ... fora da allowlist"` -> exit 2, stub intacto. Selftest t_deny caso 10 L114 e R3 L464-478.
+
+T3. Prova de rollback: flash boot_b antes de reativar b (ordem e linha):
+- L184 `"$bin" "$cmd" "$@"` executa flash boot_b <cópia> (cmd virou flash em L128).
+- L185 `rc=$?`.
+- L187 `if [ "$rc" -eq 0 ] && [ "${DO_REACTIVATE:-0}" = "1" ]`.
+- L188 `getvar slot-unbootable:b`, L189 `op=set_active`, L190 `set_active b` (rc=$?).
+Reativação de b só ocorre após saída 0 do flash. Selftest R1 L429-445: flash boot_b + getvar slot-unbootable:b + FAKE-STATE + set_active b presentes, set_active a ausente.
+
+T4. Selftest cobre rollback, set_active a e allowlist? [LIDO]:
+- Rollback: R1 L429-445 (sucesso em slot b unbootable), R2 L448-462 (slot a recusado sem flash/set_active), R4 L480 (hash errado recusado).
+- set_active a: t_deny caso 10 L114 e R3 L464-478.
+- comando fora da allowlist: L106 (getvar all), L107 (cpuid), L108-L113 oem/update/erase/format/set_active/flash; V89 reboot L152-193.
+
+T5. Falso positivo (caso que passa com guard errado) [DEDUZIDO]:
+- R1 L435-440: cada item é grep -qx isolado; um guard errado que chamasse set_active b antes ou sem flash boot_b exit 0 ainda passaria.
+- R3 L467 r3_argv=(set_active a) cobre apenas a; um guard errado que aceitasse set_active b direto nao seria detectado.
+Se adotado critério estrito de ordenação/colando, falta assert de ordem (flash precede set_active b).
+
+T6. Selftest não chama fastboot real:
+- selftest L42 `cat > "$STUBDIR/fastboot" ...` e L43 `export PATH="$STUBDIR:$PATH"`. Guard L44 default FASTBOOT_BIN=fastboot resolve via L138 `type -P`. [LIDO]
+- Rodagem selftest exit code 0 sem rotular aparelho; stub registrou 44 casos. [LIDO via selftest.out]
+
+T7. Bug real fora de T1..T6: NENHUM identificado no escopo de leitura (guard L1-L193 e selftest). [DEDUZIDO].
+Cenário testável opcional (NÃO VERIFICADO): reativação assume sla vindo do stub do caller getvar; se slot mudasse entre flash e reativação, guard reativa sem recheck — escopo de testes nao cobre, sem reprodução.
+
+Verificação final [LIDO]: selftest_fastboot_guard.sh EXIT=0, 44 passada(s)/0 falha(s), tail "SELFTEST-GUARD PASS". Arquivo de saída tmp (fora do repo): docs/history/reports/selftest.out.
+Relatório: docs/history/reports/review_lake_guard_2026-10-13.txt.
+Nenhuma edição em lake/kernel, sem commit/push, sem aparelho.
+`

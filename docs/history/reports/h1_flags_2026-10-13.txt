@@ -1,0 +1,109 @@
+ULTRAROOT-H1-2026-10-13 — autor Codex #4; revisor OpenCode #2
+VEREDITO: APROVADO na rubrica local R1–R6; conferência independente pendente.
+Raiz de todos os caminhos relativos: ultraroot
+Saídas abaixo: extratos literais de stdout/stderr e XML medidos nesta execução.
+
+Comandos exatos (TMPDIR e java.io.tmpdir fora de /tmp):
+T1/T2/T3/T5:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+T4:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
+T6:
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
+
+T1: PASSOU — vermelho esperado, exit 1; testes escritos antes da implementação.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:10:22 Unresolved reference 'KsuMode'.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:10:79 Unresolved reference 'decodeKsuMode'.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:41:33 Unresolved reference 'readMode'.
+> Task :core-backend:compileDebugUnitTestKotlin FAILED
+BUILD FAILED in 12s
+
+T2: PASSOU — decoder compila; suíte completa ainda vermelha, exit 1.
+e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:41:33 Unresolved reference 'readMode'.
+BUILD FAILED in 2s
+T2 não pode executar seis testes com readMode não resolvido no mesmo arquivo Kotlin.
+Verificação isolada: removido temporariamente só readModeWithoutLibIsUnavailable do arquivo NOVO; seis decoders executados.
+BUILD SUCCESSFUL in 2s
+<testsuite name="dev.superroot.core.KsuModeTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-13T12:59:40.818Z" hostname="rianpreiChyOs" time="0.006">
+Restauração dos sete testes antes de T3: conteúdo final idêntico ao escrito em T1 (comparação de bytes).
+
+T3: PASSOU — exit 0; KsuModeTest 7/7.
+BUILD SUCCESSFUL in 2s
+<testsuite name="dev.superroot.core.KsuModeTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-13T12:59:59.539Z" hostname="rianpreiChyOs" time="0.007">
+decodeAllKnownBits PASSED
+decodeLateLoadBit PASSED
+decodeIgnoresPrBuildAndBundledBits PASSED
+decodeManagerBit PASSED
+readModeWithoutLibIsUnavailable PASSED
+decodeZeroFlagsHasNoBits PASSED
+decodeLkmBit PASSED
+
+T4: PASSOU — compilação nativa arm64-v8a, exit 0.
+> Task :core-backend:preBuild UP-TO-DATE
+> Task :core-backend:preDebugBuild UP-TO-DATE
+> Task :core-backend:configureCMakeDebug[arm64-v8a]
+> Task :core-backend:buildCMakeDebug[arm64-v8a]
+> Task :core-backend:externalNativeBuildDebug
+BUILD SUCCESSFUL in 1s
+3 actionable tasks: 3 executed
+
+T5: PASSOU — sabotagem lkm: máscara 1 -> 2; execução vermelha, exit 1.
+Prova da mutação: core-backend/src/main/java/dev/superroot/core/KsuMode.kt:10, lkm = flags and 2 != 0.
+7 tests completed, 2 failed
+BUILD FAILED in 1s
+KsuModeTest > decodeManagerBit FAILED
+    java.lang.AssertionError at KsuModeTest.kt:20
+KsuModeTest > decodeLkmBit FAILED
+    java.lang.AssertionError at KsuModeTest.kt:15
+decodeLkmBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=true, manager=false, lateLoad=false)> but was:<KsuMode(lkm=false, manager=false, lateLoad=false)>
+decodeManagerBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=false, manager=true, lateLoad=false)> but was:<KsuMode(lkm=true, manager=true, lateLoad=false)>
+Restauração feita imediatamente após o teste, a partir de docs/history/reports/KsuMode.kt.antes_da_sabotagem.
+sha256sum antes da sabotagem (arquivo e cópia):
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  docs/history/reports/KsuMode.kt.antes_da_sabotagem
+sha256sum após restauração (arquivo e cópia):
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  docs/history/reports/KsuMode.kt.antes_da_sabotagem
+
+T6: PASSOU — módulo completo, exit 0, 17/17; sem skips, falhas ou erros.
+BUILD SUCCESSFUL in 1s
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.BackendStateTest.xml:2: tests="7" skipped="0" failures="0" errors="0"
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuBackendHostTest.xml:2: tests="3" skipped="0" failures="0" errors="0"
+core-backend/build/test-results/testDebugUnitTest/TEST-dev.superroot.core.KsuModeTest.xml:2: tests="7" skipped="0" failures="0" errors="0"
+
+R1/R5: PASSOU — baseline anterior a T1: 109 arquivos existentes; final: 111.
+Excluídos da comparação: diretórios gerados build, .gradle, .cxx, .kotlin, .idea.
+Comparação SHA-256: 3 existentes alterados, 2 novos, 0 removidos; 106 existentes restantes idênticos.
+core-backend/src/main/cpp/engine.cc
+ANTES 2a6148b98ea08a69bc5e0f2dfc5ac6a3cea74159f77f49f030febe810ac22e71
+DEPOIS 6fe79aa207c9f0b959c31f2716fa1839fa0316992836af746c01121c4e4afc1f
+core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
+ANTES 00e2830bfbf47feecd2b679af29c2ff7db8408e4505e408c370648323da6d863
+DEPOIS 05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e
+core-backend/src/main/java/dev/superroot/core/KsuBackend.kt
+ANTES f772897f1ccbe5ce8aa3f753a575688e1b3520872ace983cdc50817213a095c1
+DEPOIS 907b8dd81dbfbf0a90aafa1cfddfd5b1e4db96448eb48f2e84cea68bddc79b22
+Adicionados somente:
+core-backend/src/main/java/dev/superroot/core/KsuMode.kt sha256=6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt sha256=13e5c2fb6dd159807eaaae60e540a4a1d0b0b5e7b3fe1f4f83c5bf4e3072cfa4
+Comparação adicional: remover em memória os acréscimos dos três existentes reproduziu cada SHA-256 do baseline.
+app/*, BackendState.kt, KsuCapability e todos os testes existentes: idênticos ao baseline; nenhum uso novo na UI.
+
+Provas de implementação:
+core-backend/src/main/cpp/uapi/supercall.h:28-30: LKM=(1U << 0), MANAGER=(1U << 1), LATE_LOAD=(1U << 2).
+core-backend/src/main/cpp/uapi/supercall.h:36,43: __u32 flags; após __u32 version em ambas as structs.
+core-backend/src/main/cpp/engine.cc:105-106: kernelFlags(JNIEnv *, jobject); return static_cast<jint>(read_info().flags);
+core-backend/src/main/java/dev/superroot/core/EngineNatives.kt:11: external fun kernelFlags(): Int
+core-backend/src/main/java/dev/superroot/core/KsuBackend.kt:70-71: readMode(): KsuRead<KsuMode> = readNative { decodeKsuMode(EngineNatives.kernelFlags())
+core-backend/src/main/java/dev/superroot/core/KsuMode.kt:10-12: flags and 1 != 0; flags and 2 != 0; flags and 4 != 0.
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:35-36: decodeKsuMode(8), decodeKsuMode(16), ambos KsuMode(false,false,false).
+core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:41-43: readMode(); result is KsuRead.Unavailable; assertEquals(KsuBackend.UNAVAILABLE, ...reason).
+
+wc -l dos arquivos novos:
+13 core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+45 core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt
+58 total
+R2 PASSOU: T3 7/7; T6 17/17. R3 PASSOU: mutante detectado e SHA restaurado. R4 PASSOU: build nativo.
+R6 PASSOU: fontes, extratos de execução, XML e SHA-256 registrados.
+T7: PASSOU — relatório gravado; verificação de wc -l feita após gravação.
+Teste em aparelho: NÃO VERIFICADO; não executado, conforme escopo.

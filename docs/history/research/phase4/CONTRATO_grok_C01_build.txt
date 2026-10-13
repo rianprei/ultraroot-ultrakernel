@@ -1,0 +1,22 @@
+PAPEL: EXECUTAR o C0.1 — build real do kernel KernelSU-integrado + gate. Autônomo. SEM device, SEM flash, NÃO crie repo, SEMPRE -X GET no gh. Disco agora tem ~488G livres (resolvido). Siga a receita docs/history/research/phase4/C01_integration_recipe.md.
+
+ISOLAMENTO: NÃO builde na árvore pristina. Faça CÓPIA REFLINK (instantânea no btrfs): `cp -a --reflink=always ~/lake-build/src [artefato local, fora do repo]/grok/c01-build/src`. Trabalhe e builde SÓ nessa cópia. Registre tudo que editar.
+
+PASSOS (conforme a receita do codex):
+1. Reflink copy da árvore pra [artefato local, fora do repo]/grok/c01-build/src.
+2. Fiar o KernelSU (commit 6e38604, checkout em [artefato local, fora do repo]/*/KernelSU): copiar kernel/ do KSU p/ common/drivers/kernelsu, ligar Kconfig/Makefile, preservar Kbuild, adicionar fragment com CONFIG_KSU=y em defconfig_fragments do kernel_aarch64. CONFERIR CONFIG_KSU=y no .config FINAL do output.
+3. Preservar o cert do Google (CONFIG_SYSTEM_TRUSTED_KEYS / system_trusted_key = google_gki_...pem) pros 557 módulos de vendor continuarem sig_ok.
+4. Build Kleaf/bazel até LINKAR o vmlinux, com LTO off e limites: --jobs=1 (ou baixo) --local_ram_resources=4096. GUARDA: pare e reporte parcial se MemAvailable<1G sustentado.
+5. Provar KSU no vmlinux: nm vmlinux | grep -i ksu_ != vazio.
+6. Rodar kernel/lake/tools/gate_kmi_crc.sh no Module.symvers resultante → mismatches=0.
+
+ENTREGA: docs/history/research/phase4/C01_build_result.md — arquivos editados, CONFIG_KSU, pico RAM/disco, símbolo ksu_ no vmlinux (sim/não), saída do gate. Veredito: C0.1 VALIDADO (buildou+gate PASS) | BLOQUEADO(onde). NÃO flashar.
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+CONFIG_KSU: y|não
+KSU_NO_VMLINUX: sim|não|não-chegou
+GATE_557: compared=.. mismatches=.. missing=.. | não-chegou
+PICO_RAM_DISCO: <valores>
+VEREDITO: C0.1 VALIDADO|BLOQUEADO(onde)
+ABERTO: <lista>

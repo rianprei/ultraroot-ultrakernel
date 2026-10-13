@@ -1,0 +1,16 @@
+PAPEL: mapear a migração dos 8 módulos Magisk REAIS do dono (em /data/adb/modules) pra rodar sob o KSU. READ-ONLY no device (só ler, via adb -s [redigido: serial]; NÃO instalar/remover/ativar/desativar NADA; NÃO tocar no Magisk; NÃO flashar). Scratch [artefato local, fora do repo]/grok/modmig/. Sem valores inventados.
+
+8 módulos: always-trust-user-certs, tabs-ca-inject, yt-noads, hosts, poco_perfgov, zygisk_vector, bc-poc, termuxadb_rootport.
+
+Pra CADA módulo (ler o conteúdo em /data/adb/modules/<id>/ via adb su -c, read-only):
+- O que ele faz (module.prop + scripts) e COMO (magic mount? system.prop? post-fs-data.sh? service.sh? sepolicy? **usa Zygisk?** tem zygisk/ dir ou libs?).
+- Classificar a migração pro KSU: NATIVO (roda no runtime de módulo KSU como está) | PRECISA-ZYGISK (SP2/ZygiskNext) | PRECISA-ADAPTER (mount/.replace específico) | INCOMPATÍVEL(motivo) | UNKNOWN(o que investigar).
+- Dependências e risco de migração.
+
+ENTREGA: docs/ultraroot/MODULE_MIGRATION_lake.md — tabela módulo × (o que faz, mecanismo, usa-zygisk?, classe de migração, risco) + resumo "quantos nativo / quantos precisam SP2 / quantos adapter". Alimenta o COMPAT_MATRIX. Evidência (path do arquivo lido). NADA de alterar o device.
+
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE|BLOCKED
+NATIVO: <lista>  PRECISA_ZYGISK: <lista>  PRECISA_ADAPTER: <lista>  INCOMPAT/UNKNOWN: <lista>
+ARQUIVO: docs/ultraroot/MODULE_MIGRATION_lake.md
+ABERTO: <lista>

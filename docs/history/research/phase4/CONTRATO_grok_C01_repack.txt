@@ -1,0 +1,19 @@
+PAPEL: PREPARAR (host, SEM device, SEM flash) o boot.img do C0.1 pra validação no aparelho + plano. Autônomo. NÃO rode adb/fastboot. Scratch em [artefato local, fora do repo]/grok/c01-build/.
+
+ENTRADA: o Image/Image.gz do build KSU em [artefato local, fora do repo]/grok/c01-build/src/out/.../kernel_aarch64/ (o que você acabou de buildar, com KSU no vmlinux). Base estrutural: o backup boot_b em [fora do repo]/mods/lake-kernel/backup-2026-10-05/boot_b.img (header v4, ramdisk 0). Ferramenta de repack: a mesma que gerou o T2 — [fora do repo]/mods/lake-kernel/research/repack_boot_v2.py (ou o método documentado lá). O cert do Google já está no kernel (CONFIG_SYSTEM_TRUSTED_KEYS).
+
+TAREFAS:
+1. Repack: trocar SÓ o kernel do boot_b pelo Image-KSU, mantendo header/ramdisk/estrutura idênticos ao backup (só o kernel muda). Saída: [artefato local, fora do repo]/grok/c01-build/C01_ksu_boot_b.img.
+2. VERIFICAR a saída: tamanho == 67108864 bytes; começa com magic ANDROID!; header boot v4; difere do backup boot_b SÓ no kernel; sha256. Comparar a estrutura com o backup (só o segmento kernel diverge).
+3. Comparar vermagic: extrair o vermagic do Image-KSU e registrar (pra conferência com o aparelho). Dizer se os 557 módulos de vendor carregariam (CRCs já deram 0 mismatch; vermagic string — mesmo_magic ignora a string se há CRC, mas registre).
+4. Escrever o PLANO de flash+aceite em docs/history/research/phase4/C01_device_plan.md: passos Z0 (preflight: product=lake, current-slot=b, is-userspace!=yes, partition-size:boot_b=67108864, bateria>=60%), flash via fastboot_guard (hash na allowlist), aceite estilo T3 (dmesg_new_errors rc0, 429 módulos, wifi/BT, E NOVO: confirmar KSU ativo — su/manager detecta root), e ROLLBACK (guard flash boot_b backup, sha 3890fb96…). NÃO executar nada no device.
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+IMG: [artefato local, fora do repo]/grok/c01-build/C01_ksu_boot_b.img
+SHA256: <hash>
+SIZE: <bytes> MAGIC: <ANDROID!?> HEADER: <v?>
+DIFERE_DO_BACKUP: <só no kernel? sim/não>
+VERMAGIC: <string + 557 carregam?>
+PLANO: docs/history/research/phase4/C01_device_plan.md
+ABERTO: <lista>

@@ -1,0 +1,50 @@
+› Objetivo: aplicar, no inventário MAGISK_KSU_UI_INVENTORY.md (121 linhas), 10 correções consolidadas das revisões finais (H…
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C2          aplicada; flag qualificado à migração v2/v3    104         KernelSU/kernel/policy/allowlist.c:498 — flags =
+                                                                          FLAG_KSU_NO_NEW_PRIVS; busca por notify/
+                                                                          notification nos sete diretórios indicados: 0
+                                                                          ocorrências.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C3          aplicada                                       114         M/app/core/src/main/res/values/strings.xml:191 —
+                                                                          settings_ns_isolate, Isolated namespace; buscas em
+                                                                          KernelSU e M/ui/: 0 ocorrências.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C4          aplicada; referência renumerada para 123       120         M/app/core/src/main/res/values/strings.xml:153 —
+                                                                          “all Magisk modifications reverted”.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C5          aplicada                                       123         K/ui/screen/settings/SettingsMaterial.kt:283-284 —
+                                                                          settings_umount_modules_default; manager/app/src/
+                                                                          main/res/values/strings.xml:107 — “remove all
+                                                                          module modifications”.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C6          aplicada                                       124         KernelSU/kernel/infra/su_mount_ns.c:119,128 —
+                                                                          ksys_unshare(CLONE_NEWNS), MS_PRIVATE | MS_REC.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C7          aplicada                                       93          U/Section.kt:42 — “Disponível em um incremento
+                                                                          futuro.”; recomendações conferidas sem inclusão de
+                                                                          hide/ADB root.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C8          aplicada                                       99          MAGISK_KSU_UI_INVENTORY.md:99 — “Legenda das recs
+                                                                          2, 3 e 12”.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C9          aplicada                                       108         K/ui/screen/module/ModuleMiuix.kt:386,391 —
+                                                                          uris.size > 1, confirmDialog.showConfirm.
+  ──────────  ─────────────────────────────────────────────  ──────────  ─────────────────────────────────────────────────────
+   C10         aplicada                                       111         K/ui/screen/module/ModuleMaterial.kt:531,833 —
+                                                                          actions.onExecuteModuleAction(module),
+                                                                          module.hasActionScript.
+ 
+  Contagem final: 124 linhas, limite de 150. Trechos protegidos preservados.
+ 
+  ☑ Confirmar as provas de C1 a C10.
+  ☑ Aplicar ou registrar cada correção.
+  ☑ Conferir cada linha editada com sed.
+  ☑ Confirmar wc final até 150.
+ 
+  Worked for 5m 4s • 1:53 PM                                                                                                  
+ 
+ 
+› Ask Codex to do anything
+ 
+  GPT-6.1-Sol high · [fora do repo]/mods/tabs-agent-os · Concluir correção 11 do inventário
+  ? for shortcuts                                                                                  ⚠ 16 warnings · f2 to view

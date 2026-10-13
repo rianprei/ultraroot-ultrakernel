@@ -1,0 +1,78 @@
+MAPA JNI DO CORE-BACKEND ULTRAROOT — 2026-10-12
+Escopo: leitura estática; runtime, autorização do manager no kernel, persistência e efeito de revoke em sessões já abertas: NÃO VERIFICADO.
+Base C = ultraroot/core-backend/src/main/cpp/
+Base J = ultraroot/core-backend/src/main/java/dev/superroot/core/
+engine.cc, CMakeLists.txt e uapi/*.h são relativos a C; EngineNatives.kt e KsuBackend.kt são relativos a J.
+
+VEREDITO
+As cinco leituras external têm JNI; escrita/grant/revoke por perfil NÃO EXISTE nesta interface. Prova: EngineNatives.kt:8-16, "external fun readProfile(uid: Int): EngineProfile?"; exports engine.cc:89-197.
+Há SET_APP_PROFILE no header, sem chamada em engine.cc. Prova: uapi/supercall.h:178, "KSU_IOCTL_SET_APP_PROFILE"; engine.cc:69-84 contém apenas GET_INFO/LEGACY/NEW_GET_ALLOW_LIST/GET_APP_PROFILE.
+Estado honesto incompleto: readCapability retorna Ok sem testar version=0 ou igualdade de UAPI. Prova: KsuBackend.kt:62-68, "KsuCapability("; :98, "KsuRead.Ok(block())".
+
+T1 — EXPORTS JNI, ASSINATURAS E COMANDOS
+Todas as exports abaixo usam extern "C" JNIEXPORT e JNICALL; jobject é o receptor. Prova: engine.cc:89-90,94-95,99-100,104-105,155-156.
+1. jint Java_dev_superroot_core_EngineNatives_kernelVersion(JNIEnv *, jobject) — engine.cc:89-92; JVM ()I; Kotlin EngineNatives.kt:8, "kernelVersion(): Int".
+   Retorno read_info().version — engine.cc:91. GET_INFO em :69; fallback GET_INFO_LEGACY em :70; constantes uapi/supercall.h:162,164; version em :35. Syscall comum: engine.cc:62, "ioctl(driver_fd, op, arg)".
+2. jint Java_dev_superroot_core_EngineNatives_kernelUapi(JNIEnv *, jobject) — engine.cc:94-97; JVM ()I; Kotlin EngineNatives.kt:9, "kernelUapi(): Int".
+   Retorno read_info().uapi_version — engine.cc:96; mesmos GET_INFO/LEGACY em :69-71 e ioctl em :62; uapi/supercall.h:38,162,164. No fallback, uapi_version=0 (:71).
+3. jint Java_dev_superroot_core_EngineNatives_managerUapi(JNIEnv *, jobject) — engine.cc:99-102; JVM ()I; Kotlin EngineNatives.kt:10, "managerUapi(): Int".
+   Sem syscall: retorna constante compilada KERNEL_SU_UAPI_VERSION — engine.cc:101; uapi/supercall.h:13, "KERNEL_SU_UAPI_VERSION = 5". Não lê versão de manager instalado.
+4. jintArray Java_dev_superroot_core_EngineNatives_allowListUids(JNIEnv *env, jobject) — engine.cc:104-143; JVM ()[I; Kotlin EngineNatives.kt:13, "allowListUids(): IntArray?".
+   NEW_GET_ALLOW_LIST via get_allow_list — engine.cc:77-78,108,122; constante uapi/supercall.h:172. Usa ioctl (:62); probe.count=0 (:107), total_count (:111), segunda consulta com buf->count=total (:120).
+   Falha/probe ou alocação: nullptr (:108-109,116-118); lista existente vazia: NewIntArray(0) (:112-113); falha da segunda consulta deixa out=nullptr (:121-142).
+5. jobject Java_dev_superroot_core_EngineNatives_readProfile(JNIEnv *env, jobject, jint uid) — engine.cc:155-197; JVM (I)Ldev/superroot/core/EngineProfile; | Kotlin EngineNatives.kt:16.
+   GET_APP_PROFILE via helper — engine.cc:81-86,161; constante uapi/supercall.h:177; syscall ioctl (:62). profile.version=KSU_APP_PROFILE_VER (:158), definido em uapi/app_profile.h:6 como 4; curr_uid=uid (:159).
+   Retorna null se ioctl falhar (:161-162). Constrói EngineProfile via assinatura (ZIILjava/lang/String;JLjava/lang/String;)V (:183-196), correspondente a EngineNatives.kt:19-26.
+Infraestrutura comum: busca FD existente, não solicita instalação. engine.cc:23, "opendir(\"/proc/self/fd\")"; :41, "readlink"; :48, "[ksu_driver]"; :53, "closedir"; :59-62, "scan_driver_fd()" e "ioctl".
+FD sem correspondência: scan_driver_fd devolve -1 (:27,54). Cache g_info inicializado a zero (:65), consultado só enquanto version==0 (:68); retorno do fallback legacy não é verificado (:70-74).
+Biblioteca: CMakeLists.txt:4, "add_library(ultraroot SHARED engine.cc)"; EngineNatives.kt:5, "System.loadLibrary(\"ultraroot\")".
+
+T2 — CORRESPONDÊNCIA EXTERNAL -> IMPLEMENTAÇÃO
+kernelVersion(): Int | EXISTE | EngineNatives.kt:8 -> engine.cc:90-91, "read_info().version".
+kernelUapi(): Int | EXISTE | EngineNatives.kt:9 -> engine.cc:95-96, "read_info().uapi_version".
+managerUapi(): Int | EXISTE | EngineNatives.kt:10 -> engine.cc:100-101, "KERNEL_SU_UAPI_VERSION".
+allowListUids(): IntArray? | EXISTE | EngineNatives.kt:13 -> engine.cc:105-142, "get_allow_list(&probe)", "return out".
+readProfile(uid: Int): EngineProfile? | EXISTE | EngineNatives.kt:16 -> engine.cc:156-196, "get_app_profile(&profile)", "NewObject".
+Nenhum dos cinco itens de T2 está ausente; contagem: 5 external em EngineNatives.kt:8-16 e 5 exports em engine.cc:90,95,100,105,156.
+
+T3 — CONTRATO NOS HEADERS
+Ler versão | EXISTE | uapi/supercall.h:162, GET_INFO; :35, "version"; legacy :164 e :42. Não há ioctl exclusivo da versão.
+Ler UAPI do kernel | EXISTE | uapi/supercall.h:162, GET_INFO; :38, "uapi_version". Estrutura legacy :41-45 não contém esse campo.
+Ler UAPI do manager | NÃO EXISTE comando | uapi/supercall.h:160-187, lista de ioctls; disponível como constante local em :13, "KERNEL_SU_UAPI_VERSION = 5"; engine.cc:101 a retorna.
+Listar allowlist | EXISTE | uapi/supercall.h:172, "KSU_IOCTL_NEW_GET_ALLOW_LIST"; payload :83-87, "count", "total_count", "uids[0]"; GET_ALLOW_LIST deprecated em :169.
+Ler perfil | EXISTE | uapi/supercall.h:177, "KSU_IOCTL_GET_APP_PROFILE"; payload :103-105, "Input/Output: app profile structure".
+Gravar perfil | EXISTE no header; NÃO EXISTE no JNI | uapi/supercall.h:178, "KSU_IOCTL_SET_APP_PROFILE"; payload :107-109, "Input: app profile structure"; EngineNatives.kt:8-16 somente leituras.
+Revogar allow_su | NÃO EXISTE comando dedicado | uapi/supercall.h:160-187. Intenção pode ser representada por SET_APP_PROFILE (:178) com allow_su=false, campo bool em uapi/app_profile.h:49; aceitação/efeito no kernel: NÃO VERIFICADO.
+Payload SET_APP_PROFILE contém key/curr_uid, allow_su e a union rp_config/nrp_config: uapi/app_profile.h:47-64, "key", "curr_uid", "allow_su", "union".
+GRANT_ROOT não é SET_APP_PROFILE: constantes diferentes em uapi/supercall.h:161,178. GRANT_ROOT não tem payload declarado (_IOC_NONE, tamanho 0); não há export correspondente em EngineNatives.kt:8-16. Semântica no kernel: NÃO VERIFICADO.
+DISABLE_ESCAPE_TO_ROOT existe em uapi/supercall.h:187, "_IO('K', 21)"; não declara UID/perfil e não é chamado pelas exports de engine.cc:89-197. Não há prova aqui de revoke persistente por app.
+
+T4 — FALHAS E ESTADO DEVOLVIDO
+Lib não carrega: KsuBackend retorna KsuRead.Unavailable("backend indisponível") ao capturar UnsatisfiedLinkError (:99-100); texto em KsuBackend.kt:30; origem da carga em EngineNatives.kt:5.
+Também captura ExceptionInInitializerError causado por UnsatisfiedLinkError (KsuBackend.kt:101-105) e NoClassDefFoundError com mensagem EngineNatives/ultraroot (:107-112); demais casos são relançados, não convertidos.
+Kernel sem KSU, processo novo e sem FD: ioctl falha via engine.cc:20,27,54,59-62; g_info{} fica zero e fallback ignora erro (:65-74). kernelVersion/kernelUapi retornam 0 (:91,96); managerUapi retorna 5 (:101; uapi/supercall.h:13).
+readCapability então devolve Ok(KsuCapability(0,0,5)); prova do fluxo KsuBackend.kt:62-68,98. Estado específico "kernel sem KSU": NÃO TRATADO. O mesmo caminho não distingue ausência, falta de FD/autorização ou falha de ioctl.
+Sem KSU/FD, allowListUids retorna null por falha de ioctl (engine.cc:108-109); readAllowList converte null em Unavailable(UNAVAILABLE) (KsuBackend.kt:74). readProfile direto retorna null (engine.cc:161-162).
+kernelUapi != managerUapi: NÃO TRATADO. readCapability apenas empacota ambos (KsuBackend.kt:62-68) e readNative retorna Ok (:98); readAllowList inicia nova leitura sem checar capability (:70-78).
+Sucesso legacy: version pode vir do GET_INFO_LEGACY, mas UAPI é forçada a 0 (engine.cc:70-71). Interpretação específica de legacy/incompatibilidade: NÃO TRATADO (KsuBackend.kt:62-68).
+Falha de um perfil: lista pode ser Ok com AllowEntry.Unavailable(uid,"perfil indisponível"): KsuBackend.kt:76-93,46-47; constante :31. Falha não vira allowSu=false.
+Perfil real allowSu=false continua Confirmed: KsuBackend.kt:46-52, "if (allowSu == null)", "allowSu = allowSu"; EngineNatives.kt:15 também documenta essa distinção.
+
+T5 — RISCOS PARA O PRÓXIMO GRANT/REVOKE
+R1 Escrita sem validação: NÃO EXISTE writer atual, logo vulnerabilidade de escrita atual NÃO VERIFICADA. EngineNatives.kt:8-16 só leituras; engine.cc:69-84 só GET; uapi/supercall.h:107-109,178 apenas declara SET_APP_PROFILE.
+   Validação/autorização/persistência do SET no kernel e atomicidade do revoke: NÃO VERIFICADO neste escopo. O payload é perfil completo (uapi/supercall.h:108); header não implementa validação.
+R2 UID fora de faixa: leitura JNI NÃO TRATA faixa do UID; recebe jint e atribui diretamente curr_uid (engine.cc:156-161, "profile.curr_uid = uid"); tipo do alvo __s32 (uapi/app_profile.h:48). Faixa Android e rejeição no kernel: NÃO VERIFICADO.
+   UIDs da allowlist são __u32 (uapi/supercall.h:86), convertidos a jint sem checagem de faixa (engine.cc:133-134, "static_cast<jint>(uids[i])"). Um futuro writer não tem validação de UID herdável dessa leitura.
+R3 Falha parcial: leitura da lista seguida por leituras individuais (KsuBackend.kt:71,77-80) pode conter Confirmed e Unavailable no mesmo Ok (:76-93,98); não é snapshot transacional. Atomicidade/rollback de futuras escritas: NÃO VERIFICADO, writer NÃO EXISTE.
+R4 Perfil parcial no retorno: EngineProfile exporta só allowSu, uid, gid, context, flags, name (EngineNatives.kt:19-26; engine.cc:169-196). Payload inclui grupos/capabilities/namespaces (uapi/app_profile.h:18-32), use_default/template_name e perfil non-root (:51-64).
+   Reconstruir SET apenas desse objeto não preserva todos os campos: risco condicionado ao futuro writer; não há escrita atual que comprove perda. No retorno allowSu=false, uid/gid/context/flags ficam 0/0/vazio/0 (engine.cc:165-177).
+R5 Gate de compatibilidade ausente: o wrapper pode devolver Ok com UAPIs diferentes (KsuBackend.kt:62-68,98); qualquer segurança de futura escrita baseada só em Ok não está comprovada. Estado manager autorizado também NÃO VERIFICADO: flag MANAGER existe (uapi/supercall.h:29,36), mas KsuCapability guarda só versão e UAPIs (KsuBackend.kt:3-7).
+
+BUSCAS NEGATIVAS E CONFERÊNCIA
+grep '^Java_dev_superroot_core_EngineNatives_' engine.cc: 5 exports; grep 'external fun' EngineNatives.kt: 5 declarações; linhas listadas em T2.
+grep -nE 'SET_APP_PROFILE|Java_.*(set|write|grant|revoke)|external fun (set|write|grant|revoke)' engine.cc EngineNatives.kt: 0 linhas.
+grep -nE 'GET.*UAPI|MANAGER.*UAPI|REVOKE' uapi/supercall.h: 0 linhas; lista completa de comandos lida em :160-187.
+grep -nE 'kernelUapi[[:space:]]*(!=|==)|managerUapi[[:space:]]*(!=|==)|kernelVersion[[:space:]]*(>|<|==|!=)|SET_APP_PROFILE' engine.cc KsuBackend.kt EngineNatives.kt: 0 linhas; controle de fluxo completo lido.
+[x] T1 a T5 concluídos com fonte local; fatos de runtime/implementação kernel não lidos permanecem NÃO VERIFICADO.
+[x] Saída somente em docs/history/reports/engine_map_2026-10-12.txt.
+[x] wc -l final: 78 linhas, dentro do limite de 150.

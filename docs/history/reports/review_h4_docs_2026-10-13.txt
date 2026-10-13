@@ -1,0 +1,38 @@
+ULTRAROOT-H4R-2026-10-13 — revisão da atualização documental H4 (TODOs/CAPABILITIES/COMPAT_MATRIX). Revisor: OpenCode #2. Somente leitura. Chamadas: 10. [LIDO]
+
+T1. Hashes dos três docs: CONFEREM (sha256sum desta revisão = esperados):
+TODOs.md 1971461d...7648; CAPABILITIES.md 4b233a47...ddc9; COMPAT_MATRIX.md eeedbd81...0b92. [LIDO]
+
+T2. Escopo (ls --time-style=full-iso):
+- Mudados na janela da tarefa: CAPABILITIES.md 11:19:39, COMPAT_MATRIX.md 11:19:39, TODOs.md 11:22:12; plan.md 11:14:35 é do maestro (explicação da falha R1 do autor: h4_docs:82-83 "não atribuo essa edição a este trabalho").
+- docs/history/handoffs/HANDOFF-ultraroot-2026-10-13.md 10:04:49 e MAGISK_KSU_UI_INVENTORY.md 10:02:24 — anteriores a 11:00, não tocados. [LIDO]
+- Nenhum dos três alterado depois de 11:22:12 (TODOs.md é o último). ✓
+- Observação: HANDOFF-...-ctx490k.md 11:33:13 é posterior à tarefa e não é um dos três; sem evidência de autoria do Codex [DEDUZIDO: artefato de handoff pós-tarefa]; registro neutro, não é achado contra o autor.
+
+T3. COMPAT_MATRIX.md:15-17 vs supercall.h:28-30: CONFERE linha por linha.
+- :15 "GET_INFO: LKM ... Bit 1" ↔ supercall.h:28 `KSU_GET_INFO_FLAG_LKM = (1U << 0)`.
+- :16 "GET_INFO: MANAGER ... Bit 2" ↔ :29 `KSU_GET_INFO_FLAG_MANAGER = (1U << 1)`.
+- :17 "GET_INFO: LATE_LOAD ... Bit 4" ↔ :30 `KSU_GET_INFO_FLAG_LATE_LOAD = (1U << 2)`.
+- As três marcam "aparelho NÃO VERIFICADO (D2)" e "UNKNOWN (aparelho)". [LIDO]
+
+T4. CAPABILITIES.md:54 (linha KSU-ROOT): "host: BackendStateTest 7, KsuModeTest 10, RootGrantFlowTest 15, RootAccessFilterTest 17 + RootAccessPresenterTest 5". XMLs no disco: BackendStateTest tests="7", KsuModeTest tests="10", RootGrantFlowTest tests="15", RootAccessFilterTest tests="17", RootAccessPresenterTest tests="5", todos failures="0". Soma 7+10+15+17+5 = 54. CONFERE. [LIDO]
+
+T5. TODOs.md:36: "APK alinhado e não assinado `out/UltraRoot-own-ui10-aligned.apk`, SHA-256 `cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894`. Assinatura pendente do dono; ui10 não instalado, aparelho NÃO TESTADO." sha256sum do APK no disco = cc7212b6...55894. CONFERE. [LIDO]
+
+T6. Afirmação de aparelho sem marcação: NENHUMA. Busca (passou/funciona/testado/verificado/aprovado/instalado × device/aparelho/[DEVICE]) nos três docs:
+- TODAS as ocorrências de estado de aparelho estão marcadas "Histórico" (datado) ou "NÃO VERIFICADO/NÃO TESTADO/NÃO MEDIDO": TODOs.md:4,28,31,32,35-41,46,243-244,252,255-258,263-264,433,506,673; CAPABILITIES.md:3,9,19,27,54,79,85; COMPAT_MATRIX.md:3,9,15-17. [LIDO]
+- Linhas [DEVICE] sem marcação de NV (TODOs:47,50-53,75-79,229) são TAREFAS PENDENTES ([ ]/[!]), não afirmações de estado. [LIDO]
+
+T7. Lake/kernel sem prova: NENHUMA. Toda menção a modalidade do core no lake está marcada:
+- TODOs.md:41 "CONFIG_KSU do kernel do aparelho lake: NÃO VERIFICADO; nenhuma modalidade de integração é afirmada".
+- TODOs.md:673 "modalidade do core no lake NÃO VERIFICADA; ... Histórico 2026-10-11: presumia core integrado, sem prova" e :688 ".ko no lake NÃO VERIFICADA".
+- COMPAT_MATRIX.md:9 "modalidade no lake NÃO VERIFICADA"; :13 "o lake não foi medido"; :15 "configuração lake NÃO VERIFICADA".
+- grep 'built-in|built in' → NONE (autor h4_docs:78; confirmado pela busca desta revisão, nenhuma ocorrência). [LIDO]
+- Referências cruzadas batem: TODOs:35→plan.md:40-46 (ui8 vc40008 instalado; C0.3 UNKNOWN; fd não medido); TODOs:41→plan.md:46,93,105 (D2/E2). [LIDO]
+
+T8. VEREDITO: APROVADO.
+- Só os três docs do autor mudaram na janela da tarefa (plan.md é do maestro e explica a R1; ctx490k é pós-tarefa).
+- Bits 1/2/4 corretos contra o header; soma de testes (54) bate com os XMLs; hash do ui10 bate com o disco e com a H3.
+- Nenhuma afirmação de aparelho ou de modalidade do lake sem marcação de histórico/NÃO VERIFICADO.
+- Achados: nenhum. Observações registradas (plan.md/maestro; HANDOFF-ctx490k pós-tarefa).
+Relatório: docs/history/reports/review_h4_docs_2026-10-13.txt

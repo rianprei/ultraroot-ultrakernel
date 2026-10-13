@@ -1,0 +1,32 @@
+Objetivo: revisar, sem editar, o ramo KsuRead.Ok da função classifyBackend e os testes que o cobrem. Pergunta central: a regra mostra o estado do backend KSU de forma honesta? Nenhum caso de "sem KSU" pode virar "ativo" ou "incompatível".
+Correlation id: ULTRAROOT-REVIEW-2026-10-12-B. Autor da regra: maestro (Claude). Revisor: você.
+
+Escopo de leitura (somente leitura):
+1. ultraroot/core-backend/src/main/java/dev/superroot/core/BackendState.kt, ramo Ok nas linhas 11-22.
+2. ultraroot/core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt, inteiro.
+3. ultraroot/core-backend/src/main/java/dev/superroot/core/KsuBackend.kt, linhas 3-30 e 62-68.
+4. ultraroot/core-backend/src/main/cpp/engine.cc, linhas 65-102.
+5. ultraroot/app/src/main/java/dev/superroot/ultraroot/ui/KernelPerformanceScreen.kt, linhas 37-95: como a tela usa o estado hoje.
+
+Escrita (somente este arquivo): [artefato local, fora do repo]/claude2/review_estado_honesto_2026-10-12.txt, no máximo 80 linhas.
+
+Tarefa:
+T1. Para cada caminho da regra (Unavailable; kernelVersion == 0; kernelUapi == 0; kernelUapi diferente de managerUapi; else), diga qual teste o cobre, com arquivo:linha. Se nenhum, escreva NÃO COBERTO.
+T2. Procure uma entrada (kernelVersion, kernelUapi, managerUapi) que um aparelho sem KSU possa produzir e que a regra classifique como Active ou Incompatible. Se achar, prove com a entrada e a linha. Se não achar, escreva NENHUM e diga o que verificou em engine.cc:65-75 e :91-101.
+T3. Para cada motivo (reason) da regra, diga se afirma só o que o código sabe. Veredito por motivo: VERDADEIRO ou FALSO, com a razão e arquivo:linha.
+T4. Procure falso positivo em BackendStateTest.kt: um teste que passaria mesmo com a regra errada. Se achar, cite a linha e o mutante que ele deixaria passar. Se não, escreva NENHUM.
+T5. Verifique problemas de compilação ou de idioma Kotlin no ramo (smart cast, ordem do when, vírgulas). Se nenhum, escreva NENHUM e diga o que checou.
+T6. Verifique se o ramo tem literal numérico que deveria vir da UAPI do manager. Diga o efeito de trocar a UAPI do manager para outro valor. Prova: linha.
+
+Não deve:
+- Editar qualquer arquivo do projeto.
+- Rodar Gradle ou qualquer build.
+- Usar adb, aparelho, commit, push, /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+
+Teto: 10 chamadas de ferramenta. Registre o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Sem prova, escreva NÃO VERIFICADO. Separe o que você leu do que você deduziu.
+
+Formato da resposta no chat (no máximo 20 linhas): veredito APROVADO ou REPROVADO com as razões; uma linha por T1 a T6; caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa: entregue caminhos, linhas e trechos. Responda em português do Brasil.

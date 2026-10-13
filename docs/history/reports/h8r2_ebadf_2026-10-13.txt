@@ -1,0 +1,53 @@
+ULTRAROOT-H8R2-2026-10-13 — relatório
+
+T0 — SHA-256 antes
+app_profile_fill.h: e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+fill_test.cc: 0e6a38758bccd04e00981a5678387e6726bd32e5bf3366d2c131a25165151edd
+engine.cc: b339102e1c3fe7c7003bdcf7495d29aea451bd4889c265b948ccf126243fd8f1
+EngineNatives.kt: 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf
+Guardas header e engine conferidas; edição autorizada.
+Status T0: PASSOU.
+
+T1 — diff lógico em fill_test.cc (e somente isso permaneceu)
+- ioctlFailureReturnsEperm -> ioctlFailureReturnsEbadf
+- errno = EPERM -> errno = EBADF
+- ioctl_status(-1) == -EPERM -> ioctl_status(-1) == -EBADF
+- RUN_TEST(ioctlFailureReturnsEperm) -> RUN_TEST(ioctlFailureReturnsEbadf)
+Os outros dez casos não foram alterados. Durante T2, a ordem das duas últimas chamadas foi invertida temporariamente para capturar ambas as asserções; ordem original restaurada antes de T3.
+Comando g++ pedido, exit 0. Saída: 11/11 PASS:
+validUid, negativeUidRejected, nullKeyRejected, emptyKeyRejected,
+key255Accepted, key256Rejected, allowSuUsesMinimalDefaultRootProfile,
+allowSuFalseMarksRevoke, ioctlSuccessIsZero, ioctlFailureReturnsEbadf,
+ioctlFailureReturnsEinval.
+Status T1: PASSOU.
+
+T2 — sabotagem S10b (ioctl_status retorna ret)
+Cópia app_profile_fill.h.antes_S10b SHA-256:
+e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+Execução 1: fill_test.cc:68, ioctlFailureReturnsEbadf:
+Assertion `ioctl_status(-1) == -EBADF' failed. Exit 134.
+Execução 2, chamadas temporariamente reordenadas: fill_test.cc:73, ioctlFailureReturnsEinval:
+Assertion `ioctl_status(-1) == -EINVAL' failed. Exit 134.
+Header restaurado da cópia; SHA-256 da cópia e do header restaurado:
+e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+Status T2: PASSOU; S10b derrubou ambos os casos.
+
+T3 — após restaurar header e ordem das chamadas
+Comando g++ -std=c++17 -Wall -Werror com shim e core-backend/src/main/cpp; exit 0.
+Saída: os 11 casos PASS (lista em T1). SHA final do header:
+e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f
+Status T3: PASSOU.
+
+T4 — escopo
+engine.cc final: b339102e1c3fe7c7003bdcf7495d29aea451bd4889c265b948ccf126243fd8f1 (igual T0).
+EngineNatives.kt final: 2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf (igual T0).
+fill_test.cc final: adc212460c1388711620d94af3f47ee6ebda05e1100ff05c1d8c47eec7dc2a67.
+Status T4: PASSOU.
+
+Rubrica
+R1 PASSOU — só fill_test.cc teve alteração persistente; helper e engine preservados.
+R2 PASSOU — 11/11 antes e depois da sabotagem.
+R3 PASSOU — S10b derrubou EBADF e EINVAL; helper restaurado ao SHA de T0.
+R4 PASSOU — os outros dez casos mantiveram nomes e corpos; todos passaram.
+R5 PASSOU — hashes, saídas e linhas das asserções registrados acima.
+Sem aparelho, commit ou push.

@@ -1,0 +1,59 @@
+ULTRAROOT-REVIEW-2026-10-12-D | Autor: maestro (Claude) | Revisor: Codex #4
+VEREDITO: APROVADO COM CORREÇÕES — invariantes garantidas nos classificadores/presenter; busca/filtro não enviados pela tela e lacunas de cobertura.
+Raiz dos caminhos relativos: ultraroot/
+BackendState.kt/BackendStateTest.kt: core-backend/src/main/java/dev/superroot/core/ e core-backend/src/test/java/dev/superroot/core/, respectivamente.
+RootAccessState.kt/RootAccessScreen.kt: app/src/main/java/dev/superroot/ultraroot/ui/; testes RootAccess*: app/src/test/java/dev/superroot/ultraroot/ui/.
+strings.xml: app/src/main/res/values/; StringsIdentityTest.kt: app/src/test/java/dev/superroot/ultraroot/.
+Resultados fornecidos pelo maestro, aceitos como fatos: BackendStateTest 6/6; KsuBackendHostTest 3/3; RootAccessFilterTest 14/14; RootAccessPresenterTest 5/5; StringsIdentityTest 2/2; ContrastTest 2/2.
+Nenhum teste/build/mutante foi executado. Resultados de sobrevivência abaixo são [DEDUZIDO] da cobertura lida, não uma nova medição.
+T1 — INVARIANTES
+I1 GARANTIDO [LIDO]: BackendState.kt:15, "cap.kernelVersion == 0 -> BackendState.Absent"; precede os ramos Incompatible (:16-19) e Active (:20).
+I1 [DEDUZIDO]: para qualquer UAPI, versão zero encerra no primeiro ramo. BackendStateTest.kt:19-26 e :31-42 cobrem UAPI 0/4/5; :41, "result is BackendState.Absent".
+I2 GARANTIDO no presenter [LIDO]: RootAccessState.kt:37-40, "is AllowEntry.Unavailable", "allowSu = null"; :64-65, "allowSu == true"/"allowSu == false".
+I2 [DEDUZIDO]: null não vira true/false, não entra em GRANTED/NOT_GRANTED nem incrementa grantedTotal (:54, "all.count { it.allowSu == true }"). RootAccessPresenterTest.kt:75, "assertNull(row.allowSu)".
+I3 GARANTIDO [LIDO]: RootAccessState.kt:32-33, "read.value.isEmpty()" -> Empty; :51-52, "rows.isEmpty()" -> "RootAccessUi.NoMatch(query = needle, filter = filter)".
+I3 [DEDUZIDO]: allowlist originalmente não vazia, esvaziada por busca/filtro, nunca retorna Empty. Allowlist realmente vazia continua Empty, mesmo com query (RootAccessFilterTest.kt:88-89).
+I4 GARANTIDO [LIDO]: RootAccessState.kt:54, "grantedTotal = all.count { it.allowSu == true }"; all vem de read.value.map (:35), antes do filtro (:50).
+I4 [LIDO]: RootAccessScreen.kt:73, "AccessSummary(granted = ui.grantedTotal)"; RootAccessFilterTest.kt:127-129 filtra NOT_GRANTED mas exige total 2.
+T2 — ATÉ TRÊS MUTANTES NÃO EQUIVALENTES QUE A COBERTURA LIDA DEIXA SOBREVIVER
+M1 [DEDUZIDO]: BackendState.kt:20, trocar Active(cap.kernelVersion, cap.kernelUapi) por Active(12000, 5).
+Prova: único caso Active em BackendStateTest.kt:83-93 usa version=12000/uapi=5 e compara exatamente Active(12000,5) (:93).
+Teste que deveria pegar: matchingUapiIsActiveWithVersion, ampliado com Ok(KsuCapability(13000,6,6)) -> Active(13000,6); caso atual não pega.
+M2 [DEDUZIDO]: RootAccessState.kt:72, trocar uid.toString().contains(needle) por uid.toString().startsWith(needle).
+Prova: RootAccessFilterTest.kt:42 usa UID completo "10200"; :94 usa só prefixo "1020". Nenhum dos testes lidos exige fragmento no meio/fim.
+Teste que deveria pegar: searchMatchesPartialUid (:93-95), ampliado com query="200" -> UID 10200. O mutante retorna NoMatch nesse cenário.
+M3 [DEDUZIDO]: RootAccessState.kt:54, trocar "all.count { it.allowSu == true }" por constante 2.
+Prova: único assert direto do total nas duas suítes RootAccess é RootAccessFilterTest.kt:129, "assertEquals(2, ui.grantedTotal)".
+Teste que deveria pegar: grantedTotalCountsWholeAllowlistNotFilteredRows, ampliado com listas não vazias contendo 0, 1 e 3 concedidos e ao menos uma linha visível.
+M1/M2/M3 são distintos dos seis mutantes já medidos; não foram aplicados nem executados.
+T3 — FALSO POSITIVO / COBERTURA
+[DEDUZIDO] RootAccessFilterTest.kt:119-129, grantedTotalCountsWholeAllowlistNotFilteredRows, passaria com grantedTotal=2 fixo.
+Prova [LIDO]: fixture tem exatamente dois true (:122-123) e a única exigência é "assertEquals(2, ui.grantedTotal)" (:129). É uma lacuna de cobertura, não prova de erro na implementação atual.
+T4 — KOTLIN / COMPILAÇÃO ESTÁTICA
+NENHUM erro encontrado [LIDO/DEDUZIDO]: BackendState.kt:9-22 cobre Unavailable/Ok e tem else no when condicional; RootAccessState.kt:29-58 cobre KsuRead e AllowEntry; :62-66 cobre os três RootFilter.
+[LIDO] RootAccessScreen.kt:57-80 contém Unavailable/Empty/Listed/NoMatch; "AccessSummary(granted = ui.grantedTotal)" (:73) recebe Int definido em RootAccessState.kt:20.
+[LIDO/DEDUZIDO] Smart cast: read/entry são estáveis nos when (RootAccessState.kt:29,36); val ui em RootAccessPresenterTest.kt:15 é explicitamente convertido em :17, permitindo ui.message em :18.
+[LIDO] Defaults e tipos: RootAccessState.kt:25-27, "query: String = """, "filter: RootFilter = RootFilter.ALL"; RootRow.allowSu é Boolean? (:11), comparado com == true/false (:64-65).
+Compilação nova NÃO VERIFICADA por execução; os resultados de testes fornecidos pelo maestro foram aceitos. Nenhum build foi rodado.
+T5 — NOMATCH E IDENTIDADE
+[LIDO] strings.xml:12, root_nomatch_body: "Nenhum app corresponde aos critérios atuais."; :11, root_nomatch_title: "Nenhum resultado".
+[DEDUZIDO] Frase válida para nenhuma linha do conjunto lido satisfazer os critérios, inclusive query vazia + filtro GRANTED sobre só false (RootAccessFilterTest.kt:74-76).
+Prova [LIDO]: NoMatch depende de rows.isEmpty(), não de query não vazia (RootAccessState.kt:49-52); não significa allowlist vazia nem ausência de apps instalados.
+[LIDO] StringsIdentityTest.kt:10 proíbe "KSU", "KernelSU", "weishu", "Magisk", "APatch"; :15 usa "text.contains(word)"; :21/:26 verifica strings.xml e Section.kt.
+[DEDUZIDO] A guarda é sensível à caixa e a substrings: "magisk" minúsculo não é pego pelo literal "Magisk" (:10,15); não cobre automaticamente textos de BackendState.kt ou outros arquivos.
+[LIDO] BackendState.kt:15 contém "KSU" no reason; sua exposição na tela NÃO VERIFICADA: a tela de kernel não pertence ao escopo desta leitura.
+T6 — FRASE DO FD
+[LIDO] docs/ultraroot/OWNAPP_INC1.md:34: "engine.cc:22-55 só procura o fd; não o instala".
+[LIDO] engine.cc:23, "opendir("/proc/self/fd")"; :41, "readlink"; :48-49, "strstr(base, "[ksu_driver]")", "found = static_cast<int>(value)"; :54, "return found".
+[DEDUZIDO] VERDADEIRA quanto a buscar um FD já aberto: essa função apenas varre os descritores do próprio processo; found=-1 se nenhum corresponder (:27,54). Não instala FD nesse trecho.
+A existência real/autorização do FD e as afirmações da mesma linha sobre ioctls/copiar UAPI/ausência de telas NÃO VERIFICADAS nesta revisão: requerem trechos fora de engine.cc:22-55.
+T7 — CÓDIGO MORTO / CONSTANTES / COMENTÁRIOS
+[DEDUZIDO] Ramo NoMatch inalcançável na chamada atual da tela: RootAccessScreen.kt:57, "presentRootAccess(value)" sem query/filter; :76 mantém "is RootAccessUi.NoMatch -> EmptyState".
+Prova [LIDO]: defaults ""/ALL (RootAccessState.kt:26-27), ALL -> true (:63), needle.isEmpty() (:70); lista não vazia mantém todas as linhas e vai a Listed (:50-54); vazia vai a Empty (:32-33).
+Correção necessária: conectar critérios efetivos à chamada da tela e testar essa integração; testes do presenter não cobrem a chamada Compose (RootAccessFilterTest.kt:36,62,68 chama presentRootAccess diretamente).
+NENHUMA constante sem uso ou comentário contraditório demonstrado nos trechos lidos: UNKNOWN_PACKAGE tem usos em RootAccessState.kt:39,44; comentários :19/:61/:68 correspondem a :54/:64-65/:71-72.
+T8 — BUG REAL ADICIONAL
+NENHUM bug adicional demonstrado além de T1-T7. Integração de classifyBackend com a tela de kernel e renderização interna de AccessRow são NÃO VERIFICADO, pois não estão nos trechos autorizados.
+Prova do limite: BackendState.kt:9 define classifyBackend; o trecho lido da tela chama presentRootAccess (RootAccessScreen.kt:57), não permite concluir sobre outra tela.
+Somente este relatório foi escrito; nenhuma alteração de projeto, execução Gradle, mutação, device, git, acesso a keys, arquivo em /tmp, skill ou subagente.
+Número usado: 12 chamadas exec_command, agrupadas em 2 chamadas functions.exec.

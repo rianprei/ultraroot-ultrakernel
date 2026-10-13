@@ -1,0 +1,79 @@
+Objetivo: corrigir um defeito que a revisão do H1 deixou passar. Hoje KsuBackend.readMode() devolve KsuRead.Ok(KsuMode(false, false, false)) quando o driver do KernelSU não responde. Deve devolver KsuRead.Unavailable(KsuBackend.UNAVAILABLE). Fazer por TDD. Sem aparelho. Sem mexer em nada além dos três arquivos do escopo.
+
+Correlation id: ULTRAROOT-H1F-2026-10-13. Autor: Codex #4. Revisor: OpenCode #2.
+
+Contexto (provas conferidas pelo maestro em 2026-10-13; raiz ultraroot/):
+- core-backend/src/main/cpp/engine.cc:67-75: read_info() deixa g_info zerado quando as duas chamadas de ioctl falham (com driver_fd = -1, o ioctl retorna erro). Linha 68: só relê se version == 0.
+- engine.cc:105-106: Java_dev_superroot_core_EngineNatives_kernelFlags retorna read_info().flags. Sem resposta do kernel, retorna 0. O relatório anterior citou engine.cc:89-92 para esta função. Está errado: essas linhas são kernelVersion.
+- core-backend/src/main/java/dev/superroot/core/KsuBackend.kt:70-72: readMode = readNative { decodeKsuMode(EngineNatives.kernelFlags()) }. readNative só converte erros de biblioteca ausente (UnsatisfiedLinkError e variantes) em Unavailable. Flags zerados viram Ok com três bits falsos. Isso fabrica um estado.
+- core-backend/src/main/java/dev/superroot/core/BackendState.kt:15: classifyBackend trata kernelVersion == 0 como Absent. readMode precisa seguir o mesmo sinal.
+- Bits no header, conferidos: core-backend/src/main/cpp/uapi/supercall.h:28 LKM = 1<<0; :29 MANAGER = 1<<1; :30 LATE_LOAD = 1<<2; :31 PR_BUILD; :32 BUNDLED. O relatório anterior citou :30-32 para os três bits: está errado.
+- Semântica no pin (kernel/upstream/KernelSU): kernel/supercall/dispatch.c:44-45, LKM só com #ifdef MODULE. :51-52, MANAGER por is_manager() do processo que chama (kernel/manager/manager_identity.h:47-49). :54-55, LATE_LOAD por ksu_late_loaded.
+
+Escopo (somente estes três arquivos; nenhum outro muda):
+1. core-backend/src/main/java/dev/superroot/core/KsuMode.kt: acrescentar fun decodeKernelMode(version: Int, flags: Int): KsuRead<KsuMode>, e um KDoc em inglês na data class KsuMode (padrão de BackendState.kt e KsuBackend.kt).
+2. core-backend/src/main/java/dev/superroot/core/KsuBackend.kt: só o corpo de readMode (linhas 70-72).
+3. core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt: acrescentar três testes. Os sete existentes ficam como estão.
+
+Fora do escopo, não tocar: engine.cc, EngineNatives.kt, BackendState.kt, BackendStateTest.kt, KsuBackendHostTest.kt, qualquer arquivo de app/, build.gradle.kts, strings.xml.
+
+Contrato:
+- decodeKernelMode(version, flags): se version == 0, devolve KsuRead.Unavailable(KsuBackend.UNAVAILABLE). Senão, devolve KsuRead.Ok(decodeKsuMode(flags)). Com version == 0, flags é ignorado.
+- readMode(): lê version e flags pelo JNI dentro de readNative e passa os dois para decodeKernelMode. Forma esperada (ajustar só se o compilador exigir, sem mudar o contrato):
+    fun readMode(): KsuRead<KsuMode> {
+        val read = readNative { decodeKernelMode(EngineNatives.kernelVersion(), EngineNatives.kernelFlags()) }
+        return when (read) {
+            is KsuRead.Unavailable -> read
+            is KsuRead.Ok -> read.value
+        }
+    }
+- decodeKsuMode continua igual.
+
+Testes novos (nomes exatos, em KsuModeTest.kt):
+- decodeKernelModeWithoutAnswerIsUnavailable: decodeKernelMode(version = 0, flags = 7) é KsuRead.Unavailable com reason igual a KsuBackend.UNAVAILABLE. flags = 7 de propósito: prova que a guarda é a versão, e não os bits.
+- decodeKernelModeWithAnswerAndNoFlagsIsOkWithoutBits: decodeKernelMode(version = 12000, flags = 0) é KsuRead.Ok com KsuMode(lkm = false, manager = false, lateLoad = false). Resposta real sem bits não é ausência.
+- decodeKernelModeWithAnswerDecodesFlags: decodeKernelMode(version = 12000, flags = 5) é KsuRead.Ok com KsuMode(lkm = true, manager = false, lateLoad = true).
+
+KDoc de KsuMode, em inglês, com os fatos acima: lkm fica false num build integrado (o kernel do lake), e isso não quer dizer KernelSU ausente; manager vale para o processo que chama, não é estado global; lateLoad vem de ksu_late_loaded. Cite as linhas da fonte do pin.
+
+Tarefa, em ordem (TDD):
+T0. Registrar sha256sum de KsuMode.kt, KsuBackend.kt, KsuModeTest.kt, engine.cc e EngineNatives.kt. KsuMode.kt deve dar 6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63. Se algum hash divergir, parar e reportar, sem sobrescrever nada.
+T1. Escrever os três testes novos. Rodar KsuModeTest. Deve falhar por referência não resolvida a decodeKernelMode. Registrar a saída.
+T2. Escrever decodeKernelMode e o KDoc em KsuMode.kt. Rodar KsuModeTest. Os 10 testes ficam verdes, porque readMode ainda não mudou. Registrar.
+T3. Trocar o corpo de readMode em KsuBackend.kt pela forma do contrato. Rodar KsuModeTest: 10 de 10 verdes. Registrar.
+T4. Rodar o módulo inteiro. Esperado: 20 testes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10), 0 falhas. Registrar.
+T5. Sabotagem S1, guarda de versão: copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_S1 e registrar sha256. No corpo de decodeKernelMode, trocar a guarda por KsuRead.Ok(decodeKsuMode(flags)), sem if. Rodar KsuModeTest. Esperado: decodeKernelModeWithoutAnswerIsUnavailable FALHA. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
+T6. Sabotagem S2, máscara LKM: copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_S2 e registrar sha256. Trocar lkm = flags and 1 por lkm = flags and 2. Rodar KsuModeTest. Esperado: decodeLkmBit FALHA. Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
+T7. Rodar o módulo inteiro de novo, depois das restaurações. Esperado: 20 de 20.
+T8. Escopo: sha256 de engine.cc e EngineNatives.kt iguais aos de T0. Listar os arquivos de core-backend/src e app/src alterados nas últimas 2 horas (find ... -mmin -120). A lista deve conter engine.cc, EngineNatives.kt, KsuBackend.kt, KsuMode.kt e KsuModeTest.kt, e nenhum outro. Se aparecer outro, parar e reportar.
+T9. Escrever o relatório e responder.
+
+Comando de teste (caminhos absolutos):
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+
+Não deve:
+- Tocar o aparelho: nada de adb, fastboot, instalação ou leitura do aparelho.
+- Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Mudar a assinatura de readMode, KsuMode, decodeKsuMode, KsuCapability, classifyBackend ou dos testes existentes.
+- Restaurar um arquivo de sabotagem sem conferir o sha256.
+- Dizer que algo passou sem a saída do Gradle.
+
+Artefatos:
+- Relatório: docs/history/reports/h1_fix_readmode_2026-10-13.txt, com até 120 linhas. Conteúdo: saídas de T1, T2, T3, T4, T5 e T6; sha256 de T0, de T5 e de T6; total de T7; resultado de T8; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 20 linhas, com o caminho do relatório e o veredito.
+- Exemplo de linha no relatório: "decodeLkmBit FAILED: expected true but was false".
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só três arquivos mudaram: KsuMode.kt, KsuBackend.kt, KsuModeTest.kt. engine.cc e EngineNatives.kt com o mesmo sha256 de T0.
+R2. KsuModeTest 10 de 10. Módulo core-backend 20 de 20.
+R3. S1 derruba decodeKernelModeWithoutAnswerIsUnavailable. S2 derruba decodeLkmBit. Os dois arquivos voltam com o sha256 de T0.
+R4. KDoc de KsuMode em inglês, com as quatro referências de fonte (dispatch.c:44-45, :51-52, :54-55 e manager_identity.h:47-49).
+R5. Cada afirmação com prova. Sem prova, escrever NÃO VERIFICADO.
+
+Falhas conhecidas:
+- sha256 de T0 diferente: parar e reportar. Não sobrescrever nada.
+- Gradle offline falha: registrar a mensagem exata. Status NÃO VERIFICADO. Não dizer que passou.
+- Erro de tipo ou when não exaustivo em readMode: ajustar só a forma, sem mudar o contrato. Registrar o erro e a correção.
+- A biblioteca nativa não existe no JVM: readMode com a lib real fica NÃO VERIFICADO no host. A lógica está coberta por decodeKernelMode. Dizer isso no relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

@@ -1,0 +1,35 @@
+Objetivo: reconferir, sem editar, a linha 85 do inventário Magisk/KSU (docs/ultraroot/MAGISK_KSU_UI_INVENTORY.md) depois das duas correções finais aplicadas pelo orquestrador. Registrar também o que não pode ser verificado do veredito de cabeçalho do relatório anterior de revisões (docs/ultraroot/REVIEW_MAGISK_KSU_INVENTORY_haiku55.md). Pendência aberta desde 2026-10-12.
+
+Correlation id: ULTRAROOT-H5-2026-10-13. Autor do inventário: Codex #4 (rodadas de correção) e maestro (as duas últimas correções da linha 85). Revisor: você (OpenCode #2).
+
+Convenção de prefixos, a confirmar na linha 3 do inventário antes de abrir qualquer fonte:
+- K/ = kernel/upstream/KernelSU/manager/app/src/main/java/me/weishu/kernelsu/
+- M/ui/ = Magisk/app/apk/src/main/java/com/topjohnwu/magisk/ui/ dentro de [artefato local, fora do repo]/grok/src/Magisk/
+- M/app/core/ = [artefato local, fora do repo]/grok/src/Magisk/app/core/
+
+Escopo de leitura (somente leitura):
+1. docs/ultraroot/MAGISK_KSU_UI_INVENTORY.md: a linha 3 (convenção) e a linha 85 inteira.
+2. docs/ultraroot/REVIEW_MAGISK_KSU_INVENTORY_haiku55.md: inteiro, para achar o cabeçalho com o veredito e as correções.
+3. As fontes citadas dentro da linha 85, resolvidas pela convenção acima.
+
+Escrita (somente este arquivo): docs/history/reports/review_h5_inventario_2026-10-13.txt, com no máximo 60 linhas.
+
+Tarefa:
+T1. Transcrever a linha 85 atual, sem editar. Citar a linha.
+T2. Para cada citação arquivo:linha dentro da linha 85, abrir o arquivo na linha citada e comparar com o que a linha 85 diz sobre ele. Veredito por citação: OK, DIVERGE ou NÃO ENCONTRADO. Citar o trecho literal.
+T3. Verificar as duas correções finais: (a) a linha 85 diz "reboot normal, sem motivo, em late-load (reason.isEmpty())", com o texto de jailbreak_reboot_warning, e a prova é RebootListPopup.kt:51; (b) a linha 85 cita, para o atalho, bottom sheet em ModuleMaterial.kt:558-580, com prova. Dizer APLICADA ou NÃO APLICADA para cada uma.
+T4. Dizer se a linha 85 afirma algo que o código lido não sustenta. Citar a frase e a prova. Se não houver, escrever NENHUM.
+T5. Do veredito de cabeçalho de REVIEW_MAGISK_KSU_INVENTORY_haiku55.md: transcrever o que está visível e dizer o que não está. Se o veredito não estiver no arquivo, escrever NÃO VERIFICADO e registrar a última linha que existe.
+
+Não deve:
+- Editar qualquer arquivo do projeto ou do inventário.
+- Rodar build, adb ou qualquer comando que toque o aparelho.
+- Fazer commit ou push. Não usar /tmp, [chaves locais do dono, fora do repo]/, skills ou subagentes.
+
+Teto: 12 chamadas de ferramenta. Registrar o número usado no fim do relatório.
+
+Rubrica: cada afirmação com arquivo:linha e trecho literal curto. Marcar [LIDO] o que você viu e [DEDUZIDO] o que inferiu. Sem prova, escrever NÃO VERIFICADO.
+
+Formato da resposta no chat (no máximo 20 linhas): veredito APROVADO ou REPROVADO, com as razões; uma linha por T1 a T5; caminho do relatório.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e trechos. Responda em português do Brasil.

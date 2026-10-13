@@ -1,0 +1,46 @@
+Objetivo: preparar o build ui10 do UltraRoot até o APK alinhado e não assinado (H3). A assinatura é do dono e NÃO é feita aqui. Sem aparelho.
+
+Correlation id: ULTRAROOT-H3-2026-10-13. Autor: Codex #4. Conferência: OpenCode #2 (badging e alinhamento), depois.
+
+Contexto (verificado pelo maestro em 2026-10-13; raiz ultraroot/, não é git):
+- app/build.gradle.kts, linhas 21-22: versionCode = 40009 e versionName = "0.2.0-ui9". Mudar para 40010 e "0.2.0-ui10". Nada mais no arquivo.
+- buildTypes.release: isMinifyEnabled = false, isShrinkResources = false, sem signingConfig. O APK sai sem assinatura, como app-release-unsigned.apk.
+- As ferramentas do SDK NÃO estão no PATH. Usar o caminho completo: ~/Android/Sdk/build-tools/37.0.0/ (aapt2, apksigner, zipalign).
+- A pasta [chaves locais do dono, fora do repo]/ tem arquivos de chave. NÃO abrir, NÃO ler, NÃO listar conteúdo, NÃO imprimir, NÃO usar o arquivo de senha. Não rodar apksigner sign: a assinatura é do dono.
+- Destino dos artefatos: ultraroot/out/ (existe).
+
+Escopo: somente app/build.gradle.kts (duas linhas de versão) e os artefatos novos em out/. Nada mais.
+
+Tarefa, em ordem:
+T0. sha256sum app/build.gradle.kts. Registrar.
+T1. Editar app/build.gradle.kts: versionCode 40009 vira 40010; versionName "0.2.0-ui9" vira "0.2.0-ui10". Antes de editar, copiar para docs/history/reports/build.gradle.kts.antes_H3. Registrar diff.
+T2. Build release, offline: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:assembleRelease --offline. Registrar o resultado e as últimas 20 linhas. Se faltar dependência offline, registrar a mensagem exata e marcar NÃO VERIFICADO. Não baixar nada.
+T3. Localizar o APK de saída em app/build/outputs/apk/release/. Copiar para out/UltraRoot-own-ui10-unsigned.apk. Registrar sha256.
+T4. Alinhar: ~/Android/Sdk/build-tools/37.0.0/zipalign -p -f 4 out/UltraRoot-own-ui10-unsigned.apk out/UltraRoot-own-ui10-aligned.apk. Depois: ~/Android/Sdk/build-tools/37.0.0/zipalign -c -p 4 out/UltraRoot-own-ui10-aligned.apk. Esperado: Verification succeeded. Registrar.
+T5. Badging: ~/Android/Sdk/build-tools/37.0.0/aapt2 dump badging out/UltraRoot-own-ui10-aligned.apk > out/badging-ui10.txt. Citar as linhas de package (name='me.weishu.kernelsu', versionCode='40010', versionName='0.2.0-ui10') e de application-label. Se algum valor não bater, registrar o valor real.
+T6. sha256 do APK alinhado. Registrar.
+T7. Escrever no relatório, sem executar, o comando de assinatura para o dono: ~/Android/Sdk/build-tools/37.0.0/apksigner sign --ks [chaves locais do dono, fora do repo]/superroot-release.jks --out out/UltraRoot-own-ui10.apk out/UltraRoot-own-ui10-aligned.apk. Registrar que o dono digita a senha no prompt. Não ler o arquivo de senha da pasta keys.
+T8. Escrever o relatório.
+
+Artefatos:
+- Relatório: docs/history/reports/h3_build_ui10_2026-10-13.txt, até 100 linhas. Conteúdo: sha de T0; diff de T1; resultado de T2; sha de T3; saída de T4; linhas de T5; sha de T6; comando de T7; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 15 linhas, com o caminho do relatório.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só app/build.gradle.kts mudou, nas duas linhas de versão. Nenhum arquivo de [chaves locais do dono, fora do repo]/ foi aberto ou lido.
+R2. Build release verde, ou NÃO VERIFICADO com a mensagem exata.
+R3. zipalign -c verde.
+R4. badging com me.weishu.kernelsu, versionCode 40010 e versionName 0.2.0-ui10.
+R5. Nenhuma assinatura executada. O comando de T7 só está escrito.
+R6. Cada afirmação com prova.
+
+Falhas conhecidas:
+- Gradle falha: registrar a mensagem exata. Não dizer que passou.
+- aapt2 ou zipalign ausente no caminho indicado: procurar com find ~/Android/Sdk/build-tools -maxdepth 2 -name zipalign, registrar o caminho real, e seguir.
+
+Não deve:
+- Tocar o aparelho (adb, fastboot). Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Alterar qualquer linha de app/build.gradle.kts além das duas de versão.
+- Executar apksigner sign, keytool ou qualquer comando que peça senha.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

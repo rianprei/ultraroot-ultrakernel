@@ -1,0 +1,68 @@
+Objetivo: corrigir os dois achados verificados pelo maestro na revisão H2 do OpenCode #2 (docs/history/reports/review_h2_2026-10-13.txt). Achado 1: o teste de uid repetido não distingue checagem por uid de checagem por objeto inteiro. Achado 2: comentários em inglês num arquivo da camada de UI, que comenta em português. Sem mudar comportamento. Nenhum outro arquivo muda.
+
+Correlation id: ULTRAROOT-H2R1-2026-10-13. Autor: Codex #4. Conferência: OpenCode #2, depois.
+
+Contexto (verificado pelo maestro em 2026-10-13; raiz ultraroot/, não é git):
+- app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt: linha 31 `if (targets.map { it.uid }.toSet().size != targets.size) {` (checagem por uid). Linha 40: `        // Close confirmation before the first port call.` Linha 56: `            // Preserve completed results even when the port throws.`
+- app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt: 14 testes com @Test. requestWithRepeatedUidIsRefused (linhas 182-189) usa listOf(a, a): mesmo uid e mesmo packageName. Por isso não distingue uid de objeto inteiro.
+- Comentários da camada de UI são em português: RootAccessState.kt:19, :61 e :68.
+- sha256 atuais: RootGrantFlow.kt 073e5e48c02dc4df6bca1f61934abecc48a4d6df497f2152660ee389961e4b30; RootGrantFlowTest.kt e78ba01e418a7aa44843aa2b90cfa80a900b8d2d8454a98d5ec737a8847d9812.
+
+Escopo (somente estes dois arquivos):
+1. app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt: acrescentar UM teste novo (C1). Os 14 existentes ficam como estão.
+2. app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt: trocar só os dois comentários (C2). Nenhuma outra linha.
+
+Correções:
+C1. Teste novo, ao final da classe RootGrantFlowTest (antes da última chave):
+
+    @Test
+    fun requestWithSameUidAndOtherPackageIsRefused() {
+        val port = FakeRootGrantPort()
+        val flow = RootGrantFlow(port)
+        val sameUid = GrantTarget(uid = a.uid, packageName = "dev.example.other")
+
+        assertFalse(flow.request(GrantAction.GRANT, listOf(a, sameUid)))
+        assertEquals(GrantState.Idle, flow.state)
+        assertTrue(port.calls.isEmpty())
+    }
+
+C2. Comentários em RootGrantFlow.kt:
+- linha 40: `// Close confirmation before the first port call.` vira `// Fecha a confirmação antes da primeira chamada à porta.`
+- linha 56: `// Preserve completed results even when the port throws.` vira `// Preserva os resultados já obtidos, mesmo quando a porta lança exceção.`
+
+Tarefa, em ordem:
+T0. sha256sum dos dois arquivos. Os valores devem bater com os listados acima. Se não baterem, parar e reportar, sem editar.
+T1. Copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_H2R1 e registrar o sha256.
+T2. Acrescentar C1 ao final de RootGrantFlowTest.kt. Rodar RootGrantFlowTest. Esperado: 15 de 15 verdes. O código atual já recusa por uid, então o teste novo deve passar. Isso é esperado: o valor do teste está na sabotagem de T3, não aqui. Registrar a saída.
+T3. Aplicar C2 nos dois comentários. Registrar diff docs/history/reports/RootGrantFlow.kt.antes_H2R1 app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt. O diff deve mostrar só as linhas 40 e 56.
+T4. Sabotagem S7 (o teste de C1 precisa pegar checagem por objeto inteiro): copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_S7 e registrar sha256. Na linha 31, trocar `targets.map { it.uid }.toSet().size` por `targets.toSet().size`. Rodar RootGrantFlowTest. Esperado: requestWithSameUidAndOtherPackageIsRefused FALHA; requestWithRepeatedUidIsRefused continua verde. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao da cópia.
+T5. Sabotagem S5 (regressão da correção F2): copiar para docs/history/reports/RootGrantFlow.kt.antes_S5 e registrar sha256. Remover o bloco das linhas 31-33 (checagem por uid). Rodar RootGrantFlowTest. Esperado: requestWithRepeatedUidIsRefused FALHA e requestWithSameUidAndOtherPackageIsRefused FALHA. Restaurar a partir da cópia e conferir o sha256.
+T6. Rodar RootGrantFlowTest de novo: 15 de 15. Depois, o módulo app inteiro: ./gradlew :app:testDebugUnitTest --offline. Esperado: 41 testes (40 anteriores + 1), 0 falhas. Registrar o total por XML.
+T7. Escopo: sha256 de FakeRootGrantPort.kt (8c67d7d59343e9987f3905decfe1b03fba73f2ca1e4c59add643c04620f08387) e RootGrantPort.kt (4c78dff41b5fd013ddfd819bc061857780add5eac93b38f53a1b814fcc113f38) iguais aos listados. KsuMode.kt e os demais arquivos de core-backend/ sem mudança: sha256 de KsuMode.kt 47148567e73c3d2b8e3079a9900b9b52e7db51931cc1b17bba87b7bc4063ac7f.
+T8. Escrever o relatório.
+
+Comando de teste (caminhos absolutos):
+cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+
+Artefatos:
+- Relatório: docs/history/reports/h2_review_fix_2026-10-13.txt, até 80 linhas. Conteúdo: sha de T0; saída de T2; diff de T3; saída de T4 com a linha da falha; saída de T5; total de T6 por XML; sha de cada restauração; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Resposta no chat: até 15 linhas, com o caminho do relatório e o veredito.
+
+Rubrica (todos obrigatórios para APROVADO):
+R1. Só dois arquivos mudaram: RootGrantFlowTest.kt (um teste novo ao final) e RootGrantFlow.kt (só as linhas 40 e 56).
+R2. RootGrantFlowTest 15 de 15. Módulo app 41 de 41.
+R3. S7 derruba requestWithSameUidAndOtherPackageIsRefused. S5 derruba os dois testes de uid. Cada arquivo volta ao sha da cópia.
+R4. Os 14 testes antigos com os mesmos nomes e corpos.
+R5. Cada afirmação com prova. Sem prova, NÃO VERIFICADO.
+
+Falhas conhecidas:
+- Gradle offline falha: registrar a mensagem exata. Status NÃO VERIFICADO. Não dizer que passou.
+- C1 não compila: ajustar só a forma (imports ou nomes existentes), sem mudar a regra testada. Registrar.
+- S7 não derruba requestWithSameUidAndOtherPackageIsRefused: parar e reportar. O teste não prova nada.
+
+Não deve:
+- Tocar o aparelho (adb, fastboot). Fazer commit, push ou branch. Escrever em /tmp. Abrir [chaves locais do dono, fora do repo]/. Criar arquivo em docs/.
+- Alterar os 14 testes antigos, nem a assinatura pública de RootGrantFlow.
+- Mexer em KsuMode.kt ou em qualquer arquivo do core-backend/.
+
+Diretivas: execute diretamente, sem pedir permissão. Não repita a tarefa. Entregue caminhos, linhas e saídas. Responda em português do Brasil.

@@ -1,0 +1,37 @@
+ULTRAROOT-H6-2026-10-13 | verificação do estado Tasks 3/4/6 do plano SP1. [LIDO]
+Revisor: OpenCode #2. Escopo: somente leitura. Chamadas usadas: 9 de 12. [LIDO]
+
+T1 (Task 3 — accept). [LIDO]:
+- accept_ksu_root.sh EXISTE em docs/ultraroot/accept_ksu_root.sh (120 linhas). Teste self-servidor EXISTE em [artefato local, fora do repo]/sp1/test_accept_ksu.sh (L1-74).
+- Cenário A existe: fixture A.magisk (L46 do test) com ctx `u:r:magisk:s0`, KSU_HAS_KSUD=yes, UAPI=5, uid=0 -> reject (accept L62-73 e L75-83).
+- Cenário B existe: fixture B.ksu L47 com ctx `u:r:su:s0`, uid=0, uapi=5, ksud=yes -> acept 0 (accept L85-98).
+- Cenário C existe: fixture C.none L48 com sem ksud/ksudir/uapi/id -> reject (L75-83).
+- Testes extras: E.nouid (L52), G.idmagisk (L57), D (sem adb) L63-69.
+- `|| true` em accept: NÃO EXISTE (grep -c = 0). [LIDO]
+- Checagem explícita de rc: SIM, L32-37 `id_rc=$?` / `probe_rc=$?` e L40-47 (probe_rc L44-45 reprouva). Prova L32-47.
+- Decisão de extra: NÃO VERIFICADO (não rodei nada - T5).
+
+T2 (Task 4 — recovery). [LIDO]:
+- RECOVERY_SUITE.md EXISTE (17 linhas, L1-17).
+- 7 cenários. Todos têm procedimento e critério de sucesso (coluna Sucesso L7-L13).
+- Host-simuláveis pela regra do próprio arquivo (L5 "Device-gated; aqui só o doc + host-testáveis"):
+  - R-hash: Host (L7). R-slot-a: Host (L8). R-reactivate: Host (argv) + Device NOT_TESTED (L9). R-sabotage: Host (L10).
+  - Device-only: R-flash-fail (L11), R-bad-module (L12), R-bootloop (L13).
+- L14 (o plano diz "cada um com comando de reprodução e evidência") - presentes colunas Procedimento+Sucesso pra todos. [LIDO]
+
+T3 (Task 6 — paridade). [LIDO]:
+- Fixture KSU mínimo: `[artefato local, fora do repo]/sp1/fixtures/sp1-ksu-min.zip` EXISTE. Conteúdo: module.prop (id/name/version/versionCode/author) + post-fs-data.sh que escreve marcador `/data/adb/sp1-ksu-marker` (preservado). [LIDO]
+- Fixture Magisk mínimo: `[artefato local, fora do repo]/sp1/fixtures/sp1-magisk-min.zip` EXISTE. module.prop + service.sh + system/etc/sp1-magisk-marker ("sp1-magisk-marker"). [LIDO]
+- MODULE_PARITY.md EXISTE (23 linhas, L1-23) com checklist das etapas:
+  - module.prop (L14), post-fs-data.sh (L15), service.sh (L16), system.prop (L17), sepolicy.rule (L18), mount systemless (L19), .replace (L20), init-stages (L21) - 8 itens. [LIDO]
+- test_module_props.sh EXISTE (L1-52), falha na ausência de id/name/version/versionCode/author e falha extra se zip sem a data de author; has_entry exige post-fs-data.sh, service.sh, system/etc/sp1-magisk-marker. [LIDO]
+
+T4 (faltantes para Tasks 3/4/6). [DEDUZIDO + LIDO per L]:
+- Nenhum artefato faltando para tasks pedidas: accept, RECOVERY_SUITE, MODULE_PARITY, fixtures KSU/Magisk, tests. (T5: execução pendente.)
+- Possíveis gaps fora do escopo: não checados CAPABILITIES.md/COMPAT (Task5) e DEVICE_PLAN (Task7). [DEDUZIDO]
+
+T5 (execução). NÃO VERIFICADO: não rodamos nada. [LIDO]
+
+Verificação: encerrada sem alterar nada. Relatório em docs/history/reports/review_h6_sp1_tasks_2026-10-13.txt.
+Nenhuma escrita em projeto, devices ou build.
+`

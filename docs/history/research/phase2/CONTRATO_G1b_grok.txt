@@ -1,0 +1,22 @@
+PAPEL: executar o G1b — build de VALIDAÇÃO do KernelSU integrado (in-tree) no nosso kernel. Autônomo. Local, SEM device, SEM empacotar imagem, SEM insmod. Scratch/worktree SÓ em [artefato local, fora do repo]/grok/ksu-build/ (disco, nunca /tmp). NÃO modifique a árvore pristina ~/lake-build/src — trabalhe numa CÓPIA/worktree.
+
+OBJETIVO: provar (ou derrubar) que o build Kleaf aceita o KSU in-tree e que os 557 módulos de vendor continuam compatíveis.
+
+PASSOS:
+1. Isolar: cópia/worktree da árvore de kernel de ~/lake-build/src para [artefato local, fora do repo]/grok/ksu-build/. Registre como isolou.
+2. Fiar o KernelSU (commit pinado 6e38604, checkout em kernel/upstream/KernelSU) no Kconfig/Kbuild do kernel conforme o guia de integração do KSU (kernel/ do KSU entra na árvore). Documente exatamente os arquivos tocados.
+3. Forçar e CONFERIR CONFIG_KSU=y no .config final (o Kconfig do KSU tem default y — não confie, confirme no .config gerado).
+4. Rodar o MESMO build Kleaf/bazel usado no projeto, só até LINKAR o vmlinux. Se o build for pesado demais ou travar por RAM, PARE e reporte o ponto exato — resultado parcial (fiação aceita + config on + compila objetos KSU) já é informativo.
+5. Confirmar o KSU dentro do vmlinux (nm/grep de símbolo do KSU, ex.: ksu_* / símbolo de init do KSU).
+6. Rodar kernel/lake/tools/gate_kmi_crc.sh no Module.symvers resultante contra os 557 módulos (mesmos args do projeto). Registrar compared/mismatches/missing.
+
+ENTREGA: docs/history/research/phase2/G1b_integrated_build.md — passos, arquivos tocados, saída do build (ou ponto de parada), prova do KSU no vmlinux, saída do gate. Veredito: VALIDADO | BLOQUEADO(onde/por quê). Apague a worktree ao final se passar de ~10GB.
+
+BLOCO FINAL (`maestri ask "Claude Code" "<bloco>"`):
+STATUS: DONE|BLOCKED
+KLEAF_ACEITOU: sim|não(onde)
+CONFIG_KSU: y confirmado|não
+KSU_NO_VMLINUX: sim|não|não-chegou
+GATE_557: compared=.. mismatches=.. missing=.. | não-chegou
+VEREDITO: VALIDADO|BLOQUEADO
+ABERTO: <lista>

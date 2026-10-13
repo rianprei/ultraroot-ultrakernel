@@ -1,0 +1,20 @@
+PAPEL: AUDITORIA ADVERSARIAL FINAL do pacote device-ready do SuperRoot (C0.3 + manager + plano de flash), ANTES do dono flashar. Read-only, host, sem device. Você NÃO buildou o C0.3 — ataque. Scratch [artefato local, fora do repo]/codex/audit/.
+
+ALVO: C03_ksu_boot_b.img ([artefato local, fora do repo]/grok/c01-build/, sha 2977e1dc…), manager release APK (cert efb8d49f…), os relatórios phase4/C0{1,2,3}_* e C01_device_plan.md, o pacote de retorno em MASTER_PLAN.md. Referência: C0.1 bootou OK no device (uname 6.6.89-android15-8-4k, 429 módulos, dmesg rc0).
+
+LISTA DE CAÇA (achados concretos arquivo:linha/evidência; se nada, "nenhum achado" no item):
+1. BOOTLOOP: alguma diferença do C0.3 vs C0.1 (que bootou) que possa impedir boot? As edições foram KSU_VERSION 32673 + EXPECTED_SIZE/HASH (cert) + rebuild. Isso é só dado, não muda caminho de código de boot — confirme, ou aponte risco.
+2. ROOT NÃO CONCEDIDO: além de cert (efb8d49f bate) + package (me.weishu.kernelsu) + UAPI 5 + DISABLE_MANAGER off, falta algo pro "coronation" e pro `su` conceder? O ksud precisa estar presente/instalado separadamente, ou o manager APK provisiona sozinho? Documente o fluxo de install real (passo a passo) e se o plano de retorno cobre.
+3. CONFLITO COM MAGISK HERDADO: o device tem Magisk no userspace. KSU-kernel + Magisk-userspace coexistindo — algum risco de o Magisk atrapalhar a coronação do KSU, ou de boot? (no C0.1 coexistiram e bootou).
+4. FLASH/ROLLBACK: guard_hashes tem backup+C0.3; rollback = flash backup; slot B nunca A. Algum furo? O plano manda flashar C0.3 (não C0.2)?
+5. ESTADO RUIM IRRECUPERÁVEL: algum caminho em que o device fica sem boot E sem rollback? 
+6. SEGREDO: a chave/senha vazou em algum artefato versionável/relatório?
+
+ENTREGA: docs/history/research/phase4/FINAL_AUDIT_por_codex.md — achados numerados (severidade+evidência+correção) + VEREDITO: SEGURO PRO DONO FLASHAR C0.3 | CORRIGIR X ANTES.
+
+BLOCO FINAL (maestri ask "Claude Code"):
+STATUS: DONE
+VEREDITO: SEGURO|CORRIGIR(o quê)
+BOOTLOOP_RISCO: <sim/não+1linha>
+ROOT_GRANT_FLUXO: <ksud auto|passo faltando>
+ACHADOS: <n>

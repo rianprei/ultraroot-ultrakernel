@@ -1,0 +1,21 @@
+PAPEL: arquiteto da Fase 2 do SuperRoot. Autônomo, sem pedir permissão. Read-only (não compile, não flashe, não toque no device). Scratch só em [artefato local, fora do repo]/codex/ (nunca /tmp).
+
+ENTRADA (pode e deve ler): docs/history/research/phase1/PHASE1_SYNTHESIS.md, GROK_matriz_features.md, seu CODEX_core_decision.md, e a árvore ~/lake-build/src/common. Decisão de core JÁ tomada: KernelSU (LKM no nosso GKI 6.6.89).
+
+OBJETIVO: desenhar o BLUEPRINT do APK único "SuperRoot" — 1 manager + 1 core KernelSU + camadas que rodam o melhor dos 3+forks. NÃO é rodar 3 cores; é 1 core + adaptadores. Concreto e implementável, não genérico.
+
+ENTREGUE em docs/history/research/phase2/PHASE2_BLUEPRINT.md:
+1. Arquitetura em camadas (diagrama ASCII): L1 core KernelSU-LKM; L2 camada de compat de MÓDULOS (contrato module.prop/webroot/action.sh/metamount — features PORTÁVEIS #14/#15/#17 da matriz, formato Magisk + KSU); L3 manager APK + IPC; L4 UI unificada; L5 política (su/daemon/SELinux) e isolamento/ocultação.
+2. Mapa "de onde vem cada peça": por feature-alvo, qual motor é a origem (KSU/Suki/Next/APatch-KPM/Magisk) e se entra como PORT (reimplementar sob nosso core) ou ADAPT (rodar via contrato). Use a coluna "melhor origem" do grok.
+3. Para o que é ACOPLADA (su-redirect, allowlist, umount, zygisk, KPM, susfs): estratégia de REIMPLEMENTAÇÃO sob o core único (o que construir, não copiar). KPM: como hospedar comportamento sem o loader do KernelPatch.
+4. Sequência de implementação com GATES: (a) 1º build = LKM KernelSU vs nossa árvore + checagem de KMI/símbolos (estilo do nosso gate_kmi_crc); (b) validação em device SÓ sob as travas existentes (backup, fastboot_guard, slot b, NUNCA slot A, nada de flash sem 'sim' do dono); (c) marcos seguintes. Cada gate com critério de PASS.
+5. Riscos + pontos onde o DONO decide/autoriza (maestro não decide sozinho irreversível).
+Confiança por afirmação. Não invente; o que depender da matriz exaustiva do grok (em andamento) marque como "depende do fechamento das lacunas".
+
+BLOCO FINAL (rode `maestri ask "Claude Code" "<bloco>"` ao terminar):
+STATUS: DONE|BLOCKED
+ARQUIVO: docs/history/research/phase2/PHASE2_BLUEPRINT.md (<n linhas>)
+CAMADAS: <resumo L1-L5>
+PRIMEIRO_GATE: <o critério de PASS do 1º build>
+AUTORIZACOES_DONO: <lista de pontos que exigem 'sim'>
+ABERTO: <lista ou nenhum>

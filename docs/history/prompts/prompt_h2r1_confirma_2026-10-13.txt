@@ -1,0 +1,27 @@
+Objetivo: confirmar a correção H2R1, que trata dos achados 1 e 2 da sua revisão H2 (docs/history/reports/review_h2_2026-10-13.txt). Achado 1: o teste de uid repetido não distinguia checagem por uid de checagem por objeto. Achado 2: comentários em inglês num arquivo da UI, que comenta em português. Reproduzir a sabotagem S7 numa cópia nova. Somente leitura no original.
+
+Correlation id: ULTRAROOT-H2R1CONF-2026-10-13. Autor da correção: Codex #4. Revisor: você (OpenCode #2).
+
+Fatos do maestro (confira, não aceite):
+- Arquivo: ultraroot/app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt. sha256 esperado: d781799359002020aa817460f4fcf9f0481d2bba4e5c36b279435e24c6ad656e. Cópia de antes da correção: docs/history/reports/RootGrantFlow.kt.antes_H2R1.
+- Arquivo: ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt. sha256 esperado: 993637348a663fd6b28df3a76b06da78948c239e399760fa49db699765634542. O teste novo ocupa as linhas 233-242 (@Test na 233, fun na 234, assertFalse na 239).
+- Relatório do autor: docs/history/reports/h2_review_fix_2026-10-13.txt.
+- XML: app/build/test-results/testDebugUnitTest/TEST-dev.superroot.ultraroot.ui.RootGrantFlowTest.xml, 15 testes, 0 falhas (13:59:18).
+
+Escopo de leitura: os arquivos acima e o relatório. Escrita: somente docs/history/reports/review_h2r1_confirma_2026-10-13.txt (até 60 linhas) e a cópia nova docs/history/reports/copy_h2r1/ (para a sabotagem). Não editar o original.
+
+Tarefa:
+T1. diff docs/history/reports/RootGrantFlow.kt.antes_H2R1 ultraroot/app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt. Esperado: só as linhas 40 e 56 mudam. Cole a saída literal.
+T2. Reconstrução do arquivo de teste sem o bloco novo. Comando: F=ultraroot/app/src/test/java/dev/superroot/ultraroot/ui/RootGrantFlowTest.kt; { head -n 230 $F; tail -n +243 $F; } | sha256sum. Confirme as linhas 230-243 antes de usar (sed -n 230,243p $F). O sha esperado é e78ba01e418a7aa44843aa2b90cfa80a900b8d2d8454a98d5ec737a8847d9812. Se o número de linhas não bater com 230 e 243, ajuste e explique. Registre o resultado.
+T3. Leia o teste novo (sed -n 233,242p no arquivo de teste). Ele distingue checagem por uid de checagem por objeto inteiro? Responda SIM ou NÃO, e diga por quê, com o par de entrada usado.
+T4. Sabotagem S7 em cópia nova. Crie: mkdir -p docs/history/reports/tmp && rsync -a --exclude build --exclude .gradle --exclude out ultraroot/ docs/history/reports/copy_h2r1/ (se não houver rsync, use tar com as mesmas exclusões). Em copy_h2r1/app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt, na linha 31, troque `targets.map { it.uid }.toSet().size` por `targets.toSet().size`. Rode: cd docs/history/reports/copy_h2r1 && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline. Esperado: requestWithSameUidAndOtherPackageIsRefused FALHA (linha 239); requestWithRepeatedUidIsRefused continua verde. Registre a linha de falha e o total do Gradle. Se a sabotagem NÃO derrubar o teste novo, isso é achado grave: o teste não prova a regra.
+T5. Comentários: grep -n "//" ultraroot/app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt. Os dois comentários devem estar em português. Confirme também que "Close confirmation" e "Preserve completed" não aparecem mais no arquivo (grep, saída esperada NONE).
+T6. Veredito: FECHADO (achados 1 e 2 resolvidos) ou NÃO FECHADO, com o motivo.
+
+Formato: até 60 linhas. Cada afirmação com a saída que a sustenta. Sem prova: NÃO VERIFICADO.
+
+Não deve: editar o original; rodar Gradle no original; usar /tmp; abrir [chaves locais do dono, fora do repo]/; chamar subagentes. Gradle só na cópia copy_h2r1.
+
+Teto: 12 chamadas de ferramenta. Registre o número no fim.
+
+Diretivas: execute diretamente, sem pedir permissão. Responda em português do Brasil.

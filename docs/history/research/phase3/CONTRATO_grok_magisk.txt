@@ -1,0 +1,19 @@
+PAPEL: varredura de forks do Magisk (REFAZER — o agente anterior foi raso, só top 10). Autônomo, sem pedir permissão. PROIBIDO workflow/ultracode. Scratch SÓ em [artefato local, fora do repo]/grok/magisk-forks/ (nunca /tmp). ATENÇÃO gh: SEMPRE use -X GET em gh api (um POST acidental cria fork/repo por engano). Nunca crie repo.
+
+ALVO: https://github.com/topjohnwu/Magisk e forks.
+Já na matriz: Magisk oficial, Alpha(vvb2060). Mortos/ignorar: HuskyDG/magisk-files, KitsuneMagisk.
+O relatório anterior (MAGISK_forks.md) achou que 8/10 top forks têm 0 commits ahead (espelhos) e só WeaveMask(+1 ícone UI) e Magisk-Monet(+1 README) à frente — ambos triviais. CONFIRME ou REFUTE indo mais fundo.
+
+MÉTODO:
+1. gh api -X GET repos/topjohnwu/Magisk/forks -f sort=stargazers -f per_page=100 --paginate --jq ".[] | [.stargazers_count, .full_name, .pushed_at] | @tsv" | sort -rn | head -40
+2. Pros top ~40, ahead_by via gh api -X GET repos/topjohnwu/Magisk/compare/master...OWNER:BRANCH --jq .ahead_by (teste branches master/main). Clonar raso só os com ahead>0 e commits que parecem feature (não README/UI/deps/build).
+3. Pra cada feature NOVA real: nome, arquivo/commit, NOVA vs na-matriz. Fork sem feature verificável = [não-verificado].
+
+ENTREGA: SOBRESCREVA docs/history/research/phase3/MAGISK_forks.md com tabela (fork|estrelas|ahead|feature|evidência|NOVA/na-matriz) + "TOP features novas" + veredito (há ou não feature-fork viva de Magisk?).
+
+BLOCO FINAL (maestri ask "Claude Code" "<bloco>"):
+STATUS: DONE|BLOCKED
+FORKS_COM_FEATURE_NOVA: <n>
+NOVAS_vs_MATRIZ: <lista ou nenhuma>
+VEREDITO_MAGISK: <cenário vivo ou morto, 1 linha>
+ABERTO: <lista ou nenhum>

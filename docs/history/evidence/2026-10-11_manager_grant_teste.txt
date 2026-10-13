@@ -1,0 +1,29 @@
+# Evidência: teste manager-grant (2026-10-11), somente leitura + abrir app
+
+Aparelho: [redigido: ip privado]:5555 (2410FPCC5G, lake). USB WG7TPZOBHQGIMZZ5 desconectado no momento do teste.
+Passo aprovado: "sim pros 3" (abrir + grant teste). O grant NÃO foi executado: a tela não tem controle de concessão.
+
+## 1. Abrir o app
+- am/monkey: me.weishu.kernelsu, activity dev.superroot.ultraroot.MainActivity
+- dumpsys window: mCurrentFocus=Window{... me.weishu.kernelsu/dev.superroot.ultraroot.MainActivity}
+- Captura: 2026-10-11_manager_grant_tela_root_access.png
+- Tela: título "Root Access" e texto "backend indisponível"
+
+## 2. Diagnóstico de log
+- adb logcat -d -t 400 | grep -iE "ultraroot|KsuBackend|superroot|ksu|supercall": sem linhas.
+
+## 3. Aceite (accept_ksu_root.sh)
+- Antes da correção (linha 32 sem aspas externas), no aparelho:
+  rc=1, "/system/bin/sh: syntax error: unexpected 'then'"
+- Depois da correção (linhas 31, 32 e 44 com "|| true" e aspas):
+  rc=1, "REPROVA contexto magisk: uid=0(root) gid=0(root) groups=0(root) context=u:r:magisk:s0"
+  Interpretação: o su do adb ainda responde pelo Magisk. Não é aceite.
+
+## 4. Testes locais do aceite (sem aparelho)
+- Shim que junta argumentos como o adb: OLD rc=2 (erro de sintaxe); NEW rc=1 (REPROVA limpo).
+- Stub ksu (STUB_MODE=ksu, adb que junta argumentos): rc=0, "APROVA ksu serial=SERIALTEST uid=0 uapi=5"
+- Stub magisk (STUB_MODE=magisk): rc=1, "REPROVA contexto magisk: uid=0(root) gid=0(root) context=u:r:magisk:s0"
+- Sem ACCEPT_KSU_ALLOW_ADB: rc=2, stub não chamado.
+
+## Estado
+- manager-grant: NOT_TESTED. Bloqueio: app mostra "backend indisponível"; su do adb roteia pelo Magisk.
