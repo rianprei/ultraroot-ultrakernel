@@ -73,6 +73,7 @@ if [ -f "$PIN" ]; then
 fi
 
 # V6: teste nativo host (12 casos PASS)
+mkdir -p build
 if g++ -std=c++17 -Wall -Werror -I ultraroot/core-backend/src/test/native/shim -I ultraroot/core-backend/src/main/cpp \
      ultraroot/core-backend/src/test/native/fill_test.cc -o build/fill_test 2>/dev/null; then
   n=$(./build/fill_test | grep -c ' PASS$')
