@@ -16,5 +16,6 @@ Em andamento. A tabela é preenchida item a item, e o texto final substitui esta
 | U2 | FEITO | teste primeiro (stubs): `SelfUpdatePolicyTest` 13 falhas, 1 passa; implementado: 14 de 14 PASSED (projeto JVM descartável, `ultraroot/gradlew -p <scratch>/jvm test`, BUILD SUCCESSFUL); sabotagem (sem checar cert): `rejectsDivergentCert FAILED`; `:app:assembleDebug` NÃO VERIFICADO (dl.google.com 403) | ver `git log` |
 | U3 | FEITO | teste primeiro (stubs): `BackupRegistryTest` 13 de 13 FAILED; implementado: 13 PASSED, BUILD SUCCESSFUL; hash trocado → `Refused(HASH_MISMATCH)` (`swappedHashIsRefused`, `dryRunWithSwappedBytesIsRefused`) | ver `git log` |
 | U4 | FEITO | teste primeiro (stubs): `OpLogTest` 9 FAILED, 1 PASSED; implementado: 10 PASSED; senha fictícia redigida (`keyValuePasswordIsRedacted`, `cliPasswordFlagIsRedacted`), chave PEM fictícia recusada (`privateKeyMaterialIsRefused`); `MAX_BYTES = null` (UNKNOWN); sabotagem: `privateKeyMaterialIsRefused FAILED` | ver `git log` |
+| U5 | FEITO | teste primeiro (stubs): `ModulePropTest` 10 FAILED; implementado: 10 PASSED; spec `kernel/upstream/KernelSU/website/docs/guide/module.md:100-121`; malformado recusado (`BAD_ID`, `ID_MISSING`, `BAD_VERSION_CODE`, `CR_LINE_BREAK`, `NO_SEPARATOR`, `DUPLICATE_KEY`) | ver `git log` |
 
 revisão pendente
