@@ -125,11 +125,13 @@ Nesta rodada, o dono pediu commit e push direto em `main`, sem PR. O fluxo de br
 - **Fato:** `GUARD-SELFTEST: 44 passada(s), 0 falha(s)`. O ramo do backup auditado não roda: `T1-AUDITED skip`, porque a imagem fica fora do repo.
 - **Ação:** não incluir a imagem, que é do dono. Avaliar uma fixture sintética que cubra o mesmo ramo, ou manter o skip documentado no UK-5.
 
-### ERR-15: o resumo do `run_all_checks` repete a mesma causa em três linhas (ABERTO, melhoria)
+### ERR-15: o resumo do `run_all_checks` repete a mesma causa em três linhas (CORRIGIDO na branch `cloud/ultraroot-ultrakernel`, revisão pendente)
 
 - **Onde:** `kernel/lake/tools/run_all_checks.sh`, função `script_ok` e o bloco de resumo.
 - **Fato:** quando `check_docs_numbers.sh` falha no V1, o resumo também marca V68 e V77 como FAIL. `script_ok` exige código 0 do script inteiro, então a falha de um item vira falha de outros.
 - **Ação:** deixar a causa raiz visível e marcar os demais como efeito de V1. A contagem (116) e o código de saída não podem mudar.
+- **Correção (2026-10-14):** `kernel/lake/tools/run_all_checks.sh` registra os scripts de cada invariante em `script_ok` e, depois do resumo, imprime `causa raiz: <Vn>; efeitos: <Vm>, ...`. As linhas `FAIL`, a contagem e o código de saída não mudaram. Prova com V1 forçado numa cópia: `V1 FAIL`, `V68 FAIL`, `V77 FAIL`, `causa raiz: V1; efeitos: V68, V77`, `run_all_checks: FAIL (3 de 116 verificações falharam)`, código 1. No repo: `run_all_checks: PASS`, 116 linhas PASS, código 0.
+- **Achado no caminho:** neste ambiente (OpenSSL 3.0.13) o V67 falhava: `openssl req -not_before` só existe no OpenSSL 3.4 ou mais novo, e o `set -e` de `kernel/lake/tools/verify_modsig.sh` derrubava o selftest no caso 7. Correção: função `mkcert_dated` com fallback para `openssl ca -selfsign -startdate/-enddate`. Conferido à parte: cert vencido gerado pelo fallback → `Verify error: certificate has expired`; com datas válidas → `CMS Verification successful`.
 
 ### ERR-16: avisos V4 do verificador (ABERTO, não bloqueia)
 

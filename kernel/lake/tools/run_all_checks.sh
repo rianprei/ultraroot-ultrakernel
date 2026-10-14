@@ -81,7 +81,8 @@ run() { # <label> <script> [extra-arg]
 # shows an explicit PASS/OK signal. A crashed/muted script can no longer pass
 # by absence of FAIL lines, and the gate needs the string AND exit 0.
 script_ok() { # <label> <fail-pattern> -> 0 only if rc==0, no FAIL, explicit PASS/OK
-  local label="$1" pat="$2" rc
+  local label="$1" pat="$2" rc v
+  v="${pat#^}"; v="${v%% FAIL}"; LBLS[$v]+="$label"$'\n'   # ERR-15: script(s) de cada invariante
   rc="$(cat "$T/$label.rc")"
   [ "$rc" -eq 0 ] || return 1
   grep -qE "$pat" "$T/$label.out" && return 1
@@ -89,7 +90,7 @@ script_ok() { # <label> <fail-pattern> -> 0 only if rc==0, no FAIL, explicit PAS
   return 0
 }
 
-declare -A RC
+declare -A RC LBLS
 run "V1 docs numbers"          "$HERE/check_docs_numbers.sh"
 script_ok "V1 docs numbers" '^V1 FAIL' && RC[V1]=0 || RC[V1]=1
 script_ok "V1 docs numbers" '^V68 FAIL' && RC[V68]=0 || RC[V68]=1
@@ -142,6 +143,24 @@ bad=0
 for v in V1 V2 V3 V4 V5 V6 V7 V8 V9 V10 V11 V12 V13 V14 V15 V16 V17 V18 V19 V20 V21 V22 V23 V24 V25 V26 V27 V28 V29 V30 V31 V32 V33 V34 V35 V36 V37 V38 V39 V40 V41 V42 V43 V44 V45 V46 V47 V48 V49 V50 V51 V52 V53 V54 V55 V56 V57 V58 V59 V60 V61 V62 V63 V64 V65 V66 V67 V68 V69 V70 V71 V72 V73 V74 V75 V76 V77 V78 V79 V80 V81 V82 V83 V84 V85 V86 V87 V88 V89 V90 V91 V92 V93 V94 V95 V96 V97 V98 V99 V100 V101 V102 V103 V104 V105 V106 V107 V108 V109 V110 V111 V112 V113 V114 V115 GATE; do
   if [ "${RC[$v]:-1}" -eq 0 ]; then printf '%-5s PASS\n' "$v"; else printf '%-5s FAIL\n' "$v"; bad=$((bad + 1)); fi
 done
+# ERR-15: causa e efeito. Um script cobre vários invariantes; se ele falha, todos os seus
+# invariantes ficam FAIL (fail-closed, contagem inalterada). Causa = invariante com a própria
+# linha "Vn FAIL"; efeito = FAIL só porque o script compartilhado falhou.
+declare -A CAUSE EFFL
+for v in $(printf '%s\n' "${!LBLS[@]}" | sort -V); do
+  [ "${RC[$v]:-1}" -eq 0 ] && continue
+  while IFS= read -r l; do
+    [ -n "$l" ] || continue
+    if grep -qE "^$v FAIL" "$T/$l.out"; then CAUSE[$l]+=" $v"
+    elif [ "$(cat "$T/$l.rc")" -ne 0 ] || ! grep -qE 'OK|PASS' "$T/$l.out"; then EFFL[$l]+=" $v"; fi
+  done <<< "${LBLS[$v]}"
+done
+while IFS= read -r l; do
+  [ -n "$l" ] || continue
+  c="${CAUSE[$l]:-}"; c="${c# }"; c="${c// /, }"; e="${EFFL[$l]# }"
+  [ -n "$c" ] || c="script \"$l\" (código $(cat "$T/$l.rc"), sem linha Vn FAIL própria)"
+  echo "causa raiz: $c; efeitos: ${e// /, }"
+done < <(printf '%s\n' "${!EFFL[@]}" | sort)
 if [ "$bad" -eq 0 ]; then
   echo "run_all_checks: PASS (V1-V9 + aliases V10-V13 + V14-V33 + V34-V115 + gate self-test)"
   exit 0

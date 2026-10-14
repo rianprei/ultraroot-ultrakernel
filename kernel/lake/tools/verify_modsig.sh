@@ -237,10 +237,22 @@ PY
     full_case 5 "cert ausente rejeitado limpo" 1 "$work/full/img_empty.img" "$work/full/mod_ok.ko"
     mkimg "$work/full/c2.der" "$work/full/img_samecn.img"
     full_case 6 "mesmo issuer, outra chave rejeitado" 1 "$work/full/img_samecn.img" "$work/full/mod_ok.ko"
+    # Certificado com datas fixas. "openssl req -not_before/-not_after" só existe no OpenSSL >= 3.4;
+    # no 3.0 (Ubuntu 24.04) a opção não existe e o set -e derrubava o selftest. Fallback:
+    # "openssl ca -selfsign -startdate/-enddate", que existe nas duas versões.
+    mkcert_dated() { # <key> <crt> <cn> <notBefore> <notAfter>
+        if openssl req -x509 -newkey rsa:2048 -nodes -keyout "$1" -out "$2" -subj "/CN=$3/" \
+            -not_before "$4" -not_after "$5" 2>/dev/null; then return 0; fi
+        local d="$work/full/ca.$3"; mkdir -p "$d"; : > "$d/index.txt"; echo 01 > "$d/serial"
+        printf '[ca]\ndefault_ca=d\n[d]\ndatabase=%s/index.txt\nnew_certs_dir=%s\nserial=%s/serial\ndefault_md=sha256\npolicy=p\nunique_subject=no\n[p]\ncommonName=supplied\n' \
+            "$d" "$d" "$d" > "$d/ca.cnf"
+        openssl genrsa -out "$1" 2048 2>/dev/null
+        openssl req -new -key "$1" -subj "/CN=$3/" -out "$d/req.csr" 2>/dev/null
+        openssl ca -batch -config "$d/ca.cnf" -selfsign -keyfile "$1" -in "$d/req.csr" -out "$2" \
+            -startdate "$4" -enddate "$5" -notext 2>/dev/null
+    }
     # V67-EXPIRED: openssl cms -verify rejects notAfter in the past (proved: exit 4, "certificate has expired").
-    openssl req -x509 -newkey rsa:2048 -nodes -keyout "$work/full/kexp.key" \
-        -out "$work/full/cexp.crt" -subj "/CN=unittest-expired/" \
-        -not_before 20200101000000Z -not_after 20200102000000Z 2>/dev/null
+    mkcert_dated "$work/full/kexp.key" "$work/full/cexp.crt" "unittest-expired" 20200101000000Z 20200102000000Z
     openssl x509 -in "$work/full/cexp.crt" -outform DER -out "$work/full/cexp.der" 2>/dev/null
     openssl cms -sign -binary -in "$work/full/content.bin" -outform DER \
         -signer "$work/full/cexp.crt" -inkey "$work/full/kexp.key" -nocerts \
@@ -249,9 +261,7 @@ PY
     mkimg "$work/full/cexp.der" "$work/full/img_exp.img"
     full_case 7 "cert expirado rejeitado" 1 "$work/full/img_exp.img" "$work/full/mod_exp.ko" # V67-EXPIRED
     # V67-NOTYET: notBefore in the future is rejected ("certificate is not yet valid").
-    openssl req -x509 -newkey rsa:2048 -nodes -keyout "$work/full/kfut.key" \
-        -out "$work/full/cfut.crt" -subj "/CN=unittest-future/" \
-        -not_before 20300101000000Z -not_after 20310101000000Z 2>/dev/null
+    mkcert_dated "$work/full/kfut.key" "$work/full/cfut.crt" "unittest-future" 20300101000000Z 20310101000000Z
     openssl x509 -in "$work/full/cfut.crt" -outform DER -out "$work/full/cfut.der" 2>/dev/null
     openssl cms -sign -binary -in "$work/full/content.bin" -outform DER \
         -signer "$work/full/cfut.crt" -inkey "$work/full/kfut.key" -nocerts \
