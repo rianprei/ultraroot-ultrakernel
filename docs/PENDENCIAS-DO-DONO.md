@@ -36,5 +36,5 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 ## UltraKernel
 
 - **Revisão do inventário (UK-6):** `docs/ultrakernel/UK6-INVENTARIO-TUNABLES.md`. Libera a escolha de opções para o UK-7.
-- **TRIM_UNUSED_KSYMS:** o build deixa a opção `n`, e o config do aparelho tem `y`. Decidir se o build deve igualar o aparelho. Se sim, o gate de KMI (UK-4) roda de novo. Detalhes na seção "Diferenças" do inventário.
+- **TRIM_UNUSED_KSYMS:** o build deixa a opção `n`, e o config do aparelho tem `y`. Decidir se o build deve igualar o aparelho. Se sim, o gate de KMI (UK-4) roda de novo. Detalhes na seção "Diferenças" do inventário. Proposta de mudança no build `make`: `docs/ultrakernel/UK2-TRIM-PROPOSTA.md`.
 - **Variante do aparelho (UK-0):** o modelo `2410FPCC5G` tem final `5G`, e o pedido fala em 4G. Confirmar qual é o aparelho antes de qualquer build para ele.

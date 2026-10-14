@@ -104,6 +104,7 @@ Nesta rodada, o dono pediu commit e push direto em `main`, sem PR. O fluxo de br
 - **Fato:** o gate de KMI passa (2309 símbolos, 0 divergências, `docs/history/reports/uk4_gate_kmi_crc_2026-10-13.txt`). Com a opção desligada, o kernel exporta o conjunto completo de símbolos. No aparelho, ela está ligada.
 - **NÃO VERIFICADO:** qual passo do build do aparelho liga a opção. O `BUILD.bazel` do delta é do Kleaf, e o workspace dele não está no repo.
 - **Ação do agente:** procurar no repo o que liga o trim no build do aparelho. Propor a mudança no build `make`. Aplicar só com a aprovação do dono, e depois rodar o gate de novo.
+- **Investigação (2026-10-14, agente de nuvem):** feita em `docs/ultrakernel/UK2-TRIM-PROPOSTA.md`. `trim_nonlisted_kmi: True` em `kernel/common/BUILD.bazel:154`; config do aparelho com `CONFIG_UNUSED_KSYMS_WHITELIST="abi_symbollist.raw"` (`kernel/lake/data/official-kernel_aarch64.config:837`). A união das 32 listas `android/abi_gki_aarch64*` reconstruída no host tem 8962 símbolos, o mesmo número do `abi_symbollist.raw` oficial (`kernel/lake/docs/research/CODEX2_kleaf_repro.md:50`). A regra do Kleaf que faz a tradução está fora do repo: NÃO VERIFICADO. Aplicar continua DECISÃO DO DONO.
 
 ### ERR-12: variante do aparelho, 4G ou 5G (DECISÃO DO DONO)
 
