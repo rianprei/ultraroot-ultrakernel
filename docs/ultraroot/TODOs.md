@@ -288,7 +288,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: KsuBackend · Device-gate: sim 
 ### KSU-MOD: sistema de módulos em `/data/adb/modules`
 IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime KSU · Device-gate: sim · Origem: KernelSU `6e386044` `website/docs/guide/module.md:8` · Aceite: fixture executa script e prop sem metamódulo
 - [ ] Instalar ZIP; gerenciar; ativar, desativar e remover
-- [ ] Layout `/data/adb/modules` e `module.prop`
+- [~] Layout `/data/adb/modules` e `module.prop` — leitura de `module.prop` em `ultraroot/core-backend/src/main/java/dev/superroot/core/ModuleProp.kt`, `ModulePropTest` 10 PASSED (2026-10-14, host: `ultraroot/gradlew -p <scratch>/jvm test`, 58 de 58 PASSED); layout no aparelho NÃO VERIFICADO
 - [ ] `customize.sh`, `post-fs-data.sh`, `service.sh`
 - [ ] `system.prop` e `sepolicy.rule`
 - [ ] Diretórios de arquivos do sistema (sem mount de `/system`, ver KSU-META)
@@ -460,29 +460,29 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: Performance Engine · Device-ga
 
 ### UR-BACKUP: acervo único de backup de imagem
 IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: guard e acervo local · Device-gate: sim · Origem: requisito do spec, contrato de dados rev.6 · Aceite: backup restaura em dry-run de hash
-- [ ] Guardar path, hash, slot de origem e data
-- [ ] Validar backup antes de operação de alto risco
-- [ ] Dry-run de restauração conferindo hash
+- [~] Guardar path, hash, slot de origem e data — formato e parse em `ultraroot/core-backend/src/main/java/dev/superroot/core/BackupRegistry.kt` (`formatParseRoundTrip`, `parseRejectsMalformed`); gravação no aparelho NÃO VERIFICADO
+- [~] Validar backup antes de operação de alto risco — `validateBeforeRisk` com teste (`swappedHashIsRefused`, `missingFileIsRefused`); integração NÃO VERIFICADO
+- [x] Dry-run de restauração conferindo hash — `dryRunMatchesHashAndWritesNothing`, `dryRunWithSwappedBytesIsRefused` (2026-10-14, host: `ultraroot/gradlew -p <scratch>/jvm test`, 58 de 58 PASSED)
 - [ ] Alvo de rollback: `boot_b` no lake; em outros devices, o slot detectado
 - [ ] Detectar slot ativo antes de operar; bloquear o slot errado
-- [ ] Lake: nunca slot A (exceção documentada do POCO C75)
+- [~] Lake: nunca slot A (exceção documentada do POCO C75) — regra em `validateBeforeRisk` (`slotAOnLakeIsRefusedEvenWithGoodHash`); integração NÃO VERIFICADO
 - [ ] Um único acervo: sem segundo repositório de imagem
 
 ### UR-LOG: acervo único de log
 IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: control plane · Device-gate: não · Origem: requisito do spec, contrato de dados rev.6 · Aceite: uma operação gera uma linha; as outras telas não criam arquivo
-- [ ] Uma linha por operação; as telas mostram recortes
-- [ ] Nunca gravar SuperKey, senha de keystore ou bytes de chave privada
+- [~] Uma linha por operação; as telas mostram recortes — formatador em `ultraroot/core-backend/src/main/java/dev/superroot/core/OpLog.kt` (`oneLinePerOperation`); arquivo e telas NÃO VERIFICADO
+- [x] Nunca gravar SuperKey, senha de keystore ou bytes de chave privada — no formatador: `keyValuePasswordIsRedacted`, `cliPasswordFlagIsRedacted`, `privateKeyMaterialIsRefused` (2026-10-14, host: `ultraroot/gradlew -p <scratch>/jvm test`, 58 de 58 PASSED)
 - [ ] Segredos fora de interfaces públicas (UI, CLI, WebUI)
-- [ ] Retenção até o usuário limpar; teto em bytes = UNKNOWN até medir
+- [~] Retenção até o usuário limpar; teto em bytes = UNKNOWN até medir — `OpLog.MAX_BYTES = null` (`byteCeilingIsUnknown`); retenção real NÃO VERIFICADO
 - [ ] Rollback de configuração não apaga o log
 
 ### UR-SELFUPDATE: atualização do APK do UltraRoot
 IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: manager UltraRoot · Device-gate: sim · Origem: spec §4.0 rev.6 · Aceite: APK com outro cert é recusado e o app antigo continua
 - [ ] Procurar APK mais novo em origem configurada pelo usuário
-- [ ] Aceitar só `me.weishu.kernelsu` com cert sha256 `efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9`
-- [ ] Cert divergente ou falha de instalação: o APK anterior permanece instalado
-- [ ] Não apagar a cópia do último APK aceito antes da confirmação
-- [ ] Update inválido não conta como sucesso
+- [x] Aceitar só `me.weishu.kernelsu` com cert sha256 `efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9` — regra pura em `ultraroot/core-backend/src/main/java/dev/superroot/core/SelfUpdatePolicy.kt`, `SelfUpdatePolicyTest` 14 PASSED (2026-10-14, host: `ultraroot/gradlew -p <scratch>/jvm test`, 58 de 58 PASSED); tela e instalação NÃO VERIFICADO
+- [~] Cert divergente ou falha de instalação: o APK anterior permanece instalado — estado lógico coberto (`rejectedUpdateKeepsPreviousApkAndIsNotSuccess`, `failedInstallKeepsPreviousApkAndCopy`); instalação real NÃO VERIFICADO
+- [~] Não apagar a cópia do último APK aceito antes da confirmação — regra coberta (`confirmedInstallReplacesAndOnlyThenFreesOldCopy`); arquivo real NÃO VERIFICADO
+- [x] Update inválido não conta como sucesso — `acceptedButNotConfirmedIsNotSuccess`, `confirmedInstallOfRejectedCandidateStillFails` (2026-10-14, host: `ultraroot/gradlew -p <scratch>/jvm test`, 58 de 58 PASSED)
 
 ### UR-EXT-SDK: SDK de adapters e módulos
 IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: SDK · Device-gate: sim · Origem: spec §3 · Aceite: adapter de teste registra e sai sem deixar policy
@@ -523,10 +523,10 @@ Cada capacidade precisa de ID antes de implementar (spec §4). Os IDs abaixo for
 - [ ] Instalação de pacotes locais; importação offline
 - [ ] Ativar, desativar, remover, atualizar; rollback quando tecnicamente possível
 - [ ] Metadados, dependências e conflitos
-- [ ] Classificação por backend e formato; requisitos de kernel, Android e ABI
+- [~] Classificação por backend e formato; requisitos de kernel, Android e ABI — backend e formato KSU em `ultraroot/core-backend/src/main/java/dev/superroot/core/ModulePackageClassifier.kt`, `ModulePackageClassifierTest` 11 PASSED (2026-10-14, host: `ultraroot/gradlew -p <scratch>/jvm test`, 58 de 58 PASSED); Magisk, APatch e requisitos NÃO VERIFICADO
 - [ ] Indicador de compatibilidade verificada
 - [ ] Executar a ação do módulo; abrir a WebUI
-- [ ] Proteção contra archive malformado; verificação de hash; assinatura criptográfica quando houver
+- [~] Proteção contra archive malformado; verificação de hash; assinatura criptográfica quando houver — archive malformado e zip slip recusados (`zipSlipIsRefused`, `garbageBytesAreRefused`); hash e assinatura NÃO VERIFICADO
 - [ ] Repositórios externos configuráveis; política de confiança por repositório; atualização de metadados
 - [ ] Avisos para funções que dependem de scripts, mounts ou hooks exclusivos
 - [ ] Logs da instalação de módulo: UR-LOG
