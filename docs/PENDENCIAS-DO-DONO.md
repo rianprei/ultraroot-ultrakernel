@@ -23,6 +23,7 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 
 - **Commit do lake:** "sim, commitar" para `c8e7812` (hoje só local).
 - **Push do lake:** "sim, push", depois de revisão brutal do diff.
+- **PATHMAP do lake (ERR-18, K5):** o commit `c8e7812` não existe no ambiente de nuvem (`git cat-file -t c8e7812` → `fatal: Not a valid object name c8e7812`). Pedido: rodar no clone do lake `git -C <clone do lake> archive c8e7812 | tar -x -C <scratch>/lake-c8e7812` e `diff -r <scratch>/lake-c8e7812 kernel/lake`, e colar em `docs/history/PATHMAP.md` as reescritas de caminho, por arquivo e por tipo, sem os e-mails.
 - **Diff de trabalho:** `kernel/lake/pending/diff-nao-commitado-2026-10-13.diff` não está commitado. Decidir se entra.
 
 ## Repo

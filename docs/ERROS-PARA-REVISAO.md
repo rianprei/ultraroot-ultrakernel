@@ -143,12 +143,13 @@ Nesta rodada, o dono pediu commit e push direto em `main`, sem PR. O fluxo de br
 - **Fato:** o package é o do KernelSU. O APK de debug usa a assinatura de debug padrão do AGP, que é diferente da do manager instalado no aparelho do dono. Instalar por cima falha, e desinstalar exige a frase do dono.
 - **Ação:** não instalar APK de debug no aparelho. Qualquer instalação é o passo D1 ou D4 e depende da frase exata do dono.
 
-### ERR-18: cópia do lake diverge do commit `c8e7812` em seis arquivos (ABERTO)
+### ERR-18: cópia do lake diverge do commit `c8e7812` em seis arquivos (ABERTO; README corrigido, PATHMAP BLOQUEADA)
 
 - **Onde:** `kernel/lake/docs/research/CODEX2_kleaf_repro.md`, `kernel/lake/docs/research/CODEX4_dew_tree.md`, `kernel/lake/docs/research/raw/FIX8_codex_report.md`, `kernel/lake/docs/research/raw/FIX9_codex_report.md`, `kernel/lake/docs/research/raw/FIX11_codex_report.md` e `kernel/lake/docs/research/README.md`.
 - **Fato:** há dois tipos de diferença. Uma é a redação de e-mails de autor de commit, registrada em `docs/history/REDACOES.txt`. A outra é a reescrita de caminhos, como o caminho do repo do lake (`<HOME>/...poco-c75-lake-kernel`), que virou `<HOME>/kernel/lake`. Além disso, `kernel/lake/pending/` não existe em `c8e7812`, e isso é esperado. O `kernel/lake/docs/research/README.md` diz "unedited output", e a cópia do repo não é.
 - **Prova:** `git -C <clone do lake> archive c8e7812`, comparado com `kernel/lake/` por `diff -r`.
 - **Ação:** registrar as reescritas de caminho em `docs/history/PATHMAP.md`, ou ajustar o `kernel/lake/docs/research/README.md` para dizer que a cópia tem reescritas. Não restaurar os e-mails.
+- **Resultado (2026-10-14, agente de nuvem):** parcial. O `kernel/lake/docs/research/README.md` agora declara que a cópia do repo tem reescritas de caminho e e-mails redigidos, e mantém a exceção que já existia. A PATHMAP está BLOQUEADA: `git cat-file -t c8e7812` → `fatal: Not a valid object name c8e7812`. O pedido do diff ficou em `docs/PENDENCIAS-DO-DONO.md`, seção Lake. Os seis arquivos listados acima vêm de afirmação do dono e não foram verificados aqui.
 
 ### ERR-19: commit do lake `c8e7812` não publicado (DECISÃO DO DONO)
 
