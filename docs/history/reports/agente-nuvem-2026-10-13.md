@@ -13,5 +13,6 @@ Em andamento. A tabela é preenchida item a item, e o texto final substitui esta
 | K3 | FEITO | real: `T1-AUDITED skip`, `44 passada(s), 0 falha(s)`, código 0; `T1_SYNTH=1`: `T1-AUDITED-SYNTH: 3 de 3 caso(s) OK`, código 0; sabotagem: `divergem`, `44 passada(s), 1 falha(s)`, código 1 | ver `git log` |
 | K6 | FEITO | `bash tools/verify_repo.sh`: antes `980 referências` (982 com os arquivos novos), depois `32 referências`, `VERIFICADOR OK`; sabotagem em `README.md` → `V4 link ausente`, `VERIFICADOR FALHOU` | ver `git log` |
 | K7 | FEITO (proposta) | `docs/ultrakernel/UK7-PROPOSTA.md`; `olddefconfig` com `CONFIG_DEFAULT_BBR=y` → `rc=0`; diff: `CONFIG_DEFAULT_TCP_CONG="cubic"` → `"bbr"` | ver `git log` |
+| U2 | FEITO | teste primeiro (stubs): `SelfUpdatePolicyTest` 13 falhas, 1 passa; implementado: 14 de 14 PASSED (projeto JVM descartável, `ultraroot/gradlew -p <scratch>/jvm test`, BUILD SUCCESSFUL); sabotagem (sem checar cert): `rejectsDivergentCert FAILED`; `:app:assembleDebug` NÃO VERIFICADO (dl.google.com 403) | ver `git log` |
 
 revisão pendente

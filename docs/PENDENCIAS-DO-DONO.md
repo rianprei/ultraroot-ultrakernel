@@ -34,6 +34,12 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 - **E-mail pessoal em três commits publicados (decisão sua):** `901a32718`, `739838c3a` e `0f3fbe3c6` têm o seu e-mail pessoal no autor. Trocar isso exige reescrever o histórico público, com force push. Não faço sem a frase "sim, reescrever histórico". Detalhes em `docs/ERROS-PARA-REVISAO.md`, ERR-03.
 - **Fluxo de PR (decisão sua):** o `AGENTS.md` diz branch e PR. Nesta rodada, você pediu commit direto em `main`. Detalhes em `docs/ERROS-PARA-REVISAO.md`, ERR-20.
 
+## Ambiente do agente de nuvem (2026-10-14)
+
+- **clang r510928:** `android.googlesource.com` recusado pelo proxy (`curl: (56) CONNECT tunnel failed, response 403`). Builds da rodada usaram o clang 18.1.3 do sistema. Liberar o host no ambiente, ou entregar o toolchain, para repetir K1 com o clang pinado.
+- **SDK Android e AGP:** `dl.google.com` recusado (`CONNECT tunnel failed, response 403`); `./gradlew :app:assembleDebug` falha com `HTTP 403: https://dl.google.com/dl/android/maven2/com/android/application/com.android.application.gradle.plugin/9.4.1/...` e `HTTP 429` no Maven Central. `:core-backend` (módulo Android) e `:app:assembleDebug` ficam NÃO VERIFICADOS nesta rodada; a lógica pura nova foi testada num projeto Kotlin-JVM descartável que aponta para os arquivos do repo.
+- **JDK no `ultraroot/gradle.properties`:** `org.gradle.java.home=/usr/lib/jvm/java-21-openjdk` não existe neste ambiente (`Java home supplied is invalid`); aqui o caminho é `java-21-openjdk-amd64`. Decidir se o caminho sai do arquivo versionado.
+
 ## UltraKernel
 
 - **Revisão do inventário (UK-6):** `docs/ultrakernel/UK6-INVENTARIO-TUNABLES.md`. Libera a escolha de opções para o UK-7.
