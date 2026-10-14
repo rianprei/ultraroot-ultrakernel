@@ -391,6 +391,21 @@ T1_IMG=""
 if [ -n "$T1_DIR" ]; then
   T1_IMG="$T1_DIR/boot_b.img"
 fi
+# ERR-14: fixture sintética do ramo auditado, só com a variável de teste T1_SYNTH=1.
+# Sem ela, imagem e hash são os do backup real (acima), intocados. T1_HASH_OVERRIDE só vale
+# com T1_SYNTH=1; T1_SYNTH_SABOTAGE=1 troca um byte depois do hash (o ramo deve falhar).
+T1_LABEL='backup 3890fb96…829fc7'
+if [ "${T1_SYNTH:-0}" = 1 ]; then
+  T1_IMG="$BASE/t1_synth_boot_b.img"
+  cp -- "$GOODIMG" "$T1_IMG"
+  T1_HASH_OVERRIDE="${T1_HASH_OVERRIDE:-$(sha256sum "$T1_IMG" | cut -d' ' -f1)}"
+  T1_HASH="$T1_HASH_OVERRIDE"
+  T1_LABEL='fixture sintética'
+  if [ "${T1_SYNTH_SABOTAGE:-0}" = 1 ]; then
+    python3 -c "import sys; p=sys.argv[1]; d=bytearray(open(p,'rb').read()); d[4096]^=1; open(p,'wb').write(bytes(d))" "$T1_IMG"
+  fi
+  echo "T1-AUDITED synthetic hash=$T1_HASH sabotage=${T1_SYNTH_SABOTAGE:-0}"
+fi
 if [ -n "$T1_IMG" ] && [ -f "$T1_IMG" ]; then
   t1_got="$(sha256sum "$T1_IMG" | cut -d' ' -f1)"
   t1_sz="$(stat -c%s -- "$T1_IMG")"
@@ -398,9 +413,12 @@ if [ -n "$T1_IMG" ] && [ -f "$T1_IMG" ]; then
   if [ "$t1_got" = "$T1_HASH" ] && [ "$t1_sz" = "67108864" ] && [ "$t1_mag" = "ANDROID!" ]; then
     T1_HASHES="$BASE/t1_audited.sha256"
     printf '%s\n' "$T1_HASH" > "$T1_HASHES"
-    t1_run "backup 3890fb96…829fc7 + 4000000" pass "partition-size:boot_b: 4000000" "$T1_HASHES" "$T1_IMG"
+    t1_before="$t1_fail"
+    t1_run "$T1_LABEL + 4000000" pass "partition-size:boot_b: 4000000" "$T1_HASHES" "$T1_IMG"
     t1_run "backup com hash trocado recusa" deny "partition-size:boot_b: 4000000" "$BAD_HASHES" "$T1_IMG"
     t1_run "backup com partição 3ffffff recusa" deny "partition-size:boot_b: 3ffffff" "$T1_HASHES" "$T1_IMG"
+    # contagem separada: os casos T-1 não entram no total GUARD-SELFTEST (44)
+    [ "${T1_SYNTH:-0}" = 1 ] && printf 'T1-AUDITED-SYNTH: %s de 3 caso(s) OK\n' "$((3 - (t1_fail - t1_before)))"
   else
     printf '### T-1 backup presente mas hash/tamanho/magic divergem\n  => FALHA\n\n'
     t1_fail=$((t1_fail + 1))

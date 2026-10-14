@@ -119,11 +119,13 @@ Nesta rodada, o dono pediu commit e push direto em `main`, sem PR. O fluxo de br
 - **NÃO VERIFICADO:** a causa dos 1153 bytes.
 - **Ação:** achar a causa. Listar os offsets diferentes e identificar as strings ou dados neles. Se for timestamp, usuário ou host do build, testar `KBUILD_BUILD_TIMESTAMP`, `KBUILD_BUILD_USER` e `KBUILD_BUILD_HOST` fixos, e comparar duas compilações. Registrar o resultado neste item.
 
-### ERR-14: caso T-1 contra o backup auditado é pulado no selftest do guard (ABERTO, documentado)
+### ERR-14: caso T-1 contra o backup auditado é pulado no selftest do guard (CORRIGIDO com fixture sintética na branch `cloud/ultraroot-ultrakernel`, revisão pendente)
 
 - **Onde:** `kernel/lake/tools/selftest_fastboot_guard.sh` (ramo T1-AUDITED) e `docs/history/reports/uk5_selftest_fastboot_guard_2026-10-13.txt`.
 - **Fato:** `GUARD-SELFTEST: 44 passada(s), 0 falha(s)`. O ramo do backup auditado não roda: `T1-AUDITED skip`, porque a imagem fica fora do repo.
 - **Ação:** não incluir a imagem, que é do dono. Avaliar uma fixture sintética que cubra o mesmo ramo, ou manter o skip documentado no UK-5.
+- **Correção (2026-10-14):** `kernel/lake/tools/selftest_fastboot_guard.sh` aceita a variável de teste `T1_SYNTH=1`, que copia a imagem sintética do selftest para uma fixture e usa o hash dela (`T1_HASH_OVERRIDE` só vale com `T1_SYNTH=1`). Sem a variável, o caminho real e a constante `T1_HASH` ficam intocados. Saídas: sem variável, `T1-AUDITED skip` e `GUARD-SELFTEST: 44 passada(s), 0 falha(s)`, código 0. Com `T1_SYNTH=1`: `T1-AUDITED-SYNTH: 3 de 3 caso(s) OK`, `T-1 pronto: sim`, `GUARD-SELFTEST: 44 passada(s), 0 falha(s)`, código 0. Com `T1_SYNTH=1 T1_SYNTH_SABOTAGE=1` (um byte trocado no offset 4096 depois do hash): `T-1 backup presente mas hash/tamanho/magic divergem`, `T-1 pronto: não`, `GUARD-SELFTEST: 44 passada(s), 1 falha(s)`, código 1.
+- **Contagem:** o total continua 44, porque `t1_run` não soma em `pass` (conta só em `t1_fail`). Os três casos do ramo (aceite, hash trocado, partição 3ffffff) aparecem na linha separada `T1-AUDITED-SYNTH`.
 
 ### ERR-15: o resumo do `run_all_checks` repete a mesma causa em três linhas (CORRIGIDO na branch `cloud/ultraroot-ultrakernel`, revisão pendente)
 

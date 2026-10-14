@@ -10,5 +10,6 @@ Em andamento. A tabela é preenchida item a item, e o texto final substitui esta
 | K5 | BLOQUEADO (PATHMAP); README corrigido | `git cat-file -t c8e7812` → `fatal: Not a valid object name c8e7812` | ver `git log` |
 | U1 | FEITO | antes: `CODE-PATHS: ok=9 falta=1 externo=4 elidido=2`, código 1; depois: `CODE-PATHS: ok=10 falta=0 externo=4 elidido=2`, código 0 | ver `git log` |
 | K4 | FEITO | cópia com V1 forçado: `causa raiz: V1; efeitos: V68, V77`, `FAIL (3 de 116 ...)`, código 1; repo: `run_all_checks: PASS`, 116 PASS, código 0 | ver `git log` |
+| K3 | FEITO | real: `T1-AUDITED skip`, `44 passada(s), 0 falha(s)`, código 0; `T1_SYNTH=1`: `T1-AUDITED-SYNTH: 3 de 3 caso(s) OK`, código 0; sabotagem: `divergem`, `44 passada(s), 1 falha(s)`, código 1 | ver `git log` |
 
 revisão pendente
