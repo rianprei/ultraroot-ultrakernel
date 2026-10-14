@@ -16,7 +16,7 @@ Raízes das citações: checkout KSU em kernel/upstream/KernelSU; árvore de ker
 
 3. Preservar o Kbuild do pin. Ele já lista os objetos e contém obj-$(CONFIG_KSU) += kernelsu.o (KernelSU/kernel/Kbuild:1-51,91). O Kconfig declara KSU como tristate, dependente de KPROBES && EXT4_FS, com default y (KernelSU/kernel/Kconfig:3-12). Com CONFIG_KSU=y, obj-y inclui os objetos no vmlinux; o KSU não é um kernelsu.ko.
 
-4. Fixar a opção para o target GKI com um arquivo novo common/arch/arm64/configs/kernelsu.fragment contendo CONFIG_KSU=y. No mapa target_configs["kernel_aarch64"] em common/BUILD.bazel:149-160, acrescentar "defconfig_fragments": ["arch/arm64/configs/kernelsu.fragment"]. Kleaf aplica defconfig_fragments depois de make defconfig e valida os fragmentos contra o .config (build/kernel/kleaf/docs/kernel_config.md:31-46; docs/api_reference/kernel.md:1209). Não escrever CONFIG_KSU=y diretamente em gki_defconfig: check_defconfig compara savedefconfig com esse arquivo, e o símbolo default y é omitido (G1b_integrated_build.md:59). A fragmentação proposta ainda precisa passar pelo config target; G1b provou somente o caminho via default. **Confiança alta na API Kleaf; média na mudança até executá-la.**
+4. Fixar a opção para o target GKI com um arquivo novo common/arch/arm64/configs/kernelsu.fragment contendo CONFIG_KSU=y. No mapa target_configs["kernel_aarch64"] em common/BUILD.bazel:149-160, acrescentar "defconfig_fragments": ["arch/arm64/configs/kernelsu.fragment"]. Kleaf aplica defconfig_fragments depois de make defconfig e valida os fragmentos contra o .config (build/kernel/kleaf/docs/kernel_config.md:31-46; [fora do repo] docs/api_reference/kernel.md:1209). Não escrever CONFIG_KSU=y diretamente em gki_defconfig: check_defconfig compara savedefconfig com esse arquivo, e o símbolo default y é omitido (G1b_integrated_build.md:59). A fragmentação proposta ainda precisa passar pelo config target; G1b provou somente o caminho via default. **Confiança alta na API Kleaf; média na mudança até executá-la.**
 
 5. Não é necessário adicionar uma lista srcs para o kernel/ do KSU: common_kernel_sources inclui as fontes sob common/ com native.glob(["**"]). O edit Bazel necessário é acrescentar o fragmento à configuração de kernel_aarch64; os fontes têm de estar dentro de common/ (common/BUILD.bazel:149-160; common_kernels.bzl:526-540).
 
@@ -26,7 +26,7 @@ Raízes das citações: checkout KSU em kernel/upstream/KernelSU; árvore de ker
 
 KernelSU/Cargo.toml:1-9 mostra userspace/ksud e userspace/ksuinit como crates do workspace. O justfile constrói ksud para aarch64-linux-android, copia-o para manager/app/src/main/jniLibs/arm64-v8a/libksud.so e constrói o manager APK via Gradle (KernelSU/justfile:4-9). O app busca libksud.so em applicationInfo.nativeLibraryDir (manager/app/.../KsuCli.kt:39-41). ksud embute assets da pasta AArch64 (userspace/ksud/src/assets.rs:43-50).
 
-Portanto, o alvo Kleaf não entrega o APK único. A etapa Android precisa empacotar o userspace do mesmo pin e integrar a interface/app do SuperRoot. Isso não é feito pelo build do kernel. Para o caminho in-tree, ksud deve detectar o KSU já carregado e pular o fallback kernelsu.ko (userspace/ksud/src/late_load.rs:43-68). A integração dessa versão de APK ainda não foi compilada nem executada. **Confiança alta na separação kernel/userspace; baixa para o APK integrado até validação.**
+Portanto, o alvo Kleaf não entrega o APK único. A etapa Android precisa empacotar o userspace do mesmo pin e integrar a interface/app do SuperRoot. Isso não é feito pelo build do kernel. Para o caminho in-tree, ksud deve detectar o KSU já carregado e pular o fallback kernelsu.ko (userspace/ksud/src/late_load.rs:43-68). A integração dessa versão de APK ainda não foi compilada nem executada. **Confiança alta na separação [fora do repo] kernel/userspace; baixa para o APK integrado até validação.**
 
 ## 2. Assinatura e símbolos
 
@@ -44,7 +44,7 @@ gate_kmi_crc.sh agora é apenas uma etapa de compatibilidade dos imports do corp
 |---|---|
 | C01-CFG | .config do build final tem exatamente CONFIG_KSU=y, CONFIG_KPROBES=y e CONFIG_EXT4_FS=y; keyring/cert Google preservados. Registrar caminho e hash dos artefatos. |
 | C01-LINK | llvm-nm --defined-only vmlinux encontra pelo menos um símbolo definido que começa com ksu_; confirmar também ksu_syscall_hook_manager_init se presente. Guardar hash do vmlinux. |
-| C01-KMI | tools/gate_kmi_crc.sh recebe symvers do build KSU e retorna PASS/exit 0; exigir 557 arquivos, 370 módulos únicos e zero mismatches, missing_exports, conflicting_crcs, export_type_mismatches, namespace_mismatches e unresolved. Histórico de controle/cert: compared=2309, mismatches=0, missing_exports=0 (G1b_integrated_build.md:109). |
+| C01-KMI | [fora do repo] tools/gate_kmi_crc.sh recebe symvers do build KSU e retorna PASS/exit 0; exigir 557 arquivos, 370 módulos únicos e zero mismatches, missing_exports, conflicting_crcs, export_type_mismatches, namespace_mismatches e unresolved. Histórico de controle/cert: compared=2309, mismatches=0, missing_exports=0 (G1b_integrated_build.md:109). |
 | C01-ABI | Produzir diff de config e ABI/KMI contra baseline e justificar cada diferença; sem drift sem explicação (PHASE2_ADJUSTMENTS.md:47). |
 | C01-VM | Não há vermagic de kernelsu.ko para comparar. Extrair UTS_RELEASE e vermagic completo do kernel final; comparar módulo a módulo com o conjunto exato de system/vendor modules destinado a este boot. Falha qualquer incompatibilidade de release, SMP, preempt, unload, modversions ou arquitetura sem exceção justificada. O gate CRC atual não faz isso. |
 | C01-SIG | Preservar configuração/certificado Google e confirmar lista X.509 no build; no boot, não aceitar rejeição/erro de assinatura de módulos vendor. Não deduzir sig_ok só do .config. |
@@ -52,7 +52,7 @@ gate_kmi_crc.sh agora é apenas uma etapa de compatibilidade dos imports do corp
 | C01-DMESG | dmesg-accept combina ausência de erros novos com marcadores positivos de init e registro dos hooks, listados abaixo. |
 | C01-DEVICE | Boot e checks T3 em B passam: dmesg, Wi-Fi, Bluetooth, su e módulos vendor; imagem testada == empacotada. |
 
-O gate_kmi_crc.sh valida CRCs, providers, export_type e namespace para o corpus (tools/gate_kmi_crc.sh:1-15,41-72,89-101). PASS nele não prova KSU no vmlinux nem que a imagem bootada é a mesma inspecionada.
+O gate_kmi_crc.sh valida CRCs, providers, export_type e namespace para o corpus ([fora do repo] tools/gate_kmi_crc.sh:1-15,41-72,89-101). PASS nele não prova KSU no vmlinux nem que a imagem bootada é a mesma inspecionada.
 
 Para a checagem build-side, CONFIG, VMLINUX e SYMVERS devem apontar para outputs da mesma execução de //common:kernel_aarch64. Executar no host de build futuro, com scratch controlado:
 
@@ -65,19 +65,19 @@ Para a checagem build-side, CONFIG, VMLINUX e SYMVERS devem apontar para outputs
     grep -Fx 'CONFIG_SYSTEM_TRUSTED_KEYRING=y' "$CONFIG"
     grep -Fx 'CONFIG_SYSTEM_TRUSTED_KEYS="google_gki_ab13771415_modsign_cert.pem"' "$CONFIG"
     llvm-nm --defined-only "$VMLINUX" | awk '$3 ~ /^ksu_/ { found=1 } END { exit !found }'
-    tools/gate_kmi_crc.sh "$SYMVERS"
+    [fora do repo] tools/gate_kmi_crc.sh "$SYMVERS"
 
 O exit code do gate KMI precisa ser zero e a saída precisa satisfazer todos os contadores de C01-KMI. As variáveis não devem misturar outputs de dois Bazel output roots.
 
 ### vermagic
 
-G1a reportou UTS_RELEASE local 6.6.89-android15-8-4k e 6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k como referência (G1a_feasibility.md:7-12,106-114). Essa diferença deixa de ser o vermagic de um hipotético kernelsu.ko, mas permanece um risco para módulos vendor. O inventário existente tem mais de uma variante: entre elas 6.6.89-android15-8-g810fd09a116c-4k e 6.6.89-android15-8-gbdb5aebb8ade-4k (tools/data/modules_inventory.tsv:1); primeiro selecionar os módulos da imagem C75 exata e então exigir compatibilidade para cada módulo que será carregado. Não reduzir os 557 arquivos a uma única string nem ignorar divergências (tools/data/modules_inventory.tsv; cabeçalho em tools/gate_kmi_crc.sh:10-15). O conjunto ativo e seu UTS esperado ainda precisam ser reconciliados. **Confiança alta na divergência reportada; conjunto ativo pendente.**
+G1a reportou UTS_RELEASE local 6.6.89-android15-8-4k e 6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k como referência (G1a_feasibility.md:7-12,106-114). Essa diferença deixa de ser o vermagic de um hipotético kernelsu.ko, mas permanece um risco para módulos vendor. O inventário existente tem mais de uma variante: entre elas 6.6.89-android15-8-g810fd09a116c-4k e 6.6.89-android15-8-gbdb5aebb8ade-4k ([fora do repo] tools/data/modules_inventory.tsv:1); primeiro selecionar os módulos da imagem C75 exata e então exigir compatibilidade para cada módulo que será carregado. Não reduzir os 557 arquivos a uma única string nem ignorar divergências ([fora do repo] tools/data/modules_inventory.tsv; cabeçalho em [fora do repo] tools/gate_kmi_crc.sh:10-15). O conjunto ativo e seu UTS esperado ainda precisam ser reconciliados. **Confiança alta na divergência reportada; conjunto ativo pendente.**
 
 ### dmesg-accept e hooks
 
-tools/dmesg_new_errors.sh encontra classes de erro novas contra baseline stock e retorna 0 se não encontrar, mas não exige sinais positivos de KSU (dmesg_new_errors.sh:1-16,76-115). O wrapper dmesg-accept deve exigir:
+[fora do repo] tools/dmesg_new_errors.sh encontra classes de erro novas contra baseline stock e retorna 0 se não encontrar, mas não exige sinais positivos de KSU (dmesg_new_errors.sh:1-16,76-115). O wrapper dmesg-accept deve exigir:
 
-- tools/dmesg_new_errors.sh <dmesg.txt> com exit 0;
+- [fora do repo] tools/dmesg_new_errors.sh <dmesg.txt> com exit 0;
 - "welcome to KernelSU version" — começo de kernelsu_init (KernelSU/kernel/core/init.c:91-93);
 - "hook_manager: ksu_hook_manager_init called" (kernel/hook/syscall_hook_manager.c:128-135);
 - "hook_manager: register_syscall_regfunc kretprobe: 0" e "hook_manager: register_syscall_unregfunc kretprobe: 0": retorno zero de register_kretprobe (syscall_hook_manager.c:28-45,133-136);
@@ -90,7 +90,7 @@ A chamada do init sozinha não prova registro: o código imprime o resultado de 
 Critério mínimo para a parte positiva do dmesg-accept, depois de salvar o dmesg do boot:
 
     set -euo pipefail
-    tools/dmesg_new_errors.sh "$DMESG"
+    [fora do repo] tools/dmesg_new_errors.sh "$DMESG"
     grep -Fq 'Loading compiled-in X.509 certificates' "$DMESG"
     grep -Fq 'welcome to KernelSU version' "$DMESG"
     grep -Fq 'hook_manager: ksu_hook_manager_init called' "$DMESG"
@@ -103,7 +103,7 @@ Critério mínimo para a parte positiva do dmesg-accept, depois de salvar o dmes
 ## 4. Sequência futura de device (não executada)
 
 1. Fazer backup do boot_b original, guardar seu hash e o procedimento de recuperação por teclas. Fase 2 exige backup e fastboot_guard, autorização literal “sim” para gravar e proíbe slot A (PHASE2_ADJUSTMENTS.md:29-33).
-2. Reempacotar boot.img a partir do boot C75 verificado, substituindo somente o payload do kernel pelo Image.lz4 que passou C01. Reextrair o payload e confirmar o hash. fastboot_guard exige arquivo regular de 67.108.864 bytes, magic ANDROID!, SHA-256 na allowlist e tamanho igual à partição boot_b (tools/fastboot_guard.sh:17-29,83-105,116-130).
+2. Reempacotar boot.img a partir do boot C75 verificado, substituindo somente o payload do kernel pelo Image.lz4 que passou C01. Reextrair o payload e confirmar o hash. fastboot_guard exige arquivo regular de 67.108.864 bytes, magic ANDROID!, SHA-256 na allowlist e tamanho igual à partição boot_b ([fora do repo] tools/fastboot_guard.sh:17-29,83-105,116-130).
 3. Só com “sim” literal para esta gravação, usar fastboot_guard.sh flash boot_b <boot.img>. O guard rejeita qualquer partição diferente, exige current-slot=b e is-userspace diferente de yes antes de enviar o flash (fastboot_guard.sh:83-105,133-145). Slot A nunca. O wrapper cria cópia temporária sob TMPDIR ou /tmp (fastboot_guard.sh:92); na execução futura, definir TMPDIR=[artefato local, fora do repo]/codex/c01/ para obedecer a regra de scratch.
 4. Após boot em B, capturar dmesg e rodar C01-DMESG. Fazer checks T3: Wi-Fi conecta e trafega; Bluetooth liga, descobre e pareia; APK/daemon KSU funciona; app autorizado recebe su e confirma UID 0; app não autorizado continua sem root. Confirmar que módulos vendor necessários carregam sem erro de assinatura ou formato.
 5. Aceitar só se todos os critérios passarem e a imagem empacotada corresponder ao kernel testado. Rollback requer outro “sim” literal; nunca gravar slot A. Nada disso foi executado nesta pesquisa.
@@ -115,7 +115,7 @@ Critério mínimo para a parte positiva do dmesg-accept, depois de salvar o dmes
 - O .config observado mostra CONFIG_LTO_NONE=y e full/thin LTO desativados (.config:738-740). Reconfirmar no config do link final.
 - G1b usou --local_cpu_resources=2 --local_ram_resources=2560 para o alvo _config, que terminou em 31,258 s e 315 ações; isso não mediu nem iniciou o link (G1b_integrated_build.md:11-20,65-80). scripts/build.sh passa --local_cpu_resources e --local_ram_resources, mas por padrão pede nproc e 8000 MB (scripts/build.sh:8,17,129-132). Para execução futura, começar com 1 CPU, --jobs=1 e --local_ram_resources=4096. Esses limites orientam agendamento Bazel; não são teto de RSS do linker.
 
-Com memória/espaço suficientes, o comando proposto dentro da cópia reflink é: cd [artefato local, fora do repo]/codex/c01/ksu-build; export TMPDIR="[artefato local, fora do repo]/codex/c01"; mkdir -p "$TMPDIR"; SOURCE_DATE_EPOCH=1752273969 tools/bazel build --config=stamp --jobs=1 --local_cpu_resources=1 --local_ram_resources=4096 --sandbox_base="$TMPDIR/bazel-sandbox" //common:kernel_aarch64. Não executar nesta rodada; a captura atual falha nos pré-requisitos de RAM/disco acima.
+Com memória/espaço suficientes, o comando proposto dentro da cópia reflink é: cd [artefato local, fora do repo]/codex/c01/ksu-build; export TMPDIR="[artefato local, fora do repo]/codex/c01"; mkdir -p "$TMPDIR"; SOURCE_DATE_EPOCH=1752273969 [fora do repo] tools/bazel build --config=stamp --jobs=1 --local_cpu_resources=1 --local_ram_resources=4096 --sandbox_base="$TMPDIR/bazel-sandbox" //common:kernel_aarch64. Não executar nesta rodada; a captura atual falha nos pré-requisitos de RAM/disco acima.
 - Pico do link não foi medido. Observação mais próxima: dois rustc somaram cerca de 3,44 GiB RSS durante config, quando MemAvailable era 1,5 GiB e SwapFree menor que 4 MiB (G1b_integrated_build.md:13-20). Reservar pelo menos 8 GiB de RAM disponível antes do link é orçamento prudencial, não medição nem garantia.
 - Captura local revalidada em 2026-10-11: RAM total 15 GiB, 7,5 GiB disponíveis, 13 GiB de swap livre; /home tem 23 GiB livres (96%). O preflight de scripts/build.sh exige 80 GiB livres (scripts/build.sh:21-26). A RAM disponível está ligeiramente abaixo da reserva prudencial de 8 GiB; o bloqueio decisivo nesta captura é o disco. A captura anterior do G1b tinha 1,5 GiB disponíveis e menos de 4 MiB de swap livre.
 - Worktree Git não se ajusta: Kleaf é repo com vários gitlinks. G1b usou cp -a --reflink=always na mesma Btrfs, excluiu out/ (5,9 GiB já existentes) e mediu 249,68 MiB de blocos exclusivos depois do config (G1b_integrated_build.md:22-40). Repetir isolamento em [artefato local, fora do repo]/codex/c01/ksu-build/ preserva a árvore comum e evita duplicar os dados compartilhados. O pico do novo output nunca foi medido; 5,9 GiB é tamanho observado preexistente, não máximo. Até medir uma execução, usar 80 GiB livres como requisito.

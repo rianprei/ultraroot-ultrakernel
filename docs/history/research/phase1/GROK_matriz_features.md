@@ -63,7 +63,7 @@ KSU `kernel/hook/syscall_hook_manager.c:38` `register_kretprobe`, `:146` `regist
 
 ### 4. LKM + late load
 
-KSU `kernel/core/init.c:111` `ksu_late_loaded = (current->pid != 1)` sob `#ifdef MODULE`, e `:227-236` `module_init` / `MODULE_LICENSE("GPL")`. `[ACOPLADA]` ao `.ko`. Next `init.c:116` e `module_init` `:237`/`:239`. Suki `init.c:117`, mesmos `module_init`. MKSU `init.c:105`, `module_init` `:220`/`:222`. bsxx não tem `kernel/core/init.c`; o LKM está em `kernel/ksu.c:298` `kernelsu_lkm_init`, late load quando `current->pid != 1` (`:306-309`), `module_init` `:346`, `MODULE_LICENSE("GPL")` `:350`. `[ACOPLADA]`. rs `kernel/ksu.c:135` é `device_initcall(kernelsu_init)`; `MODULE_LICENSE` está comentado em `:137-141`. Sem `module_init` e sem `ksu_late_loaded` → `[AUSENTE]` como LKM late-load (built-in só). Magisk e Alpha não são LKM → `[AUSENTE]`. KP entrega `.ko` de release (`kernelpatch.ko` na release 0.13.9, não traçado) e o fonte de módulo está em `kernel/patch/`; o flag `pid != 1` do KSU não se aplica. `[ACOPLADA]` ao patch KernelPatch, não ao late-load do KSU.
+KSU `kernel/core/init.c:111` `ksu_late_loaded = (current->pid != 1)` sob `#ifdef MODULE`, e `:227-236` `module_init` / `MODULE_LICENSE("GPL")`. `[ACOPLADA]` ao `.ko`. Next `init.c:116` e `module_init` `:237`/`:239`. Suki `init.c:117`, mesmos `module_init`. MKSU `init.c:105`, `module_init` `:220`/`:222`. bsxx não tem `kernel/core/init.c`; o LKM está em `[fora do repo] kernel/ksu.c:298` `kernelsu_lkm_init`, late load quando `current->pid != 1` (`:306-309`), `module_init` `:346`, `MODULE_LICENSE("GPL")` `:350`. `[ACOPLADA]`. rs `[fora do repo] kernel/ksu.c:135` é `device_initcall(kernelsu_init)`; `MODULE_LICENSE` está comentado em `:137-141`. Sem `module_init` e sem `ksu_late_loaded` → `[AUSENTE]` como LKM late-load (built-in só). Magisk e Alpha não são LKM → `[AUSENTE]`. KP entrega `.ko` de release (`kernelpatch.ko` na release 0.13.9, não traçado) e o fonte de módulo está em `[fora do repo] kernel/patch/`; o flag `pid != 1` do KSU não se aplica. `[ACOPLADA]` ao patch KernelPatch, não ao late-load do KSU.
 
 ### 5. kpimg — `[ACOPLADA]` ao KernelPatch
 
@@ -129,7 +129,7 @@ Nenhum arquivo `*overlay*` em KernelSU-Next. O core oficial só chama o script. 
 
 ### 19. KPM — `[ACOPLADA]` ao KernelPatch; SukiSU `[AUSENTE]` como loader
 
-`KernelPatch/kernel/patch/module/module.c:558` `load_module`, `:613` `load_module_path`. SukiSU `kernel/kpm/kpm.c:54-121` stubs com `pr_info` e `nop`. Os outros clones não têm nenhum dos dois arquivos.
+`KernelPatch/kernel/patch/module/module.c:558` `load_module`, `:613` `load_module_path`. SukiSU `[fora do repo] kernel/kpm/kpm.c:54-121` stubs com `pr_info` e `nop`. Os outros clones não têm nenhum dos dois arquivos.
 
 ### 20. Zygisk — `[ACOPLADA]` ao `libmagisk` / magiskd
 

@@ -51,18 +51,18 @@ Chave release fixa em [chaves locais do dono, fora do repo]/superroot-release.jk
 
 ## PACOTE OPERACIONAL (único; device sob "sim", fastboot por teclas, bateria>=60%)
 Allowlist já pronta: `export FASTBOOT_GUARD_HASHES=docs/ultraroot/guard_hashes_sp1.txt`
-Não criar `guard_hashes.txt` na raiz do kernel. Entre o Z0.4 e o flash não há reboot. Reboot só com `tools/fastboot_guard.sh reboot`, ou pelas teclas.
+Não criar `guard_hashes.txt` na raiz do kernel. Entre o Z0.4 e o flash não há reboot. Reboot só com `[fora do repo] tools/fastboot_guard.sh reboot`, ou pelas teclas.
 # Z0 getvars → T-1 flash do backup pelo guard → reboot pelo guard → flash de C03_ksu_boot_b.img pelo guard → reboot pelo guard
 # adb install de [artefato local, fora do repo]/grok/manager/out/SuperRoot-manager-release.apk e abrir o manager
 # ACEITE: accept_ksu_root.sh exige uid=0( na saída de su -c id, UAPI 5 e contexto sem magisk
 # ROLLBACK: guard rollback do backup; em seguida guard reboot; o cenário fecha quando o boot do backup é observado
 
 ## SP1 host Tasks 1-6 (2026-10-11)
-Host-only. Task 7 não rodou. Nenhum adb e nenhum fastboot real. `[fora do repo]` não é repositório git; este parágrafo registra as tasks 1 e 3-6. A task 2 está no commit `c8e78121d602a1b4bf8b00318d2d3acec78c965a` de `kernel/lake` (`tools/fastboot_guard.sh` + `tools/selftest_fastboot_guard.sh`). O `guard_hashes.txt` solto na raiz desse repo não entrou no commit.
+Host-only. Task 7 não rodou. Nenhum adb e nenhum fastboot real. `[fora do repo]` não é repositório git; este parágrafo registra as tasks 1 e 3-6. A task 2 está no commit `c8e78121d602a1b4bf8b00318d2d3acec78c965a` de `kernel/lake` (`[fora do repo] tools/fastboot_guard.sh` + `[fora do repo] tools/selftest_fastboot_guard.sh`). O `guard_hashes.txt` solto na raiz desse repo não entrou no commit.
 
 Allowlist do dia: `docs/ultraroot/guard_hashes_sp1.txt` com o backup `3890fb9664c6543a4939b18b3845f05995221672fb4af905d2367ef12b829fc7` e o C0.3 `2977e1dc002d1a9d9ebb9338b60fae3e9df6cc31d50c8adb8be9b2352d6304fe`. O prefixo C0.1 `74090569` não está no arquivo. `rollback` flasha `boot_b` pelos gates já existentes e, só se esse flash sair 0 e o slot atual for `b`, emite `set_active b`. `set_active a` continua recusado. Aceite: `docs/ultraroot/accept_ksu_root.sh` (sem fixture sai 2 e não chama adb). Selftest do guard: 44/44. `run_all_checks`: 116/116. Relatório: `docs/ultraroot/SP1_IMPL_REPORT.md`.
 
 ## SP1 fixes do review (2026-10-11, host)
 `[fora do repo]` não é git; este parágrafo registra os três fixes. Nenhum arquivo rastreado do kernel mudou. O `guard_hashes.txt` não rastreado, que listava o hash do C0.1, foi removido.
 Aceite agora exige `uid=0(` na saída de `su -c id`, evidência KSU (ksud ou `/data/adb/ksu`, UAPI 5) e contexto sem magisk. Sem fixture continua saindo 2, sem adb.
-Recovery: depois do rollback, reboot só por `tools/fastboot_guard.sh reboot` ou pelas teclas. Sem reboot entre o Z0.4 e o flash. O cenário de device fecha quando o boot é observado.
+Recovery: depois do rollback, reboot só por `[fora do repo] tools/fastboot_guard.sh reboot` ou pelas teclas. Sem reboot entre o Z0.4 e o flash. O cenário de device fecha quando o boot é observado.

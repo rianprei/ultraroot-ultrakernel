@@ -25,7 +25,7 @@
 ### 1.1 Feito (operações e evidências)
 - [x] Par C0.3 no host: imagem `2977e1dc…`, cert `efb8d49f…`, gate 557 módulos com 0 mismatch. Evidência: `docs/history/research/phase4/C03_stablekey_result.md`.
 - [x] Artefato C0.1 no host: `[artefato local, fora do repo]/grok/c01-build/C01_ksu_boot_b.img`, sha256 `74090569d7fc4883159ea1fe14a484c4e3a3b14458aa84605aa3f520d78a1120`, header v4, 67108864 bytes, `kernel_size` 14634767, data 2026-10-11. Obsoleto como alvo operacional, segundo o próprio arquivo. Evidência: `docs/history/research/phase4/C01_device_plan.md` (spec §2).
-- [x] [DEVICE] Histórico da base 2026-10-11: boot C0.1 no aparelho, recorte: 62 linhas `KernelSU:`, `dmesg_new_errors.sh` exit 0 nesse arquivo. Evidência: `docs/history/research/phase4/c01_dmesg.txt`. Continua UNKNOWN: 429 módulos e "boot inteiro sem erro". Aparelho em 2026-10-13: NÃO VERIFICADO.
+- [x] [DEVICE] Histórico da base 2026-10-11: boot C0.1 no aparelho, recorte: 62 linhas `KernelSU:`, `dmesg_new_errors.sh` exit 0 nesse arquivo. Evidência: `[fora do repo] docs/history/research/phase4/c01_dmesg.txt`. Continua UNKNOWN: 429 módulos e "boot inteiro sem erro". Aparelho em 2026-10-13: NÃO VERIFICADO.
 - [x] Histórico da base 2026-10-11: APK UltraRoot vc40000 verificado no host: V2-only, cert `efb8d49f…`, pacote `me.weishu.kernelsu`, sha256 `7a3ae0b1…`. Cross-review Codex #4: ACEITO em `docs/ultraroot/REVIEW_vc40000_codex4.md`.
 - [x] Backup do reskin antes da troca: `[fora do repo]/ultraroot/reskin-inc2b-vc32673.apk`, sha256 `3429e23a…`.
 - [x] [DEVICE] Histórico 2026-10-11: APK vc40000 instalado no aparelho por `adb install -r` (Success; `dumpsys` = versionCode 40000). Autorizado por "sim, pode fazer os 2". Evidência: `docs/history/evidence/2026-10-11_install_vc40000.txt`. Operação, não capacidade: validação funcional segue em aberto. Estado mais recente documentado: ui8 (vc40008), 2026-10-12; sem medida hoje, NÃO VERIFICADO em 2026-10-13.
@@ -71,7 +71,7 @@ Cada item validado separadamente. ZIP aceito não prova nenhum deles.
 ## 2. Magisk: MagiskAdapter e runtime Magisk (`MG-*`, 20 OBRIG)
 
 ### MG-SU-GRANT: conceder, revogar e listar root por app e por shell/ADB
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/details.md:67`, `native/src/include/consts.hpp:7` · Aceite: policy de um uid de teste muda e volta
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/details.md:67`, `native/src/include/consts.hpp:7` · Aceite: policy de um uid de teste muda e volta
 - [ ] [DEVICE] Conceder root a app autorizado
 - [ ] Solicitar autorização quando um app chama `su`
 - [ ] [DEVICE] Revogar root
@@ -81,7 +81,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Registrar e administrar estados de autorização
 
 ### MG-SU-EXEC: `su` com shell, UID/GID/grupos, contexto SELinux, ambiente e capabilities
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `native/src/core/su/su.cpp`, `docs/tools.md` · Aceite: `su -c id` com e sem os limites
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `native/src/core/su/su.cpp`, `[fora do repo] docs/tools.md` · Aceite: `su -c id` com e sem os limites
 - [ ] Executar comandos como root
 - [ ] Disponibilizar o executável `su`
 - [ ] Selecionar shell da sessão
@@ -91,21 +91,21 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Restringir capabilities Linux, inclusive em UID 0
 
 ### MG-SU-NS: namespace de montagem a partir de PID
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md:305` (`--target PID`) · Aceite: o processo alvo vê o namespace pedido
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md:305` (`--target PID`) · Aceite: o processo alvo vê o namespace pedido
 - [ ] Selecionar o namespace de montagem a partir de um PID
 
 ### MG-SU-PTY: PTY e shell interativo
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md:299` · Aceite: sessão interativa aloca pty
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md:299` · Aceite: sessão interativa aloca pty
 - [ ] Shell interativo com alocação de pseudoterminal
 
 ### MG-SU-DAEMON: daemon, versões e estado de autorização
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md`, `docs/details.md` · Aceite: versão lida bate com o binário instalado
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md`, `[fora do repo] docs/details.md` · Aceite: versão lida bate com o binário instalado
 - [ ] Manter serviço e daemon próprios
 - [ ] Consultar versão do binário e do daemon
 - [ ] Iniciar e parar o daemon pelas interfaces suportadas
 
 ### MG-MOD-LIFE: ciclo de módulos ZIP (sem repositório central)
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/guides.md` · Aceite: fixture instala e remove
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/guides.md` · Aceite: fixture instala e remove
 - [ ] Instalar módulo a partir de ZIP
 - [ ] Desinstalar módulo
 - [ ] Ativar e desativar módulo
@@ -117,7 +117,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: 
 - [ ] Ciclo inteiro validado com fixture (ZIP aceito não prova o ciclo)
 
 ### MG-MOD-SCRIPT: scripts de instalação, boot e callbacks
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/guides.md` · Aceite: cada script roda no estágio dele
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/guides.md` · Aceite: cada script roda no estágio dele
 - [ ] `customize.sh` na instalação
 - [ ] `post-fs-data.sh` no estágio correto
 - [ ] `service.sh` no boot de serviços
@@ -125,22 +125,22 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: 
 - [ ] Callbacks de estágio: post-fs-data, service, boot-complete, zygote-restart
 
 ### MG-MOD-PROP: `system.prop` de módulos
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/guides.md` · Aceite: prop aparece com o módulo e some quando ele sai
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/guides.md` · Aceite: prop aparece com o módulo e some quando ele sai
 - [ ] Aplicar `system.prop` do módulo
 
 ### MG-MOD-SEP: `sepolicy.rule`
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/guides.md:137` · Aceite: regra do fixture é carregada e não abre allow global
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/guides.md:137` · Aceite: regra do fixture é carregada e não abre allow global
 - [ ] Aplicar regras de `sepolicy.rule`
 
 ### MG-MOD-MOUNT: magic mount, `.replace` e systemless (algoritmo do Magisk, não do KSU)
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/guides.md` · Aceite: arquivo do módulo aparece sem escrever a partição
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: runtime Magisk · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/guides.md` · Aceite: arquivo do módulo aparece sem escrever a partição
 - [ ] Montagem systemless por scripts e configuração
 - [ ] Substituir arquivo do sistema sem alterar a partição original, quando permitido
 - [ ] Suportar o mecanismo `.replace`
 - [ ] Alterar diretórios do sistema por montagem
 
 ### MG-MOD-OVLAYD: `overlay.d` no ramdisk
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/guides.md:275` · Aceite: rc do overlay entra no boot de teste
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/guides.md:275` · Aceite: rc do overlay entra no boot de teste
 - [ ] Integrar `overlay.d` para personalizações compatíveis no boot
 
 ### MG-ZYG: Zygisk nativo do Magisk
@@ -154,7 +154,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: ZygiskAdapter sobre Magisk · D
 - [ ] Hooking de processos Android nos processos compatíveis
 
 ### MG-DENY: DenyList
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md:272` · Aceite: o alvo deixa de ver o mount do módulo. Não é garantia de ocultação do root
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md:272` · Aceite: o alvo deixa de ver o mount do módulo. Não é garantia de ocultação do root
 - [ ] Manter a lista de pacotes e processos
 - [ ] Ativar e desativar a aplicação da lista
 - [ ] Adicionar alvos
@@ -166,7 +166,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Gerenciar pela CLI
 
 ### MG-BOOT: magiskboot
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md` (magiskboot) · Aceite: unpack e repack de uma imagem de fixture fecham o roundtrip
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md` (magiskboot) · Aceite: unpack e repack de uma imagem de fixture fecham o roundtrip
 - [ ] Desempacotar imagem de boot
 - [ ] Reempacotar imagem de boot
 - [ ] Interpretar cabeçalhos de imagem
@@ -182,7 +182,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Preservar os componentes originais necessários ao repack
 
 ### MG-INIT: magiskinit
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md:162` · Aceite: boot de fixture chega ao daemon
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md:162` · Aceite: boot de fixture chega ao daemon
 - [ ] Substituir o init do ramdisk modificado
 - [ ] Configuração inicial do ambiente Magisk
 - [ ] Operações prévias à inicialização normal do Android
@@ -192,7 +192,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Aplicar as adaptações de boot suportadas pela versão
 
 ### MG-POLICY: magiskpolicy e supolicy
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md` (magiskpolicy) · Aceite: regra de teste aplica e não abre allow global
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md` (magiskpolicy) · Aceite: regra de teste aplica e não abre allow global
 - [ ] Carregar políticas SELinux
 - [ ] Inspecionar e salvar políticas
 - [ ] Aplicar modificações à política em execução, quando suportado
@@ -202,7 +202,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Sintaxe da ferramenta e alias `supolicy`
 
 ### MG-PROP: resetprop
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md:344` · Aceite: get, set e wait em prop de teste
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md:344` · Aceite: get, set e wait em prop de teste
 - [ ] Consultar propriedades Android
 - [ ] Definir propriedades
 - [ ] Modificar `ro.*` em condições suportadas
@@ -212,7 +212,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] `--compact` nas versões compatíveis
 
 ### MG-CLI: CLI `magisk`
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/tools.md`, `native/src/core/applets.cpp` · Aceite: `magisk -v` e um applet
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/tools.md`, `native/src/core/applets.cpp` · Aceite: `magisk -v` e um applet
 - [ ] Executar comandos `magisk`; listar applets
 - [ ] `su` e `resetprop` como applets
 - [ ] Instalar e remover módulos pela CLI, inclusive remover todos
@@ -224,7 +224,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 - [ ] Ferramentas auxiliares próprias do projeto
 
 ### MG-APP-PATCH: patch de boot pelo app
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `docs/install.md:74`, `docs/tools.md:77` · Aceite: dry-run numa imagem local, sem flash
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: sim · Origem: Magisk `e8915d9d` `[fora do repo] docs/install.md:74`, `[fora do repo] docs/tools.md:77` · Aceite: dry-run numa imagem local, sem flash
 - [ ] Selecionar e corrigir imagem de boot (dry-run antes)
 - [ ] [DEVICE] Instalar a imagem corrigida pelo procedimento aplicável
 - [ ] Fluxo Samsung AP/TAR: fora do alvo do lake até ser suportado
@@ -240,8 +240,8 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 ## 3. KernelSU: KsuBackend (`KSU-*`, 11 OBRIG) e seeds
 
 ### Seed KSU-core: KernelSU no kernel (fora dos 44); modalidade no lake NÃO VERIFICADA
-`IMPL: IMPLEMENTED · VALID: DEVICE_TESTED (recorte histórico da base 2026-10-11); aparelho hoje NÃO VERIFICADO` · Origem: KernelSU `6e386044`, GKI 6.6.89 · Evidência: `docs/history/research/phase4/c01_dmesg.txt`, sha256 `0aad0b4d…`
-- [x] [DEVICE] Histórico da base 2026-10-11: KSU no boot C0.1 (recorte de 17,0 s a 88,5 s, 62 linhas `KernelSU:`). Evidência: `docs/history/research/phase4/c01_dmesg.txt` Aparelho hoje NÃO VERIFICADO.
+`IMPL: IMPLEMENTED · VALID: DEVICE_TESTED (recorte histórico da base 2026-10-11); aparelho hoje NÃO VERIFICADO` · Origem: KernelSU `6e386044`, GKI 6.6.89 · Evidência: `[fora do repo] docs/history/research/phase4/c01_dmesg.txt`, sha256 `0aad0b4d…`
+- [x] [DEVICE] Histórico da base 2026-10-11: KSU no boot C0.1 (recorte de 17,0 s a 88,5 s, 62 linhas `KernelSU:`). Evidência: `[fora do repo] docs/history/research/phase4/c01_dmesg.txt` Aparelho hoje NÃO VERIFICADO.
 - [ ] UNKNOWN: contagem de 429 módulos
 - [ ] UNKNOWN: boot inteiro sem erro (recorte não começa em t=0)
 - [ ] Variante GKI e não-GKI, conforme kernel e procedimento (escopo atual: lake, GKI 6.6.89)
@@ -407,7 +407,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: ApmRuntime · Device-gate: sim 
 - [ ] Interação com módulos e gerenciamento de módulos pela UI
 
 ### AP-BB: BusyBox ash standalone
-IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: ApmRuntime · Device-gate: sim · Origem: APatch `e78e7b3e` `docs/cn/ap_module.md`, `apd/` · Aceite: script do fixture roda em ash standalone
+IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: ApmRuntime · Device-gate: sim · Origem: APatch `e78e7b3e` `[fora do repo] docs/cn/ap_module.md`, `apd/` · Aceite: script do fixture roda em ash standalone
 - [ ] Fornecer applets BusyBox para scripts de módulos
 - [ ] Executar scripts no ash standalone
 - [ ] Suporte relacionado a SELinux nas ferramentas fornecidas

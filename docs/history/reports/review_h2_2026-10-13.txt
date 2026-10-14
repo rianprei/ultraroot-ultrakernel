@@ -25,7 +25,7 @@ T3. Caça de defeito novo:
 (h) Comentários :40 e :56 em inglês; base vizinha em português (RootAccessState.kt:19, :61, :68; RootGrantPort.kt:3), embora core tenha inglês (KsuBackend.kt:12). Base mista; ACHADO 2 (estilo, não funcional). Proposta: traduzir :40/:56 ou padronizar a UI; não aplicado. [LIDO]
 (i) Thread-safety: grep -rn "RootGrantFlow" app/src/main/java → única ocorrência RootGrantFlow.kt:23 (a própria classe). Nenhuma tela/chamador. `var state ... private set` (:24-25) sem sincronização — confere com a declaração do autor (h2_fix:130-131): não thread-safe, UI como único chamador. [LIDO]
 
-T4. Sabotagem independente (cópia docs/history/reports/copy_h2; original intocado; sha antes = 073e5e48...):
+T4. Sabotagem independente (cópia [fora do repo] docs/history/reports/copy_h2; original intocado; sha antes = 073e5e48...):
 - S4 (barreira :41 + try/finally removidos, só o laço): EXIT=1; `confirmDoesNotRepeatGrantsWhenPortThrows FAILED / java.lang.AssertionError at RootGrantFlowTest.kt:225`; 14 tests completed, 9 failed (mutação literal remove todo set de Done; o autor, mantendo Done pós-laço, registrou 1 failed — ambos derrubam o teste-alvo na mesma linha). Restaurado, sha 073e5e48. [LIDO]
 - S5 (bloco uid repetido :31-33 removido): EXIT=1; `requestWithRepeatedUidIsRefused FAILED / AssertionError at RootGrantFlowTest.kt:186`; 14 tests completed, 1 failed. Restaurado, sha 073e5e48. [LIDO]
 - S6 (targets.toList() → targets na :34): EXIT=1; `requestCopiesTargetsAtConfirmation FAILED / AssertionError at RootGrantFlowTest.kt:200`; 14 tests completed, 1 failed. Restaurado, sha 073e5e48. [LIDO]

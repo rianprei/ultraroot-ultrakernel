@@ -17,7 +17,7 @@ Aparelho: WG7TPZOBHQGIMZZ5 (lake_p_global, 2410FPCC5G), via `adb -s`.
 - Resultado: aparelho inalterado.
 
 ## Operação (b): versionCode 40000
-- Artefato: ultraroot/out/UltraRoot-own-inc2-vc40000.apk
+- Artefato: [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk
 - sha256: 7a3ae0b1a287b39b774ab5c8d99f37e6af7d7fad10ef3c859e4edb5a4593dc5f
 - Cert (apksigner, pré-install): efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9
 - Install com gate de cert:

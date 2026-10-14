@@ -6,9 +6,9 @@ Veredito: **CORRIGIR**. O miolo (su, módulos, Zygisk só no Magisk, SuperKey/Su
 
 ## O que o pin confirma (não é achado)
 
-- Magisk `e8915d9d`: su com PTY (`docs/tools.md`), DenyList como desmonte e não como hide (`spec` 180–181 bate com o projeto), stub de ocultar o app (`app/stub`, `docs/faq.md`), `resetprop --compact` (`docs/tools.md:344`), extração de boot por URL de OTA (`docs/changes.md` e `app/core/.../AppTest.kt`), fluxo Samsung AP/TAR (`docs/install.md`), terminal com TTY (`app/apk/.../ui/terminal/TerminalScreen.kt`).
+- Magisk `e8915d9d`: su com PTY (`[fora do repo] docs/tools.md`), DenyList como desmonte e não como hide (`spec` 180–181 bate com o projeto), stub de ocultar o app (`app/stub`, `[fora do repo] docs/faq.md`), `resetprop --compact` (`[fora do repo] docs/tools.md:344`), extração de boot por URL de OTA (`[fora do repo] docs/changes.md` e `app/core/.../AppTest.kt`), fluxo Samsung AP/TAR (`[fora do repo] docs/install.md`), terminal com TTY (`app/apk/.../ui/terminal/TerminalScreen.kt`).
 - KernelSU `6e386044`: `FLAG_KSU_NO_NEW_PRIVS` em `uapi/app_profile.h:12`, `.ksurc` lido em `userspace/ksud/src/su.rs:321-323`, `sepolicy.rule` e `system.prop` em `module.rs` / `init_event.rs`, WebUI `webroot`, config key-value em `module_config`.
-- APatch/KernelPatch: `post-mount.sh`, `boot-completed.sh`, `skip_mount`, `webroot` em `apd/`; demos `kpms/demo-inlinehook` e `kpms/demo-syscallhook`; SuperCall em `lkm/supercall/`. Zygisk não aparece no Rust do `apd` (só num diagrama do guia chinês `docs/cn/ap_module.md`). O inventário acerta ao marcar Zygisk nativo como não.
+- APatch/KernelPatch: `post-mount.sh`, `boot-completed.sh`, `skip_mount`, `webroot` em `apd/`; demos `kpms/demo-inlinehook` e `kpms/demo-syscallhook`; SuperCall em `lkm/supercall/`. Zygisk não aparece no Rust do `apd` (só num diagrama do guia chinês `[fora do repo] docs/cn/ap_module.md`). O inventário acerta ao marcar Zygisk nativo como não.
 
 ## Achados
 
@@ -40,7 +40,7 @@ Spec 370: “Permitir implementações de montagem compatíveis com magic mount�
 
 ### 7. “Não modificar o contexto SELinux” esconde bypass por hook
 
-Spec 461–462. A fonte no mesmo pin é `APatch/docs/pt_br/faq_pt_br.md:42`: “KernelPatch não modifica o contexto do SELinux **e ignora o SELinux via hook**”, para rootear a thread dentro do contexto do app. O código faz isso: `kernel/patch/patch.c:87` chama `bypass_selinux()`; `kernel/patch/common/accctl.c:239-258` aplica hook em `avc_denied` e `slow_avc_audit`; `avc_denied_replace` (`accctl.c:194-209`) põe `allowed = 0xffffffff`, zera `auditallow`/`auditdeny` e retorna 0 quando `sel_allow` ou `priv_sel_allow`. O inventário ficou só com a metade cosmética (“sem modificar o contexto”). Isso é ocultação do domínio de root por bypass de AVC. Marcar **FORA-do-produto**. `selinux_hide_init` está comentado (`patch.c:61`); o bypass de AVC não está.
+Spec 461–462. A fonte no mesmo pin é `APatch/docs/pt_br/faq_pt_br.md:42`: “KernelPatch não modifica o contexto do SELinux **e ignora o SELinux via hook**”, para rootear a thread dentro do contexto do app. O código faz isso: `[fora do repo] kernel/patch/patch.c:87` chama `bypass_selinux()`; `[fora do repo] kernel/patch/common/accctl.c:239-258` aplica hook em `avc_denied` e `slow_avc_audit`; `avc_denied_replace` (`accctl.c:194-209`) põe `allowed = 0xffffffff`, zera `auditallow`/`auditdeny` e retorna 0 quando `sel_allow` ou `priv_sel_allow`. O inventário ficou só com a metade cosmética (“sem modificar o contexto”). Isso é ocultação do domínio de root por bypass de AVC. Marcar **FORA-do-produto**. `selinux_hide_init` está comentado (`patch.c:61`); o bypass de AVC não está.
 
 ### 8. BusyBox do KernelSU é o binário do Magisk, e a matriz não diz
 

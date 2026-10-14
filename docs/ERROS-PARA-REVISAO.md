@@ -135,11 +135,12 @@ Nesta rodada, o dono pediu commit e push direto em `main`, sem PR. O fluxo de br
 - **Correção (2026-10-14):** `kernel/lake/tools/run_all_checks.sh` registra os scripts de cada invariante em `script_ok` e, depois do resumo, imprime `causa raiz: <Vn>; efeitos: <Vm>, ...`. As linhas `FAIL`, a contagem e o código de saída não mudaram. Prova com V1 forçado numa cópia: `V1 FAIL`, `V68 FAIL`, `V77 FAIL`, `causa raiz: V1; efeitos: V68, V77`, `run_all_checks: FAIL (3 de 116 verificações falharam)`, código 1. No repo: `run_all_checks: PASS`, 116 linhas PASS, código 0.
 - **Achado no caminho:** neste ambiente (OpenSSL 3.0.13) o V67 falhava: `openssl req -not_before` só existe no OpenSSL 3.4 ou mais novo, e o `set -e` de `kernel/lake/tools/verify_modsig.sh` derrubava o selftest no caso 7. Correção: função `mkcert_dated` com fallback para `openssl ca -selfsign -startdate/-enddate`. Conferido à parte: cert vencido gerado pelo fallback → `Verify error: certificate has expired`; com datas válidas → `CMS Verification successful`.
 
-### ERR-16: avisos V4 do verificador (ABERTO, não bloqueia)
+### ERR-16: avisos V4 do verificador (CORRIGIDO na branch `cloud/ultraroot-ultrakernel`: 980 para 32, revisão pendente)
 
 - **Onde:** documentos históricos em `docs/history/`.
 - **Fato:** o verificador conta 975 referências a arquivos que ficaram fora do repo, de propósito (ver `docs/history/EXCLUSOES.txt`).
 - **Ação:** reduzir as referências, ou marcar as que apontam para fora do repo.
+- **Correção (2026-10-14):** antes, `bash tools/verify_repo.sh` → `AVISO V4 (histórico, não bloqueia): 980 referências a arquivos fora do repo` (com os arquivos novos desta rodada, 982). Causas e tratamento: (a) a regex casava caminhos no meio de outros (`dev/superroot/ultraroot/ui/...`); agora exige fronteira; (b) arquivos de `kernel/lake/` citam caminhos relativos à raiz do lake; (c) caminhos do KernelSU resolvem em `kernel/upstream/KernelSU/`; (d) caminhos da árvore do kernel resolvem em `kernel/common/`. As resoluções (b) a (d) e a marca não valem nos documentos STRICT. Depois disso, 336 avisos. As 304 referências reais em `docs/` receberam a marca `[fora do repo] <caminho>`, definida em `docs/history/EXCLUSOES.txt` (541 ocorrências em 92 arquivos, sem apagar texto). Depois: `AVISO V4 (histórico, não bloqueia): 32 referências a arquivos fora do repo`, todas em `kernel/lake/`, que não foi marcado (ERR-18). Sabotagem: link ausente em `README.md`, com ou sem marca → `V4 link ausente` e `VERIFICADOR FALHOU`.
 
 ### ERR-17: APK de debug com o package do manager instalado no aparelho (ABERTO, risco)
 

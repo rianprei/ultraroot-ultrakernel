@@ -19,15 +19,15 @@ Antes de qualquer escrita, ler o slot ativo. No POCO C75 (lake) a exceção docu
 
 ## Roteiro gated
 
-Só com "sim" presencial, aparelho em fastboot pelas teclas, bateria ≥ 60%. Wrapper: `tools/fastboot_guard.sh` com `--hashes` apontando para `guard_hashes_sp1.txt`.
+Só com "sim" presencial, aparelho em fastboot pelas teclas, bateria ≥ 60%. Wrapper: `[fora do repo] tools/fastboot_guard.sh` com `--hashes` apontando para `guard_hashes_sp1.txt`.
 
 1. Z0: `getvar current-slot` tem de ser `b`; produto lake; `is-userspace` não é `yes`; `partition-size:boot_b` parseia para 67108864.
 2. Z0.4 não é seguido de reboot. O flash vem na sequência da leitura.
-3. T-1: `flash boot_b` do backup. O reboot, se houver, é `tools/fastboot_guard.sh reboot`, depois do flash sair 0.
+3. T-1: `flash boot_b` do backup. O reboot, se houver, é `[fora do repo] tools/fastboot_guard.sh reboot`, depois do flash sair 0.
 4. Flash: `flash boot_b` do `C03_ksu_boot_b.img`, e o reboot seguinte também pelo guard.
 5. Coroação: `adb install` do APK release. Abrir o manager. Desativar o Magisk herdado, sem desinstalar.
 6. Aceite: `docs/ultraroot/accept_ksu_root.sh <serial>`. Exit 0 só com as três juntas: `su -c id` contém `uid=0(`, ksud ou `/data/adb/ksu` com UAPI 5, e contexto sem `magisk`.
-7. Recuperação de ensaio: `rollback <backup>` no guard. Isso flasha `boot_b` e reativa o slot `b`, e o aparelho continua em fastboot. Em seguida, `tools/fastboot_guard.sh reboot`. O cenário só fecha quando o boot do backup é observado. Sem cabo, teclas. Não existe caminho que envie `set_active a`.
+7. Recuperação de ensaio: `rollback <backup>` no guard. Isso flasha `boot_b` e reativa o slot `b`, e o aparelho continua em fastboot. Em seguida, `[fora do repo] tools/fastboot_guard.sh reboot`. O cenário só fecha quando o boot do backup é observado. Sem cabo, teclas. Não existe caminho que envie `set_active a`.
 
 Comando de ensaio do rollback, quando o gate abrir:
 

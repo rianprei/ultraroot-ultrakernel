@@ -3,11 +3,11 @@ Repo: kernel/lake. Escopo de leitura; nenhuma escrita no lake/kernel.
 Chamadas de ferramenta usadas: 6 de 12. [LIDO]
 
 T1. Mudanças do diff não commitado (unstaged) [LIDO]:
-1. tools/fastboot_guard.sh:93 (flash path): base do mktemp ${TMPDIR:-/tmp} -> ${TMPDIR:-$HOME/.cache/fastboot_guard}, precedido de mkdir -p. Efeito: cópia privada sai de /tmp para cache por-usuário.
-2. tools/fastboot_guard.sh:114 (rollback path): mesmo ajuste da linha 93.
-3. tools/selftest_fastboot_guard.sh:32-33 (stub): substitui printf único de slot-unbootable:b por cache `unboot_line=...` + `printf 'FAKE-STATE %s\n' "$unboot_line" >> "$STUBLOG"` (linha 33) antes de emitir em stderr. Finalidade: R1 pode asserts um estado explícito.
-4. tools/selftest_fastboot_guard.sh:435-438 (R1): adiciona `grep -qx 'getvar slot-unbootable:b'` e `grep -qx 'FAKE-STATE slot-unbootable:b: yes'` ao checklist.
-5. tools/selftest_fastboot_guard.sh:441 (R1): mensagem impressa passou a incluir r1_log.
+1. [fora do repo] tools/fastboot_guard.sh:93 (flash path): base do mktemp ${TMPDIR:-/tmp} -> ${TMPDIR:-$HOME/.cache/fastboot_guard}, precedido de mkdir -p. Efeito: cópia privada sai de /tmp para cache por-usuário.
+2. [fora do repo] tools/fastboot_guard.sh:114 (rollback path): mesmo ajuste da linha 93.
+3. [fora do repo] tools/selftest_fastboot_guard.sh:32-33 (stub): substitui printf único de slot-unbootable:b por cache `unboot_line=...` + `printf 'FAKE-STATE %s\n' "$unboot_line" >> "$STUBLOG"` (linha 33) antes de emitir em stderr. Finalidade: R1 pode asserts um estado explícito.
+4. [fora do repo] tools/selftest_fastboot_guard.sh:435-438 (R1): adiciona `grep -qx 'getvar slot-unbootable:b'` e `grep -qx 'FAKE-STATE slot-unbootable:b: yes'` ao checklist.
+5. [fora do repo] tools/selftest_fastboot_guard.sh:441 (R1): mensagem impressa passou a incluir r1_log.
 Variante vs commit c8e7812 [LIDO]: commit adicionou rollback (guard L42-131, selftest L195-480) -> commit L42 DO_REACTIVATE=0, L104-129 rollback (file gates + set -- boot_b, DO_REACTIVATE=1, cmd=flash), L183-192 reativação pós-flash.
 
 T2. Prova de recusa de flash no slot A e set_active a:
@@ -39,7 +39,7 @@ T6. Selftest não chama fastboot real:
 T7. Bug real fora de T1..T6: NENHUM identificado no escopo de leitura (guard L1-L193 e selftest). [DEDUZIDO].
 Cenário testável opcional (NÃO VERIFICADO): reativação assume sla vindo do stub do caller getvar; se slot mudasse entre flash e reativação, guard reativa sem recheck — escopo de testes nao cobre, sem reprodução.
 
-Verificação final [LIDO]: selftest_fastboot_guard.sh EXIT=0, 44 passada(s)/0 falha(s), tail "SELFTEST-GUARD PASS". Arquivo de saída tmp (fora do repo): docs/history/reports/selftest.out.
+Verificação final [LIDO]: selftest_fastboot_guard.sh EXIT=0, 44 passada(s)/0 falha(s), tail "SELFTEST-GUARD PASS". Arquivo de saída tmp (fora do repo): [fora do repo] docs/history/reports/selftest.out.
 Relatório: docs/history/reports/review_lake_guard_2026-10-13.txt.
 Nenhuma edição em lake/kernel, sem commit/push, sem aparelho.
 `

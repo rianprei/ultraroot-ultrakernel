@@ -39,7 +39,7 @@
   final.
  
   Contagem final: 120 linhas, limite de 150. Único arquivo editado: MAGISK_KSU_UI_INVENTORY.md ([fora do repo]/docs/
-  ultraroot/MAGISK_KSU_UI_INVENTORY.md).
+  [fora do repo] ultraroot/MAGISK_KSU_UI_INVENTORY.md).
  
   Worked for 5m 44s • 12:56 PM                                                                                                
  

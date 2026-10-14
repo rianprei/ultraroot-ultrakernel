@@ -27,7 +27,7 @@ O hash antigo `c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6`
 
 ## Gate
 
-`tools/gate_kmi_crc.sh` em `Module.symvers`, exit 0:
+`[fora do repo] tools/gate_kmi_crc.sh` em `Module.symvers`, exit 0:
 
 ```text
 modules.files=557 modules.unique=370

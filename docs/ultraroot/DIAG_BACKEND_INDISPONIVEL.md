@@ -37,4 +37,4 @@ Se o teste falhar, o APK e os dados permanecem (`-r`), e nada é gravado em part
 - dmesg: `Found manager base.apk at path: /data/app/~~pVyoCVgeyGmjxz_t6gdmfg==/.../base.apk, is_manager: 1` e `Crowning manager: uid=10296`. A hipótese se confirma: a causa era a pasta incfs da instalação incremental.
 - Root Access passou de "backend indisponível" para o estado vazio real ("Nenhum app com root"): a allowlist do kernel é lida.
 - Ainda não há grant. A UI da inc2/ui3 é somente leitura; conceder e revogar é da inc3. Aceite (`accept_ksu_root.sh`) continua REPROVA por contexto magisk: o `su` do adb ainda roteia pelo Magisk (coroação pendente).
-- Evidências: `docs/history/evidence/2026-10-12_*`.
+- Evidências: `[fora do repo] docs/history/evidence/2026-10-12_*`.

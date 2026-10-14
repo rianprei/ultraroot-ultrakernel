@@ -21,7 +21,7 @@ UltraRoot = plataforma/manager de root unificado (app PRÓPRIO) sobre o engine K
 Scaffold novo em `ultraroot/` (Compose, M3 dark, fundo #0B0C0E, primary #D6B25E, ModalNavigationDrawer próprio com 6 seções: Root Access, Module Center, System Toolkit, Kernel&Performance, Boot&Recovery, Extensions Hub). Backend ISOLADO `:core-backend` (namespace `dev.superroot.core`, libultraroot.so: GET_INFO/NEW_GET_ALLOW_LIST/GET_APP_PROFILE; cabeçalhos UAPI copiados; zero tela KSU). Kernel&Performance lê KsuBackend.readCapability() real; as outras 5 dizem "indisponível".
 
 **Artefato canônico (host-completo, cross-review ACEITO):**
-- APK: `ultraroot/out/UltraRoot-own-inc2-fix.apk`
+- APK: `[fora do repo] ultraroot/out/UltraRoot-own-inc2-fix.apk`
 - sha256: `a697228a22241b8edee89eaa1469eb12e80e7a50f302996adccc35af6165e813`
 - Assinatura: **V2-only**, cert `efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9` (mesma do C0.3)
 - Package: `me.weishu.kernelsu` (applicationId inalterado — decisão (a): mantém autorização do C0.3 sem reflash; namespace do código = `dev.superroot.ultraroot`)
@@ -62,7 +62,7 @@ Se ACEITE: KSU concede root. Próximo: inc3 (grant/revoke UI + migrar 4 módulos
 - `superpowers:writing-plans` + `superpowers:subagent-driven-development` (para inc3/device).
 - `fable-method`, `think-twice` (sempre).
 - `apk-reverse` (se precisar auditar backend no device).
-- `hardware-firmware-validation` (se voltar a mexer no kernel/device).
+- `hardware-firmware-validation` (se voltar a mexer no [fora do repo] kernel/device).
 
 ---
 

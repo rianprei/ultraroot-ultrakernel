@@ -10,12 +10,12 @@ f148e9160599d9d1f571b8a11672155ffd0fe13ed2e3f9cdd5835ad54e8737e6  core-backend/s
 05fda95a2ea19d6c36ca12c5c0f44490dca005b918e543e2d00ef6007da39b3e  core-backend/src/main/java/dev/superroot/core/EngineNatives.kt
 
 T1: PASSOU — cópia criada e hash igual ao KsuMode.kt de T0:
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_R2
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_R2
 
 T2: PASSOU — somente a linha 5 substituída pelo texto exato solicitado.
 SHA final de KsuMode.kt:
 47148567e73c3d2b8e3079a9900b9b52e7db51931cc1b17bba87b7bc4063ac7f  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-Comando: diff docs/history/reports/KsuMode.kt.antes_R2 core-backend/src/main/java/dev/superroot/core/KsuMode.kt
+Comando: diff [fora do repo] docs/history/reports/KsuMode.kt.antes_R2 core-backend/src/main/java/dev/superroot/core/KsuMode.kt
 Saída (exit 1, diferença esperada):
 5c5
 <  * lkm is false in a built-in build (the lake kernel), which does not mean KernelSU is absent.
@@ -24,7 +24,7 @@ Saída (exit 1, diferença esperada):
 
 T3: PASSOU — core-backend 20/20; 0 falhas, erros ou skips; exit 0.
 Comando exato:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
 > Task :core-backend:testDebugUnitTest
 BUILD SUCCESSFUL in 1s
 15 actionable tasks: 3 executed, 12 up-to-date

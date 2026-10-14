@@ -5,7 +5,7 @@ ALVO (leia): docs/history/research/phase2/PHASE2_BLUEPRINT.md + docs/history/res
 LISTA DE CAÇA (achados CONCRETOS; se nada, "nenhum achado", nunca "parece ok"):
 1. A decisão KernelSU×APatch se sustenta contra a SUA matriz? Alguma feature-alvo prioritária que só o APatch/KPM entrega e que inviabiliza KernelSU? Aponte a feature (nº da matriz).
 2. Arquitetura de 5 camadas: falta alguma camada, ou duas que o blueprint junta mas que de fato conflitam (dono do su, mount)? 
-3. Gate G1: o critério de PASS (kernelsu.ko do DDK pinado, sem símbolo indefinido, CRC/KMI + vermagic + arquitetura batendo, trust resolvida) é SUFICIENTE pra garantir que o módulo encaixa no nosso 6.6.89? O que ele deixa passar que não deveria? Compare com a lógica do nosso tools/gate_kmi_crc.sh.
+3. Gate G1: o critério de PASS (kernelsu.ko do DDK pinado, sem símbolo indefinido, CRC/KMI + vermagic + arquitetura batendo, trust resolvida) é SUFICIENTE pra garantir que o módulo encaixa no nosso 6.6.89? O que ele deixa passar que não deveria? Compare com a lógica do nosso [fora do repo] tools/gate_kmi_crc.sh.
 4. A camada de compat de módulo é realista dadas as ressalvas da sua matriz (webroot ausente no Magisk/Alpha; diferenças de instalação KSU×Magisk)?
 5. Os pontos de autorização do dono cobrem todo write/flash? Falta algum ponto irreversível sem "sim"?
 

@@ -1,6 +1,6 @@
 PAPEL: implementar as Tasks 1-6 (HOST-ONLY) do plano UltraRoot SP1. Autônomo. Siga EXATAMENTE [fora do repo]/docs/superpowers/plans/2026-10-11-ultraroot-sp1.md. NÃO faça a Task 7 (device-gated). NÃO rode adb/fastboot real. -X GET no gh, sem criar repo, sem workflow.
 
-REGRAS: TDD como no plano (teste falha → implementa → passa → commit local por task). Tasks 2/3 mexem na tooling de kernel/lake (fastboot_guard.sh + selftest_fastboot_guard.sh) — `tools/selftest_fastboot_guard.sh` e `tools/run_all_checks.sh` TÊM que passar com os casos novos. Artefatos (Tasks 4-6) em docs/ultraroot/ e [artefato local, fora do repo]/sp1/ (nunca /tmp). Evidência (comando+saída) em tudo. Compila ≠ validado.
+REGRAS: TDD como no plano (teste falha → implementa → passa → commit local por task). Tasks 2/3 mexem na tooling de kernel/lake (fastboot_guard.sh + selftest_fastboot_guard.sh) — `[fora do repo] tools/selftest_fastboot_guard.sh` e `[fora do repo] tools/run_all_checks.sh` TÊM que passar com os casos novos. Artefatos (Tasks 4-6) em docs/ultraroot/ e [artefato local, fora do repo]/sp1/ (nunca /tmp). Evidência (comando+saída) em tudo. Compila ≠ validado.
 
 ATENÇÃO (Review Focus do plano):
 - Task 2: rollback reativa `set_active b` só com current-slot==b; `set_active a` SEMPRE recusado (selftest sabota).

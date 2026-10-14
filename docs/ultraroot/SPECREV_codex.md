@@ -1,6 +1,6 @@
 # Revisão Codex — spec UltraRoot rev.5
 
-**Escopo:** leitura integral das 1001 linhas de `docs/superpowers/specs/2026-10-11-ultraroot-design.md`, revisão estática e read-only. Consultei também os catálogos referenciados e os documentos SP1 de paridade/recuperação para conferir o estado real da decomposição. Nenhum arquivo de implementação foi alterado; não rodei build, testes ou comandos de device.
+**Escopo:** leitura integral das 1001 linhas de `[fora do repo] docs/superpowers/specs/2026-10-11-ultraroot-design.md`, revisão estática e read-only. Consultei também os catálogos referenciados e os documentos SP1 de paridade/recuperação para conferir o estado real da decomposição. Nenhum arquivo de implementação foi alterado; não rodei build, testes ou comandos de device.
 
 ## Veredito
 

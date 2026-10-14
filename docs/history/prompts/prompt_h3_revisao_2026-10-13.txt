@@ -5,7 +5,7 @@ Correlation id: ULTRAROOT-H3R-2026-10-13. Autor: Codex #4. Revisor: você (OpenC
 Fatos do maestro (confira, não aceite):
 - Raiz: ultraroot/ (não é git).
 - Relatório do autor: docs/history/reports/h3_build_ui10_2026-10-13.txt.
-- Mudança em app/build.gradle.kts: só as linhas 21-22 (versionCode 40010, versionName "0.2.0-ui10"). Cópia de antes: docs/history/reports/build.gradle.kts.antes_H3 (sha 904e39c0...).
+- Mudança em app/build.gradle.kts: só as linhas 21-22 (versionCode 40010, versionName "0.2.0-ui10"). Cópia de antes: [fora do repo] docs/history/reports/build.gradle.kts.antes_H3 (sha 904e39c0...).
 - sha256 esperado de app/build.gradle.kts: a70bc6d68c6a1bb35e06e478a8ef33e7fa2106f9219e7dc48b1266388558fd41.
 - Artefatos em out/: UltraRoot-own-ui10-unsigned.apk e UltraRoot-own-ui10-aligned.apk, ambos com sha256 esperado cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894. out/badging-ui10.txt.
 - Build do autor: :app:assembleRelease, BUILD SUCCESSFUL, com aviso "Unable to strip the following libraries, packaging them as they are: libultraroot.so".
@@ -13,7 +13,7 @@ Fatos do maestro (confira, não aceite):
 Escrita: somente docs/history/reports/review_h3_badging_2026-10-13.txt (até 40 linhas).
 
 Tarefa:
-T1. diff docs/history/reports/build.gradle.kts.antes_H3 ultraroot/app/build.gradle.kts. Esperado: só 21-22. Cole a saída.
+T1. diff [fora do repo] docs/history/reports/build.gradle.kts.antes_H3 ultraroot/app/build.gradle.kts. Esperado: só 21-22. Cole a saída.
 T2. sha256sum de app/build.gradle.kts e dos dois APKs em out/. Confira com os valores esperados.
 T3. ~/Android/Sdk/build-tools/37.0.0/zipalign -c -v -p 4 out/UltraRoot-own-ui10-aligned.apk. Esperado: Verification successful.
 T4. ~/Android/Sdk/build-tools/37.0.0/aapt2 dump badging out/UltraRoot-own-ui10-aligned.apk | head -5. Conferir: name='me.weishu.kernelsu', versionCode='40010', versionName='0.2.0-ui10', application-label:'UltraRoot'.

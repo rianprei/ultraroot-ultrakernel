@@ -9,14 +9,14 @@ Substitui como ponto de retomada apenas o bloco "Repo público" abaixo; o restan
 - OpenCode padrão (`omniroute/auto/coding:reliable`) roteia para Requesty, sem saldo. Usar modelo NVIDIA explícito com `-m` (`nvidia/moonshotai/kimi-k3`, `nvidia/z-ai/glm-5.3`).
 - TUI do OpenCode não aceita prompt colado: usar `opencode run --auto -m <modelo> "$(cat contrato)"` por script.
 - Agentes OpenCode #4 e OpenCode #5 encerrados com `maestri dismiss`; nenhum executor ativo; nenhum artefato deles no repo (sem saída útil).
-- Revisão Haiku do contrato de montagem: 13 achados, 8 bloqueantes; corrigidos no contrato v2 (`docs/history/prompts/prompt_repo_montagem_opencode4_v2_2026-10-13.txt`).
+- Revisão Haiku do contrato de montagem: 13 achados, 8 bloqueantes; corrigidos no contrato v2 (`[fora do repo] docs/history/prompts/prompt_repo_montagem_opencode4_v2_2026-10-13.txt`).
 
 ## Repo público (decisão do dono, 2026-10-13)
 - Nome: `rianprei/ultraroot-ultrakernel`. Criar privado, verificar, depois tornar público.
 - Sem trailer de IA em commit (skill no-ai-attribution). E-mail do commit: o noreply do lake.
 - Sem licença definida (todos os direitos reservados) — pendência do dono.
 - Fora do repo: keys, backups, Magisk, scratch (exceto relatórios e código listados), APK/IMG/SO, dmesg bruto do aparelho, capturas PNG em `docs/history/evidence/`.
-- Lake: só `tools/fastboot_guard.sh`, `tools/selftest_fastboot_guard.sh` e README, no commit c8e7812 (não publicado no GitHub; remoto público em ffe583a). Diff de trabalho em arquivo separado.
+- Lake: só `[fora do repo] tools/fastboot_guard.sh`, `[fora do repo] tools/selftest_fastboot_guard.sh` e README, no commit c8e7812 (não publicado no GitHub; remoto público em ffe583a). Diff de trabalho em arquivo separado.
 - Executor da montagem: nenhum agente. Feito direto, com scripts e verificador mecânico (`tools/verify_repo.sh`), sabotagens e clone de conferência. Sem revisão cruzada por agente (o dono pediu para parar de rodar agentes); registrar isso no relatório final.
 
 ## Pendências do dono

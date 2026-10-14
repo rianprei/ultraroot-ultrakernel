@@ -72,7 +72,7 @@ Três motores, não nove produtos:
 
 Fora da matriz, como motores mortos ou redundantes neste recorte: `HuskyDG/magisk-files` respondeu HTTP 404; `1q23lyc45/KitsuneMagisk` está arquivado. SuList / MagiskHide não têm implementação viva no master nem na Alpha (os dois apagam a chave `magiskhide`). `rifsxd/KernelSU-Next` é fork de uma estrela do org e não foi clonado.
 
-Licenças vistas, sem abrir todos os `LICENSE`: KernelSU `MODULE_LICENSE("GPL")` em `kernel/core/init.c:234`. backslashxx declara GPL-2.0 no cabeçalho de `syscall_table_hook_arm64.c:8-10`. KernelPatch `kernel/include/kpscauth.h:1` é `GPL-2.0-or-later`. Juntar esses núcleos num único objeto de kernel é um problema de licença, separado do veredito de cada feature.
+Licenças vistas, sem abrir todos os `LICENSE`: KernelSU `MODULE_LICENSE("GPL")` em `kernel/core/init.c:234`. backslashxx declara GPL-2.0 no cabeçalho de `syscall_table_hook_arm64.c:8-10`. KernelPatch `[fora do repo] kernel/include/kpscauth.h:1` é `GPL-2.0-or-later`. Juntar esses núcleos num único objeto de kernel é um problema de licença, separado do veredito de cada feature.
 
 ## Eixo A — mecanismo de root
 
@@ -84,7 +84,7 @@ O gancho de syscall está em `kernel/hook/syscall_hook_manager.c`. `register_kre
 
 `kernel/hook/lsm_hook.c` deste commit é um patcher de slot (`ksu_patch_text` na linha 69, tabela `ksu_lsm_hook_entries`). Não chama `security_add_hooks`. A busca de `security_add_hooks` em todo `**/lsm_hook.c` dos clones só acertou rsuntk. (Alta)
 
-Não há `kernel/hook/syscall_table_hook_arm64.c` nesta árvore. (Alta, ausência de arquivo)
+Não há `[fora do repo] kernel/hook/syscall_table_hook_arm64.c` nesta árvore. (Alta, ausência de arquivo)
 
 ### KernelSU-Next, SukiSU, MKSU
 
@@ -96,11 +96,11 @@ Os três têm `syscall_hook_manager.c` e a mesma chamada:
 
 (Alta para a chamada; Média para o resto do arquivo quando o hash difere.)
 
-SukiSU acrescenta `kernel/kpm/kpm.c`. As exportações lidas são stubs: `sukisu_kpm_load_module_path` (linha 54) e `sukisu_kpm_unload_module`, `sukisu_kpm_num`, `sukisu_kpm_info`, `sukisu_kpm_list`, `sukisu_kpm_control`, `sukisu_kpm_version` só fazem `pr_info("kpm: Stub function called...")` e `nop` (linhas 58-121). (Alta: neste commit não há loader KPM.)
+SukiSU acrescenta `[fora do repo] kernel/kpm/kpm.c`. As exportações lidas são stubs: `sukisu_kpm_load_module_path` (linha 54) e `sukisu_kpm_unload_module`, `sukisu_kpm_num`, `sukisu_kpm_info`, `sukisu_kpm_list`, `sukisu_kpm_control`, `sukisu_kpm_version` só fazem `pr_info("kpm: Stub function called...")` e `nop` (linhas 58-121). (Alta: neste commit não há loader KPM.)
 
 ### backslashxx
 
-Cabeçalho de `kernel/hook/syscall_table_hook_arm64.c:1-15`: extensão downstream, “NOT affiliated” com o KernelSU oficial, GPL-2.0, só ARM64. Números de syscall fixos no estilo 4.14 (`__AARCH64_execve 221`, linha 23; `__AARCH64_reboot 142`, linha 22). A partir da linha 359, `syscall_table_sucompat_enable` chama `read_and_replace_syscall` sobre `sys_call_table` e, com `CONFIG_COMPAT`, sobre `compat_sys_call_table`, para execve, execveat, faccessat, newfstatat, reboot, read e os equivalentes armeabi (linhas 362-406). Existe também `syscall_table_hook_arm.c` com o mesmo padrão (linha 236 em diante). Não existe `syscall_hook_manager.c`. (Alta)
+Cabeçalho de `[fora do repo] kernel/hook/syscall_table_hook_arm64.c:1-15`: extensão downstream, “NOT affiliated” com o KernelSU oficial, GPL-2.0, só ARM64. Números de syscall fixos no estilo 4.14 (`__AARCH64_execve 221`, linha 23; `__AARCH64_reboot 142`, linha 22). A partir da linha 359, `syscall_table_sucompat_enable` chama `read_and_replace_syscall` sobre `sys_call_table` e, com `CONFIG_COMPAT`, sobre `compat_sys_call_table`, para execve, execveat, faccessat, newfstatat, reboot, read e os equivalentes armeabi (linhas 362-406). Existe também `syscall_table_hook_arm.c` com o mesmo padrão (linha 236 em diante). Não existe `syscall_hook_manager.c`. (Alta)
 
 Não existe `kernel/core/init.c` nem `kernel/Kbuild` neste layout. Se o entregável é LKM ou built-in, `[NÃO-VERIFICÁVEL]` neste dossiê.
 
@@ -126,7 +126,7 @@ Alpha: `zygisk/hook.cpp`, `module.rs`, `sqlite.cpp`, `resetprop/cli.rs` e `const
 
 O README do KernelPatch (lido na sessão anterior; não reaberto aqui) descreve patch de imagem de kernel stripped, arm64, kallsyms. O que esta passagem prova no fonte:
 
-- `kernel/patch/include/uapi/scdefs.h:114` `#define SUPERCMD "/system/bin/truncate"`.
+- `[fora do repo] kernel/patch/include/uapi/scdefs.h:114` `#define SUPERCMD "/system/bin/truncate"`.
 - `supercall.c:461-469`: `supercall_install` chama `hook_syscalln_override(__NR_supercall, 6, before, ...)`. O comentário nas linhas 465-468 diz que o supercall curto-circuita o syscall real e, quando o dispatcher global está em `invoke_syscall`, o syscall 45 usa o mesmo trampolim. (Alta para a instalação do hook; Média para o número 45, que está no comentário.)
 - `kptools-linux` parseia `kpimg` (REA). `kpimg-android` contém `superkey` e `/system/bin/su` (varredura). (Alta para as strings; o layout do blob não foi descompilado.)
 
@@ -174,7 +174,7 @@ Paths Android em `scdefs.h:94-114` (sob `#ifdef ANDROID`):
 
 (Alta)
 
-Quem autentica é o hook `before` em `kernel/patch/common/supercall.c:418-458`:
+Quem autentica é o hook `before` em `[fora do repo] kernel/patch/common/supercall.c:418-458`:
 
 1. `get_ap_mod_exclude(uid)` retorna na hora (linha 421). O uid excluído não chega no supercall.
 2. `is_authed` começa em 0.
@@ -222,7 +222,7 @@ Magic mount do Magisk: `native/src/core/module.rs`. `bind_mount` na linha 39. `p
 
 `apd/src/module.rs` existe. O corpo do mount não foi lido. Pelo `exec_mount_script` do KSU e pelos mesmos nomes em `defs.rs` do APatch, o desenho esperado é delegação a metamódulo. O veredito “APatch não faz bind/tmpfs dentro do apd” fica `[NÃO-VERIFICÁVEL]` até o corpo ser lido. (Baixa se eu afirmasse ausência.)
 
-KPM real: `KernelPatch/kernel/patch/module/module.c`. `load_module` na linha 558 chama `load_module_ex` (452). `load_module_path` na 613. `set_kpm_load_result` na 65. (Alta: o loader está no KernelPatch.) SukiSU, neste commit, não o tem (stubs acima). Nenhum outro clone tem `kernel/kpm/kpm.c` nem `kernel/patch/module/module.c`.
+KPM real: `KernelPatch/kernel/patch/module/module.c`. `load_module` na linha 558 chama `load_module_ex` (452). `load_module_path` na 613. `set_kpm_load_result` na 65. (Alta: o loader está no KernelPatch.) SukiSU, neste commit, não o tem (stubs acima). Nenhum outro clone tem `[fora do repo] kernel/kpm/kpm.c` nem `[fora do repo] kernel/patch/module/module.c`.
 
 Boot patch do KSU: `userspace/ksud/src/boot_patch.rs:573` `pub fn patch`. O trecho 746-776 carrega o asset `ksuinit`, renomeia `init` para `init.real` se o cpio ainda não tem `kernelsu.ko`, e adiciona `init` + `kernelsu.ko` ao cpio. Comentário na linha 386 cita a ordem de lookup do magiskboot (`init_boot.cpio` antes de `ramdisk.cpio`). (Alta: o patch de ramdisk do ksud injeta o init e o `.ko` do KernelSU.) O arquivo é byte-idêntico em backslashxx. Next, SukiSU, MKSU e rsuntk diferem; o corpo deles não foi relido.
 
@@ -268,7 +268,7 @@ KSU: `kernel/feature/selinux_hide.c:510-515` registra feature de nome `"selinux_
 
 O boot do KSU também injeta `exec u:r:` + domínio + `KSUD_PATH` em texto de rc, `kernel/runtime/ksud_integration.c:39-48`. (Alta: há uma linha de rc que dispara o ksud num domínio. O nome do domínio está no macro, não foi aberto.)
 
-KernelPatch: `kernel/patch/include/selinux_hide.h:13-14` diz que a feature liga por supercall `SUPERCALL_CONTROL_FEATURE` com nome `"selinux_hide"` ou pelo arquivo `/data/adb/ap/selinux_hide`. `user_event.c:37` chama `selinux_hide_post_fs_data`. O `.c` existe em `kernel/patch/common/selinux_hide.c`. O corpo do hide não foi citado. (Alta para o ponto de entrada; Média para o que ele altera na policy.)
+KernelPatch: `[fora do repo] kernel/patch/include/selinux_hide.h:13-14` diz que a feature liga por supercall `SUPERCALL_CONTROL_FEATURE` com nome `"selinux_hide"` ou pelo arquivo `/data/adb/ap/selinux_hide`. `user_event.c:37` chama `selinux_hide_post_fs_data`. O `.c` existe em `[fora do repo] kernel/patch/common/selinux_hide.c`. O corpo do hide não foi citado. (Alta para o ponto de entrada; Média para o que ele altera na policy.)
 
 Magisk: domínio `u:r:magisk:s0` e tipo de arquivo `magisk_file` em `consts.rs:41-45`. Há `libmagiskpolicy.so` no APK (extraído, não traçado). O que a policy injeta, além desses contextos, não foi lido. (Alta para os contextos; Média para o restante da sepolicy.)
 

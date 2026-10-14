@@ -10,29 +10,29 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V1 PASS docs numbers == gate/data (557 files, 370 modules, 4138 required, 2309 provided)
 
 --- V2 regex controls
-    V2 OK   docs/DEVICE-TEST-PROTOCOL.md:12 controle positivo+negativo (sha256sums_bad.txt: 1 linhas)
-    V2 OK   docs/DEVICE-TEST-PROTOCOL.md:183 controle positivo+negativo (dmesg_bad.txt: 7 linhas)
-    V2 OK   docs/DEVICE-TEST-PROTOCOL.md:184 controle positivo+negativo (dmesg_bad.txt: 7 linhas)
+    V2 OK   [fora do repo] docs/DEVICE-TEST-PROTOCOL.md:12 controle positivo+negativo (sha256sums_bad.txt: 1 linhas)
+    V2 OK   [fora do repo] docs/DEVICE-TEST-PROTOCOL.md:183 controle positivo+negativo (dmesg_bad.txt: 7 linhas)
+    V2 OK   [fora do repo] docs/DEVICE-TEST-PROTOCOL.md:184 controle positivo+negativo (dmesg_bad.txt: 7 linhas)
     V2 PASS 3 padrão(ões) -E com controles positivo+negativo; 0 pipe escapado
     V37 OK todos os padrões -E dos 5 docs têm controles positivo+negativo; 0 pipe escapado
 
 --- V3-V8+V14-V17 invariants
     V85 OK required docs exist
     V3 OK protocol compares avbtool info_image of vbmeta_a and vbmeta_b and forbids slot switching
-    V3 OK no un-negated 'fastboot set_active' instruction in docs/DEVICE-TEST-PROTOCOL.md
-    V4 OK docs/DEVICE-TEST-PROTOCOL.md states the fastboot boot caveat (UNKNOWN) next to the command
-    V4 OK no positive support claim for fastboot boot in docs/DEVICE-TEST-PROTOCOL.md/docs/SAFETY.md/README.md
+    V3 OK no un-negated 'fastboot set_active' instruction in [fora do repo] docs/DEVICE-TEST-PROTOCOL.md
+    V4 OK [fora do repo] docs/DEVICE-TEST-PROTOCOL.md states the fastboot boot caveat (UNKNOWN) next to the command
+    V4 OK no positive support claim for fastboot boot in [fora do repo] docs/DEVICE-TEST-PROTOCOL.md/docs/SAFETY.md/README.md
     V4 OK protocol STOPs when the bootloader answers 'unknown command'
     V5 OK every absence claim in the protocol/safety docs cites 2+ independent sources
     V5 NOTE manual-review scope: empirical absence claims only; 'nothing in T0/T2 writes flash' is a statement about the doc's own table, checked by reading the table
     V7 OK every kernel-behaviour claim cites a source file or CONFIG symbol
-    V14 OK docs/SAFETY.md has the real-bootloader evidence table (lk_b.img strings source + INFERRED labelling)
+    V14 OK [fora do repo] docs/SAFETY.md has the real-bootloader evidence table (lk_b.img strings source + INFERRED labelling)
     V14 OK SAFETY string verification recipe complete (image sha256 + 4 file offsets)
     V14 OK protocol labels LK check order (INFERRED other-device, or cites RE1 disassembly)
     V14 NOTE manual-review the semantic truth (string really in lk_b.img) still needs the retained binary, but the recipe (image sha256 + 4 file offsets, greppable with grep -boa -F) is checked above; the quoted strings were grepped against a retained strings extract during the FIX7 review (extract not published)
-    V15 OK no executable 'fastboot boot' step in docs/DEVICE-TEST-PROTOCOL.md
+    V15 OK no executable 'fastboot boot' step in [fora do repo] docs/DEVICE-TEST-PROTOCOL.md
     V15 OK protocol documents why the legacy RAM-boot was discarded (slot-selection risk)
-    V15 OK docs/SAFETY.md states the RAM path is not used
+    V15 OK [fora do repo] docs/SAFETY.md states the RAM path is not used
     V16 OK protocol declares 'Variable not found' as an accepted answer
     V16 OK write pre-flight present: partition-size:boot_b = 0x4000000, file = 67108864 B, sha256 checked
     V16 OK is-userspace=yes (fastbootd) is a STOP
@@ -47,10 +47,10 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V18 OK T-1 writes identical content only
     V18 OK T-1 names the backup-image flash command
     V18 OK README affirms two protected writes (T-1 backup, T3 kernel)
-    V19 OK docs/SAFETY.md cites RE4_codex_fallback.md
-    V19 OK docs/SAFETY.md cites RE2_codex_bootmode.md
-    V19 OK docs/SAFETY.md cites fcn.4c461724
-    V19 OK docs/SAFETY.md cites 0x4c42b264
+    V19 OK [fora do repo] docs/SAFETY.md cites RE4_codex_fallback.md
+    V19 OK [fora do repo] docs/SAFETY.md cites RE2_codex_bootmode.md
+    V19 OK [fora do repo] docs/SAFETY.md cites fcn.4c461724
+    V19 OK [fora do repo] docs/SAFETY.md cites 0x4c42b264
     V19 OK retry mechanics stay labelled UNVERIFIED
     V20 OK no instruction presents is-userspace as absent from lk_b.img
     V21 OK Z0 allowlist contains getvar product
@@ -116,7 +116,7 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V29 OK SAFETY states: boot_para is NOT in either table
     V29 OK SAFETY states: vbmeta is NOT in either table
     V29 OK SAFETY states: vendor_boot is NOT in either table
-    V30 OK no executable 'getvar all' outside docs/research/
+    V30 OK no executable 'getvar all' outside [fora do repo] docs/research/
     V31 OK protocol has exactly 2 wrapper flash lines (T-1, T3)
     V31 OK every wrapper flash targets boot_b
     V31 OK README affirms two protected writes (T-1 backup, T3 kernel)
@@ -155,7 +155,7 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V38 OK Z0.3 has no extra getvar beyond the 15-name closed allowlist
     V39 OK No stale single-write sentence; README affirms two protected writes
     V40 OK SPEC V40 names the exact phrase V22 enforces (key-reached fastboot)
-    V41 OK docs/research/README.md has 'contain errors' warning and UNVERIFIED table
+    V41 OK [fora do repo] docs/research/README.md has 'contain errors' warning and UNVERIFIED table
     V42 OK V41: V30 stricter filter enforced in V30
     V43 OK Z0.4 exception states rollback index 0 means LK can boot old slot A
     V44 OK is-userspace text states string exists in LK getvar table
@@ -173,7 +173,7 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V53 OK Abort criteria table includes L1-L6 lacunae
     V8 OK 68 fact rows present (>= 10)
     V8 OK 68 fact rows, all with a non-empty proof column
-    V8 OK docs/research/README.md carries the 'contain errors' warning and the UNVERIFIED link table
+    V8 OK [fora do repo] docs/research/README.md carries the 'contain errors' warning and the UNVERIFIED link table
     V8 OK every device-dump proof citation carries its verification boundary (retained/not published)
     V8 NOTE manual-review that each individual FACT sentence in the raw notes has a source is NOT automatable (free prose); the proof column of the facts log is the enforced landing place
     V56 OK protocol runs on-device observation via: adb shell uname -r
@@ -204,7 +204,7 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V58 OK guard write gate keeps: FASTBOOT_GUARD_HASHES
     V58 OK guard write gate keeps: flash boot_b
     V59 OK no bare/command fastboot instruction in protocol/SAFETY (wrapper-only)
-    V59 OK protocol routes fastboot through tools/fastboot_guard.sh
+    V59 OK protocol routes fastboot through [fora do repo] tools/fastboot_guard.sh
     V60 OK protocol captures stderr via: 2>&1 | tee z0_fastboot_before.txt
     V60 OK protocol captures stderr via: 2>&1 | tee t2b_readout.txt
     V60 OK protocol captures stderr via: fastboot answers on stderr
@@ -217,14 +217,14 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     V69 OK README.md uses controlled term: rebuild-reproducible
     V69 OK README.md uses controlled term: hardware-unverified
     V69 OK README.md uses controlled term: boot-unproven
-    V69 OK docs/KMI-GATES.md uses controlled term: host-verified
-    V69 OK docs/KMI-GATES.md uses controlled term: rebuild-reproducible
-    V69 OK docs/KMI-GATES.md uses controlled term: hardware-unverified
-    V69 OK docs/KMI-GATES.md uses controlled term: boot-unproven
-    V69 OK docs/SAFETY.md uses controlled term: host-verified
-    V69 OK docs/SAFETY.md uses controlled term: rebuild-reproducible
-    V69 OK docs/SAFETY.md uses controlled term: hardware-unverified
-    V69 OK docs/SAFETY.md uses controlled term: boot-unproven
+    V69 OK [fora do repo] docs/KMI-GATES.md uses controlled term: host-verified
+    V69 OK [fora do repo] docs/KMI-GATES.md uses controlled term: rebuild-reproducible
+    V69 OK [fora do repo] docs/KMI-GATES.md uses controlled term: hardware-unverified
+    V69 OK [fora do repo] docs/KMI-GATES.md uses controlled term: boot-unproven
+    V69 OK [fora do repo] docs/SAFETY.md uses controlled term: host-verified
+    V69 OK [fora do repo] docs/SAFETY.md uses controlled term: rebuild-reproducible
+    V69 OK [fora do repo] docs/SAFETY.md uses controlled term: hardware-unverified
+    V69 OK [fora do repo] docs/SAFETY.md uses controlled term: boot-unproven
     V71 OK no stale T0/T2 live-step references in device-facing docs
     V72 OK slot-successful is required, and the accepted-absent block says it is not accepted-absent
     V72 OK no 'any per-slot' accepted-absent clause
@@ -273,17 +273,17 @@ As 5 linhas FAIL do log são o veredito dos casos de sabotagem do selftest do ga
     PASS protocol invariants (V3-V75 and V90-V115 except aliases and the checks that live in other scripts)
 
 --- V6 destructive ops
-    V6 OK   tools/check_docs_numbers.sh:22 rm -rf $T (mktemp -d + trap)
-    V6 OK   tools/fastboot_guard.sh:40 rm -rf $GDIR (mktemp -d + trap)
-    V6 OK   tools/fetch_official_artifacts.sh:114 rm -rf $STAGE (mktemp -d + trap)
-    V6 OK   tools/gate_kmi_crc.sh:22 rm -rf $T (mktemp -d + trap)
-    V6 OK   tools/run_all_checks.sh:65 rm -rf $T (mktemp -d + trap)
-    V6 OK   tools/selftest_backprop.sh:12 rm -rf $BASE (mktemp -d + trap)
-    V6 OK   tools/selftest_backprop.sh:40 rm -rf $dir (mktemp -d + trap)
-    V6 OK   tools/selftest_fastboot_guard.sh:11 rm -rf $BASE (mktemp -d + trap)
-    V6 OK   tools/selftest_fetch_publish.sh:12 rm -rf $WORK (mktemp -d + trap)
-    V6 OK   tools/selftest_gates.sh:15 rm -rf $WORK (mktemp -d + trap)
-    V6 OK   tools/verify_modsig.sh:24 rm -rf $TMPWORK (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/check_docs_numbers.sh:22 rm -rf $T (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/fastboot_guard.sh:40 rm -rf $GDIR (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/fetch_official_artifacts.sh:114 rm -rf $STAGE (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/gate_kmi_crc.sh:22 rm -rf $T (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/run_all_checks.sh:65 rm -rf $T (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/selftest_backprop.sh:12 rm -rf $BASE (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/selftest_backprop.sh:40 rm -rf $dir (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/selftest_fastboot_guard.sh:11 rm -rf $BASE (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/selftest_fetch_publish.sh:12 rm -rf $WORK (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/selftest_gates.sh:15 rm -rf $WORK (mktemp -d + trap)
+    V6 OK   [fora do repo] tools/verify_modsig.sh:24 rm -rf $TMPWORK (mktemp -d + trap)
     V6 PASS 11 rm -rf executável(is), todos em diretórios criados por mktemp -d e removidos por trap
 
 --- V54 sigpipe hygiene

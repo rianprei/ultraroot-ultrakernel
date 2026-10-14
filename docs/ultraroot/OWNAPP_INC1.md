@@ -47,7 +47,7 @@ O APK deste incremento está assinado só com V2, um signer, cert DER de 818 byt
 
 `KsuBackendHostTest` 3/3, failures=0: capability sem lib, allowlist sem lib, perfil null vira `perfil indisponível` e `allowSu=false` lido continua confirmado.
 
-APK: `ultraroot/out/UltraRoot-own-inc1.apk`  
+APK: `[fora do repo] ultraroot/out/UltraRoot-own-inc1.apk`  
 sha256 `58cb70b93a4c4f8367b499de0d856bf00c68d1f56cefcb5a00d2d63e620340f4`
 
 `libultraroot.so` exporta `kernelVersion`, `kernelUapi`, `managerUapi`, `allowListUids`, `readProfile`. O strip do Gradle não rodou; `libc++_shared.so` foi no APK sem strip (~9 MB). O ioctl não foi executado no aparelho.

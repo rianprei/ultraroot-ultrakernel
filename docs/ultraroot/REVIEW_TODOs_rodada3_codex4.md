@@ -14,13 +14,13 @@
 Comando executado para a matriz item a item:
 
 ```text
-$ python3 docs/history/reports/round3_coverage.py
+$ python3 [fora do repo] docs/history/reports/round3_coverage.py
 todo=docs/ultraroot/TODOs.md inventory_raw=440 excluded_bullets=7 inventory=433 capabilities=52 product_requirements=32 total=517
 CAPABILITY_COBERTO=52
 INVENTORY_COBERTO=433
 SPEC_REQ_COBERTO=32
 coverage=517/517=100.00%
-matrix=docs/history/reports/TODOs_coverage_rodada3.tsv
+matrix=[fora do repo] docs/history/reports/TODOs_coverage_rodada3.tsv
 ```
 
 A matriz contém para cada uma das 517 unidades a linha-fonte, a classificação e a linha/trecho do TODO. Linhas: inventário spec:151–853; capacidades CAPABILITIES.md:33–92; requisitos gerais spec:42–116. Resultado conferido na matriz: 518 linhas incluindo o cabeçalho.
@@ -52,7 +52,7 @@ Os dois itens parciais da rodada 2 agora estão cobertos: spec:525 “Configurar
   EXISTS docs/history/research/phase4/C03_stablekey_result.md
   EXISTS docs/history/research/phase4/C01_device_plan.md
   EXISTS [artefato local, fora do repo]/grok/c01-build/C01_ksu_boot_b.img
-  EXISTS docs/history/research/phase4/c01_dmesg.txt
+  EXISTS [fora do repo] docs/history/research/phase4/c01_dmesg.txt
   EXISTS docs/ultraroot/REVIEW_vc40000_codex4.md
   EXISTS [fora do repo]/ultraroot/reskin-inc2b-vc32673.apk
   EXISTS docs/history/evidence/2026-10-11_install_vc40000.txt
@@ -78,7 +78,7 @@ Comandos executados e saída literal:
 $ python3 - <<'PY'
 from pathlib import Path
 source=Path('docs/ultraroot/TODOs.md')
-dest=Path('docs/history/reports/todos-rodada3-sabotado.md')
+dest=Path('[fora do repo] docs/history/reports/todos-rodada3-sabotado.md')
 phrase='Matriz de recuperação por device e por domínio'
 lines=source.read_text(encoding='utf-8').splitlines(keepends=True)
 hits=[i for i,line in enumerate(lines,1) if phrase in line]
@@ -86,24 +86,24 @@ if len(hits)!=1: raise SystemExit(f'expected one source line, got {hits}')
 dest.write_text(''.join(line for line in lines if phrase not in line),encoding='utf-8')
 print(f'copied={source} to={dest}; removed source_line={hits[0]}; matches=1')
 PY
-copied=docs/ultraroot/TODOs.md to=docs/history/reports/todos-rodada3-sabotado.md; removed source_line=577; matches=1
+copied=docs/ultraroot/TODOs.md to=[fora do repo] docs/history/reports/todos-rodada3-sabotado.md; removed source_line=577; matches=1
 
-$ python3 docs/history/reports/round3_coverage.py
+$ python3 [fora do repo] docs/history/reports/round3_coverage.py
 todo=docs/ultraroot/TODOs.md inventory_raw=440 excluded_bullets=7 inventory=433 capabilities=52 product_requirements=32 total=517
 CAPABILITY_COBERTO=52
 INVENTORY_COBERTO=433
 SPEC_REQ_COBERTO=32
 coverage=517/517=100.00%
-matrix=docs/history/reports/TODOs_coverage_rodada3.tsv
+matrix=[fora do repo] docs/history/reports/TODOs_coverage_rodada3.tsv
 
-$ python3 docs/history/reports/round3_coverage.py docs/history/reports/todos-rodada3-sabotado.md
-todo=docs/history/reports/todos-rodada3-sabotado.md inventory_raw=440 excluded_bullets=7 inventory=433 capabilities=52 product_requirements=32 total=517
+$ python3 [fora do repo] docs/history/reports/round3_coverage.py [fora do repo] docs/history/reports/todos-rodada3-sabotado.md
+todo=[fora do repo] docs/history/reports/todos-rodada3-sabotado.md inventory_raw=440 excluded_bullets=7 inventory=433 capabilities=52 product_requirements=32 total=517
 CAPABILITY_COBERTO=52
 INVENTORY_COBERTO=433
 SPEC_REQ_AUSENTE=1
 SPEC_REQ_COBERTO=31
 coverage=516/517=99.81%
-matrix=docs/history/reports/TODOs_coverage_rodada3_sabotado.tsv
+matrix=[fora do repo] docs/history/reports/TODOs_coverage_rodada3_sabotado.tsv
 SABOTAGE_CHECK: spec:107 AUSENTE — Matriz de recuperação por device e por domínio; accusations=1
 ```
 

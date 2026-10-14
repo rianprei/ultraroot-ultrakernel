@@ -4,8 +4,8 @@ Raiz dos caminhos relativos: ultraroot
 Saídas registradas: extratos literais do Gradle e XML desta execução.
 
 Comandos exatos:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
 
 T0: PASSOU — cinco hashes iguais aos resultados do H1; nenhum arquivo sobrescrito antes da conferência.
 6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
@@ -43,12 +43,12 @@ KsuModeTest > decodeKernelModeWithoutAnswerIsUnavailable FAILED
 decodeKernelModeWithoutAnswerIsUnavailable FAILED: java.lang.AssertionError at KsuModeTest.kt:49
 sha256sum antes de S1 (fonte e cópia):
 cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S1
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_S1
 Cópia conferida por sha256sum ANTES de restaurar:
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S1
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_S1
 sha256sum depois de restaurar S1:
 cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S1
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_S1
 
 T6/S2: PASSOU — máscara LKM 1 -> 2; três falhas; restauração da implementação corrigida comprovada.
 KsuModeTest > decodeKernelModeWithAnswerDecodesFlags FAILED
@@ -64,12 +64,12 @@ decodeManagerBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=false, 
 decodeLkmBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=true, manager=false, lateLoad=false)> but was:<KsuMode(lkm=false, manager=false, lateLoad=false)>; at dev.superroot.core.KsuModeTest.decodeLkmBit(KsuModeTest.kt:15)
 sha256sum antes de S2 (fonte e cópia):
 cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S2
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_S2
 Cópia conferida por sha256sum ANTES de restaurar:
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S2
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_S2
 sha256sum depois de restaurar S2:
 cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  docs/history/reports/KsuMode.kt.antes_S2
+cb26f43f38815ccc20591806dd1160b8f347ef26c067e92fb4e643e6b60df67a  [fora do repo] docs/history/reports/KsuMode.kt.antes_S2
 
 T7: PASSOU — módulo 20/20 após as duas restaurações, exit 0.
 BUILD SUCCESSFUL in 1s

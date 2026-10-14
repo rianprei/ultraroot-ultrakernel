@@ -36,8 +36,8 @@ Caminhos relativos a `[artefato local, fora do repo]/grok/src/`.
 
 - Next: ACOPLADA. `kernel/core/init.c:116` `ksu_late_loaded = (current->pid != 1)`. `module_init` `:237` e `:239`. `MODULE_LICENSE("GPL")` `:243`.
 - Suki: ACOPLADA. `init.c:117`, `module_init` `:237`/`:239`, licença `:243`.
-- bsxx: ACOPLADA. `kernel/ksu.c:298` `kernelsu_lkm_init`. `:306-309` retorna 0 se `pid == 1`; senão o caminho “pid not 1, late load”. `module_init` `:346`. `MODULE_LICENSE("GPL")` `:350`. O built-in separado é `device_initcall` `:284` sob `#if !defined(MODULE)`.
-- rs: AUSENTE. `kernel/ksu.c:135` `device_initcall(kernelsu_init)`. `MODULE_LICENSE` está dentro do comentário `:137-141`. Sem `module_init` e sem `ksu_late_loaded`.
+- bsxx: ACOPLADA. `[fora do repo] kernel/ksu.c:298` `kernelsu_lkm_init`. `:306-309` retorna 0 se `pid == 1`; senão o caminho “pid not 1, late load”. `module_init` `:346`. `MODULE_LICENSE("GPL")` `:350`. O built-in separado é `device_initcall` `:284` sob `#if !defined(MODULE)`.
+- rs: AUSENTE. `[fora do repo] kernel/ksu.c:135` `device_initcall(kernelsu_init)`. `MODULE_LICENSE` está dentro do comentário `:137-141`. Sem `module_init` e sem `ksu_late_loaded`.
 - MKSU: ACOPLADA. `init.c:105`, `module_init` `:220`/`:222`, licença `:226`.
 
 ### 7 — `ksuinit` + `kernelsu.ko` no cpio
@@ -99,7 +99,7 @@ bsxx continua ACOPLADA pela identidade de arquivo com o KSU oficial (linhas 746/
 - bsxx: ACOPLADA. `apk_sign.c:323` size `0x363` hash `4359c171f32543394cbc23ef908c4bb94cad7c8087002ba164c8230948c21549`; `:327` `EXPECTED_SIZE`/`EXPECTED_HASH`; `:331` size `0x375` hash `484fcba6e6c43b1fb09700633bf2fb4758f13cb0b2f4457b80d075084b26c588`. `kernel/Makefile:17` pacote `me.weishu.kernelsu`, `:18-19` size `0x033b` e o hash oficial `c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6`.
 - rs: ACOPLADA. `apk_sign.c:164` `check_v2_signature(char *path)` abre o arquivo e caminha o EOCD. `is_manager_apk` `:340-355` pode comparar `KSU_MANAGER_PACKAGE` e chama `check_v2_signature(path)`.
 - MKSU: ACOPLADA. `apk_sign.c:352`, check `:366`, segundo cert `:369-370`. `Kbuild:131` size `0x033b`, `:135` hash oficial.
-- KP: AUSENTE nesta linha. `kernel/patch/android/userd.c:1151-1157` `is_trusted_manager_uid_android` compara `uid == trusted_manager_uid` e devolve 0 se o uid confiável é inválido. Chamado em `supercall.c:413`. Declaração em `userd.h:19`. É confiança por uid. O superkey continua na linha 13, já ACOPLADA.
+- KP: AUSENTE nesta linha. `[fora do repo] kernel/patch/android/userd.c:1151-1157` `is_trusted_manager_uid_android` compara `uid == trusted_manager_uid` e devolve 0 se o uid confiável é inválido. Chamado em `supercall.c:413`. Declaração em `userd.h:19`. É confiança por uid. O superkey continua na linha 13, já ACOPLADA.
 
 ### 29 — resetprop
 
@@ -130,4 +130,4 @@ Corpos de método Java (`isSuEnabled`, `Natives.su`, `SuPolicy`) continuam indis
 
 ## Scratch
 
-`[artefato local, fora do repo]/grok` ficou em 321 MB. `tmp/` e `decompile/` já estavam vazios (0 bytes); não havia lixo de Ghidra para apagar. Ficam `src/` (155 MB), `bin/` (115 MB, APKs e nativos citados), `tools/jadx-headless-mcp-0.7.1-all.jar` (41 MB), `alpha/` (11 MB), `rea/` e `notes/`. Nada foi escrito em `/tmp`.
+`[artefato local, fora do repo]/grok` ficou em 321 MB. `tmp/` e `decompile/` já estavam vazios (0 bytes); não havia lixo de Ghidra para apagar. Ficam `src/` (155 MB), `bin/` (115 MB, APKs e nativos citados), `[fora do repo] tools/jadx-headless-mcp-0.7.1-all.jar` (41 MB), `alpha/` (11 MB), `rea/` e `notes/`. Nada foi escrito em `/tmp`.

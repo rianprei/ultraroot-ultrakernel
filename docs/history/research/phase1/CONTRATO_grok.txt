@@ -5,7 +5,7 @@ OBJETIVO ÚNICO: mapear a ARQUITETURA e o conjunto de FEATURES do KernelSU, Magi
 FERRAMENTA OBRIGATÓRIA — REA (https://github.com/morluto/rea):
 1. Node >=22.19. Instale/registre o MCP do REA na sua sessão: `npx rea-agents setup` (ou `npm install --global rea-agents`). Reinicie o agente se o setup pedir.
 2. Dependências pra este alvo: JADX headless + JDK (APK), Ghidra OU Hopper OU IDA (binário nativo). Instale o que faltar.
-3. Use o REA pra: decompilar os managers (APKs), e tracear os nativos (ksud, magiskboot, magiskinit, libmagisk, kpatch/kpimg, libzygisk). APK: veja docs/android-analysis.md. Nativo: docs/cli.md.
+3. Use o REA pra: decompilar os managers (APKs), e tracear os nativos (ksud, magiskboot, magiskinit, libmagisk, kpatch/kpimg, libzygisk). APK: veja [fora do repo] docs/android-analysis.md. Nativo: [fora do repo] docs/cli.md.
 
 SCRATCH (regra do dono): clone e extraia SOMENTE em [artefato local, fora do repo]/grok/ (disco). NUNCA /tmp (é tmpfs/RAM neste PC, trava a máquina). Apague [artefato local, fora do repo]/grok/ ao final se passar de ~5GB.
 
@@ -15,7 +15,7 @@ ALVOS (candidatos — CONFIRME liveness/manutenção por research; adicione fork
 - APatch: bmax121/APatch (oficial) + core bmax121/KernelPatch + forks ativos que existirem.
 
 PARA CADA ENGINE, mapeie a arquitetura nestes eixos (tabela):
-  a) Mecanismo de root: kernel-space (hooks no kernel/kprobe/manual, KPM) vs userspace (patch de ramdisk/init, su daemon). GKI vs não-GKI, suporte LKM.
+  a) Mecanismo de root: kernel-space (hooks no [fora do repo] kernel/kprobe/manual, KPM) vs userspace (patch de ramdisk/init, su daemon). GKI vs não-GKI, suporte LKM.
   b) Implementação do su + modelo do daemon (quem possui /system/bin/su, socket, policy).
   c) Sistema de módulos: formato, mecanismo de mount (magic mount, overlayfs, systemless), compatibilidade.
   d) Injeção de código: zygisk / injeção no zygote / app_process.

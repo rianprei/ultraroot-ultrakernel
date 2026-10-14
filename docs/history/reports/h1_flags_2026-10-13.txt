@@ -5,11 +5,11 @@ Saídas abaixo: extratos literais de stdout/stderr e XML medidos nesta execuçã
 
 Comandos exatos (TMPDIR e java.io.tmpdir fora de /tmp):
 T1/T2/T3/T5:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
 T4:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
 T6:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --offline
 
 T1: PASSOU — vermelho esperado, exit 1; testes escritos antes da implementação.
 e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/KsuModeTest.kt:10:22 Unresolved reference 'KsuMode'.
@@ -57,13 +57,13 @@ KsuModeTest > decodeLkmBit FAILED
     java.lang.AssertionError at KsuModeTest.kt:15
 decodeLkmBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=true, manager=false, lateLoad=false)> but was:<KsuMode(lkm=false, manager=false, lateLoad=false)>
 decodeManagerBit FAILED: java.lang.AssertionError: expected:<KsuMode(lkm=false, manager=true, lateLoad=false)> but was:<KsuMode(lkm=true, manager=true, lateLoad=false)>
-Restauração feita imediatamente após o teste, a partir de docs/history/reports/KsuMode.kt.antes_da_sabotagem.
+Restauração feita imediatamente após o teste, a partir de [fora do repo] docs/history/reports/KsuMode.kt.antes_da_sabotagem.
 sha256sum antes da sabotagem (arquivo e cópia):
 6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  docs/history/reports/KsuMode.kt.antes_da_sabotagem
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  [fora do repo] docs/history/reports/KsuMode.kt.antes_da_sabotagem
 sha256sum após restauração (arquivo e cópia):
 6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  core-backend/src/main/java/dev/superroot/core/KsuMode.kt
-6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  docs/history/reports/KsuMode.kt.antes_da_sabotagem
+6b21b9a5433d41f071b750eb2e8d888268a3246219c3528143f364f32e351d63  [fora do repo] docs/history/reports/KsuMode.kt.antes_da_sabotagem
 
 T6: PASSOU — módulo completo, exit 0, 17/17; sem skips, falhas ou erros.
 BUILD SUCCESSFUL in 1s

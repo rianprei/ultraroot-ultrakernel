@@ -24,13 +24,13 @@ Recontagem dos requisitos gerais: spec:42,44,46,48,51–57,65–68,70,74,85,87,9
 Comando e saída da medição atual:
 
 ```text
-$ python3 docs/history/reports/round4_coverage.py
+$ python3 [fora do repo] docs/history/reports/round4_coverage.py
 todo=docs/ultraroot/TODOs.md inventory_raw=440 excluded_bullets=7 inventory=433 capabilities=52 product_requirements=32 total=517
 CAPABILITY_COBERTO=52
 INVENTORY_COBERTO=433
 SPEC_REQ_COBERTO=32
 coverage=517/517=100.00%
-matrix=docs/history/reports/TODOs_coverage_rodada4.tsv
+matrix=[fora do repo] docs/history/reports/TODOs_coverage_rodada4.tsv
 ```
 
 A matriz atual tem 518 linhas contando o cabeçalho, uma por unidade, e classifica as 517 como COBERTO. As âncoras gerais incluem a regra e a exceção de obrigatório (TODOs:4,658), o gate de aprovação (TODOs:16), as evidências C0.1/C0.3 e o manager-grant (TODOs:25–36), as seções de produto (TODOs:495–567), recuperação (TODOs:571–578) e conclusão/processo (TODOs:580–643). As linhas específicas de SuperKey e patch continuam cobertas: spec:525 → TODOs:362, “Configurar a SuperKey durante o patch da imagem”; spec:656 → TODOs:370, “requisitos de patch e aos símbolos necessários”.
@@ -93,7 +93,7 @@ Copiei o TODO e removi apenas `[DEVICE]` da linha TODOs:248. O checker passa no 
 $ python3 - <<'PY'
 from pathlib import Path
 src=Path('docs/ultraroot/TODOs.md')
-dst=Path('docs/history/reports/todos-rodada4-sabotado.md')
+dst=Path('[fora do repo] docs/history/reports/todos-rodada4-sabotado.md')
 phrase='Revogar root pelo manager'
 lines=src.read_text(encoding='utf-8').splitlines(keepends=True)
 hits=[i for i,line in enumerate(lines) if phrase in line]
@@ -104,9 +104,9 @@ lines[i]=lines[i].replace('[DEVICE] ', '', 1)
 dst.write_text(''.join(lines),encoding='utf-8')
 print(f'copied={src} to={dst}; removed=[DEVICE] from line={i+1}; matches=1')
 PY
-copied=docs/ultraroot/TODOs.md to=docs/history/reports/todos-rodada4-sabotado.md; removed=[DEVICE] from line=248; matches=1
+copied=docs/ultraroot/TODOs.md to=[fora do repo] docs/history/reports/todos-rodada4-sabotado.md; removed=[DEVICE] from line=248; matches=1
 
-$ python3 docs/history/reports/check_round4_device_tags.py docs/ultraroot/TODOs.md
+$ python3 [fora do repo] docs/history/reports/check_round4_device_tags.py docs/ultraroot/TODOs.md
 CHECK TODOs:65 Conceder root a app autorizado: DEVICE=true
 CHECK TODOs:67 Revogar root: DEVICE=true
 CHECK TODOs:69 Controlar root oferecido ao shell e ao ADB: DEVICE=true
@@ -115,7 +115,7 @@ CHECK TODOs:248 Revogar root pelo manager: DEVICE=true
 CHECK TODOs:348 Conceder e revogar root a apps autorizados: DEVICE=true
 EXPECTED_DEVICE_ROWS=6; missing=0
 
-$ python3 docs/history/reports/check_round4_device_tags.py docs/history/reports/todos-rodada4-sabotado.md
+$ python3 [fora do repo] docs/history/reports/check_round4_device_tags.py [fora do repo] docs/history/reports/todos-rodada4-sabotado.md
 CHECK TODOs:65 Conceder root a app autorizado: DEVICE=true
 CHECK TODOs:67 Revogar root: DEVICE=true
 CHECK TODOs:69 Controlar root oferecido ao shell e ao ADB: DEVICE=true

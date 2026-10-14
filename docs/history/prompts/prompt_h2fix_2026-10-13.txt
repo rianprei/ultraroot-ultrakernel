@@ -65,7 +65,7 @@ T0. Registrar sha256sum dos dois arquivos do escopo, de FakeRootGrantPort.kt e d
 T1. Acrescentar os três testes novos. Rodar só RootGrantFlowTest. Esperado: os três falham (exit 1), e os onze antigos passam. Registrar a saída. Os três novos devem falhar por asserção, não por erro de compilação. Se falharem por compilação, corrigir só o teste, sem mudar RootGrantFlow.kt, e registrar.
 T2. Aplicar as correções em RootGrantFlow.kt. Rodar RootGrantFlowTest: 14 de 14 verdes. Registrar.
 T3. Rodar o módulo app: ./gradlew :app:testDebugUnitTest --offline. Esperado: 40 testes (26 do baseline + 14 do H2), 0 falhas. Registrar o total por XML.
-T4. Sabotagem S4 (exceção deixa o estado aberto): copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_S4 e registrar sha256. Remover a linha que fecha a barreira no início de confirm e o bloco finally, deixando o laço sem try. Rodar. Esperado: confirmDoesNotRepeatGrantsWhenPortThrows FALHA. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao de T0 de RootGrantFlow.kt... não: igual ao sha da cópia antes de S4 (o arquivo corrigido).
+T4. Sabotagem S4 (exceção deixa o estado aberto): copiar RootGrantFlow.kt para [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S4 e registrar sha256. Remover a linha que fecha a barreira no início de confirm e o bloco finally, deixando o laço sem try. Rodar. Esperado: confirmDoesNotRepeatGrantsWhenPortThrows FALHA. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao de T0 de RootGrantFlow.kt... não: igual ao sha da cópia antes de S4 (o arquivo corrigido).
 T5. Sabotagem S5 (uid repetido aceito): copiar para ...antes_S5, registrar sha256. Remover o bloco que recusa uid repetido. Rodar. Esperado: requestWithRepeatedUidIsRefused FALHA. Restaurar, conferir sha256.
 T6. Sabotagem S6 (lista por referência): copiar para ...antes_S6, registrar sha256. Trocar targets.toList() por targets. Rodar. Esperado: requestCopiesTargetsAtConfirmation FALHA. Restaurar, conferir sha256.
 T7. Rodar RootGrantFlowTest de novo (14 de 14) e o módulo app inteiro (40 de 40), depois das restaurações.
@@ -73,7 +73,7 @@ T8. Escopo: sha256 de FakeRootGrantPort.kt e RootGrantPort.kt iguais aos de T0. 
 T9. Escrever o relatório e responder.
 
 Comando de teste (caminhos absolutos):
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
 
 Não deve:
 - Tocar o aparelho: nada de adb, fastboot, instalação ou leitura do aparelho.

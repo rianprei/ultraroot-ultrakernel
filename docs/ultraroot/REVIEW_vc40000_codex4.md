@@ -24,14 +24,14 @@ Ambos coincidem exatamente com os hashes esperados.
 
 Comandos:
 ```sh
-unzip -q ultraroot/out/UltraRoot-own-inc2-fix.apk -d docs/history/reports/accepted
-unzip -q ultraroot/out/UltraRoot-own-inc2-vc40000.apk -d docs/history/reports/candidate
-diff -qr --exclude='META-INF' docs/history/reports/accepted docs/history/reports/candidate
-python3 docs/history/reports/compare_entries.py ultraroot/out/UltraRoot-own-inc2-fix.apk ultraroot/out/UltraRoot-own-inc2-vc40000.apk
+unzip -q [fora do repo] ultraroot/out/UltraRoot-own-inc2-fix.apk -d [fora do repo] docs/history/reports/accepted
+unzip -q [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk -d [fora do repo] docs/history/reports/candidate
+diff -qr --exclude='META-INF' [fora do repo] docs/history/reports/accepted [fora do repo] docs/history/reports/candidate
+python3 [fora do repo] docs/history/reports/compare_entries.py [fora do repo] ultraroot/out/UltraRoot-own-inc2-fix.apk [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk
 ```
 Saída:
 ```
-Files docs/history/reports/accepted/AndroidManifest.xml and docs/history/reports/candidate/AndroidManifest.xml differ
+Files [fora do repo] docs/history/reports/accepted/AndroidManifest.xml and [fora do repo] docs/history/reports/candidate/AndroidManifest.xml differ
 left non-META-INF entries=59
 right non-META-INF entries=59
 different entries=1
@@ -43,9 +43,9 @@ Lista completa de conteúdo diferente fora de META-INF: somente `AndroidManifest
 
 Comandos:
 ```sh
-[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump badging ultraroot/out/UltraRoot-own-inc2-fix.apk > docs/history/reports/accepted.badging.txt
-[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump badging ultraroot/out/UltraRoot-own-inc2-vc40000.apk > docs/history/reports/candidate.badging.txt
-diff -u docs/history/reports/accepted.badging.txt docs/history/reports/candidate.badging.txt
+[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump badging [fora do repo] ultraroot/out/UltraRoot-own-inc2-fix.apk > [fora do repo] docs/history/reports/accepted.badging.txt
+[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump badging [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk > [fora do repo] docs/history/reports/candidate.badging.txt
+diff -u [fora do repo] docs/history/reports/accepted.badging.txt [fora do repo] docs/history/reports/candidate.badging.txt
 ```
 
 Saída literal do diff:
@@ -62,9 +62,9 @@ Saída literal do diff:
 
 Comandos:
 ```sh
-[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump xmltree ultraroot/out/UltraRoot-own-inc2-fix.apk --file AndroidManifest.xml > docs/history/reports/accepted.manifest.xmltree.txt
-[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump xmltree ultraroot/out/UltraRoot-own-inc2-vc40000.apk --file AndroidManifest.xml > docs/history/reports/candidate.manifest.xmltree.txt
-diff -u docs/history/reports/accepted.manifest.xmltree.txt docs/history/reports/candidate.manifest.xmltree.txt
+[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump xmltree [fora do repo] ultraroot/out/UltraRoot-own-inc2-fix.apk --file AndroidManifest.xml > [fora do repo] docs/history/reports/accepted.manifest.xmltree.txt
+[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump xmltree [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk --file AndroidManifest.xml > [fora do repo] docs/history/reports/candidate.manifest.xmltree.txt
+diff -u [fora do repo] docs/history/reports/accepted.manifest.xmltree.txt [fora do repo] docs/history/reports/candidate.manifest.xmltree.txt
 ```
 
 Saída literal do diff:
@@ -82,7 +82,7 @@ Saída literal do diff:
 
 Comando:
 ```sh
-[caminho local]/Android/Sdk/build-tools/37.0.0/apksigner verify --verbose --print-certs ultraroot/out/UltraRoot-own-inc2-vc40000.apk
+[caminho local]/Android/Sdk/build-tools/37.0.0/apksigner verify --verbose --print-certs [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk
 ```
 Saída literal completa:
 ```
@@ -115,7 +115,7 @@ V2 Signer: public key MD5 digest: 26a832c7559c2bf5d8e59a38234a7b9f
 
 Comando:
 ```sh
-[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump resources ultraroot/out/UltraRoot-own-inc2-vc40000.apk | rg -i 'KSU|KernelSU|weishu'
+[caminho local]/Android/Sdk/build-tools/37.0.0/aapt2 dump resources [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk | rg -i 'KSU|KernelSU|weishu'
 ```
 Saída:
 ```
@@ -141,12 +141,12 @@ Resultado: UNKNOWN quanto a ser a única mudança relativa ao fonte aceito; não
 
 ## 8. Prova de sabotagem do comparador
 
-Comando: `python3 docs/history/reports/sabotage_apk.py`. O script copiou o candidato para `docs/history/reports/sabotado.apk`, regravou a cópia alterando um byte de `classes.dex`, e chamou o mesmo comparador da etapa 2 contra o candidato.
+Comando: `python3 [fora do repo] docs/history/reports/sabotage_apk.py`. O script copiou o candidato para `[fora do repo] docs/history/reports/sabotado.apk`, regravou a cópia alterando um byte de `classes.dex`, e chamou o mesmo comparador da etapa 2 contra o candidato.
 
 Saída literal:
 ```
 mutated classes.dex[0]: 0x64 -> 0x65; bytes_changed=1
-copied candidate then wrote modified archive: docs/history/reports/sabotado.apk
+copied candidate then wrote modified archive: [fora do repo] docs/history/reports/sabotado.apk
 left non-META-INF entries=59
 right non-META-INF entries=59
 different entries=1

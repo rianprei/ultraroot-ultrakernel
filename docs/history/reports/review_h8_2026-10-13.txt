@@ -1,5 +1,5 @@
 ULTRAROOT-H8R-2026-10-13 — revisão H8: escrita nativa de perfil (SET_APP_PROFILE). Autor: Codex #4; revisor: OpenCode #2. [LIDO]
-Original intocado; sabotagens S8/S9 só na cópia docs/history/reports/h8. Chamadas: 10 de 16. [LIDO]
+Original intocado; sabotagens S8/S9 só na cópia [fora do repo] docs/history/reports/h8. Chamadas: 10 de 16. [LIDO]
 
 T1. sha256 dos três arquivos do escopo: CONFEREM (medi = esperados):
 app_profile_fill.h 5ee15449...471e0d9; engine.cc 60c44448...292eaeb; EngineNatives.kt 2d84e412...294accf. [LIDO]

@@ -42,7 +42,7 @@ Evidência existente, lida sem repetir teste no aparelho:
 
 **Veredito: OK, com selftest UNKNOWN** (o caminho de cache por operação está limpo estaticamente; o diretório-pai de cache permanece).
 
-Comando: `git -C kernel/lake diff -- tools/fastboot_guard.sh`.
+Comando: `git -C kernel/lake diff -- [fora do repo] tools/fastboot_guard.sh`.
 
 Saída literal do diff:
 ```diff
@@ -83,9 +83,9 @@ diff -u ultraroot/core-backend/src/main/cpp/uapi/supercall.h kernel/upstream/Ker
 supercall_diff_rc=0
 diff -u ultraroot/core-backend/src/main/cpp/uapi/app_profile.h kernel/upstream/KernelSU/uapi/app_profile.h; echo $?
 app_profile_diff_rc=0
-aapt2 dump badging ultraroot/out/UltraRoot-own-inc2-vc40000.apk | sed -n '1p'
+aapt2 dump badging [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk | sed -n '1p'
 package: name='me.weishu.kernelsu' versionCode='40000' versionName='0.1.0-inc2' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
-apksigner verify --verbose --print-certs ultraroot/out/UltraRoot-own-inc2-vc40000.apk
+apksigner verify --verbose --print-certs [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk
 Verified using v1 scheme (JAR signing): false
 Verified using v2 scheme (APK Signature Scheme v2): true
 Verified using v3 scheme (APK Signature Scheme v3): false
@@ -94,15 +94,15 @@ Verified using v3.2 scheme (APK Signature Scheme v3.2): false
 Verified using v4 scheme (APK Signature Scheme v4): false
 Number of signers: 1
 V2 Signer: certificate SHA-256 digest: efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9
-unzip -l ultraroot/out/UltraRoot-own-inc2-vc40000.apk | rg 'libultraroot|libc\+\+_shared'
+unzip -l [fora do repo] ultraroot/out/UltraRoot-own-inc2-vc40000.apk | rg 'libultraroot|libc\+\+_shared'
      8704  1981-01-01 01:01   lib/arm64-v8a/libultraroot.so
-readelf -d docs/history/reports/libultraroot-vc40000.so | rg 'NEEDED|SONAME'
+readelf -d [fora do repo] docs/history/reports/libultraroot-vc40000.so | rg 'NEEDED|SONAME'
 NEEDED Shared library: [liblog.so]
 NEEDED Shared library: [libm.so]
 NEEDED Shared library: [libdl.so]
 NEEDED Shared library: [libc.so]
 SONAME Library soname: [libultraroot.so]
-llvm-nm -D --defined-only docs/history/reports/libultraroot-vc40000.so | rg 'Java_dev_superroot_core_EngineNatives'
+llvm-nm -D --defined-only [fora do repo] docs/history/reports/libultraroot-vc40000.so | rg 'Java_dev_superroot_core_EngineNatives'
 0000000000004da0 T Java_dev_superroot_core_EngineNatives_kernelVersion
 0000000000004e28 T Java_dev_superroot_core_EngineNatives_kernelUapi
 0000000000004eac T Java_dev_superroot_core_EngineNatives_managerUapi
@@ -129,5 +129,5 @@ wc -c [artefato local, fora do repo]/device-grant/logcat_ultraroot.txt
 1. Confirmar no device o pacote/cert do APK instalado e o KSU ativo/UAPI=5.
 2. Em sessão de diagnóstico aprovada, registrar no processo do app se `/proc/self/fd` contém `[ksu_driver]`; registrar também `driver_fd`, retorno de `GET_INFO` e `NEW_GET_ALLOW_LIST` e `errno` (sem alterar allowlist/perfis).
 3. Capturar logs do KernelSU em torno de `track_throne`: pacote encontrado, validação V2, “Crowning manager” e instalação do FD para o UID; comparar esse UID com o app.
-4. Interpretar: FD ausente/EBADF aponta entrega do FD; FD válido + EPERM aponta manager appId/assinatura/package no kernel em execução; ENOTTY aponta kernel/interface diferente; `UnsatisfiedLinkError` aponta carregamento/JNI. Reabrir o app depois que a identidade manager tiver sido registrada.
+4. Interpretar: FD ausente/EBADF aponta entrega do FD; FD válido + EPERM aponta manager appId/assinatura/package no kernel em execução; ENOTTY aponta [fora do repo] kernel/interface diferente; `UnsatisfiedLinkError` aponta carregamento/JNI. Reabrir o app depois que a identidade manager tiver sido registrada.
 

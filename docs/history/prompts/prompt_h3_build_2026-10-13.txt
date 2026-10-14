@@ -7,14 +7,14 @@ Contexto (verificado pelo maestro em 2026-10-13; raiz ultraroot/, não é git):
 - buildTypes.release: isMinifyEnabled = false, isShrinkResources = false, sem signingConfig. O APK sai sem assinatura, como app-release-unsigned.apk.
 - As ferramentas do SDK NÃO estão no PATH. Usar o caminho completo: ~/Android/Sdk/build-tools/37.0.0/ (aapt2, apksigner, zipalign).
 - A pasta [chaves locais do dono, fora do repo]/ tem arquivos de chave. NÃO abrir, NÃO ler, NÃO listar conteúdo, NÃO imprimir, NÃO usar o arquivo de senha. Não rodar apksigner sign: a assinatura é do dono.
-- Destino dos artefatos: ultraroot/out/ (existe).
+- Destino dos artefatos: [fora do repo] ultraroot/out/ (existe).
 
 Escopo: somente app/build.gradle.kts (duas linhas de versão) e os artefatos novos em out/. Nada mais.
 
 Tarefa, em ordem:
 T0. sha256sum app/build.gradle.kts. Registrar.
-T1. Editar app/build.gradle.kts: versionCode 40009 vira 40010; versionName "0.2.0-ui9" vira "0.2.0-ui10". Antes de editar, copiar para docs/history/reports/build.gradle.kts.antes_H3. Registrar diff.
-T2. Build release, offline: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:assembleRelease --offline. Registrar o resultado e as últimas 20 linhas. Se faltar dependência offline, registrar a mensagem exata e marcar NÃO VERIFICADO. Não baixar nada.
+T1. Editar app/build.gradle.kts: versionCode 40009 vira 40010; versionName "0.2.0-ui9" vira "0.2.0-ui10". Antes de editar, copiar para [fora do repo] docs/history/reports/build.gradle.kts.antes_H3. Registrar diff.
+T2. Build release, offline: cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :app:assembleRelease --offline. Registrar o resultado e as últimas 20 linhas. Se faltar dependência offline, registrar a mensagem exata e marcar NÃO VERIFICADO. Não baixar nada.
 T3. Localizar o APK de saída em app/build/outputs/apk/release/. Copiar para out/UltraRoot-own-ui10-unsigned.apk. Registrar sha256.
 T4. Alinhar: ~/Android/Sdk/build-tools/37.0.0/zipalign -p -f 4 out/UltraRoot-own-ui10-unsigned.apk out/UltraRoot-own-ui10-aligned.apk. Depois: ~/Android/Sdk/build-tools/37.0.0/zipalign -c -p 4 out/UltraRoot-own-ui10-aligned.apk. Esperado: Verification succeeded. Registrar.
 T5. Badging: ~/Android/Sdk/build-tools/37.0.0/aapt2 dump badging out/UltraRoot-own-ui10-aligned.apk > out/badging-ui10.txt. Citar as linhas de package (name='me.weishu.kernelsu', versionCode='40010', versionName='0.2.0-ui10') e de application-label. Se algum valor não bater, registrar o valor real.

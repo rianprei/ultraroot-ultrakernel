@@ -1,9 +1,9 @@
-Objetivo: verificar, sem editar, o estado real dos artefatos das Tasks 3, 4 e 6 do plano SP1 (docs/superpowers/plans/2026-10-11-ultraroot-sp1.md). Dizer o que existe, o que falta e o que passa, com prova. Nada é criado nesta etapa.
+Objetivo: verificar, sem editar, o estado real dos artefatos das Tasks 3, 4 e 6 do plano SP1 ([fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md). Dizer o que existe, o que falta e o que passa, com prova. Nada é criado nesta etapa.
 
 Correlation id: ULTRAROOT-H6-2026-10-13. Revisor: você (OpenCode #2). Autor dos artefatos: Codex #4 e maestro.
 
 Escopo de leitura (somente leitura). Caminhos relativos a [fora do repo]:
-1. docs/superpowers/plans/2026-10-11-ultraroot-sp1.md: as seções Task 3, Task 4 e Task 6, com seus passos e critérios.
+1. [fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md: as seções Task 3, Task 4 e Task 6, com seus passos e critérios.
 2. docs/ultraroot/accept_ksu_root.sh (inteiro).
 3. docs/ultraroot/RECOVERY_SUITE.md (inteiro).
 4. docs/ultraroot/MODULE_PARITY.md (inteiro).

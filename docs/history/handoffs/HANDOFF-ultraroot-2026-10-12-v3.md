@@ -7,9 +7,9 @@ Responder em pt-BR. Projeto: [fora do repo]. App: ultraroot (pacote me.weishu.ke
 - Manager coroado pelo kernel (uid 10296). Root Access lê a allowlist: "Nenhum app com root" (vazia).
 - Grant: NÃO testado. A UI atual é só leitura; conceder e revogar é da inc3.
 - Aceite (accept_ksu_root.sh): REPROVA contexto magisk. O su do adb ainda passa pelo Magisk. Coroação pendente.
-- Causa do "backend indisponível" (resolvida): instalação incremental do adb cria a pasta do app em incfs; a busca do manager do KernelSU pula essa pasta. Ver docs/ultraroot/DIAG_BACKEND_INDISPONIVEL.md e docs/history/evidence/2026-10-12_*.
+- Causa do "backend indisponível" (resolvida): instalação incremental do adb cria a pasta do app em incfs; a busca do manager do KernelSU pula essa pasta. Ver docs/ultraroot/DIAG_BACKEND_INDISPONIVEL.md e [fora do repo] docs/history/evidence/2026-10-12_*.
 
-## Artefatos (todos em ultraroot/out/)
+## Artefatos (todos em [fora do repo] ultraroot/out/)
 - Instalado: UltraRoot-own-ui8-vc40008.apk (sha256 5861465c14a99e4bade3b6efa5885bc31eae7904b694c993bef0ac19ca7a1529).
 - Último build, NÃO instalado: UltraRoot-own-ui9-vc40009.apk (sha256 671d0c9ce4d14bfc910870ff5273a3a65990d179294e0f864f4ac041fc97f48a). Ícone do robô recalibrado (trim e área de segurança).
 - Assinatura: v2 apenas, cert efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9. Chave em [chaves locais do dono, fora do repo]/ (NÃO abrir nem imprimir o arquivo de senha).

@@ -48,7 +48,7 @@ A configuração e os exports locais citados na decisão da Fase 1 confirmam pr�
 
 - Fixar um commit do KernelSU/DDK e compilar kernelsu.ko para a arquitetura do aparelho contra a configuração, headers, Module.symvers e KMI do build alvo. Não usar kpimg nem substituir o kernel com APatch.
 - L1 é responsável por conceder a autoridade root e expor a API que ksud consome. O APK não chama símbolos de kernel diretamente.
-- O instalador deve tratar o par kernel/ramdisk e o .ko como uma unidade versionada. Bloquear a instalação se versão, arquitetura, KMI ou hash não corresponderem.
+- O instalador deve tratar o par [fora do repo] kernel/ramdisk e o .ko como uma unidade versionada. Bloquear a instalação se versão, arquitetura, KMI ou hash não corresponderem.
 - Reutilizar o mecanismo LKM do KernelSU; não portar o antigo caminho manual non-GKI como se fosse a API suportada para GKI 6.6.89. Confiança alta na decisão da Fase 1.
 
 ### L2 — Compatibilidade de módulos

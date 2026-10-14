@@ -4,8 +4,14 @@ Fora do repo, e por quê:
 - scratch/ (exceto relatórios, prompts, código do app e pins listados em PATHMAP.md): volume e artefatos de build.
 - Binários gerados: APK, IMG (imagens de boot), SO, O, DEX, out/ do Bazel. Os dtbo e as imagens stock do aparelho ficam com o dono.
 - research/phase4/c01_dmesg.txt: log bruto de aparelho.
-- docs/ultraroot/evidence/*.png: capturas de tela do aparelho (ver NAO-INCLUIDO.txt).
-- kernel/common/tools/testing/selftests/sgx/sign_key.pem: chave privada de teste do upstream. O GitHub bloqueia push com chave privada, e o arquivo não entra no build.
+- [fora do repo] docs/ultraroot/evidence/*.png: capturas de tela do aparelho (ver NAO-INCLUIDO.txt).
+- [fora do repo] kernel/common/tools/testing/selftests/sgx/sign_key.pem: chave privada de teste do upstream. O GitHub bloqueia push com chave privada, e o arquivo não entra no build.
 - prompt_repo_*: contratos de montagem deste próprio repo.
 - Referências em documentos históricos (handoffs, relatórios, pesquisa) a APKs, planos do Superpowers e árvores que ficaram fora. O verificador conta essas referências como aviso, sem bloquear.
 - Árvore do kernel (kernel/common): texto do upstream não é varrido por segredo, dado pessoal e caminho local. Só a checagem de chave privada e de extensões proibidas roda ali. Integridade pelo commit base 5a0ffb4 e pelo delta em kernel/patches/.
+
+Marca de referência fora do repo (ERR-16, definida em 2026-10-14):
+- Forma: "[fora do repo] <caminho>", com um espaço entre a marca e o caminho. Ex.: [fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md
+- Significa: o caminho foi citado de propósito, mas o arquivo ficou fora do repo (ou nunca existiu com esse nome). O texto original continua; só a marca foi acrescentada.
+- O verificador (tools/verify_repo.sh, V4) não conta referência marcada como aviso. A marca não vale nos documentos STRICT: neles todo caminho citado precisa existir.
+- Não se marca nada em kernel/lake/ (snapshot de outro repo; ver ERR-18). As referências de lá seguem como aviso.

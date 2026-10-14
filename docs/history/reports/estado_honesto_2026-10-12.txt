@@ -2,10 +2,10 @@ ULTRAROOT-ESTADO-2026-10-12-A — estado honesto / TDD — 2026-10-12
 VEREDITO: APROVADO pelos critérios R1-R6; o ramo Ok continua reservado ao dono, terminando em TODO().
 Projeto: ultraroot
 Comando exato em T2, T3 e T4 (mesmo comando, nesse diretório):
-TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.BackendStateTest' --offline
+TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.BackendStateTest' --offline
 Gradle 9.7.1; ./gradlew --version --offline: Launcher JVM 25.0.4.1; Daemon JVM /usr/lib/jvm/java-21-openjdk (from org.gradle.java.home).
 gradle.properties:2: org.gradle.java.home=/usr/lib/jvm/java-21-openjdk. /usr/lib/jvm contém Java 21/25; JDK 17 não encontrado. Não houve bloqueio de JDK nem instalação.
-TMPDIR e java.io.tmpdir apontados para docs/history/reports/tmp; nenhuma gravação intencional em /tmp.
+TMPDIR e java.io.tmpdir apontados para [fora do repo] docs/history/reports/tmp; nenhuma gravação intencional em /tmp.
 T1 PASSOU: KsuBackend.kt e KsuBackendHostTest.kt lidos; estilo JUnit 4 (KsuBackendHostTest.kt:3-5), indentação 4 espaços e vírgulas finais preservados.
 T2 PASSOU: teste escrito antes de BackendState.kt; Gradle exit=1 por compilação, conforme esperado; nenhum teste executou.
 e: file://ultraroot/core-backend/src/test/java/dev/superroot/core/BackendStateTest.kt:10:22 Unresolved reference 'classifyBackend'.
@@ -35,7 +35,7 @@ BackendStateTest > legacyKernelWithoutUapiIsIncompatible FAILED
 BUILD FAILED in 1s
 T4 XML: <testcase name="unavailableReadIsAbsentWithSameReason" classname="dev.superroot.core.BackendStateTest" time="0.012"/>
 T4 XML: <testcase name="matchingUapiIsActiveWithVersion" classname="dev.superroot.core.BackendStateTest" time="0.0"/>
-Cópia: docs/history/reports/BackendState.kt.orig (cp antes da mutação).
+Cópia: [fora do repo] docs/history/reports/BackendState.kt.orig (cp antes da mutação).
 sha256 antes da sabotagem (BackendState.kt): 3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50
 sha256 da cópia .orig: 3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50
 sha256 depois de cp .orig -> BackendState.kt: 3a6574d021bdbc843c2be1e142c89cb1516a84d18eddbdb6dcbf2870ad32ac50

@@ -3,8 +3,8 @@ Objetivo: revisar, sem editar, o diff não commitado do lake e o commit c8e7812.
 Correlation id: ULTRAROOT-L1-2026-10-13. Autor do diff: Codex #4. Revisor: OpenCode #2.
 
 Escopo de leitura (somente leitura). Repositório: kernel/lake
-1. tools/fastboot_guard.sh (inteiro).
-2. tools/selftest_fastboot_guard.sh (inteiro).
+1. [fora do repo] tools/fastboot_guard.sh (inteiro).
+2. [fora do repo] tools/selftest_fastboot_guard.sh (inteiro).
 3. git -C kernel/lake diff (somente leitura).
 4. git -C kernel/lake show c8e7812 --stat e o diff do commit.
 

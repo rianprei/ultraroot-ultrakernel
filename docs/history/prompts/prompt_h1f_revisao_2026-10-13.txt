@@ -22,7 +22,7 @@ Escopo de leitura (somente leitura no original):
 6. kernel/upstream/KernelSU/kernel/manager/manager_identity.h, linhas 40-55
 7. kernel/lake: só grep, para o item do KDoc.
 
-Escrita: somente docs/history/reports/review_h1f_2026-10-13.txt (até 100 linhas) e a cópia em docs/history/reports/copy_h1f/ (para a sabotagem). Nada mais.
+Escrita: somente docs/history/reports/review_h1f_2026-10-13.txt (até 100 linhas) e a cópia em [fora do repo] docs/history/reports/copy_h1f/ (para a sabotagem). Nada mais.
 
 Tarefa:
 T1. Defeito original fechado? Com kernelVersion == 0, readMode devolve Unavailable(KsuBackend.UNAVAILABLE) para qualquer flags? Cite as linhas de decodeKernelMode e de readMode. Responda SIM ou NÃO, com prova.
@@ -30,9 +30,9 @@ T2. Confira cada prova do relatório do autor contra o disco: sha256 atual, linh
 T3. Testes novos (KsuModeTest.kt:46-71): cada um testa o que o nome diz, com version e flags corretos? Algum passaria com implementação errada? Se sim, dê o mutante e a linha. Se não, escreva NENHUM e liste o que você checou.
 T4. KDoc de KsuMode.kt:3-11: confira as três referências de fonte contra o pin (dispatch.c:44-45, :51-52, :54-55; manager_identity.h:47-49). Cite o trecho literal de cada uma. Sobre "(the lake kernel)": diga se está provado no repositório do lake. Se não estiver, é achado: proponha a frase exata, usando só o que for verificável no pin.
 T5. Caça de defeito novo, nesta ordem: (a) decodeKernelMode com version negativa, ou com bit 31 em flags; (b) exceção lançada dentro de decodeKernelMode, que readNative trataria de forma errada; (c) o when de readMode perde o tipo ou reempacota Unavailable; (d) cast não verificado nos testes e warnings de compilação; (e) readCapability e readAllowList mudaram? Confirme com grep -n "fun readCapability\|fun readAllowList" e pelo corpo; (f) readModeWithoutLibIsUnavailable continua cobrindo o caminho sem biblioteca; (g) idioma dos comentários consistente com BackendState.kt e KsuBackend.kt.
-T6. Sabotagem independente, SÓ NA CÓPIA. Crie a cópia sem artefatos: mkdir -p docs/history/reports/copy_h1f docs/history/reports/tmp && rsync -a --exclude build --exclude .gradle --exclude out ultraroot/ docs/history/reports/copy_h1f/ (se rsync não existir, use tar com as mesmas exclusões).
+T6. Sabotagem independente, SÓ NA CÓPIA. Crie a cópia sem artefatos: mkdir -p [fora do repo] docs/history/reports/copy_h1f [fora do repo] docs/history/reports/tmp && rsync -a --exclude build --exclude .gradle --exclude out ultraroot/ [fora do repo] docs/history/reports/copy_h1f/ (se rsync não existir, use tar com as mesmas exclusões).
    Na cópia, em core-backend/src/main/java/dev/superroot/core/KsuMode.kt:
-   S1: copie o arquivo para KsuMode.kt.antes_S1 e registre o sha256. Troque o corpo de decodeKernelMode por KsuRead.Ok(decodeKsuMode(flags)), sem if. Rode: cd docs/history/reports/copy_h1f && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline. Esperado: decodeKernelModeWithoutAnswerIsUnavailable FALHA. Registre a linha da falha. Restaure a partir da cópia e confira o sha256.
+   S1: copie o arquivo para KsuMode.kt.antes_S1 e registre o sha256. Troque o corpo de decodeKernelMode por KsuRead.Ok(decodeKsuMode(flags)), sem if. Rode: cd [fora do repo] docs/history/reports/copy_h1f && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline. Esperado: decodeKernelModeWithoutAnswerIsUnavailable FALHA. Registre a linha da falha. Restaure a partir da cópia e confira o sha256.
    S2: copie de novo e troque lkm = flags and 1 != 0 por lkm = flags and 2 != 0. Rode o mesmo comando. Esperado: decodeLkmBit FALHA. Restaure e confira o sha256.
    Registre as linhas de FAILED e o total do Gradle. Não toque no original.
    Se S1 ou S2 NÃO derrubar o teste esperado, isso é achado grave: o teste não prova o contrato.

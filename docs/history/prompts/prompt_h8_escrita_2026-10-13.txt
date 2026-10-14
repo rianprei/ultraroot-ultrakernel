@@ -23,16 +23,16 @@ T1. Ler kernel/supercall/dispatch.c:373-390 e kernel/policy/allowlist.c:166-230 
 T2. Scratch do host: ultraroot/core-backend/src/test/native/. Criar o shim ultraroot/core-backend/src/test/native/shim/linux/types.h com __u8, __u16, __u32, __u64, __s32, __s64 e o que mais o uapi precisar. Escrever layout_test.cc, que imprime offsetof e sizeof de app_profile, root_profile e non_root_profile (campo, offset, tamanho). Compilar: g++ -std=c++17 -I ultraroot/core-backend/src/test/native/shim -I ultraroot/core-backend/src/main/cpp/uapi layout_test.cc -o layout_test && ./layout_test. Registrar a tabela. Ela é o gabarito dos static_assert.
 T3. Escrever fill_test.cc ANTES do header. Casos: uid válido; uid negativo (rejeitado); key nulo; key vazia; key de 255 caracteres (aceito); key de 256 caracteres (rejeitado); allow_su true (campos esperados); allow_su false (campo de revogação esperado). Compilar e rodar. Deve FALHAR, porque o header ainda não existe. Registrar.
 T4. Escrever app_profile_fill.h. Compilar e rodar fill_test.cc com -Wall -Werror. Todos verdes. Registrar.
-T5. Sabotagem S8: copiar app_profile_fill.h para ultraroot/core-backend/src/test/native/app_profile_fill.h.antes_S8 e registrar sha256. Trocar curr_uid = uid por curr_uid = 0. Rodar. Esperado: o caso de uid FALHA. Restaurar e conferir o sha256.
+T5. Sabotagem S8: copiar app_profile_fill.h para [fora do repo] ultraroot/core-backend/src/test/native/app_profile_fill.h.antes_S8 e registrar sha256. Trocar curr_uid = uid por curr_uid = 0. Rodar. Esperado: o caso de uid FALHA. Restaurar e conferir o sha256.
 T6. Sabotagem S9: copiar para ...antes_S9 e registrar sha256. Remover a checagem de tamanho da key. Rodar. Esperado: o caso de key de 256 caracteres FALHA. Restaurar e conferir o sha256.
 T7. Editar engine.cc (item 2 do escopo) e EngineNatives.kt (item 3).
-T8. Compilação nativa arm64, com o NDK, que confere os static_assert: ./gradlew :core-backend:tasks --all | grep -i native, para achar a task certa; depois rodá-la com TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' e --offline. Registrar. Se falhar por NDK ausente, NÃO VERIFICADO com a mensagem exata.
+T8. Compilação nativa arm64, com o NDK, que confere os static_assert: ./gradlew :core-backend:tasks --all | grep -i native, para achar a task certa; depois rodá-la com TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' e --offline. Registrar. Se falhar por NDK ausente, NÃO VERIFICADO com a mensagem exata.
 T9. Testes Kotlin do módulo: cd ultraroot && TMPDIR=... ./gradlew :core-backend:testDebugUnitTest --offline. Esperado: 20 testes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10), 0 falhas. Registrar.
 T10. Escopo: sha256 dos arquivos fora do escopo iguais aos de T0. grep -rn "setAppProfile" app/src core-backend/src/main/java deve mostrar só a declaração em EngineNatives.kt.
 T11. Escrever o relatório.
 
 Artefatos:
-- Relatório: ultraroot/core-backend/src/test/native_profile_write_2026-10-13.txt, até 150 linhas. Conteúdo: sha de T0; comparação do app_profile.h com o pin; leituras de T1 com linhas; tabela de T2; saídas de T3, T4, T5 e T6; saída de T8 e de T9; saída do grep de T10; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Relatório: [fora do repo] ultraroot/core-backend/src/test/native_profile_write_2026-10-13.txt, até 150 linhas. Conteúdo: sha de T0; comparação do app_profile.h com o pin; leituras de T1 com linhas; tabela de T2; saídas de T3, T4, T5 e T6; saída de T8 e de T9; saída do grep de T10; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
 - Resposta no chat: até 15 linhas, com o caminho do relatório.
 
 Rubrica (todos obrigatórios para APROVADO):

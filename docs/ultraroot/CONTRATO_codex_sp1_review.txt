@@ -1,7 +1,7 @@
 PAPEL: review adversarial das Tasks 1-6 do SP1 (grok implementou). Read-only, sem device. Você NÃO escreveu — ataque. Scratch [artefato local, fora do repo]/codex/sp1review/.
 
 ALVOS:
-- Task 2 (SAFETY-CRÍTICO): commit c8e78121 em kernel/lake (tools/fastboot_guard.sh rota `rollback` + selftest). CAÇA: existe ALGUM caminho em que `set_active a` seja enviado? O rollback valida current-slot==b antes? Reusa os gates de hash (não flasha arquivo fora da allowlist)? O selftest R1-R4 realmente SABOTA (falha se o código tentar `a`)? TOCTOU?
+- Task 2 (SAFETY-CRÍTICO): commit c8e78121 em kernel/lake ([fora do repo] tools/fastboot_guard.sh rota `rollback` + selftest). CAÇA: existe ALGUM caminho em que `set_active a` seja enviado? O rollback valida current-slot==b antes? Reusa os gates de hash (não flasha arquivo fora da allowlist)? O selftest R1-R4 realmente SABOTA (falha se o código tentar `a`)? TOCTOU?
 - Task 3: docs/ultraroot/accept_ksu_root.sh. CAÇA: algum FALSO-POSITIVO (aprovar quando o root é Magisk, ou sem root)? Ele exige evidência POSITIVA de KSU (ksud//data/adb/ksu + prctl UAPI 5) E reprova contexto magisk? Dá pra enganar?
 - Tasks 1,4,5,6: hashes corretos (C0.3 2977e1dc, não C0.1); CAPABILITIES/COMPAT com status honesto (impl×validação; nada marcado VALIDATED sem evidência); fixtures KSU/Magisk válidos; MODULE_PARITY proíbe magic mount+overlayfs juntos e não anuncia compat universal.
 

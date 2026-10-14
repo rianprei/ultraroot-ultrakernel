@@ -32,17 +32,17 @@ C2. Comentários em RootGrantFlow.kt:
 
 Tarefa, em ordem:
 T0. sha256sum dos dois arquivos. Os valores devem bater com os listados acima. Se não baterem, parar e reportar, sem editar.
-T1. Copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_H2R1 e registrar o sha256.
+T1. Copiar RootGrantFlow.kt para [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_H2R1 e registrar o sha256.
 T2. Acrescentar C1 ao final de RootGrantFlowTest.kt. Rodar RootGrantFlowTest. Esperado: 15 de 15 verdes. O código atual já recusa por uid, então o teste novo deve passar. Isso é esperado: o valor do teste está na sabotagem de T3, não aqui. Registrar a saída.
-T3. Aplicar C2 nos dois comentários. Registrar diff docs/history/reports/RootGrantFlow.kt.antes_H2R1 app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt. O diff deve mostrar só as linhas 40 e 56.
-T4. Sabotagem S7 (o teste de C1 precisa pegar checagem por objeto inteiro): copiar RootGrantFlow.kt para docs/history/reports/RootGrantFlow.kt.antes_S7 e registrar sha256. Na linha 31, trocar `targets.map { it.uid }.toSet().size` por `targets.toSet().size`. Rodar RootGrantFlowTest. Esperado: requestWithSameUidAndOtherPackageIsRefused FALHA; requestWithRepeatedUidIsRefused continua verde. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao da cópia.
-T5. Sabotagem S5 (regressão da correção F2): copiar para docs/history/reports/RootGrantFlow.kt.antes_S5 e registrar sha256. Remover o bloco das linhas 31-33 (checagem por uid). Rodar RootGrantFlowTest. Esperado: requestWithRepeatedUidIsRefused FALHA e requestWithSameUidAndOtherPackageIsRefused FALHA. Restaurar a partir da cópia e conferir o sha256.
+T3. Aplicar C2 nos dois comentários. Registrar diff [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_H2R1 app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt. O diff deve mostrar só as linhas 40 e 56.
+T4. Sabotagem S7 (o teste de C1 precisa pegar checagem por objeto inteiro): copiar RootGrantFlow.kt para [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S7 e registrar sha256. Na linha 31, trocar `targets.map { it.uid }.toSet().size` por `targets.toSet().size`. Rodar RootGrantFlowTest. Esperado: requestWithSameUidAndOtherPackageIsRefused FALHA; requestWithRepeatedUidIsRefused continua verde. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao da cópia.
+T5. Sabotagem S5 (regressão da correção F2): copiar para [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S5 e registrar sha256. Remover o bloco das linhas 31-33 (checagem por uid). Rodar RootGrantFlowTest. Esperado: requestWithRepeatedUidIsRefused FALHA e requestWithSameUidAndOtherPackageIsRefused FALHA. Restaurar a partir da cópia e conferir o sha256.
 T6. Rodar RootGrantFlowTest de novo: 15 de 15. Depois, o módulo app inteiro: ./gradlew :app:testDebugUnitTest --offline. Esperado: 41 testes (40 anteriores + 1), 0 falhas. Registrar o total por XML.
 T7. Escopo: sha256 de FakeRootGrantPort.kt (8c67d7d59343e9987f3905decfe1b03fba73f2ca1e4c59add643c04620f08387) e RootGrantPort.kt (4c78dff41b5fd013ddfd819bc061857780add5eac93b38f53a1b814fcc113f38) iguais aos listados. KsuMode.kt e os demais arquivos de core-backend/ sem mudança: sha256 de KsuMode.kt 47148567e73c3d2b8e3079a9900b9b52e7db51931cc1b17bba87b7bc4063ac7f.
 T8. Escrever o relatório.
 
 Comando de teste (caminhos absolutos):
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
 
 Artefatos:
 - Relatório: docs/history/reports/h2_review_fix_2026-10-13.txt, até 80 linhas. Conteúdo: sha de T0; saída de T2; diff de T3; saída de T4 com a linha da falha; saída de T5; total de T6 por XML; sha de cada restauração; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).

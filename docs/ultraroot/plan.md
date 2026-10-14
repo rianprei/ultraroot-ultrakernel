@@ -2,7 +2,7 @@
 
 - Data: 2026-10-13
 - Autor: maestro (Claude). Executor: Codex #4. Revisor: OpenCode #2. grok não aparece no `maestri list` de hoje.
-- Base: spec rev.7 (aprovado em 2026-10-11) · plano SP1 `docs/superpowers/plans/2026-10-11-ultraroot-sp1.md` · handoff v4 (2026-10-12). Este arquivo substitui a lista de próximos passos do handoff v4.
+- Base: spec rev.7 (aprovado em 2026-10-11) · plano SP1 `[fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md` · handoff v4 (2026-10-12). Este arquivo substitui a lista de próximos passos do handoff v4.
 - Legenda: [x] feito · [~] parcial · [ ] pendente · [!] espera "sim, <passo>" ou decisão do dono.
 
 ## 0. O que "terminar" significa
@@ -16,7 +16,7 @@ Eu sigo sem parar até o primeiro gate de aparelho ou de decisão. Nesse ponto p
 ## 1. Regras fixas
 
 1. Aparelho: só com "sim, <passo>" explícito. Vale também para leitura.
-2. Boot: slot ativo. No POCO C75 o ativo é boot_b. O slot A é o OS antigo e nunca é alvo. Rollback só pelo `tools/fastboot_guard.sh`.
+2. Boot: slot ativo. No POCO C75 o ativo é boot_b. O slot A é o OS antigo e nunca é alvo. Rollback só pelo `[fora do repo] tools/fastboot_guard.sh`.
 3. Legítimo: nada de DenyList, hide ou umount por perfil.
 4. Autor ≠ revisor. Revisor principal: OpenCode #2. Os achados dele são conferidos linha a linha antes de aceitar.
 5. Todo achado de revisão é corrigido, sem triagem por severidade. Achado que não pode ser corrigido vira bloqueio com motivo escrito.
@@ -47,7 +47,7 @@ Eu sigo sem parar até o primeiro gate de aparelho ou de decisão. Nesse ponto p
 
 ### Lake (`kernel/lake`)
 - HEAD c8e7812 "guard: rollback flashes boot_b then reactivates slot b". Local, à frente 1 de origin.
-- Sem commit: `tools/fastboot_guard.sh` e `tools/selftest_fastboot_guard.sh` (9 inserções, 5 remoções).
+- Sem commit: `[fora do repo] tools/fastboot_guard.sh` e `[fora do repo] tools/selftest_fastboot_guard.sh` (9 inserções, 5 remoções).
 - O selftest usa stub de fastboot no PATH. Não toca o aparelho.
 
 ### Agentes (maestri list, 2026-10-13)
@@ -81,7 +81,7 @@ Ordem de H: H1 → (H2 ∥ H6) → H5 → H3 → H4 → H7 (depois de E1) → H8
 | ID | O que | Dono | Aceite | Gate |
 |---|---|---|---|---|
 | L1 | Revisar o diff não commitado (2 arquivos) e o commit c8e7812 | OpenCode #2 (o autor do diff é o Codex #4) | achados corrigidos; veredito com prova | — |
-| L2 | Rodar `tools/selftest_fastboot_guard.sh` (stub, host) | maestro | exit 0; cobre rollback, recusa de set_active a e recusa fora da allowlist | — |
+| L2 | Rodar `[fora do repo] tools/selftest_fastboot_guard.sh` (stub, host) | maestro | exit 0; cobre rollback, recusa de set_active a e recusa fora da allowlist | — |
 | L3 | Commit local e push do lake | maestro | commit com a mensagem e a coautoria do padrão; push só depois de revisão brutal (regra do dono) | [!] "sim, commitar" e "sim, push" |
 
 ### Fase D — aparelho (cada passo exige "sim, <passo>")
@@ -108,7 +108,7 @@ Ordem de H: H1 → (H2 ∥ H6) → H5 → H3 → H4 → H7 (depois de E1) → H8
 | E5 | Estado "biblioteca ausente" separado de "sem resposta do kernel" | Não separar. O motivo já diz a diferença | — |
 | E6 | Filtro de sistema e de usuário (exige o tipo do app, fonte nova) | Fora do SP1 | — |
 
-## 4. Status das tarefas do SP1 (`docs/superpowers/plans/2026-10-11-ultraroot-sp1.md`)
+## 4. Status das tarefas do SP1 (`[fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md`)
 
 | Task | Conteúdo | Status | Próximo |
 |---|---|---|---|
@@ -150,26 +150,26 @@ O SP1 fecha quando:
 
 ## 8. Anexos
 
-- Testes do host (caminhos absolutos no comando real): `cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest :app:testDebugUnitTest --offline`
+- Testes do host (caminhos absolutos no comando real): `cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest :app:testDebugUnitTest --offline`
 - Selftest do lake: `bash kernel/lake/tools/selftest_fastboot_guard.sh`
 - Mapa: código em `ultraroot/`; docs em `docs/ultraroot/`; spec e plano SP1 em `[fora do repo]/docs/superpowers/`; evidências em `docs/history/evidence/`; revisões em `[artefato local, fora do repo]/claude2/` e `docs/history/reports/`; lake em `kernel/lake/`.
 
 ## 9. Estado de execução (2026-10-13)
 
-- [~] H8 (escrita nativa de perfil `SET_APP_PROFILE`, SEM chamada na UI): Codex #4 entregou (`ultraroot/core-backend/src/test/native_profile_write_2026-10-13.txt`). OpenCode #2: APROVADO COM CORREÇÕES (`docs/history/reports/review_h8_2026-10-13.txt`). Achado único, conferido pelo maestro (`engine.cc:227` repassa o `-1` do ioctl e perde o `errno`; `allowlist.c:171-174` rejeita com `-EINVAL`).
-  - Correção H8R1 feita (Codex #4; `ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt`): `ioctl_status` em `app_profile_fill.h:9`, `engine.cc:227-228` trocado, 3 casos novos. NDK arm64 OK; Kotlin 20/20 (UP-TO-DATE, código Kotlin inalterado). Falha no teste: o caso EPERM não discrimina, porque em Linux EPERM = 1 = -(-1), o retorno bruto do ioctl. S10 só derrubou EINVAL. Conferido pelo maestro (`errno` do host: EPERM=1, EBADF=9).
-  - Correção H8R2 em andamento (Codex #4; `ultraroot/core-backend/src/test/nativer2_ebadf_2026-10-13.txt`): caso EPERM trocado por EBADF (9), que é o erro real sem fd do driver. S10 precisa derrubar os dois casos de errno. Depois: conferência do OpenCode #2.
+- [~] H8 (escrita nativa de perfil `SET_APP_PROFILE`, SEM chamada na UI): Codex #4 entregou (`[fora do repo] ultraroot/core-backend/src/test/native_profile_write_2026-10-13.txt`). OpenCode #2: APROVADO COM CORREÇÕES (`docs/history/reports/review_h8_2026-10-13.txt`). Achado único, conferido pelo maestro (`engine.cc:227` repassa o `-1` do ioctl e perde o `errno`; `allowlist.c:171-174` rejeita com `-EINVAL`).
+  - Correção H8R1 feita (Codex #4; `[fora do repo] ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt`): `ioctl_status` em `app_profile_fill.h:9`, `engine.cc:227-228` trocado, 3 casos novos. NDK arm64 OK; Kotlin 20/20 (UP-TO-DATE, código Kotlin inalterado). Falha no teste: o caso EPERM não discrimina, porque em Linux EPERM = 1 = -(-1), o retorno bruto do ioctl. S10 só derrubou EINVAL. Conferido pelo maestro (`errno` do host: EPERM=1, EBADF=9).
+  - Correção H8R2 em andamento (Codex #4; `[fora do repo] ultraroot/core-backend/src/test/nativer2_ebadf_2026-10-13.txt`): caso EPERM trocado por EBADF (9), que é o erro real sem fd do driver. S10 precisa derrubar os dois casos de errno. Depois: conferência do OpenCode #2.
   - H8 fica [x] quando a correção for conferida. Teste de escrita no aparelho: NÃO VERIFICADO (fora do escopo; D4 depende de E2 e E4).
 
 - [x] H3 (FECHADO no preparo e na assinatura V2; D1 aguarda "sim, instalar ui10"; OpenCode #2 conferiu o APK final: PRONTO PARA INSTALAR, `review_ui10_final_2026-10-13.txt`). Codex #4 entregou (`docs/history/reports/h3_build_ui10_2026-10-13.txt`). Conferido pelo maestro: diff só nas linhas 21-22; `zipalign -c` OK; badging `me.weishu.kernelsu` / 40010 / `0.2.0-ui10` / `UltraRoot`; `apksigner verify` dá não assinado, como esperado; sha do APK alinhado `cc7212b6…`. Revisão de leitura do OpenCode #2 (`docs/history/reports/review_h3_badging_2026-10-13.txt`): PRONTO PARA ASSINATURA. Confirmou diff, sha, zipalign, badging, `apksigner verify` como não assinado, e o aviso de strip (`OWNAPP_INC2.md:70`, `.so` com `stripped`). Falta só a assinatura do dono. (`docs/history/prompts/prompt_h3_build_2026-10-13.txt`). Relatório esperado: `docs/history/reports/h3_build_ui10_2026-10-13.txt`. Escopo: `versionCode` 40010 e `versionName` "0.2.0-ui10" em `app/build.gradle.kts`; APK release não assinado; `zipalign`; `aapt2 dump badging`. Não assina.
   - Assinatura: FEITA em 2026-10-13, com o `.pass` autorizado pelo dono ("pode usar o pass", só para este build). 1ª saiu v3 apenas: REJEITADA, renomeada para `out/UltraRoot-own-ui10-v3only-REJEITADO.apk`. 2ª saiu V2-only, como o C0.3 exige: `out/UltraRoot-own-ui10.apk`, cert `efb8d49f…`, sha `b5f5bb36…`, registrado em `out/UltraRoot-own-ui10.sha256.txt`. Próximas assinaturas: perguntar de novo.
   - Ferramentas do SDK fora do PATH: `~/Android/Sdk/build-tools/37.0.0/` (aapt2, apksigner, zipalign).
 
-- [x] L1: revisão do diff do lake pelo OpenCode #2 (`docs/history/reports/review_lake_guard_2026-10-13.txt`). Verificada linha a linha pelo maestro (`docs/history/prompts/L1_verificacao_2026-10-13.txt`). Um gap confirmado, na ordem flash e set_active b no R1 do selftest, corrigido. Diff do lake: `tools/fastboot_guard.sh` (sem mudança minha) e `tools/selftest_fastboot_guard.sh` (com a checagem de ordem). Commit: [!] "sim, commitar".
-- [x] L2: selftest do lake em host, com stub. Depois da correção: rc 0, 90 casos OK, 0 falhas (`docs/history/prompts/selftest_pos_fix_2026-10-13.out`).
+- [x] L1: revisão do diff do lake pelo OpenCode #2 (`docs/history/reports/review_lake_guard_2026-10-13.txt`). Verificada linha a linha pelo maestro (`[fora do repo] docs/history/prompts/L1_verificacao_2026-10-13.txt`). Um gap confirmado, na ordem flash e set_active b no R1 do selftest, corrigido. Diff do lake: `[fora do repo] tools/fastboot_guard.sh` (sem mudança minha) e `[fora do repo] tools/selftest_fastboot_guard.sh` (com a checagem de ordem). Commit: [!] "sim, commitar".
+- [x] L2: selftest do lake em host, com stub. Depois da correção: rc 0, 90 casos OK, 0 falhas (`[fora do repo] docs/history/prompts/selftest_pos_fix_2026-10-13.out`).
 - [ ] H2, H3, H4, H7, H8, D0 a D7 e E1 a E6: pendentes, conforme §3.
 - [x] H5: reconferência da linha 85 pelo OpenCode #2 (`docs/history/reports/review_h5_inventario_2026-10-13.txt`). Veredito do revisor: APROVADO, com T2 parcial em HomeScreen.kt:887-908.
-  - Correção aplicada: "fluxos do Home" virou "diálogos do Home de desinstalar/restaurar e de instalar o manager", que é o que as linhas 883-908 mostram. Texto anterior guardado em `docs/history/prompts/MAGISK_KSU_UI_INVENTORY.antes_H5_2026-10-13.md`. Se o dono preferir o texto fechado em 2026-10-12, reverter.
+  - Correção aplicada: "fluxos do Home" virou "diálogos do Home de desinstalar/restaurar e de instalar o manager", que é o que as linhas 883-908 mostram. Texto anterior guardado em `[fora do repo] docs/history/prompts/MAGISK_KSU_UI_INVENTORY.antes_H5_2026-10-13.md`. Se o dono preferir o texto fechado em 2026-10-12, reverter.
   - Erro de citação do revisor: o veredito `APROVADO COM CORREÇÕES` está em `REVIEW_MAGISK_KSU_INVENTORY_haiku55.md:4`, e não na linha 8 como ele disse.
   - Pendência que continua NÃO VERIFICADA: P1 e P2 da reaprovação do Claude Code #2 (rodada 6), porque a saída salva não as mostra (`REVIEW_MAGISK_KSU_INVENTORY_haiku55.md:164`).
 - [x] H1 (fechado em 2026-10-13) → H1F: defeito real corrigido pelo Codex #4 (`docs/history/reports/h1_fix_readmode_2026-10-13.txt`). Achado original: `readMode()` devolvia `Ok` com flags zerados quando o driver não respondia (`engine.cc:67-75`, `:105-106`; `readNative` só converte erro de biblioteca). Correção: `decodeKernelMode(version, flags)` em `KsuMode.kt:24-29` e `readMode` em `KsuBackend.kt:70-76`.
@@ -177,7 +177,7 @@ O SP1 fecha quando:
   - Revisão do H1 pelo OpenCode #2 (`review_h1_flags_2026-10-13.txt`): APROVADO, mas NÃO aceito. Não viu o defeito e errou citações (`engine.cc:89-92` é `kernelVersion`; bits em `supercall.h:28-30`).
   - Erro do meu prompt H1F: a rubrica R3 pedia o sha de T0 como alvo de restauração. O alvo certo é a cópia pré-sabotagem. O autor usou o certo e registrou.
   - Revisão do H1F pelo OpenCode #2 (`docs/history/reports/review_h1f_2026-10-13.txt`): APROVADO COM CORREÇÕES. Defeito original fechado; sabotagens S1 e S2 reproduzidas numa cópia, caindo nos testes esperados. Um achado: o KDoc de `KsuMode.kt:5` afirma "(the lake kernel)" sem prova.
-  - Conferido pelo maestro: o achado procede. Além disso, o revisor não viu três `CONFIG_KSU` (`docs/research/CODEX4_dew_tree.md:69` e `docs/research/OPENCODE3_mtk_gki_failures.md:18`, além dos dois que ele citou). Nenhum é medida do build do lake, então o veredito não muda.
+  - Conferido pelo maestro: o achado procede. Além disso, o revisor não viu três `CONFIG_KSU` (`[fora do repo] docs/research/CODEX4_dew_tree.md:69` e `[fora do repo] docs/research/OPENCODE3_mtk_gki_failures.md:18`, além dos dois que ele citou). Nenhum é medida do build do lake, então o veredito não muda.
   - Correção feita (Codex #4, ULTRAROOT-H1KDOC; relatório `docs/history/reports/h1_kdoc_fix_2026-10-13.txt`). Conferido pelo maestro no disco: `diff` mostra só a linha 5; sha dos outros quatro arquivos do H1 iguais aos de T0; XML de 13:44:21 com 20 testes e 0 falhas, posterior à edição (10:44:19).
   - FECHADO: o OpenCode #2 confirmou o diff (`docs/history/reports/review_h1kdoc_confirma_2026-10-13.txt`, veredito FECHADO). O maestro conferiu de novo: diff de uma linha, sha `47148567…`, `dispatch.c:44-45` sustenta a frase, sem menção ao lake, 20/20 nos XMLs.
   - H1 vira [x] só com a revisão do H1F sem achado aberto. Teste em aparelho: NÃO VERIFICADO (fora do escopo).
@@ -192,6 +192,6 @@ O SP1 fecha quando:
   - Confirmação do OpenCode #2 sobre o H2R1 e sobre o KDoc do H1: em andamento (`review_h1kdoc_confirma_2026-10-13.txt` e o da rodada H2R1). H1 e H2 só viram [x] com essa confirmação.
   - Depois: revisão do H2 final pelo OpenCode #2. Limite conhecido, registrado e não corrigido: o fluxo não é thread-safe; a UI chama de uma thread só.
 - [x] H6: artefatos das Tasks 3, 4 e 6 conferidos. Nenhum item faltando. Relatório do OpenCode #2: `docs/history/reports/review_h6_sp1_tasks_2026-10-13.txt`.
-  - Testes executados pelo maestro, em host, sem device: `scratch/sp1/test_accept_ksu.sh` rc 0, PASS (saída em `docs/history/prompts/h6_test_accept_2026-10-13.out`); `scratch/sp1/test_module_props.sh` rc 0, PASS (saída em `docs/history/prompts/h6_test_module_props_2026-10-13.out`). Nenhum dos dois chama adb nem fastboot.
+  - Testes executados pelo maestro, em host, sem device: `scratch/sp1/test_accept_ksu.sh` rc 0, PASS (saída em `[fora do repo] docs/history/prompts/h6_test_accept_2026-10-13.out`); `scratch/sp1/test_module_props.sh` rc 0, PASS (saída em `[fora do repo] docs/history/prompts/h6_test_module_props_2026-10-13.out`). Nenhum dos dois chama adb nem fastboot.
   - Erros de citação do revisor, corrigidos aqui: `accept_ksu_root.sh` tem 99 linhas (ele disse 120); `test_accept_ksu.sh` tem 69 (ele disse 74); `test_module_props.sh` tem 59 (ele disse 52); os cenários A, B e C ficam nas linhas 19, 26 e 33 do teste, e as execuções em 55 a 57.
 - [x] H1 revisão cruzada 1 (OpenCode #2): recebida em `review_h1_flags_2026-10-13.txt`. Verdito APROVADO, contestado pelo maestro (ver bullet H1 acima). Log do TUI sem conteúdo útil além do relatório.

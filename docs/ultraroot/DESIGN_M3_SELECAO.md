@@ -1,6 +1,6 @@
 # Direção de design do UltraRoot: seleção do Material 3 (incremento ui1)
 
-Data: 2026-10-11. Artefato: `ultraroot/out/UltraRoot-own-ui1-vc40001.apk`
+Data: 2026-10-11. Artefato: `[fora do repo] ultraroot/out/UltraRoot-own-ui1-vc40001.apk`
 (versionCode 40001, versionName 0.2.0-ui1, sha256 bf83214c9ad5013f2385ef31a9b0bc417c3f784cb9e7851a50b903050cea8a6d,
 assinado v2 com cert efb8d49f). Não instalado no aparelho.
 
@@ -16,7 +16,7 @@ Regra deste documento: toda afirmação sobre o M3 aponta para o token oficial o
 
 ## 2. Diagnóstico do produto (antes da mudança)
 
-Evidência: código da versão 40000 e captura `docs/history/evidence/2026-10-11_manager_grant_tela_root_access.png`.
+Evidência: código da versão 40000 e captura `[fora do repo] docs/history/evidence/2026-10-11_manager_grant_tela_root_access.png`.
 
 - Estados reais aparecem como texto puro ("backend indisponível", "perfil indisponível"), sem hierarquia de severidade nem explicação.
 - Textos de desenvolvimento visíveis ao usuário: "Este texto não é mais o conteúdo da seção", "Sem a lib, a tela fica em backend indisponível", rótulo "incremento 1".

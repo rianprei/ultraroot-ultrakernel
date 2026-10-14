@@ -23,14 +23,14 @@ Tarefa, em ordem:
 T0. sha256sum de app_profile_fill.h (5ee15449f881e622a6a3ad4614779c530b7d1e258b3575c3b43c0525d471e0d9), engine.cc (60c44448ae91514fb3e25bccbe36afdb255ef57cf18b451418f57c185292eaeb), EngineNatives.kt (2d84e412f6c97e5906f1cca0a5e0378425304ddf01b7c150c597a580e294accf). Se algum não bater, parar e reportar.
 T1. Acrescentar os 3 casos novos em fill_test.cc e chamá-los no main, SEM ainda criar ioctl_status. Compilar com g++ -std=c++17 -Wall -Werror -I shim -I ultraroot/core-backend/src/main/cpp fill_test.cc -o fill_test. Esperado: falha de compilação por ioctl_status não declarada. Registrar a saída.
 T2. Acrescentar ioctl_status em app_profile_fill.h e a troca em engine.cc (linha 227). Compilar e rodar fill_test: 11 de 11 PASS, exit 0. Registrar.
-T3. Sabotagem S10: copiar app_profile_fill.h para ultraroot/core-backend/src/test/native/app_profile_fill.h.antes_S10 e registrar sha256. Trocar o corpo de ioctl_status por `return ret;`. Compilar e rodar. Esperado: ioctlFailureReturnsEperm e ioctlFailureReturnsEinval FALHAM. Registrar as linhas de falha. Restaurar a partir da cópia e conferir o sha256 igual ao de antes.
-T4. Compilação nativa arm64 (confere os static_assert e o novo ioctl_status): cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline. Esperado: BUILD SUCCESSFUL. Registrar. Se falhar por NDK ausente, NÃO VERIFICADO com a mensagem.
+T3. Sabotagem S10: copiar app_profile_fill.h para [fora do repo] ultraroot/core-backend/src/test/native/app_profile_fill.h.antes_S10 e registrar sha256. Trocar o corpo de ioctl_status por `return ret;`. Compilar e rodar. Esperado: ioctlFailureReturnsEperm e ioctlFailureReturnsEinval FALHAM. Registrar as linhas de falha. Restaurar a partir da cópia e conferir o sha256 igual ao de antes.
+T4. Compilação nativa arm64 (confere os static_assert e o novo ioctl_status): cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline. Esperado: BUILD SUCCESSFUL. Registrar. Se falhar por NDK ausente, NÃO VERIFICADO com a mensagem.
 T5. Testes Kotlin do módulo: ./gradlew :core-backend:testDebugUnitTest --offline. Esperado: 20 testes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10), 0 falhas. Registrar.
 T6. Escopo: sha256 de EngineNatives.kt igual ao de T0. grep -rn "ioctl_status" core-backend/src app/src deve mostrar só app_profile_fill.h e engine.cc.
 T7. Relatório.
 
 Artefatos:
-- Relatório: ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt, até 100 linhas. Conteúdo: sha de T0; saída de T1 (falha de compilação); diff de engine.cc (só a linha 227 virou duas); saída de T2 (11/11); sha de S10 antes e depois, linhas de falha de T3; saída de T4; totais de T5; saída de T6; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
+- Relatório: [fora do repo] ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt, até 100 linhas. Conteúdo: sha de T0; saída de T1 (falha de compilação); diff de engine.cc (só a linha 227 virou duas); saída de T2 (11/11); sha de S10 antes e depois, linhas de falha de T3; saída de T4; totais de T5; saída de T6; status por item (PASSOU, FALHOU ou NÃO VERIFICADO).
 - Resposta no chat: até 15 linhas, com o caminho do relatório.
 
 Rubrica (todos obrigatórios para APROVADO):

@@ -3,7 +3,7 @@ Objetivo: conferir, somente leitura, o APK final assinado do build ui10. Respond
 Correlation id: ULTRAROOT-UI10R-2026-10-13. Autor da assinatura: maestro. Revisor: você (OpenCode #2).
 
 Fatos do maestro (confira, não aceite):
-- APK final: ultraroot/out/UltraRoot-own-ui10.apk. sha256 esperado: b5f5bb369caf64af01c4897d9a1e07 (o início; o valor completo está em out/UltraRoot-own-ui10.sha256.txt).
+- APK final: [fora do repo] ultraroot/out/UltraRoot-own-ui10.apk. sha256 esperado: b5f5bb369caf64af01c4897d9a1e07 (o início; o valor completo está em out/UltraRoot-own-ui10.sha256.txt).
 - Esquema esperado: V2 apenas (v1 false, v2 true, v3 false). Certificado esperado: SHA-256 efb8d49f0bb8022e55e5ec89db26c5131bf4a6c3878496fa583d74fbc8d99ad9.
 - APK rejeitado, para comparação: out/UltraRoot-own-ui10-v3only-REJEITADO.apk (tinha só v3). Não usar.
 - APK alinhado de origem: out/UltraRoot-own-ui10-aligned.apk, sha cc7212b68e7c5bcefbe3.

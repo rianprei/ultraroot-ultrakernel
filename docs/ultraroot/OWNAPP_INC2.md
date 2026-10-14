@@ -81,10 +81,10 @@ O cross-review rejeitou o APK `out/UltraRoot-own-inc2.apk` (sha256 `b2b0d4bcb0a4
 
 ## APK
 
-Artefato rejeitado, ainda no disco: `ultraroot/out/UltraRoot-own-inc2.apk`  
+Artefato rejeitado, ainda no disco: `[fora do repo] ultraroot/out/UltraRoot-own-inc2.apk`  
 sha256 `b2b0d4bcb0a460a287e5bbd2347b149737bf63066622655d1494a92a27b93eaa`
 
-Artefato corrigido: `ultraroot/out/UltraRoot-own-inc2-fix.apk`  
+Artefato corrigido: `[fora do repo] ultraroot/out/UltraRoot-own-inc2-fix.apk`  
 sha256 `a697228a22241b8edee89eaa1469eb12e80e7a50f302996adccc35af6165e813`
 
 Os dois têm 23295483 bytes. O sha256 mudou. O `.so` extraído do APK corrigido continua `stripped`, BuildID `f3467d50691d094cea0c9c42b6d187d97fd08ed6`, e `libc++_shared` continua ausente.

@@ -61,7 +61,7 @@ Os hashes `b830cb5194e9bdb0f2a7c2cb295cd6e4123aaecf9b262f5adac7d90ce1d0620f` e `
 
 ## Gate
 
-`tools/gate_kmi_crc.sh` em `kernel_aarch64_Module.symvers`, exit 0:
+`[fora do repo] tools/gate_kmi_crc.sh` em `kernel_aarch64_Module.symvers`, exit 0:
 
 ```text
 modules.files=557 modules.unique=370

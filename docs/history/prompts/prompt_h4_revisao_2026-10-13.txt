@@ -8,7 +8,7 @@ Fatos do maestro (confira, não aceite):
 - Mtimes: docs/history/handoffs/HANDOFF-ultraroot-2026-10-13.md (10:04) e MAGISK_KSU_UI_INVENTORY.md (10:02) são anteriores à tarefa e não foram tocados por ela. plan.md (11:14:35) foi editado pelo maestro, durante a tarefa: essa é a causa da falha R1 que o autor registrou. Não é mudança do Codex. Conte isso como explicação, não como achado contra o autor. Os três docs do autor: CAPABILITIES.md 11:19:39, COMPAT_MATRIX.md 11:19:39, TODOs.md 11:22:12.
 - Bits GET_INFO no header: supercall.h (ultraroot/core-backend/src/main/cpp/uapi/supercall.h) linhas 28-30.
 - Testes no disco (XML): BackendStateTest 7, KsuModeTest 10, RootGrantFlowTest 15, RootAccessFilterTest 17, RootAccessPresenterTest 5, KsuBackendHostTest 3, StringsIdentityTest 2, ContrastTest 2.
-- Artefato ui10: ultraroot/out/UltraRoot-own-ui10-aligned.apk, sha256 esperado cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894. Assinatura: pendente do dono, não feita.
+- Artefato ui10: [fora do repo] ultraroot/out/UltraRoot-own-ui10-aligned.apk, sha256 esperado cc7212b68e7c5bcefbe3b38fa730af1362854e4ac2ecbc9588e2460493f55894. Assinatura: pendente do dono, não feita.
 
 Escopo de leitura: os três docs acima; plan.md §2 e §9 (o estado de referência); os arquivos de código citados pelo autor, só para conferir números e nomes.
 Escrita: somente docs/history/reports/review_h4_docs_2026-10-13.txt (até 60 linhas).

@@ -13,13 +13,13 @@ Escopo: revisão estática e stubs host; nenhum adb/fastboot real, instalação 
 - rg -n -F '|| true' docs/ultraroot/accept_ksu_root.sh não imprime correspondências (rc 1). bash -n no script atual e no backup: PASS.
 - RC e precedência: accept_ksu_root.sh:33–36 captura separadamente rc de adb ... su -c id e da coleta ksud. A normalização CR fica nas linhas 38–39; antes de qualquer teste semântico de contexto, marcadores KSU, UAPI ou uid, as linhas 40–47 reprovam rc diferente de zero com exit 1. As validações de conteúdo começam nas linhas 49–96.
 - Aspas do probe: accept_ksu_root.sh:35 passa um argumento remoto delimitado por aspas duplas ao adb shell. O Bash local remove as aspas duplas externas e mantém as aspas simples internas no argumento único su -c 'if ...; then ...; fi; ...'. O adb junta/passa a string de comando remoto e o sh remoto interpreta as aspas simples como um único argumento de comando para su -c. Os stubs indicados juntam os argumentos e executam sh -c; a bateria abaixo exercita esse caminho simulado.
-- Bateria executada com stubs e /usr/bin/timeout 25, stdin /dev/null; variáveis-base usadas: SCRIPT=docs/ultraroot/accept_ksu_root.sh e STUB=docs/history/reports/a1/stub.log.
-  - (a) Comando: env STUB_MODE=ksu STUB_LOG="$STUB" ACCEPT_KSU_ALLOW_ADB=1 PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/ksu:docs/history/reports/sp1-audit/stubs/ksu:/usr/bin:/bin /usr/bin/timeout 25 /bin/bash "$SCRIPT" SERIALTEST </dev/null. Saída literal: APROVA ksu serial=SERIALTEST uid=0 uapi=5; rc=0.
-  - (b) Mesmo comando com STUB_MODE=magisk e PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/magisk:docs/history/reports/sp1-audit/stubs/magisk:/usr/bin:/bin. Saída literal: REPROVA contexto magisk: uid=0(root) gid=0(root) context=u:r:magisk:s0; rc=1.
+- Bateria executada com stubs e /usr/bin/timeout 25, stdin /dev/null; variáveis-base usadas: SCRIPT=docs/ultraroot/accept_ksu_root.sh e STUB=[fora do repo] docs/history/reports/a1/stub.log.
+  - (a) Comando: env STUB_MODE=ksu STUB_LOG="$STUB" ACCEPT_KSU_ALLOW_ADB=1 PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/ksu:[fora do repo] docs/history/reports/sp1-audit/stubs/ksu:/usr/bin:/bin /usr/bin/timeout 25 /bin/bash "$SCRIPT" SERIALTEST </dev/null. Saída literal: APROVA ksu serial=SERIALTEST uid=0 uapi=5; rc=0.
+  - (b) Mesmo comando com STUB_MODE=magisk e PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/magisk:[fora do repo] docs/history/reports/sp1-audit/stubs/magisk:/usr/bin:/bin. Saída literal: REPROVA contexto magisk: uid=0(root) gid=0(root) context=u:r:magisk:s0; rc=1.
   - (c) Comando: env -u ACCEPT_KSU_ALLOW_ADB -u ACCEPT_KSU_FIXTURE STUB_LOG="$STUB" PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/ksu:/usr/bin:/bin /usr/bin/timeout 25 /bin/bash "$SCRIPT" SERIALTEST </dev/null. Saída literal: sem fixture: coleta adb exige ACCEPT_KSU_ALLOW_ADB=1; rc=2; stub log vazio, logo adb não foi chamado.
   - (d) Comando: env STUB_LOG="$STUB" PATH=[artefato local, fora do repo]/device-grant/stubs-partial/id:/usr/bin:/bin ACCEPT_KSU_ALLOW_ADB=1 /usr/bin/timeout 25 /bin/bash "$SCRIPT" SERIALTEST </dev/null. Saída literal: REPROVA su -c id falhou (rc=3): uid=0(root) gid=0(root) context=u:r:su:s0; rc=1 apesar da saída parcial com uid=0.
   - (e) Comando: env STUB_LOG="$STUB" PATH=[artefato local, fora do repo]/device-grant/stubs-partial/probe:/usr/bin:/bin ACCEPT_KSU_ALLOW_ADB=1 /usr/bin/timeout 25 /bin/bash "$SCRIPT" SERIALTEST </dev/null. Saída literal: REPROVA coleta do ksud falhou (rc=3); rc=1 apesar da saída parcial conter HAS_KSUD/UAPI 5.
-- Comparação literal: cmp entre cada saída salva em docs/history/reports/a1/ e R_ksu.txt, R_magisk.txt, R_noopt.txt, R_part_id.txt, R_part_probe.txt retornou MATCH em todos os cinco casos. R_shim.txt (rc=127) e R_device.txt são evidências adicionais de cenários diferentes; não foram usados como substitutos da bateria, e nenhum teste em aparelho foi executado nesta revisão.
+- Comparação literal: cmp entre cada saída salva em [fora do repo] docs/history/reports/a1/ e R_ksu.txt, R_magisk.txt, R_noopt.txt, R_part_id.txt, R_part_probe.txt retornou MATCH em todos os cinco casos. R_shim.txt (rc=127) e R_device.txt são evidências adicionais de cenários diferentes; não foram usados como substitutos da bateria, e nenhum teste em aparelho foi executado nesta revisão.
 
 ## REVISÃO 2 (UI ui2): FALHA
 
@@ -46,14 +46,14 @@ Escopo: revisão estática e stubs host; nenhum adb/fastboot real, instalação 
 ## SABOTAGEM
 
 Comandos executados só na cópia scratch, sem editar o projeto original:
-cp -r ultraroot docs/history/reports/sabotage-app
-find docs/history/reports/sabotage-app -type d -name build -prune -exec rm -rf -- {} +
-find docs/history/reports/sabotage-app -type d -name .gradle -prune -exec rm -rf -- {} +
-sed -i 's/allowSu = null,/allowSu = false,/' docs/history/reports/sabotage-app/app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt
+cp -r ultraroot [fora do repo] docs/history/reports/sabotage-app
+find [fora do repo] docs/history/reports/sabotage-app -type d -name build -prune -exec rm -rf -- {} +
+find [fora do repo] docs/history/reports/sabotage-app -type d -name .gradle -prune -exec rm -rf -- {} +
+sed -i 's/allowSu = null,/allowSu = false,/' [fora do repo] docs/history/reports/sabotage-app/app/src/main/java/dev/superroot/ultraroot/ui/RootAccessState.kt
 diff mostrou somente essa linha: allowSu = null → allowSu = false.
 
-Comando executado (cwd docs/history/reports/sabotage-app):
-env PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/ksu:docs/history/reports/sp1-audit/stubs/ksu:/usr/bin:/bin STUB_LOG=docs/history/reports/gradle-stub.log TMPDIR=docs/history/reports/tmp /usr/bin/timeout 600 ./gradlew :app:testDebugUnitTest --no-daemon </dev/null >docs/history/reports/sabotage-gradle.log 2>&1
+Comando executado (cwd [fora do repo] docs/history/reports/sabotage-app):
+env PATH=[artefato local, fora do repo]/device-grant/stubs-fixed/ksu:[fora do repo] docs/history/reports/sp1-audit/stubs/ksu:/usr/bin:/bin STUB_LOG=[fora do repo] docs/history/reports/gradle-stub.log TMPDIR=[fora do repo] docs/history/reports/tmp /usr/bin/timeout 600 ./gradlew :app:testDebugUnitTest --no-daemon </dev/null >[fora do repo] docs/history/reports/sabotage-gradle.log 2>&1
 Retorno:
 gradle_rc=1
 RootAccessPresenterTest > failedProfileDoesNotBecomeAllowSuFalse FAILED

@@ -1,6 +1,6 @@
 # Revisão adversarial — blueprint e decisão de core
 
-Revisor: Grok. Data: 2026-10-10. Alvos lidos: `PHASE2_BLUEPRINT.md`, `CODEX_core_decision.md`. Evidência cruzada: `GROK_matriz_features.md` (rodada 2, 0 células NÃO-VERIFICÁVEL) e `tools/gate_kmi_crc.sh` de `kernel/lake/tools/gate_kmi_crc.sh`. Não alterei os alvos. Não compilei e não falei com o aparelho.
+Revisor: Grok. Data: 2026-10-10. Alvos lidos: `PHASE2_BLUEPRINT.md`, `CODEX_core_decision.md`. Evidência cruzada: `GROK_matriz_features.md` (rodada 2, 0 células NÃO-VERIFICÁVEL) e `[fora do repo] tools/gate_kmi_crc.sh` de `kernel/lake/tools/gate_kmi_crc.sh`. Não alterei os alvos. Não compilei e não falei com o aparelho.
 
 Veredito: o core KernelSU se sustenta para o baseline escrito. O plano não está pronto para rodar o G1 como gate. O PASS do G1, do jeito que está escrito, aceita um `.ko` que não encaixa no 6.6.89 que o C75 carrega.
 

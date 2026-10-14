@@ -43,7 +43,7 @@ Tarefa, em ordem:
 T1. Ler KsuBackend.kt e KsuBackendHostTest.kt para o estilo: indentação de 4 espaços, vírgula final nos parâmetros, KDoc em inglês. Comentários de código curtos em inglês; o texto do TODO(human) em português.
 T2. Gravar o arquivo 2 primeiro e rodar o teste. Esperado: falha de compilação, porque BackendState e classifyBackend ainda não existem. Registrar a saída.
 T3. Gravar o arquivo 1 e rodar de novo. Esperado: teste 1 passa; testes 2 a 5 falham com NotImplementedError. Registrar a saída.
-T4. Prova de sabotagem: copiar BackendState.kt para docs/history/reports/BackendState.kt.orig e registrar o sha256sum. Trocar só o corpo do ramo Ok por:
+T4. Prova de sabotagem: copiar BackendState.kt para [fora do repo] docs/history/reports/BackendState.kt.orig e registrar o sha256sum. Trocar só o corpo do ramo Ok por:
     BackendState.Active(read.value.kernelVersion, read.value.kernelUapi)
 Rodar. Esperado: testes 2, 3 e 4 falham; o 5 passa. Registrar quais falharam. Depois restaurar a partir da cópia e provar com sha256sum que o arquivo voltou idêntico ao original, com o TODO() de volta.
 T5. Conferência final: sha256sum dos arquivos existentes em core-backend/src e app/src, medido antes de T2 (baseline) e no fim. O conjunto deve ser idêntico, exceto pelos dois arquivos novos. grep -rn "TODO(human)" core-backend/src app/src deve dar exatamente 1 linha.

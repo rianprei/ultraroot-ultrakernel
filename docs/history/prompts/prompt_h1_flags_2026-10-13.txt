@@ -30,12 +30,12 @@ T1. Escrever KsuModeTest.kt. Rodar. Deve falhar por referência não resolvida. 
 T2. Escrever KsuMode.kt com decodeKsuMode. Rodar. Os seis testes de decode ficam verdes. readModeWithoutLibIsUnavailable continua vermelho, porque readMode ainda não existe. Registrar.
 T3. Adicionar kernelFlags em engine.cc e EngineNatives.kt, e readMode em KsuBackend.kt. Rodar. Os sete testes do KsuModeTest ficam verdes. Registrar.
 T4. Compilação nativa: ./gradlew :core-backend:externalNativeBuildDebug --offline. Se a task não existir, listar com ./gradlew :core-backend:tasks --all | grep -i native e usar a correta. Registrar a saída. Se falhar por NDK ausente, registrar a mensagem exata e marcar NÃO VERIFICADO.
-T5. Sabotagem: copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_da_sabotagem e registrar sha256sum. Trocar a máscara de lkm de 1 para 2 em decodeKsuMode. Rodar. decodeLkmBit deve falhar. Restaurar a partir da cópia e provar com sha256sum que o arquivo voltou igual ao original.
+T5. Sabotagem: copiar KsuMode.kt para [fora do repo] docs/history/reports/KsuMode.kt.antes_da_sabotagem e registrar sha256sum. Trocar a máscara de lkm de 1 para 2 em decodeKsuMode. Rodar. decodeLkmBit deve falhar. Restaurar a partir da cópia e provar com sha256sum que o arquivo voltou igual ao original.
 T6. Rodar o módulo inteiro: ./gradlew :core-backend:testDebugUnitTest --offline. Esperado: 17 testes, sendo KsuBackendHostTest 3, BackendStateTest 7 e KsuModeTest 7. Registrar.
 T7. Escrever o relatório e responder.
 
 Comando de teste, com caminhos absolutos:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
 
 Não deve:
 - Tocar o aparelho: nada de adb, fastboot, instalação de APK ou leitura do aparelho.

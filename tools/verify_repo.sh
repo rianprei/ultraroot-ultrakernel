@@ -62,14 +62,26 @@ WARN=0
 for f in $TEXT; do
   case "$f" in *.md|*.txt|*.sh) ;; *) continue ;; esac
   case "$f" in tools/verify_repo.sh|kernel/upstream/*) continue ;; esac
-  for p in $(grep -oE '(docs|ultraroot|kernel|tools)/[A-Za-z0-9_./-]+' "$f" | sed 's/[.,;:)]*$//' | sort -u); do
+  # ERR-16: (a) o caminho começa em fronteira (não casa "dev/superroot/ultraroot/ui" no meio de outro).
+  # Só fora dos STRICT (que continuam exigindo caminho exato a partir da raiz):
+  # (b) referência marcada com "[fora do repo] <caminho>" (convenção em docs/history/EXCLUSOES.txt) não conta;
+  # (c) arquivos de kernel/lake/ citam caminhos relativos à raiz do lake;
+  # (d) caminhos do KernelSU resolvem em kernel/upstream/KernelSU/; (e) caminhos da árvore do kernel, em kernel/common/.
+  strict=0; echo " $STRICT " | grep -q " $f " && strict=1
+  if [ "$strict" = 1 ]; then src="$(cat "$f")"
+  else src="$(sed -E 's/\[fora do repo\] (docs|ultraroot|kernel|tools)\/[A-Za-z0-9_./-]+//g' "$f")"; fi
+  for p in $(printf '%s\n' "$src" | grep -oE '(^|[^A-Za-z0-9_./-])(docs|ultraroot|kernel|tools)/[A-Za-z0-9_./-]+' \
+      | sed -E 's/^[^A-Za-z0-9_./-]//; s/[.,;:)]*$//' | sort -u); do
     [ -e "$p" ] && continue
-    if echo " $STRICT " | grep -q " $f "; then
+    if [ "$strict" = 1 ]; then
       MISSING="$MISSING
 V4 link ausente: $f -> $p"
-    else
-      WARN=$((WARN+1))
+      continue
     fi
+    case "$f" in kernel/lake/*) [ -e "kernel/lake/$p" ] && continue ;; esac
+    [ -e "kernel/upstream/KernelSU/$p" ] && continue
+    [ -e "kernel/common/$p" ] && continue
+    WARN=$((WARN+1))
   done
 done
 if [ -n "$MISSING" ]; then printf '%s

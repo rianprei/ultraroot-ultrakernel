@@ -49,7 +49,7 @@
 | spec:92 - Validação: `NOT_TESTED \| HOST_TESTED \| DEVICE_TEST… | Enum de validação: NOT_TESTED, HOST_TESTED, DEVICE_TESTED, FAILED, UNKNOWN. | TODO:7 - `[ ]` NOT_STARTED · `[~]` IN_PROGRESS, ou IMPLEMENTED sem validação · `[…; TODO:23 - [x] Boot C0.1 no aparelho, recorte: 62 linhas `KernelSU:`, `dmesg_new_er…; TODO:27 - [~] C0.3 no aparelho: o handoff v2 afirma flash e boot. Sem log de boot … | PARCIAL | Legenda descreve HOST/DEVICE; os valores FAILED e UNKNOWN não são declarados como enum completo. |
 | spec:93 Princípio: **componente que compila ≠ funcional; inter… | Princípios de status honesto, domínios de inventário, retenção de inviáveis/externos e corpus/metodologia. | TODO:9 - IMPL e VALID são independentes. Compilar não é validar. Aceitar ZIP não …; TODO:584 - [ ] ZIP aceito não é compatibilidade funcional; TODO:592 - [ ] Não considerar concluído por existir tela, botão, APK compilado, ZIP…; TODO:566 - [ ] Por item: localizar a implementação original; confirmar a licença; i…; TODO:610 - [ ] Campos independentes por capacidade no CAPABILITIES.md: ID, origem e… | PARCIAL | Falta o corpus/metodologia reprodutível e a lista de domínios não aparece como deliverable único. |
 | spec:96 Subsistema integrado: descoberta de HW/drivers/control… | Performance Engine: descoberta/inspeção, controles, medições, reversão e baseline; investigar a cadeia HW. | TODO:410 - [ ] Informações da CPU; TODO:417 - [ ] Investigar a cadeia: userspace → driver → kernel → device tree → reg…; TODO:422 - [ ] Perfis de desempenho e de economia; TODO:427 - [ ] Benchmark antes×depois contra baseline gravado; TODO:429 - [ ] Classificar cada ajuste nas 6 classes do §6 (`HW_PERF_MATRIX_lake.md…; TODO:431 - [ ] Testes de estabilidade, latência, throughput e sustentado; TODO:433 - [ ] Guardrails: sem inventar freq ou volt; sem remover proteção térmica … | PARCIAL | O TODO não exige leitura de volt/OPP/limites; só diz que não escreve OPP (TODO 418). |
-| spec:99 Alvo inicial: lake, com kernel/source/DT/OPP/drivers r… | Alvo lake, taxonomia de seis classes, máximo sustentável demonstrável e medidas contra baseline. | TODO:417 - [ ] Investigar a cadeia: userspace → driver → kernel → device tree → reg…; TODO:429 - [ ] Classificar cada ajuste nas 6 classes do §6 (`HW_PERF_MATRIX_lake.md…; TODO:431 - [ ] Testes de estabilidade, latência, throughput e sustentado; TODO:432 - [!] Overclock e undervolt só com margem medida. DVFS do lake bloqueia no… | PARCIAL | Classes e métricas aparecem, mas não há tarefa explícita para achar/documentar o máximo sustentável demonstrável. |
+| spec:99 Alvo inicial: lake, com [fora do repo] kernel/source/DT/OPP/drivers r… | Alvo lake, taxonomia de seis classes, máximo sustentável demonstrável e medidas contra baseline. | TODO:417 - [ ] Investigar a cadeia: userspace → driver → kernel → device tree → reg…; TODO:429 - [ ] Classificar cada ajuste nas 6 classes do §6 (`HW_PERF_MATRIX_lake.md…; TODO:431 - [ ] Testes de estabilidade, latência, throughput e sustentado; TODO:432 - [!] Overclock e undervolt só com margem medida. DVFS do lake bloqueia no… | PARCIAL | Classes e métricas aparecem, mas não há tarefa explícita para achar/documentar o máximo sustentável demonstrável. |
 | spec:102 `capacidade × backend × versão Android × kernel × ABI … | Matriz por recurso e eixos, enum de estados, teste de comportamento real e gate device. | TODO:15 - [!] Toda operação no aparelho: "sim, <passo>". Sem isso não há instalaçã…; TODO:572 - [~] `COMPAT_MATRIX.md`: existe. Preencher célula por célula: capacidade …; TODO:575 - [ ] Cada célula do COMPAT_MATRIX com um de: VALIDATED, IMPLEMENTED_UNVAL…; TODO:585 - [ ] Testar separadamente scripts, montagem, SELinux, propriedades, estág… | COBERTO | — |
 | spec:104 ## 8. Paridade funcional — testes que provam, por back… | Paridade funcional testada por backend, limitações/deps; sem teste=UNKNOWN. | TODO:577 - [ ] Paridade funcional por backend: testes que provam o que funciona, co… | COBERTO | — |
 | spec:107 Cenários+evidência: flash falho, módulo defeituoso no … | Suite de recuperação com seis cenários e regra slot lake/genérica. | TODO:554 - [ ] Flash falho; TODO:555 - [ ] Módulo defeituoso no boot; TODO:556 - [ ] Interrupção durante a operação; TODO:557 - [ ] Boot-loop com guard e combinação de teclas; TODO:558 - [ ] Configuração de performance ruim, com rollback; TODO:559 - [ ] Matriz de recuperação por device e por domínio; TODO:560 - Regra: rollback de `boot_b` vale só para o lake (POCO C75). Outros devic… | COBERTO | — |
@@ -460,7 +460,7 @@
 | spec:738 | Detecção de dependências. | TODO:488 - [ ] Detecção do backend de autorização (UR-EXT-SDK, descoberta) | COBERTO | — |
 | spec:739 | Detecção de conflitos. | TODO:497 - [ ] Metadados, dependências e conflitos | COBERTO | — |
 | spec:740 | Classificação por backend e formato. | TODO:498 - [ ] Classificação por backend e formato; requisitos de kernel, Android e ABI | COBERTO | — |
-| spec:741 | Requisitos de kernel/Android/ABI. | TODO:498 - [ ] Classificação por backend e formato; requisitos de kernel, Android e ABI | COBERTO | — |
+| spec:741 | Requisitos de [fora do repo] kernel/Android/ABI. | TODO:498 - [ ] Classificação por backend e formato; requisitos de kernel, Android e ABI | COBERTO | — |
 | spec:742 | Indicador de compatibilidade verificada. | TODO:499 - [ ] Indicador de compatibilidade verificada | COBERTO | — |
 | spec:743 | Execução da ação declarada pelo módulo. | TODO:500 - [ ] Executar a ação do módulo; abrir a WebUI | COBERTO | — |
 | spec:744 | Abertura da WebUI. | TODO:536 - [ ] Integração de WebUI; registro de versões; contratos de compatibilidade | COBERTO | — |
@@ -607,12 +607,12 @@
 
 ## Sabotagem
 
-Comandos executados: `cp docs/ultraroot/TODOs.md docs/history/reports/todos-sabotado.md`, remoção da linha exata pela rotina abaixo, e execução do checker nos dois arquivos.
+Comandos executados: `cp docs/ultraroot/TODOs.md [fora do repo] docs/history/reports/todos-sabotado.md`, remoção da linha exata pela rotina abaixo, e execução do checker nos dois arquivos.
 
 ```sh
 python3 - <<'PY'
 from pathlib import Path
-p=Path('docs/history/reports/todos-sabotado.md')
+p=Path('[fora do repo] docs/history/reports/todos-sabotado.md')
 lines=p.read_text().splitlines(keepends=True)
 needle='- [ ] Revogar root pelo manager'
 found=[i for i,line in enumerate(lines) if line.rstrip('\n')==needle]
@@ -621,23 +621,23 @@ lines.pop(found[0])
 p.write_text(''.join(lines))
 print(f'removed={needle!r}; matches={len(found)}; copy={p}')
 PY
-python3 docs/history/reports/sabotage_check.py docs/ultraroot/TODOs.md
-python3 docs/history/reports/sabotage_check.py docs/history/reports/todos-sabotado.md
+python3 [fora do repo] docs/history/reports/sabotage_check.py docs/ultraroot/TODOs.md
+python3 [fora do repo] docs/history/reports/sabotage_check.py [fora do repo] docs/history/reports/todos-sabotado.md
 ```
 Saída literal:
 ```text
-removed='- [ ] Revogar root pelo manager'; matches=1; copy=docs/history/reports/todos-sabotado.md
+removed='- [ ] Revogar root pelo manager'; matches=1; copy=[fora do repo] docs/history/reports/todos-sabotado.md
 docs/ultraroot/TODOs.md: KSU-ROOT revogação pelo manager = COBERTO (linha 243: - [ ] Revogar root pelo manager)
-docs/history/reports/todos-sabotado.md: KSU-ROOT revogação pelo manager = AUSENTE
+[fora do repo] docs/history/reports/todos-sabotado.md: KSU-ROOT revogação pelo manager = AUSENTE
 ```
 
 
-Comando para confirmar que só a linha indicada foi removida: `diff -u docs/ultraroot/TODOs.md docs/history/reports/todos-sabotado.md`.
+Comando para confirmar que só a linha indicada foi removida: `diff -u docs/ultraroot/TODOs.md [fora do repo] docs/history/reports/todos-sabotado.md`.
 
 Saída literal do diff:
 ```diff
 --- docs/ultraroot/TODOs.md	2026-10-11 21:50:42.355370308 -0300
-+++ docs/history/reports/todos-sabotado.md	2026-10-11 22:04:00.699396291 -0300
++++ [fora do repo] docs/history/reports/todos-sabotado.md	2026-10-11 22:04:00.699396291 -0300
 @@ -240,7 +240,6 @@
  IMPL IN_PROGRESS · VALID NOT_TESTED · Adapter: KsuBackend · Device-gate: sim · Origem: KernelSU `6e386044` `uapi/supercall.h` (allow list), `manager/.../ksu.h` · Aceite: `su` atendido pelo KSU, uid=0, sem magisk
  - [~] Ler versão e UAPI na cópia `[artefato local, fora do repo]/grok/ultraroot-mgr/` (host)
@@ -652,6 +652,6 @@ Saída literal do diff:
 
 - Recontagem assertiva do gerador: 440 bullets brutos − 7 excluídos = 433 obrigatórios; 44 IDs; 32 unidades §0–§13; total 509.
 - Soma por classe: 486 COBERTO + 21 PARCIAL + 2 AUSENTE = 509.
-- A cópia sabotada está em `docs/history/reports/todos-sabotado.md`; a checagem detectou `AUSENTE` após remover uma única linha.
+- A cópia sabotada está em `[fora do repo] docs/history/reports/todos-sabotado.md`; a checagem detectou `AUSENTE` após remover uma única linha.
 
 **RELATÓRIO:** `docs/ultraroot/REVIEW_TODOs_codex4.md`

@@ -1,5 +1,5 @@
 ULTRAROOT-H8RC-2026-10-13 — conferência independente da correção H8 (errno no retorno JNI). Revisor: OpenCode #2. [LIDO]
-Original somente leitura; sabotagens S10b/S11 só na cópia docs/history/reports/h8r. Chamadas de ferramenta: 10 de 16. [LIDO]
+Original somente leitura; sabotagens S10b/S11 só na cópia [fora do repo] docs/history/reports/h8r. Chamadas de ferramenta: 10 de 16. [LIDO]
 
 T1. sha256 dos quatro arquivos: CONFEREM (medi = esperados):
 app_profile_fill.h e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f

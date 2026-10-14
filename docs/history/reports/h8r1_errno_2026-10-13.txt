@@ -45,7 +45,7 @@ Comando: g++ -std=c++17 -Wall -Werror -I shim -I ultraroot/core-backend/src/main
 Os 11 casos PASS; exit 0. Header restaurado SHA-256 e9ad688cf8cf7c0a74335a839b8114a2712914be5cf8d6a696f40442b2bf538f.
 
 T4 — compilação nativa
-Comando: cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
+Comando: cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:externalNativeBuildDebug --offline
 Saída: configureCMakeDebug[arm64-v8a], buildCMakeDebug[arm64-v8a], BUILD SUCCESSFUL in 2s.
 Status T4: PASSOU.
 

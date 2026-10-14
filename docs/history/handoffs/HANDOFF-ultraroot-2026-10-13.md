@@ -5,7 +5,7 @@ Motivo: passei de 490.000 tokens de contexto (606.000 agora) e não avisei no mo
 
 ## Linha do tempo
 - 2026-10-10: lake T-1 e T3 gravados e PASS no aparelho. Kernel custom rodando (memória do projeto lake).
-- 2026-10-11: spec rev.7 aprovado ("sim pros 3"). Plano SP1 escrito em `docs/superpowers/plans/2026-10-11-ultraroot-sp1.md`. APK vc40000 instalado no aparelho (`docs/history/evidence/2026-10-11_install_vc40000.txt`).
+- 2026-10-11: spec rev.7 aprovado ("sim pros 3"). Plano SP1 escrito em `[fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md`. APK vc40000 instalado no aparelho (`docs/history/evidence/2026-10-11_install_vc40000.txt`).
 - 2026-10-12 manhã: diagnóstico de "backend indisponível". A causa era a instalação incremental (incfs). `pm install -r` a partir de /data/local/tmp: manager coroado (uid 10296) e allowlist lida (vazia).
 - 2026-10-12: inventário Magisk/KSU fechado pelo dono. Handoff v4 gerado.
 - 2026-10-12 tarde: estado honesto (`BackendState`) implementado. Revisão do Claude #2: REPROVADO, corrigido. Busca e filtro no presenter: revisão do Claude #2 e do Codex #4, corrigido. `OWNAPP_INC1.md:34` corrigido (o `.so` só procura o fd).
@@ -54,7 +54,7 @@ Ver `docs/ultraroot/plan.md` §2 (verificado em 2026-10-13). Não repetir aqui.
 ## Atualização 2 (2026-10-13)
 
 - L1 e L2 concluídas (ver `plan.md` §9). Selftest do lake corrigido e passando.
-- H5 concluído: linha 85 do inventário ajustada em "fluxos do Home" para os diálogos reais de HomeScreen.kt. Antes do ajuste, o texto foi guardado em `docs/history/prompts/MAGISK_KSU_UI_INVENTORY.antes_H5_2026-10-13.md`. O veredito de cabeçalho do REVIEW existe em `REVIEW_MAGISK_KSU_INVENTORY_haiku55.md:4`. A reaprovação do Claude na rodada 6 (P1 e P2) segue NÃO VERIFICADA.
+- H5 concluído: linha 85 do inventário ajustada em "fluxos do Home" para os diálogos reais de HomeScreen.kt. Antes do ajuste, o texto foi guardado em `[fora do repo] docs/history/prompts/MAGISK_KSU_UI_INVENTORY.antes_H5_2026-10-13.md`. O veredito de cabeçalho do REVIEW existe em `REVIEW_MAGISK_KSU_INVENTORY_haiku55.md:4`. A reaprovação do Claude na rodada 6 (P1 e P2) segue NÃO VERIFICADA.
 - H6 (leitura, Tasks 3, 4 e 6 do SP1) despachado ao OpenCode #2 (tarefa beq3zoeth). Relatório esperado em `docs/history/reports/review_h6_sp1_tasks_2026-10-13.txt`.
 - H1 segue no Codex #4 (tarefa bp4aiaelh), perto do fim. Relatório esperado em `docs/history/reports/h1_flags_2026-10-13.txt`.
 - Contexto em cerca de 724 mil tokens. /compact continua pendente.
@@ -70,6 +70,6 @@ Ver `docs/ultraroot/plan.md` §2 (verificado em 2026-10-13). Não repetir aqui.
 ## Atualização 4 (2026-10-13)
 
 - H6 concluído. Os artefatos das Tasks 3, 4 e 6 existem. `test_accept_ksu.sh` e `test_module_props.sh` passaram em host (rc 0, PASS). O revisor OpenCode #2 errou algumas linhas citadas; corrigidas em `plan.md` §9.
-- H1 (flags do GET_INFO, Codex #4) verificado pelo maestro. A revisão cruzada foi despachada ao OpenCode #2 com `&` no shell, sem notificação. Conferir `docs/history/reports/log_h1_revisao_2026-10-13.log` e `docs/history/reports/review_h1_flags_2026-10-13.txt`.
+- H1 (flags do GET_INFO, Codex #4) verificado pelo maestro. A revisão cruzada foi despachada ao OpenCode #2 com `&` no shell, sem notificação. Conferir `[fora do repo] docs/history/reports/log_h1_revisao_2026-10-13.log` e `docs/history/reports/review_h1_flags_2026-10-13.txt`.
 - Próximo passo da rota depois da revisão de H1: H2 (inc3 no host com fakes, Codex #4).
 - Contexto em cerca de 757 mil tokens. /compact pendente. Rode /compact antes de seguir.

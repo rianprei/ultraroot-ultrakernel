@@ -4,8 +4,8 @@ Raiz dos caminhos relativos: ultraroot
 Saídas abaixo: extratos literais de Gradle/XML/SHA desta execução.
 
 Comandos exatos:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --tests 'dev.superroot.ultraroot.ui.RootGrantFlowTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :app:testDebugUnitTest --offline
 
 T0: PASSOU — 111 arquivos existentes registrados antes de editar; os quatro novos não existiam.
 Baseline por leitura dos XMLs existentes e contagem de @Test, sem executar Gradle: app=26; core-backend=20.
@@ -85,25 +85,25 @@ confirmOutsideConfirmingIsRefused FAILED: java.lang.AssertionError; at dev.super
 SHA original de RootGrantFlow.kt após T2: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0
 S1 — sha256sum antes da sabotagem (fonte e cópia):
 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
-318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S1
-S1 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S1
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S1
+S1 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S1
 S1 — sha256sum depois da restauração:
 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
-318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S1
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S1
 S2 — sha256sum antes da sabotagem (fonte e cópia):
 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
-318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S2
-S2 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S2
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S2
+S2 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S2
 S2 — sha256sum depois da restauração:
 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
-318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S2
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S2
 S3 — sha256sum antes da sabotagem (fonte e cópia):
 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
-318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S3
-S3 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S3
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S3
+S3 — cópia conferida ANTES de restaurar: 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S3
 S3 — sha256sum depois da restauração:
 318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  app/src/main/java/dev/superroot/ultraroot/ui/RootGrantFlow.kt
-318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  docs/history/reports/RootGrantFlow.kt.antes_S3
+318adc6af9b1540d166293959c3b265091208a50791dc9ef60363c05b9a231c0  [fora do repo] docs/history/reports/RootGrantFlow.kt.antes_S3
 
 T7: PASSOU — após restaurações, fluxo 11/11 e módulo app 37/37; exit 0 em ambos.
 BUILD SUCCESSFUL in 2s

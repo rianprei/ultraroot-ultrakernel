@@ -42,14 +42,14 @@ T1. Escrever os três testes novos. Rodar KsuModeTest. Deve falhar por referênc
 T2. Escrever decodeKernelMode e o KDoc em KsuMode.kt. Rodar KsuModeTest. Os 10 testes ficam verdes, porque readMode ainda não mudou. Registrar.
 T3. Trocar o corpo de readMode em KsuBackend.kt pela forma do contrato. Rodar KsuModeTest: 10 de 10 verdes. Registrar.
 T4. Rodar o módulo inteiro. Esperado: 20 testes (BackendStateTest 7, KsuBackendHostTest 3, KsuModeTest 10), 0 falhas. Registrar.
-T5. Sabotagem S1, guarda de versão: copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_S1 e registrar sha256. No corpo de decodeKernelMode, trocar a guarda por KsuRead.Ok(decodeKsuMode(flags)), sem if. Rodar KsuModeTest. Esperado: decodeKernelModeWithoutAnswerIsUnavailable FALHA. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
-T6. Sabotagem S2, máscara LKM: copiar KsuMode.kt para docs/history/reports/KsuMode.kt.antes_S2 e registrar sha256. Trocar lkm = flags and 1 por lkm = flags and 2. Rodar KsuModeTest. Esperado: decodeLkmBit FALHA. Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
+T5. Sabotagem S1, guarda de versão: copiar KsuMode.kt para [fora do repo] docs/history/reports/KsuMode.kt.antes_S1 e registrar sha256. No corpo de decodeKernelMode, trocar a guarda por KsuRead.Ok(decodeKsuMode(flags)), sem if. Rodar KsuModeTest. Esperado: decodeKernelModeWithoutAnswerIsUnavailable FALHA. Registrar a linha da falha. Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
+T6. Sabotagem S2, máscara LKM: copiar KsuMode.kt para [fora do repo] docs/history/reports/KsuMode.kt.antes_S2 e registrar sha256. Trocar lkm = flags and 1 por lkm = flags and 2. Rodar KsuModeTest. Esperado: decodeLkmBit FALHA. Restaurar a partir da cópia e conferir o sha256 igual ao de T0.
 T7. Rodar o módulo inteiro de novo, depois das restaurações. Esperado: 20 de 20.
 T8. Escopo: sha256 de engine.cc e EngineNatives.kt iguais aos de T0. Listar os arquivos de core-backend/src e app/src alterados nas últimas 2 horas (find ... -mmin -120). A lista deve conter engine.cc, EngineNatives.kt, KsuBackend.kt, KsuMode.kt e KsuModeTest.kt, e nenhum outro. Se aparecer outro, parar e reportar.
 T9. Escrever o relatório e responder.
 
 Comando de teste (caminhos absolutos):
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :core-backend:testDebugUnitTest --tests 'dev.superroot.core.KsuModeTest' --offline
 
 Não deve:
 - Tocar o aparelho: nada de adb, fastboot, instalação ou leitura do aparelho.

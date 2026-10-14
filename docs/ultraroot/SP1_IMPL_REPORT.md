@@ -24,14 +24,14 @@ O teste exige que o sha do C0.3 seja exatamente `2977e1dc002d1a9d9ebb9338b60fae3
 
 ## Task 2 — rollback reativa só B
 
-Arquivos: `tools/fastboot_guard.sh`, `tools/selftest_fastboot_guard.sh`. Commit `c8e78121d602a1b4bf8b00318d2d3acec78c965a`.
+Arquivos: `[fora do repo] tools/fastboot_guard.sh`, `[fora do repo] tools/selftest_fastboot_guard.sh`. Commit `c8e78121d602a1b4bf8b00318d2d3acec78c965a`.
 
 `rollback <arquivo>` copia a imagem, exige 67108864 bytes, magic `ANDROID!` e sha na allowlist, e então segue o interlock de flash já existente (`current-slot` exatamente `b`, `is-userspace` diferente de `yes`). Se o flash sai 0, o guard emite `set_active` com o argumento literal `b`. O pedido `set_active a` cai na recusa da allowlist e o stub não é chamado. Um `set_active` solto, inclusive `b`, também é recusado: a reativação só existe depois do flash do rollback.
 
 O scanner V6 trata a palavra `set_active` na posição de comando como troca de slot. A emissão usa `op=set_active` e `"$bin" "$op" b`. O caso R3 monta o argv num array pelo mesmo motivo; o pedido que o stub vê continua sendo `set_active a`, e o teste exige que essa linha não apareça no log.
 
 ```
-bash tools/selftest_fastboot_guard.sh
+bash [fora do repo] tools/selftest_fastboot_guard.sh
 ### [R1] rollback com slot b unbootable flasha boot_b e reativa b
     flash boot_b + set_active b; set_active a ausente
   => OK
@@ -148,7 +148,7 @@ B é o único aprovado: `uid=0(root)` e contexto `u:r:su:s0`. A, com `uid=0(` e 
 
 ### Fix 2 — reboot depois do rollback
 
-`rollback` reativa B e deixa o aparelho em fastboot. O boot é um segundo comando, `tools/fastboot_guard.sh reboot`, só se o rollback saiu 0. Entre o Z0.4 e o flash não há reboot. Sem cabo, a volta é pelas teclas. O cenário de device fecha quando o boot do backup é observado. Não há reboot nu do binário fastboot.
+`rollback` reativa B e deixa o aparelho em fastboot. O boot é um segundo comando, `[fora do repo] tools/fastboot_guard.sh reboot`, só se o rollback saiu 0. Entre o Z0.4 e o flash não há reboot. Sem cabo, a volta é pelas teclas. O cenário de device fecha quando o boot do backup é observado. Não há reboot nu do binário fastboot.
 
 O teste falhou antes da edição (`FAIL suite sem Z0.4` e `FAIL suite nao exige boot observado`) e depois:
 
@@ -159,7 +159,7 @@ PASS
 
 ### Fix 3 — C0.1/C0.2 fora do caminho operacional
 
-O pacote que escrevia a allowlist com o hash do C0.2 e mandava flashar `C02_ksu_boot_b.img` foi substituído por um aviso OBSOLETO, sem comando. O pacote ativo aponta só para `guard_hashes_sp1.txt` (backup + C0.3). O arquivo não rastreado `kernel/lake/guard_hashes.txt`, que continha o hash do C0.1, foi apagado. `C01_device_plan.md` ganhou um banner de obsoleto; o hash que resta lá é histórico. O parágrafo de status do C0.2 no plano-mestre também continua como histórico, sem comando.
+O pacote que escrevia a allowlist com o hash do C0.2 e mandava flashar `C02_ksu_boot_b.img` foi substituído por um aviso OBSOLETO, sem comando. O pacote ativo aponta só para `guard_hashes_sp1.txt` (backup + C0.3). O arquivo não rastreado `[fora do repo] kernel/lake/guard_hashes.txt`, que continha o hash do C0.1, foi apagado. `C01_device_plan.md` ganhou um banner de obsoleto; o hash que resta lá é histórico. O parágrafo de status do C0.2 no plano-mestre também continua como histórico, sem comando.
 
 Antes: `FAIL guard_hashes.txt ainda existe`, `FAIL master-escreve-guard_hashes`, `FAIL master-flash-c02`. Depois:
 

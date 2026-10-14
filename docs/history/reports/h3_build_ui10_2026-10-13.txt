@@ -5,8 +5,8 @@ Raiz dos caminhos relativos: ultraroot
 T0: PASSOU — sha256sum app/build.gradle.kts:
 904e39c099c4895887a74d1d8f5738c4d8e2e3871289e87f9481e6259bc4fb1c  app/build.gradle.kts
 T1: PASSOU — cópia antes de editar:
-904e39c099c4895887a74d1d8f5738c4d8e2e3871289e87f9481e6259bc4fb1c  docs/history/reports/build.gradle.kts.antes_H3
-Comando: diff docs/history/reports/build.gradle.kts.antes_H3 app/build.gradle.kts
+904e39c099c4895887a74d1d8f5738c4d8e2e3871289e87f9481e6259bc4fb1c  [fora do repo] docs/history/reports/build.gradle.kts.antes_H3
+Comando: diff [fora do repo] docs/history/reports/build.gradle.kts.antes_H3 app/build.gradle.kts
 Diff (exit 1, diferença esperada; somente linhas 21–22):
 21,22c21,22
 <         versionCode = 40009
@@ -17,7 +17,7 @@ Diff (exit 1, diferença esperada; somente linhas 21–22):
 
 T2: PASSOU — release offline, exit 0.
 Comando exato:
-cd ultraroot && TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' ./gradlew :app:assembleRelease --offline
+cd ultraroot && TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' ./gradlew :app:assembleRelease --offline
 Últimas 20 linhas de stdout/stderr:
 > Task :app:sdkReleaseDependencyData UP-TO-DATE
 > Task :app:writeReleaseAppMetadata UP-TO-DATE
@@ -70,7 +70,7 @@ Executar a partir de ultraroot:
 ~/Android/Sdk/build-tools/37.0.0/apksigner sign --ks [chaves locais do dono, fora do repo]/superroot-release.jks --out out/UltraRoot-own-ui10.apk out/UltraRoot-own-ui10-aligned.apk
 O dono digita a senha do keystore no prompt; nenhum arquivo de senha foi lido.
 Somente verificação de assinatura foi executada, sem keystore:
-TMPDIR=docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=docs/history/reports/tmp' [caminho local]/Android/Sdk/build-tools/37.0.0/apksigner verify --verbose out/UltraRoot-own-ui10-aligned.apk
+TMPDIR=[fora do repo] docs/history/reports/tmp JAVA_TOOL_OPTIONS='-Djava.io.tmpdir=[fora do repo] docs/history/reports/tmp' [caminho local]/Android/Sdk/build-tools/37.0.0/apksigner verify --verbose out/UltraRoot-own-ui10-aligned.apk
 Saída relevante (exit 1 esperado no APK sem assinatura):
 DOES NOT VERIFY
 ERROR: Missing META-INF/MANIFEST.MF

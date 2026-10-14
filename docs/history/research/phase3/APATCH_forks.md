@@ -15,7 +15,7 @@ Dos 84 compares: APatch 18 ahead, 20 em 0, 1 sem ancestral. KernelPatch 18 ahead
 | Fork | Estrelas | Ahead | Feature | Evidência | Classe |
 |---|---:|---:|---|---|---|
 | Prslc/APatch (`miuix`) | 24 | 309 | Manager em Miuix, tema e intent pendente | `MainActivity.kt:65` importa `top.yukonga.miuix.kmp.basic.Scaffold`; `:79-90` guarda `pendingIntent` e chama `onNewIntent`. Ponta `1acd4305a9a6` é só `kp: bump to 0.13.3`. | NOVA (UI; a matriz não tem linha de toolkit) |
-| niqiuqiux/KernelPatchUltra (`ultra`) | 18 | 32 | Offset de membro via BTF para o kpimg | `kernel/patch/ksyms/struct_hash.c:471` `btf_get_member_offset`; export `:487`. Uso em `task_cred.c:155`. HEAD `13c0f1b4e2256344f9a13d106224d8cf1288995e`. O pin local do KernelPatch não tem esse símbolo. | NOVA (alimenta a linha 5, não é a linha 5) |
+| niqiuqiux/KernelPatchUltra (`ultra`) | 18 | 32 | Offset de membro via BTF para o kpimg | `[fora do repo] kernel/patch/ksyms/struct_hash.c:471` `btf_get_member_offset`; export `:487`. Uso em `task_cred.c:155`. HEAD `13c0f1b4e2256344f9a13d106224d8cf1288995e`. O pin local do KernelPatch não tem esse símbolo. | NOVA (alimenta a linha 5, não é a linha 5) |
 | ColdAsSunny/APatch | 13 | 4 | Troca de package, tira checagem de assinatura, `/bin/sh` → `/system/bin/sh` | Subjects do compare. Sem clone. | sem feature nova |
 | FrostRime/APatch | 10 | 178 | Troca de namespace / `applicationId`, desliga checagem de assinatura | Subjects do compare (`com.frost.apatch`, depois `com.kqengine.meet`). Sem clone. | sem feature nova |
 | JingMatrix/APatch | 10 | 2 | Mostra o contexto SELinux default como `untrusted_app` | Subject do compare. Sem clone. | sem feature nova |
@@ -26,7 +26,7 @@ Dos 84 compares: APatch 18 ahead, 20 em 0, 1 sem ancestral. KernelPatch 18 ahead
 | DjihadsTesting/FreakPatch | 3 | 19 | Subjects `freaky` e README | Compare. | sem feature nova |
 | CaptainThrowback/APatch | 3 | 4 | CI e `magiskboot` na pasta `bin` | Subjects do compare. | na-matriz (linha 30, patcher de boot) |
 | y0geshx/APatch | 3 | 1 | README | Subject. | sem feature nova |
-| symbuzzer/fork-APatch | 3 | 1 | `docs/faq_tr.md` | Subject. | sem feature nova |
+| symbuzzer/fork-APatch | 3 | 1 | `[fora do repo] docs/faq_tr.md` | Subject. | sem feature nova |
 | matcxz/MPatch | 2 | 10 | Manager `armeabi-v7a` | `README.md:13` e `:23`. `app/build.gradle.kts:113` filtra `arm64-v8a` e `armeabi-v7a`. HEAD `738499f54ecb45f65bb8b0c3ecc9f22c7c92f85f`. | NOVA |
 | ouchao6122/APatch | 2 | 77 | strings, manifest, gradle | Subjects do compare. | sem feature nova |
 | Hotsteel2901/APatch-Win98-Style | 2 | 9 | Tema Win98 e remoção de checagem de assinatura | Subjects do compare. | sem feature nova |
@@ -35,7 +35,7 @@ Dos 84 compares: APatch 18 ahead, 20 em 0, 1 sem ancestral. KernelPatch 18 ahead
 | AlexLiuDev233/APatch | 2 | 1 | Texto em DPI alto | Subject. | sem feature nova |
 | ThePedroo/APatch | 1 | 1 | Acompanha `kstorage` read/write do KP | Subject. O pin local já chama `sc_kstorage_write` em `apd/src/supercall.rs:74`. | na-matriz |
 | alwayslovestudy/KernelPatch | 2 | 24 | KPM `kpm-detector-bypass`: redirect de path e filtro de binder | `kpms/detector-bypass/main.c:18` `KPM_NAME`. `redirect.h:5-6`. `binder_filter.h:3-4`. HEAD `2fd0015fcfe2f207d18e34ca454e66ede863868a`. | NOVA |
-| matcxz/MKernelPatch | 2 | 13 | kpimg e hook ARMv7 | `README.md:18`. `kernel/base/hook_arm.c:3-7` sob `#ifndef __aarch64__`. HEAD `bba0cdd54439b04fc8dfbfa1d0bd6166bd0218b1`. O pin local não tem `kernel/base/arm`. | NOVA |
+| matcxz/MKernelPatch | 2 | 13 | kpimg e hook ARMv7 | `README.md:18`. `[fora do repo] kernel/base/hook_arm.c:3-7` sob `#ifndef __aarch64__`. HEAD `bba0cdd54439b04fc8dfbfa1d0bd6166bd0218b1`. O pin local não tem `[fora do repo] kernel/base/arm`. | NOVA |
 | xiameng666/KernelPatch | 1 | 22 | KPMs `wxjump`, `wxshadow`, `kdbg`, `kdbg-probe`, `xiam-hide`, `xiam-tools` | `kpms/wxjump/wxjump.c:3` e `:38`. `kpms/wxshadow/wxshadow.c:3` e `:40`. `kpms/kdbg/kdbg.c:3` e `:45`. `xiam_hide.c:23`. HEAD `34cd202d2e8c7e2c4b1b76c1fead7bcd01458d7c`. | NOVA |
 | Kahllo/KernelPatch | 1 | 12 | Só subjects `Update syscallhook.c` | Compare, arquivos em `kpms/`. Diff não aberto. | [não-verificado] |
 | enrikenavarrete1986-cmyk/KernelPatch | 1 | 12 | `build.yml` | Subjects. | sem feature nova |

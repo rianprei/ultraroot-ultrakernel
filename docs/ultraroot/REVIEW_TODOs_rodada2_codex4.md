@@ -11,7 +11,7 @@
 | Requisitos de produto §§0–13 | 32 | 32 | 0 | 0 |
 | **Total** | **517** | **515** | **2** | **0** |
 
-A contagem do inventário veio de 440 bullets no intervalo spec:151–853, menos 7 itens classificados fora do obrigatório: spec:244, 426–428 e 492–494. O catálogo tem 44 OBRIG e 8 OBRIG-PROPOSTO (CAPABILITIES.md:33–84 e 85–92). As 32 unidades §§0–13 foram contadas por parágrafo normativo, bullet ou linha de tabela; o diagrama §3 conta como entregável (spec:42–116). A matriz item a item, com linha-fonte, linha TODO e classificação, está em `docs/history/reports/TODOs_coverage_round2.tsv` (517 linhas de itens).
+A contagem do inventário veio de 440 bullets no intervalo spec:151–853, menos 7 itens classificados fora do obrigatório: spec:244, 426–428 e 492–494. O catálogo tem 44 OBRIG e 8 OBRIG-PROPOSTO (CAPABILITIES.md:33–84 e 85–92). As 32 unidades §§0–13 foram contadas por parágrafo normativo, bullet ou linha de tabela; o diagrama §3 conta como entregável (spec:42–116). A matriz item a item, com linha-fonte, linha TODO e classificação, está em `[fora do repo] docs/history/reports/TODOs_coverage_round2.tsv` (517 linhas de itens).
 
 ## Itens parciais
 
@@ -53,23 +53,23 @@ Oito IDs novos passaram a compor o denominador e estão cobertos: `UR-DASH`, `UR
 
 ## Evidências e sabotagem
 
-Contagem executada com `python3 docs/history/reports/generate_round2_matrix.py`; verificação de paths/IDs/tags em `docs/history/reports/round2_verification.txt`:
+Contagem executada com `python3 [fora do repo] docs/history/reports/generate_round2_matrix.py`; verificação de paths/IDs/tags em `[fora do repo] docs/history/reports/round2_verification.txt`:
 
 ```text
-matrix=docs/history/reports/TODOs_coverage_round2.tsv rows=517 inventory=433 req=32 capabilities=52
+matrix=[fora do repo] docs/history/reports/TODOs_coverage_round2.tsv rows=517 inventory=433 req=32 capabilities=52
 inventory_classes {'COBERTO': 431, 'PARCIAL': 2, 'AUSENTE': 0, 'UNKNOWN': 0}
 req_classes {'COBERTO': 32, 'PARCIAL': 0, 'AUSENTE': 0, 'UNKNOWN': 0}
 cap_classes {'COBERTO': 52, 'PARCIAL': 0, 'AUSENTE': 0, 'UNKNOWN': 0}
 ```
 
-Verificação dos `[x]` e paths: `checked_x_rows=9 missing_evidence_paths=[]`; cada path e seu resultado `exists=True` estão em `docs/history/reports/round2_verification.txt`. Varredura de IDs: `unknown_ids=[]`. Comparação de campos IMPL/VALID explícitos: 0 divergências; o achado (d) acima é o marcador `[~]` de TODOs.md:521 contra os estados expressos na mesma linha e no catálogo.
+Verificação dos `[x]` e paths: `checked_x_rows=9 missing_evidence_paths=[]`; cada path e seu resultado `exists=True` estão em `[fora do repo] docs/history/reports/round2_verification.txt`. Varredura de IDs: `unknown_ids=[]`. Comparação de campos IMPL/VALID explícitos: 0 divergências; o achado (d) acima é o marcador `[~]` de TODOs.md:521 contra os estados expressos na mesma linha e no catálogo.
 
-Sabotagem executada: cópia do TODOs para `docs/history/reports/todos-rodada2-sabotado.md`, remoção da única linha que contém “Corpus de pesquisa e metodologia reprodutível” (TODOs.md:594), e execução de `round2_sabotage_check.py` contra a fonte e a cópia. Saída literal:
+Sabotagem executada: cópia do TODOs para `[fora do repo] docs/history/reports/todos-rodada2-sabotado.md`, remoção da única linha que contém “Corpus de pesquisa e metodologia reprodutível” (TODOs.md:594), e execução de `round2_sabotage_check.py` contra a fonte e a cópia. Saída literal:
 
 ```text
 removed_line=594; matches=1; text=- [ ] Corpus de pesquisa e metodologia reprodutível: domínios root/privilégio; módulos; injeção (Zygisk, LSPosed, hooking); admin Android; boot e recovery; performance e hardware; monitoramento e benchmark; ferramentas. Inviáveis, redundantes, experimentais e externos ficam no catálogo
 docs/ultraroot/TODOs.md: COBERTO TODO:594
-docs/history/reports/todos-rodada2-sabotado.md: AUSENTE — item Corpus de pesquisa e metodologia reprodutível
+[fora do repo] docs/history/reports/todos-rodada2-sabotado.md: AUSENTE — item Corpus de pesquisa e metodologia reprodutível
 ```
 
 Auto-revisão concluída: denominador independente contado como 433 + 52 + 32 = 517; a matriz contém 517 itens; a sabotagem foi executada e a checagem acusou a ausência. Não usei adb.

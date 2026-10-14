@@ -79,12 +79,12 @@ Código real do UltraRoot, não só UI. Pedido do dono em 2026-10-12: "bora pro 
 
 - Status do C0.3 no device: aceitar a alegação de boot do HANDOFF v2, ou manter UNKNOWN até haver log ligado ao hash.
 - Revisão cruzada dos ajustes a–c do flash (`fastboot_guard`): autor Codex #4; revisor grok pendente por quota.
-- Lake: commit c8e7812 não enviado. `tools/fastboot_guard.sh` e `tools/selftest_fastboot_guard.sh` modificados e sem commit. Push só com "sim".
+- Lake: commit c8e7812 não enviado. `[fora do repo] tools/fastboot_guard.sh` e `[fora do repo] tools/selftest_fastboot_guard.sh` modificados e sem commit. Push só com "sim".
 
 ## Referências (não duplicadas aqui)
 
-- Spec rev.7, APROVADO em 2026-10-11: `docs/superpowers/specs/2026-10-11-ultraroot-design.md`.
-- Plano SP1: `docs/superpowers/plans/2026-10-11-ultraroot-sp1.md`.
+- Spec rev.7, APROVADO em 2026-10-11: `[fora do repo] docs/superpowers/specs/2026-10-11-ultraroot-design.md`.
+- Plano SP1: `[fora do repo] docs/superpowers/plans/2026-10-11-ultraroot-sp1.md`.
 - Capacidades (44 OBRIG, 8 OBRIG-PROPOSTO): `docs/ultraroot/CAPABILITIES.md`. Compatibilidade: `COMPAT_MATRIX.md`.
 - Diagnóstico do "backend indisponível" (causa: instalação incremental do adb; resolvida): `docs/ultraroot/DIAG_BACKEND_INDISPONIVEL.md`.
 - Aceite: `docs/ultraroot/accept_ksu_root.sh` (exige `ACCEPT_KSU_ALLOW_ADB=1`).

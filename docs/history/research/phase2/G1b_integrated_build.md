@@ -66,7 +66,7 @@ Comando, a partir de `[artefato local, fora do repo]/grok/ksu-build`:
 
 ```
 SOURCE_DATE_EPOCH=1752273969
-tools/bazel build --config=stamp --local_cpu_resources=2 --local_ram_resources=2560 //common:kernel_aarch64_config
+[fora do repo] tools/bazel build --config=stamp --local_cpu_resources=2 --local_ram_resources=2560 //common:kernel_aarch64_config
 ```
 
 O projeto usa o mesmo `--config=stamp` e o mesmo `SOURCE_DATE_EPOCH` (`scripts/build.sh:18` e `:131-132` de `poco-c75-lake-kernel`). O alvo aqui é o config, não o `_dist`. CPU e RAM foram limitados: o default do script é `nproc` e 8000 MB, e o host estava em ~2,6 GiB disponíveis no lançamento.

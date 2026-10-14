@@ -61,7 +61,7 @@ O cert do Google continua no `.config` do build (`CONFIG_SYSTEM_TRUSTED_KEYS`). 
 
 ## Plano no dia da escrita
 
-Diretório dos comandos: `kernel/lake`. Cada fastboot passa por `tools/fastboot_guard.sh`. Fastboot nu fica de fora. Nada de `set_active`. Nada de flash em `boot_a` nem no slot A. O slot A medido no protocolo é OS3.0.20.0 por cima de dados do OS3.0.306.0 e `unbootable=yes`.
+Diretório dos comandos: `kernel/lake`. Cada fastboot passa por `[fora do repo] tools/fastboot_guard.sh`. Fastboot nu fica de fora. Nada de `set_active`. Nada de flash em `boot_a` nem no slot A. O slot A medido no protocolo é OS3.0.20.0 por cima de dados do OS3.0.306.0 e `unbootable=yes`.
 
 O protocolo só libera o flash de kernel novo depois do T-1 do backup no mesmo dia. A ordem abaixo é essa.
 
@@ -85,7 +85,7 @@ Conferir de novo os dois sha256 nos arquivos antes de exportar. O guard recusa u
 Bateria em 60% ou mais. Cabo de dados. Tela ligada.
 
 1. Desligar, soltar o cabo, segurar Vol− e Power até a tela FASTBOOT, soltar, reconectar.
-2. `tools/fastboot_guard.sh devices` — um aparelho. Outro resultado encerra o dia.
+2. `[fora do repo] tools/fastboot_guard.sh devices` — um aparelho. Outro resultado encerra o dia.
 3. Só estes getvar, pelo guard: `product`, `current-slot`, `slot-count`, `is-userspace`, `unlocked`, `max-download-size`, `partition-size:boot_b`, `slot-successful:a`, `slot-successful:b`, `slot-unbootable:a`, `slot-unbootable:b`, `slot-retry-count:a`, `slot-retry-count:b`, `battery-soc-ok`, `battery-voltage`.
 4. Segue só se `product=lake`, `current-slot=b`, `is-userspace` é `no` ou `Variable not found` (`yes` é fastbootd e para), `unlocked=yes`, `slot-successful:b=yes`, `slot-unbootable:b=no`, e `partition-size:boot_b` vale 67108864 (`4000000` ou `0x4000000`). `current-slot` diferente de `b`: desligar pelas teclas e parar. Sem `fastboot reboot`.
 5. Guardar a saída em `z0_fastboot_before.txt`.
@@ -93,17 +93,17 @@ Bateria em 60% ou mais. Cabo de dados. Tela ligada.
 
 ### T-1, backup idêntico
 
-`tools/fastboot_guard.sh flash boot_b [fora do repo]/mods/lake-kernel/backup-2026-10-05/boot_b.img`
+`[fora do repo] tools/fastboot_guard.sh flash boot_b [fora do repo]/mods/lake-kernel/backup-2026-10-05/boot_b.img`
 
-Esperado: `OKAY`. Depois `tools/fastboot_guard.sh reboot`. No Android, `ro.build.version.incremental` continua a linha OS3.0.306.0 e `uname -r` continua `6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k`. Voltar ao fastboot pelas teclas. Gates: `slot-successful:b=yes`, `slot-unbootable:b=no`, `current-slot=b`.
+Esperado: `OKAY`. Depois `[fora do repo] tools/fastboot_guard.sh reboot`. No Android, `ro.build.version.incremental` continua a linha OS3.0.306.0 e `uname -r` continua `6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k`. Voltar ao fastboot pelas teclas. Gates: `slot-successful:b=yes`, `slot-unbootable:b=no`, `current-slot=b`.
 
 ### Flash desta imagem
 
 Só com T-1 verde, leitura T2b-pre verde (`slot-successful:b=yes`, `slot-unbootable:b=no`) e o dono de acordo.
 
-`tools/fastboot_guard.sh flash boot_b [artefato local, fora do repo]/grok/c01-build/C01_ksu_boot_b.img`
+`[fora do repo] tools/fastboot_guard.sh flash boot_b [artefato local, fora do repo]/grok/c01-build/C01_ksu_boot_b.img`
 
-Esperado: `OKAY`, sem `FAILED`. Não reiniciar ainda. Repetir os seis getvar de slot. Com `slot-successful:b=yes` e `slot-unbootable:b=no`, aí `tools/fastboot_guard.sh reboot`.
+Esperado: `OKAY`, sem `FAILED`. Não reiniciar ainda. Repetir os seis getvar de slot. Com `slot-successful:b=yes` e `slot-unbootable:b=no`, aí `[fora do repo] tools/fastboot_guard.sh reboot`.
 
 ### Aceite, estilo T3, mais o KernelSU
 
@@ -113,7 +113,7 @@ Depois do Android subir:
 
 ```text
 adb shell dmesg > t3_dmesg.txt
-tools/dmesg_new_errors.sh t3_dmesg.txt
+[fora do repo] tools/dmesg_new_errors.sh t3_dmesg.txt
 ```
 
 Esperado: exit 0 e saída vazia.
@@ -131,7 +131,7 @@ KernelSU: o manager mostra o kernel ativo, ou `adb shell su -c id` imprime `uid=
 Qualquer falha de boot, dmesg novo, módulo faltando, Wi-Fi ou Bluetooth, ou recusa do manager: desligar pelas teclas, entrar no fastboot, e
 
 ```text
-tools/fastboot_guard.sh flash boot_b [fora do repo]/mods/lake-kernel/backup-2026-10-05/boot_b.img
+[fora do repo] tools/fastboot_guard.sh flash boot_b [fora do repo]/mods/lake-kernel/backup-2026-10-05/boot_b.img
 ```
 
 O sha256 dessa linha é `3890fb9664c6543a4939b18b3845f05995221672fb4af905d2367ef12b829fc7`, já na lista do dia. Depois do `OKAY`, reboot pelo guard só com `current-slot=b` e `slot-unbootable:b=no`. Confirmar `uname -r` de volta em `6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k`.

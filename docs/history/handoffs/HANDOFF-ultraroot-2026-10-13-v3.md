@@ -32,18 +32,18 @@ Este arquivo substitui `docs/history/handoffs/HANDOFF-ultraroot-2026-10-13-ctx49
 - E3 (ordem com o Magisk): coroação completa depende de SP2 e SP3.
 - E4 (aceite parcial do grant): "su via KSU" não está provado.
 - E5 e E6: propostas no plan §3, sem decisão.
-- Lake: commit "sim, commitar"; push "sim, push" (revisão brutal antes). Estado: c8e7812 local, à frente de origin; dois arquivos modificados sem commit: `tools/fastboot_guard.sh` e `tools/selftest_fastboot_guard.sh`.
+- Lake: commit "sim, commitar"; push "sim, push" (revisão brutal antes). Estado: c8e7812 local, à frente de origin; dois arquivos modificados sem commit: `[fora do repo] tools/fastboot_guard.sh` e `[fora do repo] tools/selftest_fastboot_guard.sh`.
 - Passos de aparelho D0–D7: cada um só com "sim, <passo>" (inclusive leitura).
 - Assinatura: a autorização do `.pass` valeu só para o build ui10. Próxima assinatura: perguntar de novo.
 
 ## Artefatos-chave (caminhos; não copiar conteúdo)
-- APK final: `ultraroot/out/UltraRoot-own-ui10.apk`. SHA-256 em `out/UltraRoot-own-ui10.sha256.txt`. Esquema V2 (v1 false, v2 true, v3 false), 1 signer, cert SHA-256 `efb8d49f…`.
+- APK final: `[fora do repo] ultraroot/out/UltraRoot-own-ui10.apk`. SHA-256 em `out/UltraRoot-own-ui10.sha256.txt`. Esquema V2 (v1 false, v2 true, v3 false), 1 signer, cert SHA-256 `efb8d49f…`.
 - APK REJEITADO: `out/UltraRoot-own-ui10-v3only-REJEITADO.apk`. NÃO instalar.
 - Alinhado de origem (não assinado): `out/UltraRoot-own-ui10-aligned.apk`.
-- Logs de assinatura: `docs/history/prompts/sign_ui10_v2_2026-10-13.log` e `verify_ui10_v2_2026-10-13.txt`.
-- Revisões (OpenCode #2): `docs/history/reports/review_{h1f,h1kdoc_confirma,h2,h2r1_confirma,h3_badging,h4_docs,ui10_final}_2026-10-13.txt`. H8 pendente: `review_h8_2026-10-13.txt`.
+- Logs de assinatura: `[fora do repo] docs/history/prompts/sign_ui10_v2_2026-10-13.log` e `verify_ui10_v2_2026-10-13.txt`.
+- Revisões (OpenCode #2): `[fora do repo] docs/history/reports/review_{h1f,h1kdoc_confirma,h2,h2r1_confirma,h3_badging,h4_docs,ui10_final}_2026-10-13.txt`. H8 pendente: `review_h8_2026-10-13.txt`.
 - Relatórios do Codex #4: `docs/history/reports/{h1_fix_readmode,h1_kdoc_fix,h2_grant_flow,h2_fix,h2_review_fix,h3_build_ui10,h4_docs,h8_profile_write}_2026-10-13.txt`.
-- Prompts enviados: `docs/history/prompts/prompt_*_2026-10-13.txt`.
+- Prompts enviados: `[fora do repo] docs/history/prompts/prompt_*_2026-10-13.txt`.
 
 ## Chaves: não abrir, não imprimir, não ler
 - `[chaves locais do dono, fora do repo]/` tem o keystore (`.jks`), o certificado público (`.der`) e o arquivo de senha (`.pass`). Nenhum agente abre esses arquivos. A senha do keystore não está em nenhum artefato nem neste handoff.
@@ -85,5 +85,5 @@ Este arquivo substitui `docs/history/handoffs/HANDOFF-ultraroot-2026-10-13-ctx49
 
 ## Dados sensíveis
 - Nenhuma senha, chave privada ou conteúdo do `.pass` está neste arquivo. Os caminhos de chave são referências, não valores.
-- H8 (escrita nativa): OpenCode #2 APROVADO COM CORREÇÕES (errno em engine.cc:227). Correção H8R1 despachada ao Codex #4 (ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt). Pendente: conferir o relatório e a revisão de leitura da correção.
-- H8R1/H8R2: ioctl_status feito; teste EPERM não discriminava (EPERM=1=-(-1)); troca por EBADF (9) em andamento (Codex #4, ultraroot/core-backend/src/test/nativer2_ebadf_2026-10-13.txt). Pendente: conferir a sabotagem S10 e a revisão de leitura do OpenCode #2.
+- H8 (escrita nativa): OpenCode #2 APROVADO COM CORREÇÕES (errno em engine.cc:227). Correção H8R1 despachada ao Codex #4 ([fora do repo] ultraroot/core-backend/src/test/nativer1_errno_2026-10-13.txt). Pendente: conferir o relatório e a revisão de leitura da correção.
+- H8R1/H8R2: ioctl_status feito; teste EPERM não discriminava (EPERM=1=-(-1)); troca por EBADF (9) em andamento (Codex #4, [fora do repo] ultraroot/core-backend/src/test/nativer2_ebadf_2026-10-13.txt). Pendente: conferir a sabotagem S10 e a revisão de leitura do OpenCode #2.

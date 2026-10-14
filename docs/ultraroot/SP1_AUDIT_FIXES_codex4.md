@@ -7,9 +7,9 @@ A busca requisitada encontrou o contrato em `docs/history/research/phase4/CONTRA
 ```text
 $ grep -rl FINAL_AUDIT [fora do repo] 2>/dev/null
 docs/history/research/phase4/CONTRATO_codex_final_audit.txt
-docs/history/reports/inventory_matches.txt
-docs/history/reports/todo_structure.txt
-docs/history/reports/todos-sabotado.md
+[fora do repo] docs/history/reports/inventory_matches.txt
+[fora do repo] docs/history/reports/todo_structure.txt
+[fora do repo] docs/history/reports/todos-sabotado.md
 docs/ultraroot/TODOs.md
 ```
 
@@ -62,7 +62,7 @@ c8e78121d602a1b4bf8b00318d2d3acec78c965a
 $ git -C kernel/lake log -1 --format='%h %s' c8e7812
 c8e7812 guard: rollback flashes boot_b then reactivates slot b
 
-$ git -C kernel/lake show c8e7812^:tools/fastboot_guard.sh | rg -n 'rollback|DO_REACTIVATE|set_active'
+$ git -C kernel/lake show c8e7812^:[fora do repo] tools/fastboot_guard.sh | rg -n 'rollback|DO_REACTIVATE|set_active'
 (no matches; rg exit 1)
 ```
 
