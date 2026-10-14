@@ -112,12 +112,14 @@ Nesta rodada, o dono pediu commit e push direto em `main`, sem PR. O fluxo de br
 - **Fato:** o modelo tem final `5G`. O pedido do dono fala em POCO C75 4G.
 - **Ação:** não mudar a doc. O UK-0 segue PENDENTE-DONO.
 
-### ERR-13: a `Image` não é reprodutível bit a bit (ABERTO)
+### ERR-13: a `Image` não é reprodutível bit a bit (ABERTO; causa identificada com clang 18.1.3)
 
 - **Onde:** `docs/history/reports/uk2_image_clone_2026-10-13.txt` e `docs/PRE-REQUISITOS.md`.
 - **Fato:** duas compilações da mesma árvore geram `Image` do mesmo tamanho (36.395.520 bytes), com 1153 bytes diferentes. A única diferença de fonte entre as duas árvores é `kernel/common/tools/lib/bpf/libbpf.c`, ferramenta do host. sha256 do build antigo: `1fe3d6b8…7861a`. Do build novo: `5d50b74c…bb00d`.
 - **NÃO VERIFICADO:** a causa dos 1153 bytes.
 - **Ação:** achar a causa. Listar os offsets diferentes e identificar as strings ou dados neles. Se for timestamp, usuário ou host do build, testar `KBUILD_BUILD_TIMESTAMP`, `KBUILD_BUILD_USER` e `KBUILD_BUILD_HOST` fixos, e comparar duas compilações. Registrar o resultado neste item.
+- **Resultado (2026-10-14, agente de nuvem, só clang 18.1.3 do sistema; não vale para a `Image` pinada com r510928, que ficou BLOQUEADA: `android.googlesource.com` → `CONNECT tunnel failed, response 403`):** duas compilações do mesmo commit, mesmo diretório de saída, `-j4`, com `KBUILD_BUILD_TIMESTAMP='2026-10-13 00:00:00 UTC'`, `KBUILD_BUILD_USER=ultrakernel`, `KBUILD_BUILD_HOST=build`, `KBUILD_BUILD_VERSION=1`. sha256 A `7019f26b07fcf41f19d95d602a8d24a9b9342510e4d7778cd17b03aef0496156`, B `080b4fe7422d0944bc7768b4a5bbfc003dd0c8b9363631a7f33729075c969d21`, ambas com 36.526.592 bytes. `cmp -l | wc -l` → `1088`. Mapeado pelo `vmlinux` (`llvm-nm`): 1068 bytes em `system_certificate_list` e 20 bytes em `_note_41` (build-id, que muda porque o conteúdo muda). Causa: `CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"` com `CONFIG_MODULE_SIG_ALL=y` faz o build gerar um par de chaves novo a cada compilação, e o certificado entra na `Image`. Timestamp, usuário e host fixos não bastam.
+- **Próximo passo (NÃO VERIFICADO):** compilar duas vezes com a mesma chave de assinatura fornecida (fora do repo, regra de chaves do `AGENTS.md`) e comparar. Quem fornece a chave é o dono (`docs/PENDENCIAS-DO-DONO.md`).
 
 ### ERR-14: caso T-1 contra o backup auditado é pulado no selftest do guard (CORRIGIDO com fixture sintética na branch `cloud/ultraroot-ultrakernel`, revisão pendente)
 
