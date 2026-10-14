@@ -15,5 +15,6 @@ Em andamento. A tabela é preenchida item a item, e o texto final substitui esta
 | K7 | FEITO (proposta) | `docs/ultrakernel/UK7-PROPOSTA.md`; `olddefconfig` com `CONFIG_DEFAULT_BBR=y` → `rc=0`; diff: `CONFIG_DEFAULT_TCP_CONG="cubic"` → `"bbr"` | ver `git log` |
 | U2 | FEITO | teste primeiro (stubs): `SelfUpdatePolicyTest` 13 falhas, 1 passa; implementado: 14 de 14 PASSED (projeto JVM descartável, `ultraroot/gradlew -p <scratch>/jvm test`, BUILD SUCCESSFUL); sabotagem (sem checar cert): `rejectsDivergentCert FAILED`; `:app:assembleDebug` NÃO VERIFICADO (dl.google.com 403) | ver `git log` |
 | U3 | FEITO | teste primeiro (stubs): `BackupRegistryTest` 13 de 13 FAILED; implementado: 13 PASSED, BUILD SUCCESSFUL; hash trocado → `Refused(HASH_MISMATCH)` (`swappedHashIsRefused`, `dryRunWithSwappedBytesIsRefused`) | ver `git log` |
+| U4 | FEITO | teste primeiro (stubs): `OpLogTest` 9 FAILED, 1 PASSED; implementado: 10 PASSED; senha fictícia redigida (`keyValuePasswordIsRedacted`, `cliPasswordFlagIsRedacted`), chave PEM fictícia recusada (`privateKeyMaterialIsRefused`); `MAX_BYTES = null` (UNKNOWN); sabotagem: `privateKeyMaterialIsRefused FAILED` | ver `git log` |
 
 revisão pendente
