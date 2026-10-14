@@ -253,7 +253,7 @@ IMPL NOT_STARTED · VALID NOT_TESTED · Adapter: MagiskAdapter · Device-gate: s
 
 ### KSU-ROOT: root pelo kernel, allowlist, `su`, versão e UAPI
 IMPL IN_PROGRESS · VALID HOST_TESTED (parcial: classificador, flags e fluxo com fakes); aparelho NÃO TESTADO · Adapter: KsuBackend · Device-gate: sim · Origem: KernelSU `6e386044` `uapi/supercall.h` (allow list), `manager/.../ksu.h` · Aceite: `su` atendido pelo KSU, uid=0, sem magisk. Atualização 2026-10-13; histórico 2026-10-11: VALID NOT_TESTED.
-- [~] Leitura versão/UAPI em `ultraroot-app/core-backend/src/main/java/dev/superroot/core/KsuBackend.kt:62-68`; classificador puro HOST_TESTED (7 testes); JNI real no host e aparelho NÃO VERIFICADO. Atualização 2026-10-13; histórico 2026-10-11: cópia `ultraroot-mgr/`.
+- [~] Leitura versão/UAPI em `ultraroot/core-backend/src/main/java/dev/superroot/core/KsuBackend.kt:62-68`; classificador puro HOST_TESTED (7 testes); JNI real no host e aparelho NÃO VERIFICADO. Atualização 2026-10-13; histórico 2026-10-11: cópia `ultraroot-mgr/`.
 - [ ] [DEVICE] Conceder root pelo manager (allowlist). Aparelho NÃO TESTADO; H2 só host.
 - [ ] [DEVICE] Revogar root pelo manager. Aparelho NÃO TESTADO; H2 só host.
 - [ ] Disponibilizar `su` e expor interfaces KSU às ferramentas compatíveis

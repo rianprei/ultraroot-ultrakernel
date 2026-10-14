@@ -9,6 +9,7 @@ Este documento resume o que está feito, o que está bloqueado e o que é arrisc
 - **H3, build ui10:** APK assinado em V2 (cert SHA-256 `efb8d49f…`), com registro em `docs/ultraroot/plan.md` §9. O APK em si não está no repo.
 - **UltraKernel, host (2026-10-13):** `Image` compilada a partir do clone publicado (`CONFIG_KSU=y`, 0 avisos); gate de CRC PASS (2309 símbolos, 0 divergências); `run_all_checks` do lake com 116 de 116 na árvore corrigida; selftest do guard de fastboot com 44 de 44. Relatórios em `docs/history/reports/` (arquivos `uk2_…`, `uk3_…`, `uk4_…` e `uk5_…`, de 2026-10-13). Tarefas em `docs/ultrakernel/TODOS.md`, UK-2 a UK-5.
 - **UltraRoot, host (2026-10-13):** a partir do clone, com cache Gradle vazio, `core-backend` passa em 20 testes, `app` passa em 41, e o APK de debug é gerado. Relatório: `docs/history/reports/app_gradle_clone_2026-10-13.txt`.
+- **Agente de nuvem (2026-10-14), branch `cloud/ultraroot-ultrakernel`, revisão pendente:** K2 (proposta `docs/ultrakernel/UK2-TRIM-PROPOSTA.md`); K5 parcial (README do research corrigido; PATHMAP BLOQUEADA, `c8e7812` ausente); U1 (`bash tools/check_code_paths.sh` → `CODE-PATHS: ok=10 falta=0 externo=4 elidido=2`, código 0). Relatório: `docs/history/reports/agente-nuvem-2026-10-13.md`.
 
 ## Bloqueado pelo dono
 
