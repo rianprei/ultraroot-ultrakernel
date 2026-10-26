@@ -1,0 +1,371 @@
+modulo	origem	quebra_com_mptcp	license	srcversion	scmversion	vermagic_release	description
+8250_mtk	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	Mediatek 8250 serial port driver
+CPU_DVFS	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek CPU DVFS Driver v0.3.1
+MTK_INTERNAL_SPM	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	SPM Driver v0.1
+Upower	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Unified Power Driver v1.0
+accel_common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACCELEROMETER device driver
+accelhub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACCELHUB gse driver
+adapter_class	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Adapter Class Device
+aee_aed	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek AED Driver
+aee_hangdet	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	The cpu hang detector
+aee_rs	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek AED Driver
+alsps_common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ALSPS device driver
+alspshub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	alspshub driver
+archcounter_timesync	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	archcounter timesync driver
+arm_dsu_pmu	vendor_boot_b,vendor_dlkm,vendor_lib	sim	GPL v2		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	Perf driver for ARM DynamIQ Shared Unit
+atf_logger	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK Module ATF Logging Driver
+baro_common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	BAROMETER device driver
+barohub	vendor_dlkm,vendor_lib	nao	GPL	542FCD5C5660DB8C9FC0ADA		6.6.89-android15-8-g810fd09a116c-4k	BAROHUB Driver
+binder_gki	vendor_dlkm,vendor_lib	nao	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+binder_prio	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+blocktag	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Storage Block IO Tracer
+bootprof	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK BOOT TIME PROFILING
+bt_drv_connac1x	vendor_dlkm,vendor_lib	nao	Dual BSD/GPL			6.6.89-android15-8-g810fd09a116c-4k	
+btif_drv	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK BTIF Driver$1.0$
+c2k_usb	vendor_dlkm,vendor_lib	nao	GPL	7EE82CA52CE2FF379AA6DC0		6.6.89-android15-8-g810fd09a116c-4k	Rawbulk Gadget - transport data from CP to Gadget
+c2k_usb_f_via_atc	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+c2k_usb_f_via_ets	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+c2k_usb_f_via_modem	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+cache-parity	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Cache Parity Driver
+cam_qos_4	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Camera QOS
+camera_dpe_isp40	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Camera DPE driver
+camera_eeprom_isp4_t	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	EEPROM Driver
+camera_fdvt_isp40	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	FDVT Driver
+camera_isp_4_t	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Camera ISP driver
+camera_mem	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Camera Mem driver
+ccci_auxadc	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ccci auxadc driver
+ccci_ccif	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ccci hif ccif driver
+ccci_cldma	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ccci hif ccif driver
+ccci_fsm_scp	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ccci scp driver
+ccci_md_all	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	CCCI modem driver v0.1
+ccci_util_lib	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK CCCI UTIL Driver
+ccmni	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	CCCI ccmni driver v0.1
+ccu_isp4	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK CCU Driver
+cfg80211	vendor_dlkm,vendor_lib	sim	GPL		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	wireless configuration support
+charger_class	vendor_boot_b	nao	GPL	4E620520A1BC3D30EF3C5E6		6.6.89-android15-8-g810fd09a116c-4k	Switching Charger Class Device
+clk-common	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek CLK DBG
+clk-fmeter-mt6768	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+clk-mt6768	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK CCF  Driverv1.0
+clk-mt6768-pg	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK CCF  Driver
+clkbuf	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek CLKBUF CTRL Driver
+clkchk-mt6768	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+clkdbg-mt6768	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+cmdq-bdg-mailbox	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+cmdq-bdg-test	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+cmdq-platform-mt6768	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+cmdq-sec-drv	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+cmdq-test	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+cmdq_helper_inf	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+conn_md_drv	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK CONN-MD Bridge Driver$1.0$
+connadp	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+cpufreq_sugov_ext	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK static power Platform Driver v0.1.1
+cpumaxfreq	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Return the max freqency supported by any core of the processor
+cpuqos_ext	vendor_dlkm,vendor_lib	nao	Proprietary			6.6.89-android15-8-g810fd09a116c-4k	MediaTek scheduler ext
+cqhci	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Command Queue Host Controller Interface driver
+dbg_error_flag	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Bus Parity Driver
+device-apc-common-legacy	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Mediatek Device APC Driver
+device-apc-mt6768	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Mediatek MT6768 Device APC Driver
+drm_display_helper	vendor_boot_b	sim	GPL and additional rights		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	DRM display adapter helper
+drm_dma_helper	vendor_boot_b	nao	GPL		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	DRM DMA memory-management helpers
+dsi_panel_c3n_35_02_0h_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_35_0f_0e_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_35_0f_0l_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_37_02_0d_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_43_02_0a_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_43_02_0k_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_43_02_0n_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_44_03_0b_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_44_03_0j_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_46_03_0c_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_46_03_0f_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_46_03_0g_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_bias	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+dsi_panel_c3n_null_dsc_vdo	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	c3n lcm driver
+dvfsrc-opp-mt6768	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	DVFSRC SPMFW INIT
+eas_ext	vendor_dlkm,vendor_lib	nao	Proprietary			6.6.89-android15-8-g810fd09a116c-4k	MediaTek eas_ext
+emi-dummy	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SMPU Dummy Driver
+emicen	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek EMICEN Driver v0.1
+emictrl	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek EMICTRL Driver v0.1
+emiisu	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek EMIISU Driver v0.1
+emimpu	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek EMIMPU Driver v0.1
+extcon-mtk-usb	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Extcon USB Driver
+extdev_io_class	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Extdev io class
+fhctl	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek FHCTL Driver
+flashlight	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Flashlight Core Driver
+fmradio_drv_mt6631	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek FM Driver
+fpsgo	vendor_dlkm,vendor_lib	nao	Proprietary			6.6.89-android15-8-g810fd09a116c-4k	MediaTek FPSGO
+ft8057m_spi	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	FocalTech Touchscreen Driver(SPI)
+ft8057p_spi	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	FocalTech Touchscreen Driver(SPI)
+fusion	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	FUSION device driver
+gamerotvechub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	gamerotvec driver
+gc_gc6133c_ii	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	gc6133c yuv driver
+ged	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek GED Driver
+gf_fingerprint	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	Goodix Fingerprint chip GF316M/GF318M/GF3118M/GF518M/GF5118M/GF516M/GF816M/GF320
+gmagrotvechub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	gmagrotvec driver
+gps_drv_stp	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	GPS EMI Driver
+gravityhub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+gyro_common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	GYROSCOPE device driver
+gyrohub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	GYROHUB gyroscope driver
+gz_ipc_mod	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Trusty IPC driver
+gz_irq_mod	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+gz_log_mod	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+gz_main_mod	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+gz_trusty_mod	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+gz_tz_system	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+gz_virtio_mod	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Trusty virtio driver
+hwmon	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	sensor event driver
+i2c-mt65xx	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek I2C Bus Driver
+icnl9916_spi	vendor_dlkm,vendor_lib	nao	GPL	DB6CAC09EBA320EC299F83F		6.6.89-android15-8-g810fd09a116c-4k	Chipone TDDI touchscreen Driver for QualComm platform
+imgsensor_isp4_t	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	image sensor driver
+iommu_debug	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+iommu_gz	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+iommu_secure	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+iommu_test	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+irq-dbg	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek IRQ dbg Driver
+isee	vendor_boot_b	nao	GPL v2	939C531EAE068E894C5191E		6.6.89-android15-8-g810fd09a116c-4k	TEEI Agent
+lc_charger_sysfs	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+lct_audio_info	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+lct_tp	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Touchpad Information Driver
+leds-mt6370-flash	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MT6370 FLASH LED Driver
+leds-mtk	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Disp Backlight Driver
+leds-mtk-disp	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Disp Backlight Driver
+leds-mtk-pwm	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Disp PWM Backlight Driver
+linearacchub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+load_track	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek LOAD_TRACK
+log_store	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek LogStore Driver
+mac80211	vendor_dlkm,vendor_lib	sim	GPL		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	IEEE 802.11 subsystem
+mag_common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MAGELEROMETER device driver
+maghub	vendor_dlkm,vendor_lib	nao	GPL	80C12C0122AE406D99B9CE6		6.6.89-android15-8-g810fd09a116c-4k	MAGHUB compass driver
+main2af	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MAIN2AF lens module driver
+main3af	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MAIN3AF lens module driver
+mainaf	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MAINAF lens module driver
+mali_kbase_mt6768_r49	vendor_dlkm,vendor_lib	sim	GPL	16BF4ECF240FA554E792B9E		6.6.89-android15-8-g810fd09a116c-4k	
+mali_mgm_mt6768_r49	vendor_dlkm,vendor_lib	sim	GPL	88415118DF4F3F9263EF15A		6.6.89-android15-8-g810fd09a116c-4k	
+mali_prot_alloc_mt6768_r49	vendor_dlkm,vendor_lib	sim	GPL	0538CFDB83B3AC9A2F1CFB0		6.6.89-android15-8-g810fd09a116c-4k	
+mcDrvModule	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MobiCore driver
+mcdi	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK MCDI Platform Driver v0.1.1
+mdp_drv_mt6768	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK CMDQ driver
+mediatek-drm	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek SoC DRM driver
+mediatek_eem	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek EEM Driver v0.3
+mediatek_static_power	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek spower Driver v0.3.1
+memory-amms	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK Module AMMS Driver
+met	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_backlight_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_emi_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_gpu_adv_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_gpu_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_ipi_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_mcupm_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_scmi_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_sspm_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+met_vcore_api	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MET_CORE
+mi_memory	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mi_rmap_efficiency	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+miev	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	exception log transfer.
+millet_binder	vendor_dlkm,vendor_lib	nao	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+millet_core	vendor_dlkm,vendor_lib	sim	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+millet_hs	vendor_dlkm,vendor_lib	nao	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+millet_oem_cgroup	vendor_dlkm,vendor_lib	nao	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+millet_pkg	vendor_dlkm,vendor_lib	nao	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+millet_sig	vendor_dlkm,vendor_lib	nao	GPL			6.6.30-android15-8-gf597b3de5ef5-4k	
+mme	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MME Driver
+mmprofile	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MMProfile Driver
+mmqos-common	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mmqos-mt6768	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+monitor_hang	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek MonitorHang Driver
+mrdump	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek AED Driver
+mt6358-accdet	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MT6789 ALSA SoC accdet driver
+mt6358-regulator	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	Regulator Driver for MediaTek MT6358 PMIC
+mt6358_battery	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Gauge Device Driver
+mt635x-auxadc	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek PMIC AUXADC Driver for MT635x PMIC
+mt6370	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek MT6370 SubPMIC Driver
+mt6370-adc	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MT6370 ADC Driver
+mt6370-charger	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek MT6370 Charger Driver
+mt6370-regulator	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek MT6370 Regulator Driver
+mt6397	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	Driver for MediaTek MT6397 PMIC
+mt63xx-debug	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Debug driver for MediaTek MT63xx PMIC
+mt6577_auxadc	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK AUXADC Device Driver
+mt6768-mt6358	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MT6768 MT6358 ALSA SoC machine driver
+mt6768_dcm	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek DCM driver
+mtk-afe-external	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek afe external
+mtk-btcvsd	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek ALSA BT SCO CVSD/MSBC Driver
+mtk-cmdq-drv-ext	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-composite	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK V4L2 Composite Driver
+mtk-cqdma	vendor_boot_b,vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek CQDMA Controller Driver
+mtk-dvfsrc	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK DVFSRC driver
+mtk-dvfsrc-devfreq	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK DVFSRC devfreq driver
+mtk-dvfsrc-helper	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK DVFSRC helper driver
+mtk-dvfsrc-regulator	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-dvfsrc-start	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK DVFSRC enable free run driver
+mtk-emi	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-icc-core	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK Interconnect Driver Core
+mtk-kpd	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Keypad (KPD) Driver
+mtk-mbox	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Tinysys Mbox driver
+mtk-mmc	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SD/MMC Card Driver
+mtk-mmc-dbg	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SD/MMC Debug Driver
+mtk-mmc-wp	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SD/MMC Card Driver for WP
+mtk-mmdebug-vcp-stub	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MMDEBUG vcp Driver
+mtk-mmdvfs	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK MMDVFS driver
+mtk-mmdvfs-debug	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MMDVFS Debug Driver
+mtk-mmdvfs-ftrace	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MMDVFS FTRACE
+mtk-mml	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek multimedia-layer driver
+mtk-pmic-keys	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK pmic-keys driver v0.1
+mtk-pmic-wrap	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek PMIC Wrapper Driver
+mtk-pwm	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	This module is used for chip of mediatek
+mtk-scpsys	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-scpsys-bringup	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-scpsys-mt6768	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-smi	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SMI driver
+mtk-smi-bwc	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK SMI bwc driver for legacy chips
+mtk-smi-dbg	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-socinfo	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SoC Info Sysfs Interface
+mtk-sp-spk-amp	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek speaker amp register driver
+mtk-uart-apdma	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek UART APDMA Controller Driver
+mtk-vcodec-common	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk-vcodec-dec-v1	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek video codec V4L2 decoder driver
+mtk-vcodec-enc-v1	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek video codec V4L2 encoder driver
+mtk-vcu	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek Video Communication And Controller Unit driver
+mtk_battery_manager	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Battery Manager
+mtk_battery_oc_throttling	vendor_boot_b,vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK battery over current throttling driver
+mtk_bp_thl	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK battery percent throttling driver
+mtk_charger_algorithm_class	vendor_boot_b	nao	GPL	E974FAEF007AC1DA0CEFFAC		6.6.89-android15-8-g810fd09a116c-4k	Charger Algorithm Class Device
+mtk_charger_cooling	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek charger cooling driver
+mtk_charger_framework	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Charger Driver
+mtk_chg_type_det	vendor_boot_b	nao	GPL	0B95E4F49E532F4572CCEEE		6.6.89-android15-8-g810fd09a116c-4k	MTK CHARGER TYPE DETECT Driver
+mtk_cm_mgr	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk_cm_mgr_mt6768	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Mediatek cm_mgr driver
+mtk_cpu_power_throttling	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK cpu power throttling driver
+mtk_cpuhp	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek CPU HOTPLUG Driver v0.3.1
+mtk_cpuidle	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK CPU IDLE Platform Driver v0.1.1
+mtk_dcm	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek DCM driver
+mtk_disp_notify	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	mtk disp notify
+mtk_disp_sec	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK DRM secure Display
+mtk_dramc	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek DRAMC Driver
+mtk_dynamic_loading_throttling	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK dynamic loading throttling driver
+mtk_em	vendor_dlkm,vendor_lib	nao	Proprietary			6.6.89-android15-8-g810fd09a116c-4k	MediaTek mtk_em
+mtk_fpsgo	vendor_dlkm,vendor_lib	nao	GPL	DED32693FF7871B94738552		6.6.89-android15-8-g810fd09a116c-4k	MediaTek FPSGO
+mtk_gpu_hal	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek GPU HAL
+mtk_gpu_qos	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek GPU QOS
+mtk_gpufreq_mt6768	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek GPU-DVFS platform driver
+mtk_gpufreq_wrapper_legacy	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek GPU-DVFS wrapper driver
+mtk_heap_debug	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk_ioctl_powerhal	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek POWERHAL perf_ioctl
+mtk_ioctl_touch_boost	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek TOUCH_BOOST perf_ioctl
+mtk_iommu	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	IOMMU API for MediaTek M4U implementations
+mtk_iommu_util	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek IOMMU export API implementations
+mtk_irtx_pwm	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK PWM IR Transmitter
+mtk_jpeg	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek JPEG codec driver
+mtk_low_battery_throttling	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK low battery throttling driver
+mtk_md_power_throttling	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK modem power throttling driver
+mtk_mdpm_v1	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MDPM Driver v0.1
+mtk_panel_ext	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK DRM panel infrastructure
+mtk_pbm	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK power budget management
+mtk_pd_adapter	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK PD Adapter Driver
+mtk_pd_charging	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK PD algorithm Driver
+mtk_peak_power_budget	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK peak power budget
+mtk_pep	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Pump Express algorithm Driver
+mtk_pep20	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Pump Express 2 algorithm Driver
+mtk_pep40	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK Pump Express 4 algorithm Driver
+mtk_perf_common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek performance tracker
+mtk_perf_ioctl	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek FPSGO perf_ioctl
+mtk_power_gs_v1	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MT Low Power Golden Setting
+mtk_ppm_v3	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek PPM Driver v0.1
+mtk_printk_ctrl	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Printk enhance
+mtk_qos_legacy	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek QoS driver
+mtk_rpmsg_mbox	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek rpmsg driver
+mtk_sec_heap	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+mtk_spi	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk_sync	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk_tinysys_ipi	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Tinysys IPI driver
+mtk_u_ether	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	ethernet over USB driver
+mtk_usb_f_rndis	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+mtk_wdt	vendor_boot_b	sim	GPL	9669582EAC146E40FA39B58		6.6.89-android15-8-g810fd09a116c-4k	Mediatek WatchDog Timer Driver
+musb_boost	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	
+musb_hdrc	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Inventra Dual-Role USB Controller Driver, v6.0
+musb_main	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Inventra Dual-Role USB Controller Driver, v6.0
+nt36528_spi	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Novatek Touchscreen Driver
+nvmem-mt635x-efuse	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek PMIC eFuse Driver for MT6359 PMIC
+nvmem_mtk-devinfo	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek device information driver
+nxp_i2c	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	NXP NFC I2C driver
+orienthub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+pd-chk-mt6768	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+pd_dbg_info	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	PD Debug Info Module
+perf_helper	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+perfhelper	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+phy-generic	vendor_boot_b	sim	GPL		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	NOP USB Transceiver driver
+phy-mtk-tphy	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek T-PHY driver
+pidmap	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	PID Map
+pinctrl-mt6768	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek MT6768 Pinctrl Driver
+pinctrl-mtk-common-v2_debug	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Pinctrl DEBUG Driver
+pinctrl-mtk-v2	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek EINT Driver
+pmic_lbat_service	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK lbat driver
+pmic_lvsys_notify	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MTK pmic lvsys notify driver
+powerhal_cpu_ctrl	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek POWERHAL_CPU_CTRL
+pwm-mtk-disp	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek SoC display PWM driver
+reboot-mode	vendor_boot_b,vendor_dlkm,vendor_lib	sim	GPL v2		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	System reboot mode core library
+regulator-vibrator	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Regulator Vibrator Driver (VIB)
+rotatvechub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+rpmb	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	RPMB class
+rpmb-mtk	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	RPMB class
+rps_perf	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+rt_pd_manager	vendor_boot_b	nao	GPL	B3937EA9C4B2F3EC9F9E549		6.6.89-android15-8-g810fd09a116c-4k	Richtek pd manager driver
+rtc-mt6397	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	RTC Driver for MediaTek MT6397 PMIC
+sc_sc080cs_i	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	sc080cs yuv driver
+scheduler	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek scheduler
+scp	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK Module SCP driver
+sec	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Kernel Security Module
+sec-rng	vendor_boot_b	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	Security Random Number Generator Driver
+sensorHub	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	SCP sensor hub driver
+sensor_list	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	dynamic sensorlist driver
+sensor_probe	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	SensorProbe driver
+sgm41543_charger	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	sgm4154x charger driver
+sil_fingerprint	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Gigadevice/Silead Fingerprint driver for GSL6xxx/GSL7xxx/GSL8xxx series.
+simtray	vendor_boot_b,vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	Xiaomi SIM tray status
+situation	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	situation sensor driver
+situationhub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	situtation hub driver
+snd-soc-fs15xx	vendor_dlkm,vendor_lib	sim	GPL	D8DF6AD5C6BF767B5D91205		6.6.89-android15-8-g810fd09a116c-4k	FourSemi Smart PA Driver
+snd-soc-mt6358	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MT6358 ALSA SoC codec driver
+snd-soc-mt6660	vendor_dlkm,vendor_lib	sim	GPL	00343172686151BE18DC96F		6.6.89-android15-8-g810fd09a116c-4k	MT6660 SPKAMP Driver
+snd-soc-mt6768-afe	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek ALSA SoC AFE platform driver for 6768
+snd-soc-mtk-common	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Mediatek simple platform driver
+snd-soc-sipa-tuning	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+sp_sp0821_iii	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	sp0821 yuv driver
+spi-mt65xx	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MTK SPI Controller driver
+spi_slave	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	SPI driver for mt6382
+sspm_v1	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK Module SSPM platform driver
+step_counter	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	STEP_CMETER device driver
+stepsignhub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	GLANCE_GESTURE_HUB driver
+sub2af	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	SUB2AF lens module driver
+subaf	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	SUBAF lens module driver
+syscon-reboot-mode	vendor_boot_b,vendor_dlkm,vendor_lib	sim	GPL v2		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	SYSCON reboot mode driver
+system_heap	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	
+t-base-tui	vendor_dlkm,vendor_lib	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	Kinibi TUI
+tcpc_class	vendor_boot_b	sim	GPL	575D16703AE3F264E2F098A		6.6.89-android15-8-g810fd09a116c-4k	Richtek TypeC Port Control Core
+tcpc_rt1711h	vendor_boot_b	sim	GPL	93338420C6A6356E6D90B4D		6.6.89-android15-8-g810fd09a116c-4k	RT1711 TCPC Driver
+tcpc_upm7610	vendor_boot_b	sim	GPL	43983026A0014DD9AE03751		6.6.89-android15-8-g810fd09a116c-4k	UPM7610 TCPC Driver
+tcpci_late_sync	vendor_boot_b	nao	GPL	9C16E05401480B7354F6B27		6.6.89-android15-8-g810fd09a116c-4k	Richtek TypeC Port Late Sync Driver
+teeperf	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	TEE perf driver
+thermal_monitor	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK Thermal zone PMIC temperature sensor
+timer-mediatek	vendor_boot_b	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MEDIATEK Module Timer driver
+touch_boost	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek TOUCH_BOOST
+trace_mmstat	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek mmstat tracer
+trusted_mem	vendor_dlkm,vendor_lib	nao	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek Trusted Memory Driver
+tui-common	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	tui common
+ufs-mediatek-dbg	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek UFS Debugging Facility
+ufs-mediatek-mod	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	MediaTek UFS Host Driver
+uload_ind	vendor_boot_b,vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek ULOAD_IND
+uncali_acchub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+uncali_gyrohub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+uncali_maghub	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	ACTIVITYHUB driver
+upm6920_charger	vendor_boot_b	sim	GPL v2			6.6.89-android15-8-g810fd09a116c-4k	SC UPM6920 Charger Driver
+usb_meta	vendor_boot_b	nao	GPL	C976D6E4EA1629FEAED5551		6.6.89-android15-8-g810fd09a116c-4k	Android Composite USB Driver
+v4l2-flash-led-class	vendor_dlkm,vendor_lib	nao	GPL v2		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	V4L2 Flash sub-device helpers
+widevine_driver	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	Widevine Drm Driver
+wifi_ant_check	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	GPIO Interrupt Driver which use by wifi ant check!
+wlan_drv_gen4m_6768	vendor_dlkm,vendor_lib	sim	Dual BSD/GPL			6.6.89-android15-8-g810fd09a116c-4k	NIC_DESC
+wmt_chrdev_wifi	vendor_dlkm,vendor_lib	nao	Dual BSD/GPL			6.6.89-android15-8-g810fd09a116c-4k	
+wmt_drv	vendor_dlkm,vendor_lib	sim	GPL			6.6.89-android15-8-g810fd09a116c-4k	MediaTek MT6620 HIF SDIO Driver
+xiaomi_touch	vendor_dlkm,vendor_lib	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	TP touch game driver
+xm_smart_chg	vendor_boot_b	nao	GPL			6.6.89-android15-8-g810fd09a116c-4k	XM SMART CHARGE Driver
+zram	vendor_boot_b	nao	Dual BSD/GPL		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	Compressed RAM Block Device
+zsmalloc	vendor_boot_b	nao	Dual BSD/GPL		g810fd09a116c	6.6.89-android15-8-g810fd09a116c-4k	
