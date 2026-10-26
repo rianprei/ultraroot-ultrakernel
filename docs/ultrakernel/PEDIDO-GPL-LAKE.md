@@ -14,7 +14,7 @@ Quem envia: o dono, com nome e e-mail próprios. Enviar publica o texto: a decis
 >
 > Prezada equipe de Open Source da Xiaomi,
 >
-> Sou proprietário de um POCO C75, modelo 2410FPCC5G (codinome `lake`), com o firmware oficial OS3.0.306.0.WGTMIXM. Esse firmware distribui em formato binário o kernel Linux (GKI android15-6.6, `6.6.89-android15-8`) e 370 módulos de kernel de vendor. Destes, 366 declaram em `modinfo` licença GPL ("GPL", "GPL v2", "Dual BSD/GPL" ou "GPL and additional rights"). Os módulos foram compilados a partir de árvores identificadas pelos commits `810fd09a116c` (vermagic `6.6.89-android15-8-g810fd09a116c-4k`) e `f597b3de5ef5` (vermagic `6.6.30-android15-8-gf597b3de5ef5-4k`). Esses commits não estão no Android Common Kernel público.
+> Sou proprietário de um POCO C75, modelo 2410FPCC5G (codinome `lake`), com o firmware oficial OS3.0.306.0.WGTMIXM. Esse firmware distribui em formato binário o kernel Linux (GKI android15-6.6, `6.6.89-android15-8`) e 370 módulos de kernel de vendor. Destes, 366 declaram em `modinfo` licença GPL ("GPL", "GPL v2", "Dual BSD/GPL" ou "GPL and additional rights"). Os módulos foram compilados a partir de árvores identificadas pelos commits `810fd09a116c` (vermagic `6.6.89-android15-8-g810fd09a116c-4k`) e `f597b3de5ef5` (vermagic `6.6.30-android15-8-gf597b3de5ef5-4k`). Esses commits não estão no Android Common Kernel público. A fonte publicada para o aparelho-irmão (`dew-v-oss`) não serve para o lake: os módulos de Type-C dela têm `srcversion` diferente do lake, e os painéis `dsi_panel_c3n_*` do lake não estão nela.
 >
 > Nos termos da seção 3 da GNU General Public License versão 2, solicito o código-fonte completo e correspondente desses componentes, incluindo "todos os scripts usados para controlar a compilação e a instalação":
 >
@@ -35,7 +35,7 @@ Quem envia: o dono, com nome e e-mail próprios. Enviar publica o texto: a decis
 >
 > Dear Xiaomi Open Source team,
 >
-> I own a POCO C75, model 2410FPCC5G (codename `lake`), running official firmware OS3.0.306.0.WGTMIXM. This firmware distributes, in binary form, the Linux kernel (GKI android15-6.6, `6.6.89-android15-8`) and 370 vendor kernel modules, of which 366 declare a GPL license in `modinfo` ("GPL", "GPL v2", "Dual BSD/GPL" or "GPL and additional rights"). The modules were built from trees identified by commits `810fd09a116c` (vermagic `6.6.89-android15-8-g810fd09a116c-4k`) and `f597b3de5ef5` (vermagic `6.6.30-android15-8-gf597b3de5ef5-4k`). Neither commit is in the public Android Common Kernel.
+> I own a POCO C75, model 2410FPCC5G (codename `lake`), running official firmware OS3.0.306.0.WGTMIXM. This firmware distributes, in binary form, the Linux kernel (GKI android15-6.6, `6.6.89-android15-8`) and 370 vendor kernel modules, of which 366 declare a GPL license in `modinfo` ("GPL", "GPL v2", "Dual BSD/GPL" or "GPL and additional rights"). The modules were built from trees identified by commits `810fd09a116c` (vermagic `6.6.89-android15-8-g810fd09a116c-4k`) and `f597b3de5ef5` (vermagic `6.6.30-android15-8-gf597b3de5ef5-4k`). Neither commit is in the public Android Common Kernel. The source published for the sibling device (`dew-v-oss`) does not cover lake: its Type-C modules have a different `srcversion` from lake's, and lake's `dsi_panel_c3n_*` panels are not in it.
 >
 > Under Section 3 of the GNU General Public License version 2, I request the complete corresponding source code for these components, including "all the scripts used to control compilation and installation":
 >
