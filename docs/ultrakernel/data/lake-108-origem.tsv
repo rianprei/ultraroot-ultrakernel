@@ -1,0 +1,109 @@
+modulo	caminho_embutido_no_ko	objeto_na_arvore_samsung	srcversion_aparelho	resultado_srcversion
+8250_mtk	../kernel_device_modules-6.6/drivers/tty/serial/8250	kernel-6.6/drivers/tty/serial/8250/Makefile		
+arm_dsu_pmu	drivers/perf	kernel-6.6/drivers/perf/Makefile		
+bootprof		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/mtprof/Makefile		
+cache-parity	../kernel_device_modules-6.6/drivers/misc/mediatek/sda	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/sda/Makefile		
+ccci_md_all	../kernel_device_modules-6.6/drivers/misc/mediatek/eccci/fsm	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/eccci/Makefile		
+ccmni		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/ccmni/Makefile		
+ccu_isp4	../kernel_device_modules-6.6/drivers/misc/mediatek/ccu/src/isp4	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/ccu/src/isp4/Makefile		
+cfg80211	net/wireless	kernel-6.6/drivers/net/wireless/ath/ath6kl/Makefile		
+clk-common	../kernel_device_modules-6.6/drivers/clk/mediatek	kernel/kernel_device_modules-6.6/drivers/clk/mediatek/Makefile		
+clk-mt6768		kernel/kernel_device_modules-6.6/drivers/clk/mediatek/Makefile		
+cqhci	../kernel_device_modules-6.6/drivers/mmc/host	kernel-6.6/drivers/mmc/host/Makefile		
+drm_display_helper	drivers/gpu/drm/display	kernel-6.6/drivers/gpu/drm/display/Makefile		
+dsi_panel_c3n_35_02_0h_dsc_vdo		AUSENTE		
+dsi_panel_c3n_35_0f_0e_dsc_vdo		AUSENTE		
+dsi_panel_c3n_35_0f_0l_dsc_vdo		AUSENTE		
+dsi_panel_c3n_37_02_0d_dsc_vdo		AUSENTE		
+dsi_panel_c3n_43_02_0a_dsc_vdo		AUSENTE		
+dsi_panel_c3n_43_02_0k_dsc_vdo		AUSENTE		
+dsi_panel_c3n_43_02_0n_dsc_vdo		AUSENTE		
+dsi_panel_c3n_44_03_0b_dsc_vdo		AUSENTE		
+dsi_panel_c3n_44_03_0j_dsc_vdo		AUSENTE		
+dsi_panel_c3n_46_03_0c_dsc_vdo		AUSENTE		
+dsi_panel_c3n_46_03_0f_dsc_vdo		AUSENTE		
+dsi_panel_c3n_46_03_0g_dsc_vdo		AUSENTE		
+dsi_panel_c3n_null_dsc_vdo		AUSENTE		
+extcon-mtk-usb		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/extcon/Makefile		
+gc_gc6133c_ii		AUSENTE		
+gf_fingerprint		AUSENTE		
+i2c-mt65xx		kernel-6.6/drivers/i2c/busses/Makefile		
+iommu_gz		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/iommu/Makefile		
+leds-mt6370-flash		kernel-6.6/drivers/leds/flash/Makefile		
+mac80211	net/mac80211	kernel-6.6/drivers/net/wireless/intel/iwlwifi/dvm/Makefile		
+mali_kbase_mt6768_r49	../vendor/mediatek/kernel_modules/gpu/mt6768/mali_avalon/mali-r49p1/drivers/gpu/arm/midgard	vendor/mediatek/kernel_modules/gpu/gpu_mali/mali_avalon/mali-r49p1/drivers/gpu/arm/midgard/Kbuild	16BF4ECF240FA554E792B9E	NAO CALCULADO
+mali_mgm_mt6768_r49	../vendor/mediatek/kernel_modules/gpu/mt6768/mali_avalon/mali-r49p1/drivers/base/arm/memory_group_manager	vendor/mediatek/kernel_modules/gpu/gpu_mali/mali_avalon/mali-r49p1/drivers/base/arm/memory_group_manager/Makefile	88415118DF4F3F9263EF15A	DIFERENTE (header local condicional; variantes testadas)
+mali_prot_alloc_mt6768_r49	../vendor/mediatek/kernel_modules/gpu/mt6768/mali_avalon/mali-r49p1/drivers/base/arm/protected_memory_allocator	vendor/mediatek/kernel_modules/gpu/gpu_mali/mali_avalon/mali-r49p1/drivers/base/arm/protected_memory_allocator/Makefile	0538CFDB83B3AC9A2F1CFB0	DIFERENTE (arquivo único, sem header local: prova)
+mcDrvModule	../kernel_device_modules-6.6/drivers/tee/gud/600/MobiCoreDriver	kernel/kernel_device_modules-6.6/drivers/tee/gud/500/MobiCoreDriver/Makefile		
+mediatek-drm	../kernel_device_modules-6.6/drivers/gpu/drm/mediatek/mediatek_v2	kernel-6.6/drivers/gpu/drm/mediatek/Makefile		
+millet_core		AUSENTE		
+monitor_hang		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/monitor_hang/Makefile		
+mt6358-regulator		kernel-6.6/drivers/regulator/Makefile		
+mt6358_battery	../kernel_device_modules-6.6/drivers/power/supply	kernel/kernel_device_modules-6.6/drivers/power/supply/Makefile		
+mt635x-auxadc		kernel/kernel_device_modules-6.6/drivers/iio/adc/Makefile		
+mt6370		kernel-6.6/drivers/mfd/Makefile		
+mt6370-adc		kernel-6.6/drivers/iio/adc/Makefile		
+mt6370-charger		kernel-6.6/drivers/power/supply/Makefile		
+mt6370-regulator		kernel-6.6/drivers/regulator/Makefile		
+mt6397		kernel-6.6/drivers/mfd/Makefile		
+mt6577_auxadc		kernel-6.6/drivers/iio/adc/Makefile		
+mt6768-mt6358		kernel/kernel_device_modules-6.6/sound/soc/mediatek/mt6768/Makefile		
+mtk-btcvsd		kernel-6.6/sound/soc/mediatek/common/Makefile		
+mtk-cqdma	../kernel_device_modules-6.6/drivers/dma/mediatek	kernel-6.6/drivers/dma/mediatek/Makefile		
+mtk-dvfsrc		kernel/kernel_device_modules-6.6/drivers/soc/mediatek/Makefile		
+mtk-dvfsrc-devfreq		kernel/kernel_device_modules-6.6/drivers/devfreq/Makefile		
+mtk-dvfsrc-regulator		kernel-6.6/drivers/regulator/Makefile		
+mtk-emi		kernel/kernel_device_modules-6.6/drivers/interconnect/mediatek/Makefile		
+mtk-icc-core	../kernel_device_modules-6.6/drivers/misc/mediatek/mtk-interconnect	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/mtk-interconnect/Makefile		
+mtk-mmc	../kernel_device_modules-6.6/drivers/mmc/host	kernel/kernel_device_modules-6.6/drivers/mmc/host/Makefile		
+mtk-mml	../kernel_device_modules-6.6/drivers/gpu/drm/mediatek/mml	kernel/kernel_device_modules-6.6/drivers/gpu/drm/mediatek/mml/Makefile		
+mtk-pmic-keys		kernel-6.6/drivers/input/keyboard/Makefile		
+mtk-pwm		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/pwm/Makefile		
+mtk-scpsys	../kernel_device_modules-6.6/drivers/soc/mediatek	kernel-6.6/drivers/pmdomain/mediatek/Makefile		
+mtk-scpsys-bringup		kernel/kernel_device_modules-6.6/drivers/soc/mediatek/Makefile		
+mtk-scpsys-mt6768		kernel/kernel_device_modules-6.6/drivers/soc/mediatek/Makefile		
+mtk-smi	../kernel_device_modules-6.6/drivers/memory	kernel-6.6/drivers/memory/Makefile		
+mtk-sp-spk-amp		kernel/kernel_device_modules-6.6/sound/soc/mediatek/common/Makefile		
+mtk-uart-apdma	drivers/dma/mediatek/..	kernel-6.6/drivers/dma/mediatek/Makefile		
+mtk_battery_manager		kernel/kernel_device_modules-6.6/drivers/power/supply/Makefile		
+mtk_battery_oc_throttling		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/power_throttling/Makefile		
+mtk_iommu	../kernel_device_modules-6.6/drivers/iommu	kernel-6.6/drivers/iommu/Makefile		
+mtk_irtx_pwm		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/irtx/Makefile		
+mtk_jpeg	../kernel_device_modules-6.6/drivers/media/platform/mtk-jpeg	kernel-6.6/drivers/media/platform/mediatek/jpeg/Makefile		
+mtk_spi		AUSENTE		
+mtk_u_ether	../kernel_device_modules-6.6/drivers/misc/mediatek/usb/usb_rndis	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/usb/usb_rndis/Makefile		
+mtk_usb_f_rndis		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/usb/usb_rndis/Makefile		
+mtk_wdt		kernel-6.6/drivers/watchdog/Makefile	9669582EAC146E40FA39B58	IDENTICO
+nvmem-mt635x-efuse		kernel/kernel_device_modules-6.6/drivers/nvmem/Makefile		
+phy-generic		kernel-6.6/drivers/usb/phy/Makefile		
+phy-mtk-tphy		kernel-6.6/drivers/phy/mediatek/Makefile		
+pinctrl-mtk-v2	../kernel_device_modules-6.6/drivers/pinctrl/mediatek	kernel/kernel_device_modules-6.6/drivers/pinctrl/mediatek/Makefile		
+pwm-mtk-disp		kernel-6.6/drivers/pwm/Makefile		
+reboot-mode	drivers/power/reset	kernel-6.6/drivers/power/reset/Makefile		
+rtc-mt6397	../kernel_device_modules-6.6/drivers/rtc	kernel-6.6/drivers/rtc/Makefile		
+sc_sc080cs_i		AUSENTE		
+scheduler	kernel/sched	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/sched/Makefile		
+scp	../kernel_device_modules-6.6/drivers/misc/mediatek/scp/cm4/v01	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/scp/rv/Makefile		
+sec-rng		kernel/kernel_device_modules-6.6/drivers/char/hw_random/Makefile		
+sensorHub	../kernel_device_modules-6.6/drivers/misc/mediatek/sensor/1.0/sensorHub/SCP_power_monitor	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/sensor/1.0/sensorHub/Makefile		
+sgm41543_charger		AUSENTE		
+simtray		AUSENTE		
+snd-soc-fs15xx		AUSENTE	D8DF6AD5C6BF767B5D91205	SEM FONTE
+snd-soc-mt6358		kernel-6.6/sound/soc/codecs/Makefile		
+snd-soc-mt6660		kernel-6.6/sound/soc/codecs/Makefile	00343172686151BE18DC96F	IDENTICO
+snd-soc-mt6768-afe	../kernel_device_modules-6.6/sound/soc/mediatek/mt6768	kernel/kernel_device_modules-6.6/sound/soc/mediatek/mt6768/Makefile		
+snd-soc-mtk-common	../kernel_device_modules-6.6/sound/soc/mediatek/common	kernel-6.6/sound/soc/mediatek/common/Makefile		
+sp_sp0821_iii		AUSENTE		
+spi-mt65xx	../kernel_device_modules-6.6/drivers/spi	kernel-6.6/drivers/spi/Makefile		
+syscon-reboot-mode		kernel-6.6/drivers/power/reset/Makefile		
+t-base-tui		kernel/kernel_device_modules-6.6/drivers/tee/gud/500/TlcTui/Makefile		
+tcpc_class	../kernel_device_modules-6.6/drivers/misc/mediatek/typec/tcpc	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/typec/tcpc/Makefile	575D16703AE3F264E2F098A	DIFERENTE (vários objetos; não prova sozinho)
+tcpc_rt1711h		kernel/kernel_device_modules-6.6/drivers/misc/mediatek/typec/tcpc/Makefile	93338420C6A6356E6D90B4D	DIFERENTE (arquivo único, sem header local: prova)
+tcpc_upm7610		AUSENTE	43983026A0014DD9AE03751	SEM FONTE
+thermal_monitor	../kernel_device_modules-6.6/drivers/misc/mediatek/thermal/common/thermal_zones	kernel/kernel_device_modules-6.6/drivers/misc/mediatek/thermal/Makefile		
+ufs-mediatek-dbg	../kernel_device_modules-6.6/drivers/ufs	kernel/kernel_device_modules-6.6/drivers/ufs/Makefile		
+ufs-mediatek-mod	../kernel_device_modules-6.6/drivers/ufs/vendor/..	kernel/kernel_device_modules-6.6/drivers/ufs/vendor/Makefile		
+upm6920_charger		AUSENTE		
+wifi_ant_check	../kernel_device_modules-6.6/drivers/misc/mediatek/wifi_ant_check	AUSENTE		
+wlan_drv_gen4m_6768	../vendor/mediatek/kernel_modules/connectivity/wlan/core/gen4m/mgmt	vendor/mediatek/kernel_modules/connectivity/wlan/core/gen4m/Kbuild		
+wmt_drv	../vendor/mediatek/kernel_modules/connectivity/common/common_main/core	vendor/mediatek/kernel_modules/connectivity/common/Kbuild		
