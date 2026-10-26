@@ -10,7 +10,7 @@ Três partes, todas dentro do repo:
 ## Delta nosso sobre o base
 
 - Modificados: `BUILD.bazel`, `drivers/Kconfig` (`source "drivers/kernelsu/Kconfig"`), `drivers/Makefile` (`obj-$(CONFIG_KSU) += kernelsu/`).
-- Novos: `drivers/kernelsu/` (96 arquivos, KernelSU integrado), `arch/arm64/configs/kernelsu.fragment` (`CONFIG_KSU=y`), `google_gki_ab13771415_modsign_cert.pem` (certificado público do GKI).
+- Novos: `drivers/kernelsu/` (96 arquivos, KernelSU integrado), `arch/arm64/configs/kernelsu.fragment` (`CONFIG_KSU=y`), `arch/arm64/configs/ultrakernel.fragment` (ULTRA-kernel, 575 opções; `docs/ultrakernel/UK-ULTRA-RELATORIO.md`), `google_gki_ab13771415_modsign_cert.pem` (certificado público do GKI).
 - Verificado no host: `gki_defconfig` + `kernelsu.fragment` + `olddefconfig` resulta em `CONFIG_KSU=y`.
 - Correção de host, fora da configuração: `kernel/common/tools/lib/bpf/libbpf.c`, `const char *next_path` (`kernel/patches/host-libbpf-const-char.diff`). Sem ela, `make prepare` falha com clang 18 e com clang 23 (`-Werror`, ponteiro const descartado).
 

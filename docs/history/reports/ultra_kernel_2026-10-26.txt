@@ -1,0 +1,62 @@
+ULTRA-kernel (POCO C75, lake): builds, gate de KMI, reprodutibilidade, repack e pacote de módulos.
+Máquina do dono, 2026-10-25 e 2026-10-26. Saídas fora do repo: <scratch> = diretório de trabalho do agente; <keys> = chaves do dono; <backup> = backup do boot_b.
+Toolchain: Android (11368308, +pgo, +bolt, +lto, +mlgo, based on r510928) clang version 18.0.0. make -j6.
+Variáveis fixas: KBUILD_BUILD_TIMESTAMP='2026-10-25 00:00:00 UTC' KBUILD_BUILD_USER=ultrakernel KBUILD_BUILD_HOST=build KBUILD_BUILD_VERSION=1.
+Gate: bash kernel/lake/tools/gate_kmi_crc.sh <saida>/vmlinux.symvers (referência kernel/lake/data/official-vmlinux.symvers).
+
+== Rodada de busca
+full (97 opções escolhidas à mão, nuvem, clang 18.1.3): compared=2309 mismatches=770 -> FAIL
+s1 (85 opções sem header de struct): compared=2309 mismatches=17 -> FAIL
+  símbolos: __bio_add_page __blk_alloc_disk bio_alloc_bioset bio_chain ... submit_bio_wait (camada de bloco)
+  causa: BTRFS_FS -> select BLK_CGROUP_PUNT_BIO (kernel/common/fs/btrfs/Kconfig:5) -> struct blkcg_gq (kernel/common/block/blk-cgroup.h:76)
+s2 (s1 sem BTRFS, 84 opções): compared=2309 mismatches=0 -> PASS, Image 37399040 B, 0 avisos
+grupos sobre s2:
+  mptcp (MPTCP, MPTCP_IPV6): compared=2309 mismatches=223 -> FAIL
+  multipath (IP_ROUTE_MULTIPATH): compared=2309 mismatches=203 -> FAIL
+  subtrees (IPV6_SUBTREES): compared=2309 mismatches=203 -> FAIL
+  macvlan, ipvlan, brvlan, route4, synproxy, cgroup: não compilados; RISCO-KMI pelo índice de headers.
+
+== Avaliação das 3938 opções desligadas
+Uma por vez: sed '# CONFIG_X is not set' -> 'CONFIG_X=y' sobre o .config da base, make olddefconfig, diff.
+Índice de headers: 2872 símbolos CONFIG_ usados em .h de include, arch/arm64, kernel, mm, block, fs, net, security, crypto, lib, init, ipc, io_uring, virt, certs.
+Resultado (docs/ultrakernel/data/ultra-avaliacao.tsv): INCLUIDO 553, INCLUIDO-REVISADO 15, SEM-HARDWARE 2652, RISCO-KMI 443, DEBUG 132, CONFLITO 88, INALCANCAVEL 30, COMPORTAMENTO 15, SEGURANCA 10.
+
+== Builds do ULTRA
+ultra (636 opções, chave gerada pelo build): compared=2309 mismatches=0 PASS, 0 avisos, Image 44935680 B, 465 .ko
+final (+ IKHEADERS=y + chave fixa): compared=2309 mismatches=0 PASS, Image 49064448 B, 464 .ko
+  achado: USB_XHCI_PCI_RENESAS=m puxava USB_XHCI_PCI de y para m; 62 opções de controlador USB, PCI e chip de placa saíram.
+v2a (fragmento final, 575 opções): compared=2309 mismatches=0 PASS, 0 avisos, Image 48998912 B, 405 .ko, modules_install rc=0
+v2b (mesmo fragmento, mesmo diretório de saída): compared=2309 mismatches=0 PASS, Image 48998912 B
+
+== Reprodutibilidade (ERR-13)
+sha256 v2a/Image d5aec052a552007ea57076cef1c828d873f0f6c5f115d80d4f32790a3cda1a7a
+sha256 v2b/Image d5aec052a552007ea57076cef1c828d873f0f6c5f115d80d4f32790a3cda1a7a
+cmp -l v2a/Image v2b/Image | wc -l -> 0
+Antes, com diretórios de saída diferentes (final e final2): 60 bytes diferentes, três blocos de 20 bytes depois de "GNU" (build-id).
+Antes, com chave gerada pelo build (nuvem, clang 18.1.3): 1088 bytes (system_certificate_list e build-id).
+
+== Diferença de config contra a base (gki_defconfig + kernelsu.fragment)
+660 linhas novas ou mudadas. Saem só: CONFIG_DEFAULT_CUBIC=y, CONFIG_DEFAULT_TCP_CONG="cubic", CONFIG_IKHEADERS=m, CONFIG_MODULE_SIG_KEY="certs/signing_key.pem".
+Ficam: CONFIG_KSU=y, CONFIG_DEFAULT_TCP_CONG="bbr", CONFIG_IKHEADERS=y, CONFIG_TRIM_UNUSED_KSYMS não definido, CONFIG_MODULE_SIG_FORCE não definido.
+
+== Assinatura dos módulos
+405 de 405 .ko com "Module signature appended".
+modinfo -F sig_key r8152.ko -> 4FEF0E2458486952FADC1BB8764DDEF47DD1C0B9
+openssl x509 -noout -serial da chave fixa -> 4FEF0E2458486952FADC1BB8764DDEF47DD1C0B9 (iguais)
+vermagic: 6.6.89-4k SMP preempt mod_unload modversions aarch64
+
+== Repack do boot_b (host, sem aparelho)
+<backup>/boot_b.img: sha256 3890fb9664c6543a4939b18b3845f05995221672fb4af905d2367ef12b829fc7, 67108864 B, magic ANDROID! (igual ao T-1 auditado)
+header v4, kernel_size 14555421 (gzip), ramdisk_size 0
+gzip -9 -n v2a/Image -> 22450839 B
+repack_boot_v2.py <backup>/boot_b.img Image.gz boot_b_ultra.img --drop-signature --force -> rc 0, "ROUNDTRIP OK: kernel 22450839 B idêntico no OUT"
+boot_b_ultra.img: 67108864 B, sha256 c6f1ad1d6e705ad605dfd28fbff57ad37f6c9b6b9778d1866b19be1180a2dd28
+avbtool info_image: Image size 67108864, Original image size 22458368, Algorithm NONE
+Sem --drop-signature: "ERRO: bloco de assinatura GKI detectado" (o bloco do Google não vale para kernel próprio).
+
+== Pacote de módulos (R2.1)
+ultrakernel-modules.zip: 420 entradas, 405 .ko, 0 entradas inseguras, module.prop na raiz, id=ultrakernel_modules (casa ^[a-zA-Z][a-zA-Z0-9._-]+$)
+sha256 9e2fd4076e130ba44f999b3f5be46ee65f9f948a5104aa5bf18d756dcd2fc3c7, 7,1 MB. Datas fixas no zip.
+
+== NÃO VERIFICADO
+Boot no aparelho, carga dos módulos de vendor no kernel novo, Wi-Fi, módulos USB, bonding. Nenhum comando de aparelho foi executado.

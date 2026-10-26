@@ -4,7 +4,8 @@ cd "$(dirname "$0")/.." || exit 1
 FAIL=0
 fail() { echo "FALHA: $*"; FAIL=1; }
 
-FILES=$(find . -path ./.git -prune -o -path ./build -prune -o -type f -print | sed 's#^\./##' | sort)
+# Arquivos que o git publicaria: versionados e não ignorados (arquivo local ignorado, como .serena/, fica de fora).
+FILES=$(git ls-files -co --exclude-standard | while IFS= read -r f; do [ -f "$f" ] && [ ! -L "$f" ] && echo "$f"; done | sort)
 TEXT=$(for f in $FILES; do case "$f" in kernel/common/*|kernel/upstream/*) continue ;; esac; grep -Iq . "$f" 2>/dev/null && echo "$f"; done)
 
 # V1: arquivos proibidos. kernel/common é upstream: só extensões de chave e binário, sem nomes de pasta.

@@ -13,7 +13,7 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 
 ## Decisões (E1 a E6)
 
-- **E1, copy e layout dos cartões e da busca:** escolher a opção A ou B em `docs/ultraroot/E1-OPCOES-COPY-LAYOUT.md`. Libera H7.
+- **E1, copy e layout dos cartões e da busca:** layout DECIDIDO em 2026-10-26: Material Design 3 (o app já usa `androidx.compose.material3`). Copy: o agente assumiu a opção A de `docs/ultraroot/E1-OPCOES-COPY-LAYOUT.md` (a recomendada); confirmar A ou trocar por B. Libera H7.
 - **E2, origem do fd:** decidir depois do D2 (`docs/ultraroot/plan.md`, linha 105). Libera a chamada de `setAppProfile` na tela.
 - **E3, ordem com o Magisk:** `docs/ultraroot/plan.md`, linha 106.
 - **E4, aceite do grant sem o Magisk desligado:** `docs/ultraroot/plan.md`, linha 107. Até decidir, "su via KSU" continua não provado.
@@ -42,7 +42,8 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 
 ## UltraKernel
 
-- **Chave de assinatura de módulos para build reprodutível (ERR-13):** a `Image` muda a cada build porque `certs/signing_key.pem` é gerada de novo. Decidir se o build usa uma chave fixa fornecida por você (fora do repo) para o teste de reprodutibilidade.
+- **Chave de assinatura de módulos (ERR-13):** DECIDIDO em 2026-10-26 ("sim"). Chave fixa gerada fora do repo, em `[chaves locais do dono, fora do repo]/ultrakernel_modsign.pem`, permissão 600, sem senha (o kernel exige chave sem senha). Guardar cópia de segurança: sem ela, módulo novo não usa os exports protegidos.
+- **Flash do ULTRA-kernel (D6, slot B):** `boot_b_ultra.img` montado no host a partir do backup auditado (`3890fb96…829fc7`), fora do repo. Flash só com "sim, flash do ULTRA-kernel no boot_b", depois de D0 e do guard.
 
 - **Revisão do inventário (UK-6):** `docs/ultrakernel/UK6-INVENTARIO-TUNABLES.md`. Libera a escolha de opções para o UK-7.
 - **Proposta do UK-7:** `docs/ultrakernel/UK7-PROPOSTA.md` (só `CONFIG_DEFAULT_BBR=y`; o resto fica como está, por compatibilidade com os módulos de vendor). Aprovar libera gravar `arch/arm64/configs/ultrakernel.fragment`, compilar e rodar o gate de KMI.
