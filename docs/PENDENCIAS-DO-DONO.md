@@ -43,7 +43,7 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 ## UltraKernel
 
 - **Chave de assinatura de módulos (ERR-13):** DECIDIDO em 2026-10-26 ("sim"). Chave fixa gerada fora do repo, em `[chaves locais do dono, fora do repo]/ultrakernel_modsign.pem`, permissão 600, sem senha (o kernel exige chave sem senha). Guardar cópia de segurança: sem ela, módulo novo não usa os exports protegidos.
-- **Flash do ULTRA-kernel (D6, slot B):** `boot_b_ultra.img` montado no host a partir do backup auditado (`3890fb96…829fc7`), fora do repo. Flash só com "sim, flash do ULTRA-kernel no boot_b", depois de D0 e do guard.
+- **Flash do ULTRA-kernel (D6, slot B):** `boot_b_ultra.img` (v3, sha256 `a5a267f4628067e780ef7172ad0090052ff2d6f564dbeeb5c10d45f49f12ce10`) montado no host a partir do backup auditado (`3890fb96…829fc7`), fora do repo. Antes do flash: D0 (preflight), e incluir esse hash na allowlist do guard (`docs/ultraroot/guard_hashes_sp1.txt` aponta para o C0.3; o agente não mexe na allowlist sem pedido). Flash só com "sim, flash do ULTRA-kernel no boot_b", depois de D0 e do guard.
 
 - **Revisão do inventário (UK-6):** `docs/ultrakernel/UK6-INVENTARIO-TUNABLES.md`. Libera a escolha de opções para o UK-7.
 - **Proposta do UK-7:** `docs/ultrakernel/UK7-PROPOSTA.md` (só `CONFIG_DEFAULT_BBR=y`; o resto fica como está, por compatibilidade com os módulos de vendor). Aprovar libera gravar `arch/arm64/configs/ultrakernel.fragment`, compilar e rodar o gate de KMI.

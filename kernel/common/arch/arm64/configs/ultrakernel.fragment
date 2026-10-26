@@ -2,7 +2,11 @@
 # Gerado pela avaliação das 3938 opções desligadas (docs/ultrakernel/UK-ULTRA-RELATORIO.md).
 # Só entram opções sem uso em header público ou privado do núcleo, sem conflito, fora de debug,
 # segurança e hardware ausente. Gate de KMI: compared=2309 mismatches=0 com o clang r510928.
-# A chave de assinatura de módulos (CONFIG_MODULE_SIG_KEY) vai num fragmento fora do repo.
+# Fragmento externo obrigatório, fora do repo (caminhos absolutos da máquina de build):
+#   CONFIG_MODULE_SIG_KEY="<chave fixa do dono>"
+#   CONFIG_SYSTEM_TRUSTED_KEYS="<raiz do repo>/kernel/common/google_gki_ab13771415_modsign_cert.pem"
+# Sem o segundo, os módulos GKI do system_dlkm (assinados pelo Google) viram não assinados
+# e são recusados nos exports protegidos (MODULE_SIG_PROTECT=y): risco de boot quebrado.
 CONFIG_6LOWPAN_GHC_EXT_HDR_DEST=y
 CONFIG_6LOWPAN_GHC_EXT_HDR_FRAG=y
 CONFIG_6LOWPAN_GHC_EXT_HDR_HOP=y

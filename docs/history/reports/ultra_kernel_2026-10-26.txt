@@ -58,5 +58,16 @@ Sem --drop-signature: "ERRO: bloco de assinatura GKI detectado" (o bloco do Goog
 ultrakernel-modules.zip: 420 entradas, 405 .ko, 0 entradas inseguras, module.prop na raiz, id=ultrakernel_modules (casa ^[a-zA-Z][a-zA-Z0-9._-]+$)
 sha256 9e2fd4076e130ba44f999b3f5be46ee65f9f948a5104aa5bf18d756dcd2fc3c7, 7,1 MB. Datas fixas no zip.
 
+== Correção v3: certificado do Google como chave confiável (2026-10-26)
+Achado: v2a tinha CONFIG_SYSTEM_TRUSTED_KEYS="" e só a chave fixa. Os módulos GKI do system_dlkm são assinados pela chave do Google
+(número de série do certificado público 1CF83E80…6D0B1721, kernel/lake/docs/research/CODEX5_build_signing.md:90); com MODULE_SIG_PROTECT=y
+eles seriam tratados como não assinados nos exports protegidos (kernel/lake/docs/BUILD.md, seção 3).
+v3 = v2a + CONFIG_SYSTEM_TRUSTED_KEYS=<repo>/kernel/common/google_gki_ab13771415_modsign_cert.pem
+v3: compared=2309 mismatches=0 PASS, 0 avisos, Image 48998912 B, sha256 969e9f5715623d9fafbd884fed52146b16a29404c0b616e6b607fe0b8226aede, 405 .ko
+serial do Google na Image: v3 1 ocorrência, v2a 0; serial da chave fixa na v3: 1 ocorrência
+repack v3: rc 0, ROUNDTRIP OK (kernel gzip 22451572 B), boot_b_ultra.img 67108864 B, sha256 a5a267f4628067e780ef7172ad0090052ff2d6f564dbeeb5c10d45f49f12ce10
+pacote de módulos refeito da v3: sha256 9e2fd4076e130ba44f999b3f5be46ee65f9f948a5104aa5bf18d756dcd2fc3c7 (igual: os .ko não carregam a lista de chaves)
+A imagem para flash é a v3. A v2a não deve ser usada.
+
 == NÃO VERIFICADO
 Boot no aparelho, carga dos módulos de vendor no kernel novo, Wi-Fi, módulos USB, bonding. Nenhum comando de aparelho foi executado.
