@@ -1,6 +1,6 @@
 # ULTRA-kernel: avaliação de todas as opções desligadas
 
-Objetivo do dono: um kernel que nunca mais precise ser recompilado. Base: `gki_defconfig` + `kernelsu.fragment` (`kernel/README.md`). Toolchain: clang r510928 (`Android (11368308, +pgo, +bolt, +lto, +mlgo, based on r510928) clang version 18.0.0`). Resultado: `kernel/common/arch/arm64/configs/ultrakernel.fragment` (575 opções). Tabela completa, uma linha por opção: `docs/ultrakernel/data/ultra-avaliacao.tsv`.
+Objetivo do dono: um kernel que nunca mais precise ser recompilado. Base: `gki_defconfig` + `kernelsu.fragment` (`kernel/README.md`). Toolchain: clang r510928 (`Android (11368308, +pgo, +bolt, +lto, +mlgo, based on r510928) clang version 18.0.0`). Resultado: `kernel/common/arch/arm64/configs/ultrakernel.fragment` (588 opções; nome do kernel `rianprei-ultra-kernel`). Tabela completa, uma linha por opção: `docs/ultrakernel/data/ultra-avaliacao.tsv`.
 
 ## Método
 

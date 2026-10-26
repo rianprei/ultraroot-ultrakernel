@@ -111,14 +111,14 @@ PM_WAKELOCKS_GC	INCLUIDO	sem header público, sem conflito	y	kernel/power/Kconfi
 PM_TEST_SUSPEND	RISCO-KMI	em header público: PM_TEST_SUSPEND	n	kernel/power/Kconfig:212
 DPM_WATCHDOG	COMPORTAMENTO	panic se um driver demorar no suspend	n	kernel/power/Kconfig:227
 WQ_POWER_EFFICIENT_DEFAULT	INCLUIDO	sem header público, sem conflito	y	kernel/power/Kconfig:310
-CPU_IDLE_GOV_LADDER	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/cpuidle/Kconfig:21
+CPU_IDLE_GOV_LADDER	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/cpuidle/Kconfig:21
 CPU_FREQ_DEFAULT_GOV_PERFORMANCE	INALCANCAVEL	dependências não satisfeitas em arm64/GKI	n	drivers/cpufreq/Kconfig:54
 CPU_FREQ_DEFAULT_GOV_POWERSAVE	INALCANCAVEL	dependências não satisfeitas em arm64/GKI	n	drivers/cpufreq/Kconfig:62
 CPU_FREQ_DEFAULT_GOV_USERSPACE	INALCANCAVEL	dependências não satisfeitas em arm64/GKI	n	drivers/cpufreq/Kconfig:70
 CPU_FREQ_DEFAULT_GOV_ONDEMAND	INALCANCAVEL	dependências não satisfeitas em arm64/GKI (depends on !(X86_INTEL_PSTATE && SMP))	n	drivers/cpufreq/Kconfig:79
 CPU_FREQ_DEFAULT_GOV_CONSERVATIVE	INALCANCAVEL	dependências não satisfeitas em arm64/GKI (depends on !(X86_INTEL_PSTATE && SMP))	n	drivers/cpufreq/Kconfig:92
-CPU_FREQ_GOV_USERSPACE	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/cpufreq/Kconfig:139
-CPU_FREQ_GOV_ONDEMAND	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/cpufreq/Kconfig:152
+CPU_FREQ_GOV_USERSPACE	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/cpufreq/Kconfig:139
+CPU_FREQ_GOV_ONDEMAND	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/cpufreq/Kconfig:152
 CPUFREQ_DT	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/cpufreq/Kconfig:215
 ANDROID_V_CPUFREQ_VIRT	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/cpufreq/Kconfig:227
 CPUFREQ_VIRT	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/cpufreq/Kconfig:242
@@ -1505,7 +1505,7 @@ THERMAL_DEFAULT_GOV_FAIR_SHARE	CONFLITO	desliga ou muda: THERMAL_DEFAULT_GOV_STE
 THERMAL_DEFAULT_GOV_USER_SPACE	CONFLITO	desliga ou muda: THERMAL_DEFAULT_GOV_STEP_WISE=y	n	drivers/thermal/Kconfig:116
 THERMAL_DEFAULT_GOV_POWER_ALLOCATOR	CONFLITO	desliga ou muda: THERMAL_DEFAULT_GOV_STEP_WISE=y	n	drivers/thermal/Kconfig:125
 THERMAL_DEFAULT_GOV_BANG_BANG	CONFLITO	desliga ou muda: THERMAL_DEFAULT_GOV_STEP_WISE=y	n	drivers/thermal/Kconfig:133
-THERMAL_GOV_FAIR_SHARE	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/thermal/Kconfig:143
+THERMAL_GOV_FAIR_SHARE	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/thermal/Kconfig:143
 THERMAL_MMIO	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/thermal/Kconfig:234
 SUN8I_THERMAL	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/thermal/Kconfig:329
 TEGRA_SOCTHERM	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/thermal/tegra/Kconfig:5
@@ -2862,18 +2862,18 @@ LEDS_SGM3140	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	driver
 LEDS_GROUP_MULTICOLOR	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/rgb/Kconfig:5
 LEDS_PWM_MULTICOLOR	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/rgb/Kconfig:17
 LEDS_QCOM_LPG	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/rgb/Kconfig:27
-LEDS_TRIGGER_ONESHOT	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:22
-LEDS_TRIGGER_HEARTBEAT	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:49
-LEDS_TRIGGER_BACKLIGHT	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:57
+LEDS_TRIGGER_ONESHOT	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:22
+LEDS_TRIGGER_HEARTBEAT	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:49
+LEDS_TRIGGER_BACKLIGHT	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:57
 LEDS_TRIGGER_CPU	RISCO-KMI	em header público: LEDS_TRIGGER_CPU	n	drivers/leds/trigger/Kconfig:65
-LEDS_TRIGGER_ACTIVITY	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:75
-LEDS_TRIGGER_DEFAULT_ON	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:96
+LEDS_TRIGGER_ACTIVITY	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:75
+LEDS_TRIGGER_DEFAULT_ON	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:96
 LEDS_TRIGGER_CAMERA	RISCO-KMI	em header público: LEDS_TRIGGER_CAMERA	n	drivers/leds/trigger/Kconfig:112
-LEDS_TRIGGER_PANIC	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:119
-LEDS_TRIGGER_NETDEV	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:128
-LEDS_TRIGGER_PATTERN	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:135
+LEDS_TRIGGER_PANIC	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:119
+LEDS_TRIGGER_NETDEV	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:128
+LEDS_TRIGGER_PATTERN	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:135
 LEDS_TRIGGER_AUDIO	RISCO-KMI	em header público: LEDS_TRIGGER_AUDIO	n	drivers/leds/trigger/Kconfig:142
-LEDS_TRIGGER_TTY	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/leds/trigger/Kconfig:149
+LEDS_TRIGGER_TTY	INCLUIDO	subsistema genérico (governor ou trigger), classificado antes como sem hardware por erro de filtro de caminho	y	drivers/leds/trigger/Kconfig:149
 ACCESSIBILITY	SEM-HARDWARE	hardware que não existe no POCO C75 (MT6768)	n	drivers/accessibility/Kconfig:2
 INFINIBAND	RISCO-KMI	em header público: INFINIBAND_VIRT_DMA	n	drivers/infiniband/Kconfig:2
 EDAC_DEBUG	DEBUG	depuração, teste ou rastreio	n	drivers/edac/Kconfig:34

@@ -69,5 +69,30 @@ repack v3: rc 0, ROUNDTRIP OK (kernel gzip 22451572 B), boot_b_ultra.img 6710886
 pacote de módulos refeito da v3: sha256 9e2fd4076e130ba44f999b3f5be46ee65f9f948a5104aa5bf18d756dcd2fc3c7 (igual: os .ko não carregam a lista de chaves)
 A imagem para flash é a v3. A v2a não deve ser usada.
 
+== Candidato final: v6 (2026-10-26)
+v6 = v3 + pahole pinado 1.25 (kernel-build-tools, igual ao stock: PAHOLE_VERSION 125)
+     + <saida>/localversion "-android15-8-g5a0ffb447c1d-ab13771415" (uname -r igual ao stock e ao T3)
+     + KBUILD_BUILD_USER=rianprei-ultra-kernel (nome pedido pelo dono, em /proc/version)
+     + 13 opções genéricas corrigidas no classificador (governors cpufreq userspace e ondemand,
+       cpuidle ladder, thermal fair_share, 9 triggers de LED)
+kernelrelease=6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k
+v6:  compared=2309 mismatches=0 PASS, 0 avisos, Image 49265152 B, 405 .ko, sha256 ced3895e0ce45aa03be31548e7387d4afdd9d284df87544fa54b2c5d63c6f036
+v6b: mesmo sha256; cmp v6/Image v6b/Image -> idênticas, cmp -l | wc -l -> 0
+QEMU arm64 (virt, cortex-a55, 4 CPUs, 2 GB, sem rootfs):
+  "Linux version 6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k (rianprei-ultra-kernel@build)"
+  423 linhas, Oops/BUG/WARNING = 0, KernelSU inicializa, para em "Unable to mount root fs" (ponto esperado)
+  Image oficial do Google no mesmo teste: 301 linhas, 0 Oops/BUG/WARNING, mesmo ponto final
+Certificados na Image v6: Google (1CF83E80…) 1 ocorrência; chave fixa (4FEF0E24…) 1 ocorrência
+Config v6 contra o config do aparelho: perdidas só CC_CAN_LINK e UAPI_HEADER_TEST (sondas do host),
+  TRIM_UNUSED_KSYMS e UNUSED_KSYMS_WHITELIST (de propósito: mais exports), DEFAULT_CUBIC (padrão vira BBR);
+  mudadas só IKHEADERS, DEFAULT_TCP_CONG, MODULE_SIG_KEY, SYSTEM_TRUSTED_KEYS.
+vermagic do r8152.ko: "6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k SMP preempt mod_unload modversions aarch64"
+Repack v6: rc 0, ROUNDTRIP OK (kernel gzip 22522733 B), boot_b_ultra.img 67108864 B, magic ANDROID!,
+  sha256 36bc72755e82152f510d298dd1ac1641b604143abbec24c4876c5f1a5cf0d85e
+Backup do aparelho: 12 de 12 partições conferem com SHA256SUMS.log (hash e tamanho).
+Guard: GUARD-SELFTEST 44 passada(s), 0 falha(s); ramo T-1 contra o backup real (cópia do lake fora do repo):
+  "T-1 backup 3890fb96…829fc7 + 4000000" OK, hash trocado recusa OK, partição 3ffffff recusa OK.
+Imagem para flash: a v6. v2a, v3, v4 e v5 não devem ser usadas.
+
 == NÃO VERIFICADO
 Boot no aparelho, carga dos módulos de vendor no kernel novo, Wi-Fi, módulos USB, bonding. Nenhum comando de aparelho foi executado.
