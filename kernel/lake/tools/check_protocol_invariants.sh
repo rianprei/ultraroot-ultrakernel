@@ -1482,6 +1482,7 @@ else
   d114 tests/fixtures/dmesg_stock_self.txt 0 ''
   d114 tests/fixtures/dmesg_plant_symbol.txt 1 'foo: Unknown symbol bar (err -2)'
   d114 tests/fixtures/dmesg_plant_warn.txt 1 'WARNING: at fs/foo.c:1 new_warn_fn'
+  d114 tests/fixtures/dmesg_not_a_log.txt 2 'input is not a kernel log'
   if [ "$v114_ok" -eq 1 ]; then
     ok 114 "T3 acceptance diffs dmesg against the stock boot"
   else

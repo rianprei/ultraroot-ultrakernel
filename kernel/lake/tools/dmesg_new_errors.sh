@@ -2,7 +2,8 @@
 # dmesg_new_errors.sh — T3 acceptance: print dmesg error lines that the stock boot did not log.
 #
 # usage: tools/dmesg_new_errors.sh <dmesg.txt>
-# Exit 0 = no new line, 1 = at least one new line (printed on stdout), 2 = usage or missing input.
+# Exit 0 = no new line, 1 = at least one new line (printed on stdout), 2 = usage, missing input,
+# or input that is not a kernel log (fail closed).
 # Read-only. The stock set is data/stock_dmesg_known.txt (normalized lines; '#' comments ignored).
 set -uo pipefail; export LC_ALL=C
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -108,6 +109,14 @@ def known_set(text):
     return out
 
 lines = open(src_path, errors='replace').read().splitlines()
+# Fail closed: an input with no timestamped kernel line and no error-class line is not a kernel
+# log (e.g. "adb: more than one device/emulator", "dmesg: klogctl: Operation not permitted",
+# an empty capture). It used to pass with exit 0.
+body = [l for l in lines if l.strip() and not l.lstrip().startswith('#')]
+if not any(TS.match(l) or is_class(payload(l)) for l in body):
+    print('error: input is not a kernel log (no timestamped line, no error line): ' + src_path,
+          file=sys.stderr)
+    sys.exit(2)
 known = known_set(open(known_path, errors='replace').read())
 new = sorted(signatures(lines) - known)
 for n in new:

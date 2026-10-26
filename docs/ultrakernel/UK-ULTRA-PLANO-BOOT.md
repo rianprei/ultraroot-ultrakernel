@@ -83,3 +83,22 @@ Só leitura, tudo pelo `kernel/lake/tools/fastboot_guard.sh`. Serial não regist
 - Kernel em execução: `6.6.89-android15-8-4k (kleaf@build-host)`, com `KernelSU: welcome to KernelSU version 32673`. É o C0.3 (`uname -r` previsto em `docs/history/research/phase4/C01_device_plan.md:56`). Isso fecha o D3 (o C0.3 estava UNKNOWN) e mostra que um `uname -r` diferente do stock carrega os 429 módulos de vendor.
 - Linha de base para o P3: `baseline_modules.txt` (429), dmesg com 20708 linhas. `kernel/lake/tools/check_regex_controls.sh` → código 0; `kernel/lake/tools/dmesg_new_errors.sh` no dmesg atual → código 0, 0 linhas.
 - Alvo de rollback: o backup auditado `3890fb96…829fc7` é o stock, de antes do C0.3. Voltar para ele é seguro (T-1 provado), mas tira o KernelSU até um novo flash.
+
+## Resultado do P2 e do P3 (2026-10-26, frase do dono: "sim, flash do ULTRA-kernel no boot_b")
+
+- Pre-flight: 1 aparelho; `current-slot=b`, `is-userspace=no`, `unlocked=yes`, `partition-size:boot_b=4000000`, `slot-successful:b=yes`, `slot-unbootable:b=no`, `slot-retry-count:b=1`; arquivo com 67108864 bytes, magic `ANDROID!`, sha256 `36bc72755e82152f510d298dd1ac1641b604143abbec24c4876c5f1a5cf0d85e`.
+- Flash pelo guard, com a allowlist de dois hashes (backup e v6): `Sending 'boot_b' (65536 KB) OKAY [1.414s]`, `Writing 'boot_b' OKAY [0.883s]`, total 2,299 s.
+- T2b-post, antes do reboot: slots iguais aos de antes (`b` successful=yes, unbootable=no, retry=1; `a` successful=no, unbootable=yes).
+- Reboot pelo guard: OKAY. adb em cerca de 33 s; `sys.boot_completed=1` em cerca de 64 s.
+- Identidade: `uname -r` = `6.6.89-android15-8-g5a0ffb447c1d-ab13771415-4k`; `/proc/version` com `(rianprei-ultra-kernel@build)`; `OS3.0.306.0.WGTMIXM`; slot `_b`.
+- Módulos: 428 contra 429 da linha de base. Falta só `kheaders`, que no ULTRA é embutido (`IKHEADERS=y`): `/sys/kernel/kheaders.tar.xz` existe, com 4159396 bytes. Nenhum módulo de vendor faltando.
+- dmesg (lido com `su -c dmesg`, 18986 linhas, buffer a partir de 10,28 s): 0 panic, 0 Oops, 0 BUG, 0 `Unknown symbol`, 0 `disagrees about version`, 0 `exports protected symbol`, 0 `Invalid module format`, 0 falha de verificação de módulo, 0 kCFI. Os 3 `WARNING:` (BHB do eBPF sem privilégio e dois `tick_nohz_idle_*`) existem iguais no C0.3. `dmesg_new_errors.sh` → código 0, 0 linhas. Os primeiros 10 s do boot saíram do buffer circular: NÃO VERIFICADOS por log (pstore vazio, `last_kmsg` com 0 bytes); a cobertura dessa janela é a contagem de módulos.
+- Funções: `wlan0` UP, `Wi-Fi is enabled`, Bluetooth `enabled: true`; `tcp_congestion_control=bbr`, 17 algoritmos disponíveis; `bond0` presente; interfaces do modem (`ccmni*`) presentes.
+
+Veredito: P3 PASS. O rianprei-ultra-kernel v6 está no `boot_b` e boota. Observação de uso real (30 minutos, do protocolo): com o dono.
+
+### Achados da aceitação
+
+1. `SECURITY_DMESG_RESTRICT=y` entrou no fragmento (o classificador marcou como candidato, e a revisão manual não tirou). Efeito no aparelho: `adb shell dmesg` → `klogctl: Operation not permitted`, `kernel.dmesg_restrict=1`. O protocolo do lake lê o dmesg pelo shell. Contorno usado: `su -c dmesg`. Correção definitiva: tirar a opção no próximo build, que pede novo flash e a frase do dono.
+2. `kernel/lake/tools/dmesg_new_errors.sh` dava código 0 para uma entrada que não é log (`adb: more than one device/emulator`; `dmesg: klogctl: Operation not permitted`; arquivo vazio). Corrigido: agora recusa com código 2. Teste novo no V114 (`tests/fixtures/dmesg_not_a_log.txt`); sabotagem numa cópia → `V114 FAIL`; `run_all_checks` 116 de 116.
+3. O aparelho aparecia duas vezes no adb (USB e adb sem fio ativo). Os comandos da aceitação usaram `adb -d` (só USB). Se o adb sem fio não for intencional, desligue-o nas opções de desenvolvedor.
