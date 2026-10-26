@@ -72,3 +72,14 @@ Exatamente o Z0 do protocolo (Z0.1 a Z0.7), com a allowlist fechada de `getvar`.
 - **R4, contador de tentativas:** `slot-retry-count:b` = 1. Uma falha de boot pode esgotar o contador e marcar o `b` como não bootável. O rollback pelo fastboot continua valendo, mas é preciso agir na primeira falha, sem esperar loops.
 - **Fallback para o slot A:** o slot A está `unbootable=yes`, e o LK não escolhe slot com prioridade 0 (protocolo, Z0). Medição no aparelho do fallback: NÃO VERIFICADO.
 - Falha física durante a gravação (energia, cabo): mitigada por bateria ≥ 60 % e mãos fora do aparelho durante os 2 s de gravação.
+
+## Resultado do P1 (Z0, 2026-10-26, frase do dono: "sim, preflight Z0")
+
+Só leitura, tudo pelo `kernel/lake/tools/fastboot_guard.sh`. Serial não registrado. Capturas fora do repo.
+
+- Z0.2: `devices` → 1 aparelho em fastboot.
+- Z0.3/Z0.4: PASS. `product=lake`, `current-slot=b`, `slot-count=2`, `is-userspace=no`, `unlocked=yes`, `max-download-size=0x8000000`, `partition-size:boot_b=4000000`, `slot-successful:a=no`, `slot-successful:b=yes`, `slot-unbootable:a=yes`, `slot-unbootable:b=no`, `slot-retry-count:a=0`, `slot-retry-count:b=1`, `battery-soc-ok=yes`, `battery-voltage=4254mV`. Idêntico ao Z0 de 2026-10-09, exceto a tensão da bateria.
+- Z0.6: `reboot` pelo guard → OKAY. Android: `sys.boot_completed=1`, slot `_b`, `OS3.0.306.0.WGTMIXM`, 429 módulos.
+- Kernel em execução: `6.6.89-android15-8-4k (kleaf@build-host)`, com `KernelSU: welcome to KernelSU version 32673`. É o C0.3 (`uname -r` previsto em `docs/history/research/phase4/C01_device_plan.md:56`). Isso fecha o D3 (o C0.3 estava UNKNOWN) e mostra que um `uname -r` diferente do stock carrega os 429 módulos de vendor.
+- Linha de base para o P3: `baseline_modules.txt` (429), dmesg com 20708 linhas. `kernel/lake/tools/check_regex_controls.sh` → código 0; `kernel/lake/tools/dmesg_new_errors.sh` no dmesg atual → código 0, 0 linhas.
+- Alvo de rollback: o backup auditado `3890fb96…829fc7` é o stock, de antes do C0.3. Voltar para ele é seguro (T-1 provado), mas tira o KernelSU até um novo flash.

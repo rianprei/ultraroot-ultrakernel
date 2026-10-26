@@ -6,7 +6,7 @@ Cada item diz o que falta e a frase exata que libera o passo. Nenhum agente exec
 
 - **D1, instalar o ui10:** "sim, instalar ui10" (`docs/ultraroot/plan.md`, linha 92). Antes de instalar, conferir o sha256 do APK (`out/`, fora do repo).
 - **D2, diagnóstico do fd (leitura):** "sim, diagnóstico do fd" (`docs/ultraroot/plan.md`, linha 93). Libera a decisão E2.
-- **D3, log de boot do C0.3:** frase na linha 94 de `docs/ultraroot/plan.md`.
+- **D3, log de boot do C0.3:** FEITO em 2026-10-26 durante o Z0: o C0.3 está no `boot_b` e boota (`6.6.89-android15-8-4k`, KernelSU 32673, 429 módulos). Ver `docs/ultrakernel/UK-ULTRA-PLANO-BOOT.md`, "Resultado do P1".
 - **D4, grant de teste:** "sim, grant teste" (`docs/ultraroot/plan.md`, linha 95).
 - **D5, migrar módulos nativos:** "sim, migrar <módulo>" (`docs/ultraroot/plan.md`, linha 96), um por vez.
 - **D6 e D7 (flash do SP1 e drill de rollback):** linhas 97 e 98 de `docs/ultraroot/plan.md`. Só com backup conferido, slot B e guard.
