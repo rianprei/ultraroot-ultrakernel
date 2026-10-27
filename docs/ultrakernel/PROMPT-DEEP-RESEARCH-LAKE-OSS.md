@@ -24,7 +24,7 @@ Achar o código-fonte público dos módulos de kernel do POCO C75 (`lake`) que a
   - os 16 branches de `MiCode/MTK_kernel_device_modules`;
   - os 267 branches de `MiCode/Xiaomi_Kernel_OpenSource`;
   - `MiCode/mtkcam-kernel_device_modules`;
-  - os README-only `MTK_kernel_modules`, `kernel_build` e `kernel_devicetree`;
+  - `MiCode/MTK_kernel_modules` (72 branches com código; o branch padrão só tem README): Mali e conectividade;
   - os espelhos Samsung A05;
   - Motorola lamu (`OWLXS/android_kernel_motorola_lamu-modules`, `-mediatek_modules`);
   - Motorola MT6853 (`nift4`);
@@ -57,9 +57,9 @@ Achar o código-fonte público dos módulos de kernel do POCO C75 (`lake`) que a
 | `tcpci_late_sync` | `9C16E05401480B7354F6B27` | Samsung A05, `dew-v-oss`, `spark-w-oss` |
 | `charger_class` | `4E620520A1BC3D30EF3C5E6` | Samsung A05, `dew-v-oss`, `spark-w-oss` (dois caminhos) |
 | `mtk_chg_type_det` | `0B95E4F49E532F4572CCEEE` | Samsung A05, `dew-v-oss`, `spark-w-oss` |
-| `mali_prot_alloc_mt6768_r49` | `0538CFDB83B3AC9A2F1CFB0` | Samsung A05 (duas cópias), `dew-v-oss`, `spark-w-oss` |
-| `mali_mgm_mt6768_r49` | `88415118DF4F3F9263EF15A` | as mesmas do Mali acima |
-| `mali_kbase_mt6768_r49` | `16BF4ECF240FA554E792B9E` | não calculado (centenas de objetos). Versão `r49p1-03bet0`; caminho no `.ko`: `vendor/mediatek/kernel_modules/gpu/mt6768/mali_avalon/mali-r49p1` |
+| `mali_prot_alloc_mt6768_r49` | `0538CFDB83B3AC9A2F1CFB0` | RESOLVIDO: idêntico em `MiCode/MTK_kernel_modules@bsp-rodin-v-oss` (também `flare-w-oss`, `spark-w-oss`) |
+| `mali_mgm_mt6768_r49` | `88415118DF4F3F9263EF15A` | RESOLVIDO: idêntico em `MiCode/MTK_kernel_modules@bsp-rodin-v-oss` |
+| `mali_kbase_mt6768_r49` | `16BF4ECF240FA554E792B9E` | não calculado (centenas de objetos); candidato principal `MiCode/MTK_kernel_modules@bsp-rodin-v-oss`, onde os outros dois Mali são idênticos. Versão `r49p1-03bet0`; caminho no `.ko`: `vendor/mediatek/kernel_modules/gpu/mt6768/mali_avalon/mali-r49p1` |
 
 Para o Grupo B, a chance está em árvores de **outros clientes da Longcheer ou da mesma geração MTK** (tag `lc-master-v-t-alps-release-v0.mp1.rc-V4` ou vizinhas). Também vale o mesmo SoC com Type-C Richtek/SouthChip e Mali r49p1 mais novo.
 
